@@ -1,0 +1,52 @@
+package com.taoswork.tallybook.dynamic.datadomain.presentation;
+
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Created by Gao Yuan on 2015/5/21.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
+public @interface PresentationField {
+
+    /**
+     * Optional - only required if you want to order the appearance of this field in the UI
+     *
+     * The order in which this field will appear in a GUI relative to other fields from the same class
+     *
+     * @return the display order
+     */
+    int order() default 99999;
+
+    /**
+     * Optional - only required if you want to restrict the visibility of this field in the admin tool
+     *
+     * Describes how the field is shown in admin GUI.
+     *
+     * @return whether or not to hide the form field.
+     */
+    int visibility() default Visibility.VISIBLE_ALL;
+
+    /**
+     * Optional - only required if you want to explicitly specify the field type. This
+     * value is normally inferred by the system based on the field type in the entity class.
+     *
+     * Explicity specify the type the GUI should consider this field
+     * Specifying UNKNOWN will cause the system to make its best guess
+     *
+     * @return the field type
+     */
+    SupportedFieldType fieldType() default SupportedFieldType.UNKNOWN;
+
+    String tab() default PresentationClass.Tab.DEFAULT_NAME;
+
+    String group() default PresentationClass.Group.DEFAULT_NAME;
+
+    boolean nameField() default false;
+}

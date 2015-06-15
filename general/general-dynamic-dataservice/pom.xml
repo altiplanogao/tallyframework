@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>general</artifactId>
+        <groupId>com.taoswork.tallybook</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>general-dynamic-dataservice</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-dynamic-datadomain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-solution</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-authority-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>test-framework</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

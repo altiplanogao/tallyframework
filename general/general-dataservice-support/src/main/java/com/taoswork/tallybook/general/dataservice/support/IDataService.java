@@ -1,0 +1,24 @@
+package com.taoswork.tallybook.general.dataservice.support;
+
+import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
+
+import java.util.Map;
+
+/**
+ * Created by Gao Yuan on 2015/5/11.
+ */
+public interface IDataService {
+    <T> T getService(String serviceName);
+
+    <T> T getService(Class<T> clz, String serviceName);
+
+    <T> T getService(Class<T> serviceCls);
+
+    IDataServiceDefinition getDataServiceDefinition();
+
+    Map<String, EntityEntry> getEntityEntries();
+
+    String getEntityResourceName(String interfaceName);
+
+    String getEntityInterfaceName(String resourceName);
+}
