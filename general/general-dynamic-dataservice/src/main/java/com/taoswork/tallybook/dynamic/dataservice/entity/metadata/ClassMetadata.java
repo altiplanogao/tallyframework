@@ -1,9 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.exception.MetadataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class ClassMetadata extends FriendyMetadata {
+public class ClassMetadata extends FriendlyMetadata {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMetadata.class);
 
     public Class<?> entityClz;

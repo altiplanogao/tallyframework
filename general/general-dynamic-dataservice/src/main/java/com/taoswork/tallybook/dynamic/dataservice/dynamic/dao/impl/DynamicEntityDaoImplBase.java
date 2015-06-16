@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.QueryTranslator;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.impl.QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.query.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.query.impl.QueryTranslatorImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

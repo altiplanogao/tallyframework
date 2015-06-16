@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.service;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

@@ -2,9 +2,9 @@ package com.taoswork.tallybook.business.dataservice.dynamic.entity.service;
 
 import com.taoswork.tallybook.business.dataservice.dynamic.entity.conf.DynamicConfig;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
 import com.taoswork.tallybook.testframework.persistence.TestApplicationContext;

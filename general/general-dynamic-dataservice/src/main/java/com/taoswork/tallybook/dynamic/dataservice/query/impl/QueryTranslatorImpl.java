@@ -1,7 +1,7 @@
-package com.taoswork.tallybook.dynamic.dataservice.dynamic.query.impl;
+package com.taoswork.tallybook.dynamic.dataservice.query.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.query.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -41,7 +41,7 @@ public class QueryTranslatorImpl implements QueryTranslator {
     }
 
     protected static void addPaging(Query response, CriteriaTransferObject query) {
-        addPaging(response, query.getFirstResult(), query.getMaxResults());
+        addPaging(response, query.getFirstResult(), query.getMaxResultCount());
     }
 
     protected static void addPaging(Query response, Integer firstResult, Integer maxResults) {

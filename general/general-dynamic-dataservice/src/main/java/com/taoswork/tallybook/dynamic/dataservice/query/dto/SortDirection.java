@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto;
+package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 
 /**
  * @author Jeff Fischer

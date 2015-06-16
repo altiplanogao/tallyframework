@@ -117,9 +117,9 @@ public final class EdoBuilder {
         return fieldEdo;
     }
 
-    private static void copyNamesAndOrder(FriendyMetadata friendyMetadataFrom, FriendlyEdo friendlyEdoTo) {
-        friendlyEdoTo.setFriendlyName(friendyMetadataFrom.getFriendlyName())
-                .setName(friendyMetadataFrom.getName())
-                .setOrder(friendyMetadataFrom.getOrder());
+    private static void copyNamesAndOrder(FriendlyMetadata friendlyMetadataFrom, FriendlyEdo friendlyEdoTo) {
+        friendlyEdoTo.setFriendlyName(friendlyMetadataFrom.getFriendlyName())
+                .setName(friendlyMetadataFrom.getName())
+                .setOrder(friendlyMetadataFrom.getOrder());
     }
 }

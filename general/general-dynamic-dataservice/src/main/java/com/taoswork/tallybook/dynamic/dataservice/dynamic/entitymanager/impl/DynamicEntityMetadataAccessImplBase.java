@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.EntityMetadataHelper;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl.EntityMetadataHelper4Hibernate;
+import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClass;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTreeAccessor;

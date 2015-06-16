@@ -3,9 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.dto.entity;
 import com.taoswork.tallybook.general.extension.collections.StringChain;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

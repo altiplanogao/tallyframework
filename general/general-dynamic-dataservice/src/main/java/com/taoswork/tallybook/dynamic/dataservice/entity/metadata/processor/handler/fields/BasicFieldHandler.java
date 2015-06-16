@@ -3,9 +3,9 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.han
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ProcessResult;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.FriendlyNameHelper;
 
 import java.lang.reflect.Field;
 

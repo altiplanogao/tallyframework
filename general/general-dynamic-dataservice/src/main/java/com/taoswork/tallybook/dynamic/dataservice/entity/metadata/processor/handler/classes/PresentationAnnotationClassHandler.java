@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.handler.classes;
 
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.GroupMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.TabMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ProcessResult;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.FriendlyNameHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

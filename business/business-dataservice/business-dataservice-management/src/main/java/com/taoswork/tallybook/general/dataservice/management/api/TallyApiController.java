@@ -24,12 +24,12 @@ public class TallyApiController  {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    @RequestMapping("/{resourceName:^[\\w|-]+$}")
+    @RequestMapping("/{entityKey:^[\\w|-]+$}")
     @ResponseBody
     public HttpEntity<TallyResource> getEntityList(
-            @PathVariable(value="resourceName") String resourceName,
+            @PathVariable(value="entityKey") String entityKey,
             @RequestParam MultiValueMap<String, String> requestParams){
-        String entityType = dataServiceManager.getEntityInterfaceName(resourceName);
+        String entityType = dataServiceManager.getEntityInterfaceName(entityKey);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
         TallyResource resource = null;

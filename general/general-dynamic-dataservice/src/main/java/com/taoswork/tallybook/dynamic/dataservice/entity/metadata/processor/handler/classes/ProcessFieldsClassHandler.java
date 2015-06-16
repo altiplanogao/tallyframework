@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.handler.classes;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.handler.fields.IFieldHandler;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeClassHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

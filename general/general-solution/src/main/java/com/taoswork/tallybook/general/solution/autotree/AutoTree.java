@@ -6,8 +6,10 @@ import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
 import com.taoswork.tallybook.general.solution.quickinterface.IChecker;
 import com.taoswork.tallybook.general.solution.quickinterface.IToString;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -266,5 +268,70 @@ public class AutoTree<D> {
         for (AutoTree<D> child : children){
             child.printTree(sb, useIndent, indent + 1, delimiter, toString);
         }
+    }
+
+    public List<D> lineUp(){
+        final List<D> result = new ArrayList<D>();
+        traverse(true, new ICallback<Void, D, AutoTreeException>() {
+            @Override
+            public Void callback(D parameter) throws AutoTreeException {
+                result.add(parameter);
+                return null;
+            }
+        }, false);
+
+        return Collections.unmodifiableList(result);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AutoTree<?> autoTree = (AutoTree<?>) o;
+
+        List<?> leftLine = this.lineUp();
+        List<?> rightLine = autoTree.lineUp();
+
+        if (leftLine.size() == rightLine.size()) {
+            int count = leftLine.size();
+            for (int i = 0; i < count; ++i) {
+                Object a = leftLine.get(i);
+                Object b = rightLine.get(i);
+                if (a == null) {
+                    if (b != null) {
+                        return false;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    if (!a.equals(b)) {
+                        return false;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        List<?> leftLine = this.lineUp();
+        int hashCode = 0;
+        int i = 1;
+        for (Object node : leftLine){
+            if(i > 16){
+                i = 1;
+            }
+            int hash = node.hashCode() << i;
+            hashCode ^= hash;
+            i ++;
+        }
+
+        return hashCode;
     }
 }

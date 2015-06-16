@@ -12,14 +12,12 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/24.
  */
-public class FieldMetadata extends FriendyMetadata{
+public class FieldMetadata extends FriendlyMetadata {
     public Field field;
 
-    public boolean id;
     public String tabName;
     public String groupName;
     public int visibility;
-    public boolean nameField;
 
     public SupportedFieldType fieldType;
 
@@ -38,11 +36,15 @@ public class FieldMetadata extends FriendyMetadata{
     }
 
     public boolean isId() {
-        return id;
+        return SupportedFieldType.ID == fieldType;
     }
 
     public void setId(boolean id) {
-        this.id = id;
+        if(id){
+            fieldType = SupportedFieldType.ID;
+        } else if(fieldType == SupportedFieldType.ID){
+            fieldType = SupportedFieldType.UNKNOWN;
+        }
     }
 
     public String getTabName() {
@@ -70,11 +72,15 @@ public class FieldMetadata extends FriendyMetadata{
     }
 
     public boolean isNameField() {
-        return nameField;
+        return SupportedFieldType.NAME == fieldType;
     }
 
     public void setNameField(boolean nameField) {
-        this.nameField = nameField;
+        if(nameField){
+            fieldType = SupportedFieldType.NAME;
+        } else if(fieldType == SupportedFieldType.NAME){
+            fieldType = SupportedFieldType.UNKNOWN;
+        }
     }
 
     public SupportedFieldType getFieldType() {

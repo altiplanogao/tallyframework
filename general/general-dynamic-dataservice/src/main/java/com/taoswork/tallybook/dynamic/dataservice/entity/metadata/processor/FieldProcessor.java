@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor;
 
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.handler.basic.MultiMetadataHandler;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.handler.fields.*;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 
 import java.lang.reflect.Field;
 

@@ -1,6 +1,6 @@
-package com.taoswork.tallybook.dynamic.dataservice.dynamic.query;
+package com.taoswork.tallybook.dynamic.dataservice.query;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

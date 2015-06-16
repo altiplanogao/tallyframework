@@ -3,17 +3,17 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata;
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public abstract class FriendyMetadata {
+public abstract class FriendlyMetadata {
 
     public String name;
     public String friendlyName;
     public int order = 9999;
 
-    public FriendyMetadata(){
+    public FriendlyMetadata(){
         this("","");
     }
 
-    public FriendyMetadata(String name, String friendlyName){
+    public FriendlyMetadata(String name, String friendlyName){
         this.name = name;
         this.friendlyName = friendlyName;
     }
@@ -22,7 +22,7 @@ public abstract class FriendyMetadata {
         return name;
     }
 
-    public FriendyMetadata setName(String name) {
+    public FriendlyMetadata setName(String name) {
         this.name = name;
         return this;
     }
@@ -31,7 +31,7 @@ public abstract class FriendyMetadata {
         return friendlyName;
     }
 
-    public FriendyMetadata setFriendlyName(String friendlyName) {
+    public FriendlyMetadata setFriendlyName(String friendlyName) {
         this.friendlyName = friendlyName;
         return this;
     }
@@ -40,7 +40,7 @@ public abstract class FriendyMetadata {
         return order;
     }
 
-    public FriendyMetadata setOrder(int order) {
+    public FriendlyMetadata setOrder(int order) {
         this.order = order;
         return this;
     }

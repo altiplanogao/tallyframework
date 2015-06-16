@@ -2,8 +2,8 @@ package com.taoswork.tallybook.dynamic.dataservice.dynamic.service.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.annotation.Resource;
 import java.util.List;

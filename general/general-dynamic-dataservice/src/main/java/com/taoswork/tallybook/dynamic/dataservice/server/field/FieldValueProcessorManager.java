@@ -6,7 +6,10 @@ import com.taoswork.tallybook.dynamic.dataservice.server.field.processor.PhoneFi
 import com.taoswork.tallybook.dynamic.dataservice.server.field.processor.SimpleFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.field.processor.UnknownFieldValueProcessor;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/1.
