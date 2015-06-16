@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager;
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
 
 import java.util.Map;
@@ -11,11 +12,11 @@ import java.util.Map;
 public interface DynamicEntityMetadataAccess {
     public static final String COMPONENT_NAME = "DynamicEntityMetadataAccess";
 
-    EntityClassTree getEntityClassTree(Class<?> entityClz);
+    Map<String, EntityClassTree> getAllEntityClassTree();
 
     <T> Class<T> getRootPersistiveEntityClass(Class<T> entityClz);
 
-    Map<String, EntityClassTree> getAllEntityClassTree();
+    EntityClassTree getEntityClassTree(Class<?> entityClz);
 
-    ClassEdo getMergedClassEdo(Class<?> entityClz);
+    ClassTreeMetadata getClassTreeMetadata(Class<?> entityClz);
 }

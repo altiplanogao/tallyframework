@@ -4,6 +4,7 @@ import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicE
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.request.EntityQueryRequest;
@@ -37,7 +38,8 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
         Class<?> entityType = request.getEntityType();
 
         Class<?> rootPersistiveClz = dynamicEntityService.getRootPersistiveEntityClass(entityType);
-        ClassEdo classEdo = dynamicEntityMetadataAccess.getMergedClassEdo(rootPersistiveClz);
+        ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(rootPersistiveClz);
+        ClassEdo classEdo = entityDescriptionService.getClassEdo(classTreeMetadata);
         CriteriaTransferObject cto = RequestTranslator.translate(request);
         List<?> data = dynamicEntityService.query(entityType, cto);
         EntityQueryResponse response = new EntityQueryResponse();

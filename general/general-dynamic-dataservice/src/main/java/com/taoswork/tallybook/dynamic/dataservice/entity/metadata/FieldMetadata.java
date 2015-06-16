@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.facet.FieldFacetType;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.facet.IFieldFacet;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/24.
  */
-public class FieldMetadata extends FriendlyMetadata {
+public class FieldMetadata extends FriendlyMetadata implements Serializable {
     public Field field;
 
     public String tabName;

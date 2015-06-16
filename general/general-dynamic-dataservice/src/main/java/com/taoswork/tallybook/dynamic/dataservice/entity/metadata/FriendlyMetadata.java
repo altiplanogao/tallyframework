@@ -45,5 +45,13 @@ public abstract class FriendlyMetadata {
         return this;
     }
 
-
+    public void copyFrom(FriendlyMetadata metadata){
+        Class sourceType = metadata.getClass();
+        Class targetType = this.getClass();
+        if(sourceType.isAssignableFrom(targetType)){
+            this.setName(metadata.getName());
+            this.setFriendlyName(metadata.getFriendlyName());
+            this.setOrder(metadata.getOrder());
+        }
+    }
 }

@@ -1,9 +1,9 @@
-package com.taoswork.tallybook.business.dataservice.tallymodule.conf;
+package com.taoswork.tallybook.business.dataservice.tallyadmin.conf;
 
-import com.taoswork.tallybook.business.dataservice.tallymodule.TallyModuleDataService;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.ServiceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.confighelper.DataServiceConfigBase;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.FilterType;
  */
 @Configuration
 @ComponentScan(
-        basePackageClasses = TallyModuleDataService.class,
+        basePackageClasses = TallyAdminDataService.class,
         includeFilters = {@ComponentScan.Filter(
                 type = FilterType.ANNOTATION,
                 value = {
@@ -24,5 +24,8 @@ import org.springframework.context.annotation.FilterType;
                 value = {Configuration.class}
         )}
 )
-public class TallyModuleServiceConfig extends ServiceConfigBase {
+public class TallyAdminDataServiceConfig extends DataServiceConfigBase {
+        public TallyAdminDataServiceConfig() {
+                super("TallyAdminDataService");
+        }
 }

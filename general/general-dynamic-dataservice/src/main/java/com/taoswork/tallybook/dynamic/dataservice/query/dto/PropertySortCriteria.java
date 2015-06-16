@@ -36,7 +36,7 @@ public class PropertySortCriteria extends PropertyCriteria{
 
     @Override
     public String toString() {
-        return "Sort: " + propertyName +
+        return "SORT: " + propertyName +
                 (SortDirection.ASCENDING.equals(sortDirection) ?
                         "_/ asc" :
                         "\\_ desc");

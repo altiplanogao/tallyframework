@@ -8,6 +8,8 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/5/11.
  */
 public interface IDataService {
+    public static final String DATASERVICE_NAME_S_BEAN_NAME = "DataServiceBeanName";
+
     <T> T getService(String serviceName);
 
     <T> T getService(Class<T> clz, String serviceName);

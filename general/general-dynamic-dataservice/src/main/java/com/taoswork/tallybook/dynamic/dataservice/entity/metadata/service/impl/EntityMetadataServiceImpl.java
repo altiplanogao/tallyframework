@@ -1,10 +1,15 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClass;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.FieldProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
+import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
+import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
 import org.apache.commons.collections.map.LRUMap;
 
 import java.lang.reflect.Field;
@@ -16,11 +21,36 @@ import java.util.Map;
 public class EntityMetadataServiceImpl implements EntityMetadataService {
     protected final ClassProcessor classProcessor;
     protected final FieldProcessor fieldProcessor;
+
     private Map<String, ClassMetadata> classMetadataCache = new LRUMap();
 
     public EntityMetadataServiceImpl(){
         fieldProcessor = new FieldProcessor();
         classProcessor = new ClassProcessor(fieldProcessor);
+    }
+
+    @Override
+    public ClassTreeMetadata getClassTreeMetadata(final EntityClassTree entityClassTree) {
+        final ClassTreeMetadata classTreeMetadata = new ClassTreeMetadata();
+        classTreeMetadata.setEntityClassTree(entityClassTree);
+        generateClassMetadata(entityClassTree.getData().clz, classTreeMetadata);
+
+        entityClassTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
+            @Override
+            public Void callback(EntityClass parameter) throws AutoTreeException {
+                Class clz = parameter.clz;
+                ClassMetadata classMetadata = getClassMetadata(clz);
+                if(clz.equals(entityClassTree.getData().clz)){
+                    classTreeMetadata.copyFrom(classMetadata);
+                }
+                classTreeMetadata.getRWTabMetadataMap().putAll(classMetadata.getReadonlyTabMetadataMap());
+                classTreeMetadata.getRWGroupMetadataMap().putAll(classMetadata.getReadonlyGroupMetadataMap());
+                classTreeMetadata.getRWFieldMetadataMap().putAll(classMetadata.getReadonlyFieldMetadataMap());
+                return null;
+            }
+        }, false);
+
+        return classTreeMetadata;
     }
 
     @Override
@@ -51,7 +81,11 @@ public class EntityMetadataServiceImpl implements EntityMetadataService {
 
     private ClassMetadata generateClassMetadata(Class<?> clz){
         ClassMetadata classMetadata = new ClassMetadata();
-        classProcessor.process(clz, classMetadata);
+        generateClassMetadata(clz, classMetadata);
         return classMetadata;
+    }
+
+    private void generateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
+        classProcessor.process(clz, classMetadata);
     }
 }

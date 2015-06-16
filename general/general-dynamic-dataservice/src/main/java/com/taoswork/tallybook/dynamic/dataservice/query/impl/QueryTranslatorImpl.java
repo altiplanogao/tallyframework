@@ -2,6 +2,9 @@ package com.taoswork.tallybook.dynamic.dataservice.query.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.query.QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -17,7 +20,8 @@ public class QueryTranslatorImpl implements QueryTranslator {
     @Override
     public <T> TypedQuery<T> constructListQuery(
             EntityManager entityManager,
-            Class<T> entityClz, CriteriaTransferObject criteriaTransferObject){
+            Class<T> entityClz,
+            CriteriaTransferObject criteriaTransferObject){
         Integer firstResult = criteriaTransferObject.getFirstResult();
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -25,6 +29,23 @@ public class QueryTranslatorImpl implements QueryTranslator {
         Root<T> original = criteria.from(entityClz);
 
         criteria.select(original);
+
+        for(PropertyFilterCriteria pfc : criteriaTransferObject.getFilterCriteriasCollection()){
+            String propertyName = pfc.getPropertyName();
+            List<String> values = pfc.getFilterValues();
+
+        }
+
+        for (PropertySortCriteria psc : criteriaTransferObject.getSortCriterias()){
+            String propertyName = psc.getPropertyName();
+            SortDirection direction = psc.getSortDirection();
+            if(null == direction){
+                continue;
+            } else {
+
+            }
+        }
+
         List<Predicate> restrictions = new ArrayList<Predicate>();
         List<Order> sorts = new ArrayList<Order>();
 

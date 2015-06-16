@@ -47,7 +47,7 @@ public final class EdoBuilder {
             classEdo.addTab(tabDto);
         }
 
-//        Map<String, GroupMetadata> groupMetadataMap = classMetadata.getGroupMetadataMap();
+//        Map<String, GroupMetadata> groupMetadataMap = classMetadata.getReadonlyGroupMetadataMap();
 //        for (Map.Entry<String, GroupMetadata> entry : groupMetadataMap.entrySet()){
 //            if(intermediate.groupMetadataMapMerged.containsKey(entry.getKey())){
 //                LOGGER.warn("Group with name '{}' already exist.", entry.getKey());
@@ -55,7 +55,7 @@ public final class EdoBuilder {
 //            intermediate.groupMetadataMapMerged.put(entry.getKey(), entry.getValue());
 //        }
 
-        Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getFieldMetadataMap();
+        Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, FieldMetadata> entry : fieldMetadataMap.entrySet()) {
             FieldMetadata fieldMetadata = entry.getValue();
             String tabName = fieldMetadata.getTabName();
@@ -66,7 +66,7 @@ public final class EdoBuilder {
             TabEdo tabEdo = classEdo.getTab(tabName);
             GroupEdo groupEdo = tabEdo.getGroupWithName(groupName);
             if (groupEdo == null) {
-                groupEdo = createGroupEdo(classMetadata.getGroupMetadataMap().get(groupName));
+                groupEdo = createGroupEdo(classMetadata.getReadonlyGroupMetadataMap().get(groupName));
                 tabEdo.addGroup(groupEdo);
             }
             groupEdo.addField(fieldEdo);

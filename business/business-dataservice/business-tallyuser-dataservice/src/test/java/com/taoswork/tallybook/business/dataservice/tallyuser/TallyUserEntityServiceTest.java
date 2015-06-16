@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.dataservice.tallyuser;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserServiceConfig;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserDataServiceConfig;
 import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestPersistenceConfig;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
@@ -31,7 +31,7 @@ public class TallyUserEntityServiceTest {
         counter++;
         dataService = new TallyUserDataService(
                 TallyUserTestPersistenceConfig.class,
-                TallyUserServiceConfig.class);
+                TallyUserDataServiceConfig.class);
     }
 
     @After

@@ -32,7 +32,7 @@ public class EntityMetadataServiceTest {
     public void testClassMetadata(){
         ClassMetadata classMetadata = entityMetadataService.getClassMetadata(CompanyImpl.class);
 
-        Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getFieldMetadataMap();
+        Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         Assert.assertTrue(fieldMetadataMap.size() == NativeClassHelper.getFields(CompanyImpl.class,
                 NativeClassHelper.scanAllPersistentNoSuper).size());
         int callCounter = 0;

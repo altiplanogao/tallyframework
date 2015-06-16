@@ -1,9 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/15.
@@ -58,9 +55,13 @@ public class PropertyFilterCriteria extends PropertyCriteria{
         return this;
     }
 
+    public List<String> getFilterValues(){
+        return Collections.unmodifiableList(filterValues);
+    }
+
     @Override
     public String toString() {
-        return "Filter [" + propertyName + "] having '"
+        return "FILTER: [" + propertyName + "] having '"
                  + filterValues +
                 '\'';
     }

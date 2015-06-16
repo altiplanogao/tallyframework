@@ -7,6 +7,7 @@ import com.taoswork.tallybook.general.dataservice.support.IDataService;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
 import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
+import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -43,7 +44,15 @@ public abstract class DataServiceBase implements IDataService {
     private final Map<String, String> resourceNameToEntityInterface = new HashMap<String, String>();
 
     private void loadAnnotatedClasses(Class<?>... annotatedClasses) {
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext();
+        onServiceStart();
+
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(){
+            @Override
+            protected void onClose() {
+                super.onClose();
+                onServiceStop();
+            }
+        };
         annotationConfigApplicationContext.setDisplayName(this.getClass().getSimpleName());
         annotationConfigApplicationContext.register(annotatedClasses);
         annotationConfigApplicationContext.refresh();
@@ -58,6 +67,14 @@ public abstract class DataServiceBase implements IDataService {
     }
 
     protected void postConstruct() {
+    }
+
+    protected void onServiceStart(){
+        CachedRepoManager.startEhcache();
+    }
+
+    protected void onServiceStop(){
+        CachedRepoManager.stopEhcache();
     }
 
     @Override

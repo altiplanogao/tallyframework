@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminServiceConfig;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceConfig;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestPersistenceConfig;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
@@ -20,7 +20,7 @@ public class TallyAdminDataServiceTest {
     public void setDataService(){
         dataService = new TallyAdminDataService(
                 TallyAdminTestPersistenceConfig.class,
-                TallyAdminServiceConfig.class);
+                TallyAdminDataServiceConfig.class);
     }
 
     @Test

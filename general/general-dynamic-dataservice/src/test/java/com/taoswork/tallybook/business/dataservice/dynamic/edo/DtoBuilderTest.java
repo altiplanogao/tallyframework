@@ -64,7 +64,7 @@ public class DtoBuilderTest {
             }
 
             ////////////
-            FieldMetadata fieldMetadata = classMetadata.getFieldMetadataMap().getOrDefault(field.getName(), null);
+            FieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().getOrDefault(field.getName(), null);
             Assert.assertNotNull(fieldMetadata);
             FieldEdo fieldEdo = EdoBuilder.createFieldEdo(fieldMetadata);
 

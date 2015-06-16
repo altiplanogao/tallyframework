@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness;
 
 import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessPersistenceConfig;
-import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessServiceConfig;
+import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessDataServiceConfig;
 import com.taoswork.tallybook.general.dataservice.support.impl.DataServiceBase;
 
 /**
@@ -17,6 +17,6 @@ public class TallyBusinessDataService extends DataServiceBase {
     public TallyBusinessDataService() {
         super(new Class<?>[]{
                 TallyBusinessPersistenceConfig.class,
-                TallyBusinessServiceConfig.class});
+                TallyBusinessDataServiceConfig.class});
     }
 }

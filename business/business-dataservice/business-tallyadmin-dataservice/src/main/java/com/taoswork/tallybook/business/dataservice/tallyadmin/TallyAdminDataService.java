@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistenceConfig;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminServiceConfig;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceConfig;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Role;
@@ -25,7 +25,7 @@ public class TallyAdminDataService extends DataServiceBase {
     public TallyAdminDataService() {
         super( new Class<?>[]{
                 TallyAdminPersistenceConfig.class,
-                TallyAdminServiceConfig.class});
+                TallyAdminDataServiceConfig.class});
     }
 
     @Override
