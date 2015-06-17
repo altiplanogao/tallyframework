@@ -14,13 +14,16 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/5/24.
  */
 public class FieldMetadata extends FriendlyMetadata implements Serializable {
-    public Field field;
+//    public Field field;
 
-    public String tabName;
-    public String groupName;
-    public int visibility;
+    private String name;
+    private String declaringClassName;
 
-    public SupportedFieldType fieldType;
+    private String tabName;
+    private String groupName;
+    private int visibility;
+
+    private SupportedFieldType fieldType;
 
     public final Map<FieldFacetType, IFieldFacet> facets = new HashMap<FieldFacetType, IFieldFacet>();
 
@@ -28,12 +31,13 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
         setField(field);
     }
 
-    public Field getField() {
-        return field;
-    }
-
+//    public Field getField() {
+//        return field;
+//    }
+//
     public void setField(Field field) {
-        this.field = field;
+        name = field.getName();
+        declaringClassName = field.getDeclaringClass().getSimpleName();
     }
 
     public boolean isId() {
@@ -112,7 +116,7 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     @Override
     public String toString() {
         return "Field Meta{'" +
-                field.getName() + "'@" + field.getDeclaringClass().getSimpleName() +
+                name + "'@" + declaringClassName +
                 " " + Visibility.makeString(visibility) +
                 '}';
     }

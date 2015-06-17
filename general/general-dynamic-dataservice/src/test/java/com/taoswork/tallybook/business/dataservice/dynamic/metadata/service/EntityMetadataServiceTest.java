@@ -59,8 +59,8 @@ public class EntityMetadataServiceTest {
                                     String fieldName, String tabName, String groupName, int callCounter){
         FieldMetadata fieldMetadata = fieldMetadataMap.getOrDefault(fieldName, null);
         Assert.assertNotNull(fieldMetadata);
-        Assert.assertEquals(fieldMetadata.tabName, tabName);
-        Assert.assertEquals(fieldMetadata.groupName, groupName);
+        Assert.assertEquals(fieldMetadata.getTabName(), tabName);
+        Assert.assertEquals(fieldMetadata.getGroupName(), groupName);
         callCounter++;
         return callCounter;
     }

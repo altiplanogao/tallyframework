@@ -3,14 +3,15 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.edo;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Created by Gao Yuan on 2015/5/26.
  */
-public abstract class FriendlyEdo {
+public abstract class FriendlyEdo implements Serializable {
 
-    public static class OrderedComparator implements Comparator<FriendlyEdo>{
+    public static class OrderedComparator implements Comparator<FriendlyEdo> , Serializable{
         @Override
         public int compare(FriendlyEdo o1, FriendlyEdo o2) {
             return new CompareToBuilder()

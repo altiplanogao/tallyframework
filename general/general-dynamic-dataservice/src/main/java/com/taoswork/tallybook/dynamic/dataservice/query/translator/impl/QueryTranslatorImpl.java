@@ -29,7 +29,7 @@ public class QueryTranslatorImpl implements QueryTranslator {
             EntityManager entityManager,
             Class<T> entityClz,
             ClassTreeMetadata classTreeMetadata,
-            CriteriaTransferObject cto){
+            CriteriaTransferObject cto) {
         Integer firstResult = cto.getFirstResult();
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -41,10 +41,10 @@ public class QueryTranslatorImpl implements QueryTranslator {
         List<Predicate> restrictions = new ArrayList<Predicate>();
         List<Order> sorts = new ArrayList<Order>();
 
-        for(PropertyFilterCriteria pfc : cto.getFilterCriteriasCollection()){
+        for (PropertyFilterCriteria pfc : cto.getFilterCriteriasCollection()) {
             String propertyName = pfc.getPropertyName();
             List<String> values = pfc.getFilterValues();
-            if(!CollectionUtility.isEmpty(values)){
+            if (!CollectionUtility.isEmpty(values)) {
                 FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
                 FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
                 SupportedFieldType fieldType = fieldMetadata.getFieldType();
@@ -52,16 +52,16 @@ public class QueryTranslatorImpl implements QueryTranslator {
                 List<Object> convertedValues = restriction.convertValues(values);
                 Predicate predicate = restriction.getPredicateProvider().buildPredicate(criteriaBuilder, fieldPathBuilder,
                         original, entityClz, propertyName, null, convertedValues);
-                if(null != predicate){
+                if (null != predicate) {
                     restrictions.add(predicate);
                 }
             }
         }
 
-        for (PropertySortCriteria psc : cto.getSortCriterias()){
+        for (PropertySortCriteria psc : cto.getSortCriterias()) {
             String propertyName = psc.getPropertyName();
             SortDirection direction = psc.getSortDirection();
-            if(null == direction){
+            if (null == direction) {
                 continue;
             } else {
                 FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
@@ -69,9 +69,9 @@ public class QueryTranslatorImpl implements QueryTranslator {
                 Path path = fpb.buildPath(original, propertyName);
 
                 Expression exp = path;
-                if(SortDirection.ASCENDING == direction) {
+                if (SortDirection.ASCENDING == direction) {
                     sorts.add(criteriaBuilder.asc(exp));
-                }else {
+                } else {
                     sorts.add(criteriaBuilder.desc(exp));
                 }
             }
@@ -79,13 +79,10 @@ public class QueryTranslatorImpl implements QueryTranslator {
 
         criteria.where(restrictions.toArray(new Predicate[restrictions.size()]));
         criteria.orderBy(sorts);
-        if(firstResult != null && sorts.isEmpty()){
-//            sss
-        }
 
         TypedQuery<T> typedQuery = entityManager.createQuery(criteria);
-
         addPaging(typedQuery, cto);
+
         return typedQuery;
     }
 
@@ -93,12 +90,12 @@ public class QueryTranslatorImpl implements QueryTranslator {
         addPaging(response, query.getFirstResult(), query.getMaxResultCount());
     }
 
-    protected static void addPaging(Query response, Integer firstResult, Integer maxResults) {
+    protected static void addPaging(Query query, Integer firstResult, Integer maxResults) {
         if (firstResult != null) {
-            response.setFirstResult(firstResult);
+            query.setFirstResult(firstResult);
         }
         if (maxResults != null) {
-            response.setMaxResults(maxResults);
+            query.setMaxResults(maxResults);
         }
     }
 }

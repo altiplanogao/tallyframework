@@ -4,6 +4,7 @@ import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriter
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.request.EntityQueryRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.dto.request.GeneralRequestParameter;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,9 @@ public class ParameterToRequestTranslator {
     private static final Set<String> staticParaNames = new HashSet<String>();
 
     static {
-        staticParaNames.add(EntityQueryRequest.REQUEST_START_INDEX);
-        staticParaNames.add(EntityQueryRequest.REQUEST_MAX_INDEX);
-        staticParaNames.add(EntityQueryRequest.REQUEST_MAX_RESULT_COUNT);
+        staticParaNames.add(GeneralRequestParameter.REQUEST_START_INDEX);
+        staticParaNames.add(GeneralRequestParameter.REQUEST_MAX_INDEX);
+        staticParaNames.add(GeneralRequestParameter.REQUEST_MAX_RESULT_COUNT);
     }
 
     private static Integer getIntegerValue(List<String> values) {
@@ -69,15 +70,19 @@ public class ParameterToRequestTranslator {
                 String propertyName = key;
                 if (handleIndexParameter(propertyName, value, integerValues)) {
                     continue;
-                } else if (key.startsWith(EntityQueryRequest.SORT_PARAMETER)) {
-                    propertyName = key.substring(EntityQueryRequest.SORT_PARAMETER.length());
+                } else if (key.startsWith(GeneralRequestParameter.SORT_PARAMETER)) {
+                    propertyName = key.substring(GeneralRequestParameter.SORT_PARAMETER.length());
                     PropertySortCriteria sortCriteria = new PropertySortCriteria(propertyName);
-                    if (value.size() > 1) {
-                        LOGGER.warn("Sort Criteria for {} count > 1, ignoring ... ", propertyName);
+                    int valueSize = value.size();
+                    if (valueSize > 1) {
+                        LOGGER.warn("Sort Criteria for {} count > 1, ignoring the fronts ... ", propertyName);
                     }
-                    boolean sortAscending = SortDirection.ASCENDING.toString().equals(value.get(0));
-                    sortCriteria.setSortAscending(sortAscending);
-                    request.appendSortCriteria(sortCriteria);
+                    String orderStr = value.get(valueSize - 1);
+                    SortDirection sortDirection = GeneralRequestParameter.getSortDirection(orderStr);
+                    if(null != sortDirection) {
+                        sortCriteria.setSortDirection(sortDirection);
+                        request.appendSortCriteria(sortCriteria);
+                    }
                 } else {
                     PropertyFilterCriteria filterCriteria = new PropertyFilterCriteria(propertyName);
                     filterCriteria.addFilterValues(value);
@@ -86,9 +91,9 @@ public class ParameterToRequestTranslator {
             }
         }
 
-        int startIndex = integerValues.getOrDefault(EntityQueryRequest.REQUEST_START_INDEX, 0);
-        Integer maxIndex = integerValues.getOrDefault(EntityQueryRequest.REQUEST_MAX_INDEX, null);
-        Integer maxResultCount = integerValues.getOrDefault(EntityQueryRequest.REQUEST_MAX_RESULT_COUNT, null);
+        int startIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_START_INDEX, 0);
+        Integer maxIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_INDEX, null);
+        Integer maxResultCount = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_RESULT_COUNT, null);
 
         request.setStartIndex(startIndex);
         if (maxResultCount == null && maxIndex == null) {

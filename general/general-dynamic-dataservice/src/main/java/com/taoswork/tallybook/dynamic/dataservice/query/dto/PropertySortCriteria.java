@@ -22,7 +22,11 @@ public class PropertySortCriteria extends PropertyCriteria{
     }
 
     public void setSortAscending(Boolean sortAscending) {
-        this.sortDirection = (sortAscending) ? SortDirection.ASCENDING : SortDirection.DESCENDING;
+        if(null == sortAscending){
+            setSortDirection(null);
+        }else {
+            setSortDirection((sortAscending) ? SortDirection.ASCENDING : SortDirection.DESCENDING);
+        }
     }
 
     public SortDirection getSortDirection() {

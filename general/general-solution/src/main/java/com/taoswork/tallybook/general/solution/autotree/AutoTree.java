@@ -8,6 +8,7 @@ import com.taoswork.tallybook.general.solution.quickinterface.IChecker;
 import com.taoswork.tallybook.general.solution.quickinterface.IToString;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class AutoTree<D> {
+public class AutoTree<D> implements Serializable{
     protected final D data;
     protected AutoTree<D> parent;
     protected final List<AutoTree<D>> children = new ArrayList<AutoTree<D>>();

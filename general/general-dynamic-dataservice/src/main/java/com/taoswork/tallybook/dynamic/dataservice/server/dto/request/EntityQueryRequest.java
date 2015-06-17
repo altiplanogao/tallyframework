@@ -11,11 +11,6 @@ import java.util.Collection;
  */
 public class EntityQueryRequest {
 
-    public static final String REQUEST_START_INDEX = "startIndex";
-    public static final String REQUEST_MAX_INDEX = "maxIndex";
-    public static final String REQUEST_MAX_RESULT_COUNT = "maxResult";
-    public static final String SORT_PARAMETER = "sort_";
-
     public static final int DEFAULT_REQUEST_MAX_RESULT_COUNT = 50;
 
     public EntityQueryRequest(){

@@ -2,10 +2,12 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree;
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeClassHelper;
 
+import java.io.Serializable;
+
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class EntityClass {
+public class EntityClass implements Serializable {
     public final Class<?> clz;
     protected final boolean polymorphism;
 
