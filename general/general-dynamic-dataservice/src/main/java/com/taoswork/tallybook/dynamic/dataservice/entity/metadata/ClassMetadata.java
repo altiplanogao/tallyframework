@@ -58,6 +58,10 @@ public class ClassMetadata extends FriendlyMetadata implements Serializable {
         return Collections.unmodifiableMap(fieldMetadataMap);
     }
 
+    public FieldMetadata getFieldMetadata(String fieldName){
+        return fieldMetadataMap.getOrDefault(fieldName, null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,7 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper;
 
-import org.hibernate.type.Type;
-
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +16,7 @@ public interface EntityMetadataRawAccess {
 
     List<String> getPropertyNames(Class<?> entityClass);
 
-    List<Type> getPropertyTypes(Class<?> entityClass);
+ //   List<Type> getPropertyTypes(Class<?> entityClass);
 
     Class<?>[] getAllEntityClasses();
 }

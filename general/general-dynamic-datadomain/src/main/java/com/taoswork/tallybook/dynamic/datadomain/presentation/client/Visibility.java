@@ -31,7 +31,8 @@ import com.taoswork.tallybook.general.extension.utils.BitUtility;
  */
 public abstract class Visibility {
     //avoid constructor
-    private Visibility(){}
+    private Visibility() {
+    }
 
     public static final int GRID_VISIBLE = 0x00000001;
     public static final int FORM_VISIBALE = 0x00000002;
@@ -44,24 +45,32 @@ public abstract class Visibility {
 
     public static final int DEFAULT = VISIBLE_ALL;
 
-    public static boolean gridVisible(int visibility){
+    public static boolean gridVisible(int visibility) {
         return BitUtility.containsAll(visibility, GRID_VISIBLE);
     }
 
-    public static boolean formVisible(int visibility){
+    public static boolean formVisible(int visibility) {
         return BitUtility.containsAll(visibility, FORM_VISIBALE);
     }
 
-    public static String makeString(int visiblity){
+    public static String makeString(int visibility) {
+        StringBuilder sb = new StringBuilder("Visible:");
+
         StringChain<String> sc = new StringChain<String>();
         sc.setAsJsonArray();
-        sc.setFixes("Visible:[", "]");
-        if(gridVisible(visiblity)){
+        if (gridVisible(visibility)) {
             sc.add("Grid");
         }
-        if(formVisible(visiblity)){
+        if (formVisible(visibility)) {
             sc.add("Form");
         }
-        return sc.toString();
+
+        if (sc.isEmpty()) {
+            sb.append("NONE");
+        } else {
+            sb.append(sc.toString());
+        }
+
+        return sb.toString();
     }
 }

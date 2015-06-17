@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.impl;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.EntityMetadataHelper;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl.EntityMetadataHelper4Hibernate;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl.EntityMetadataHelper4JPA;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
@@ -43,10 +44,12 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     @PostConstruct
     public void init(){
         EntityManager entityManager = getEntityManager();
-        if(entityManager instanceof HibernateEntityManager) {
-            entityMetadataHelper = new EntityMetadataHelper4Hibernate();
-            entityMetadataHelper.setEntityManager(entityManager);
-        }
+        entityMetadataHelper = new EntityMetadataHelper4JPA();
+        entityMetadataHelper.setEntityManager(entityManager);
+//        if(entityManager instanceof HibernateEntityManager) {
+//            entityMetadataHelper = new EntityMetadataHelper4Hibernate();
+//            entityMetadataHelper.setEntityManager(entityManager);
+//        }
         if(entityMetadataHelper == null){
             LOGGER.error("entityMetadataHelper Not initialized !!!");
         }

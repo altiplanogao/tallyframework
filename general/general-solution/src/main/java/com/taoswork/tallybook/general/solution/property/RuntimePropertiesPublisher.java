@@ -51,4 +51,17 @@ public class RuntimePropertiesPublisher {
             return defaultVal;
         }
     }
+
+    public boolean getBoolean(String propertyKey, boolean defaultVal){
+        String strVal = properties.getProperty(propertyKey, "");
+        if(StringUtils.isEmpty(strVal)){
+            return defaultVal;
+        }
+        try {
+            boolean val = Boolean.parseBoolean(strVal);
+            return val;
+        } catch (NumberFormatException exp){
+            return defaultVal;
+        }
+    }
 }

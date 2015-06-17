@@ -1,10 +1,13 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.query.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.query.translator.QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.query.impl.QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.query.translator.impl.QueryTranslatorImpl;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -13,6 +16,9 @@ import java.util.List;
  * Created by Gao Yuan on 2015/5/21.
  */
 public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
+
+    @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
+    protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
     private final QueryTranslator queryTranslator;
     
@@ -69,7 +75,8 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     }
 
     public <T> List<T> query(Class<T> entityClz, CriteriaTransferObject query) {
-        TypedQuery<T> typedQuery = queryTranslator.constructListQuery(getEntityManager(), entityClz, query);
+        ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityClz);
+        TypedQuery<T> typedQuery = queryTranslator.constructListQuery(getEntityManager(), entityClz, classTreeMetadata, query);
         return typedQuery.getResultList();
     }
 }

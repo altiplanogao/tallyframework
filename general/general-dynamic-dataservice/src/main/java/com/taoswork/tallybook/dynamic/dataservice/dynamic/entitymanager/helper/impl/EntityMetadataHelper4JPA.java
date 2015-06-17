@@ -4,24 +4,24 @@ import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.E
 import com.taoswork.tallybook.general.solution.cache.CacheDecider;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
 import org.apache.commons.collections.map.LRUMap;
-import org.hibernate.SessionFactory;
-import org.hibernate.ejb.HibernateEntityManager;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.type.Type;
 
 import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.Type;
 import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/21.
  */
-public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
+public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
 
     public static final Object LOCK_OBJECT = new Object();
     public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE = new LRUMap(100, 1000);
     public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS = new LRUMap(100, 1000);
 
-    private HibernateEntityManager hibernateEntityManager;
+    private EntityManager entityManager;
 
     protected CacheDecider cacheDecider;
 
@@ -39,13 +39,13 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
     }
 
     @Override
-    public HibernateEntityManager getEntityManager() {
-        return hibernateEntityManager;
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     @Override
     public void setEntityManager(EntityManager entityManager) {
-        this.hibernateEntityManager = (HibernateEntityManager)entityManager;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -63,7 +63,8 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
             Class<?> ceilingClz,
             boolean includeUnqualifiedPolymorphicEntities,
             boolean useCache) {
-        SessionFactory sessionFactory = this.getSessionFactory();
+        Metamodel mm = entityManager.getMetamodel();
+        Set<EntityType<?>> entityTypes = mm.getEntities();
         Class<?>[] cache = null;
         synchronized(LOCK_OBJECT) {
             if (useCache) {
@@ -75,9 +76,8 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
             }
             if (cache == null) {
                 List<Class<?>> entities = new ArrayList<Class<?>>();
-                for (Object item : sessionFactory.getAllClassMetadata().values()) {
-                    ClassMetadata metadata = (ClassMetadata) item;
-                    Class<?> mappedClass = metadata.getMappedClass();
+                for (EntityType et : entityTypes) {
+                    Class<?> mappedClass = et.getBindableJavaType();
                     if (mappedClass != null && ceilingClz.isAssignableFrom(mappedClass)) {
                         entities.add(mappedClass);
                     }
@@ -116,26 +116,30 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
     @Override
     public Map<String, String> getIdMetadata(Class<?> entityClz) {
         Map<String, String> response = new HashMap<String, String>();
-        SessionFactory sessionFactory = getSessionFactory();
-
-        ClassMetadata metadata = sessionFactory.getClassMetadata(entityClz);
-        if (metadata == null) {
+        Metamodel mm = entityManager.getMetamodel();
+        EntityType<?> entityType = mm.entity(entityClz);
+        if (entityType == null) {
             return null;
         }
 
-        String idProperty = metadata.getIdentifierPropertyName();
-        response.put("name", idProperty);
-        Type idType = metadata.getIdentifierType();
-        response.put("type", idType.getName());
+        Type<?> idType = entityType.getIdType();
+//        idType.
+//        String idProperty = metadata.getIdentifierPropertyName();
+//        response.put("name", idProperty);
+//        Type idType = metadata.getIdentifierType();
+//        response.put("type", idType.getName());
 
         return response;
     }
 
     @Override
     public List<String> getPropertyNames(Class<?> entityClz) {
-        ClassMetadata metadata = getSessionFactory().getClassMetadata(entityClz);
+        Metamodel mm = entityManager.getMetamodel();
+        EntityType<?> entityType = mm.entity(entityClz);
         List<String> propertyNames = new ArrayList<String>();
-        Collections.addAll(propertyNames, metadata.getPropertyNames());
+        for(Attribute attribute : entityType.getAttributes()){
+            propertyNames.add(attribute.getName());
+        }
         return propertyNames;
     }
 
@@ -152,16 +156,14 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
         POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS.clear();
     }
 
-    private SessionFactory getSessionFactory() {
-        return hibernateEntityManager.getSession().getSessionFactory();
-    }
-
     @Override
     public Class<?>[] getAllEntityClasses() {
+        Metamodel mm = entityManager.getMetamodel();
+        Set<EntityType<?>> entityTypes = mm.getEntities();
+
         List<Class<?>> entityClasses = new ArrayList<Class<?>>();
-        SessionFactory sessionFactory = this.getSessionFactory();
-        for (ClassMetadata classMetadata : sessionFactory.getAllClassMetadata().values()){
-            Class<?> mappedClz = classMetadata.getMappedClass();
+        for (EntityType<?> entityType : entityTypes){
+            Class<?> mappedClz = entityType.getJavaType();
             if(mappedClz != null){
                 entityClasses.add(mappedClz);
             }

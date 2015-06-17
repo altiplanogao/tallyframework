@@ -1,5 +1,6 @@
-package com.taoswork.tallybook.dynamic.dataservice.query;
+package com.taoswork.tallybook.dynamic.dataservice.query.translator;
 
+import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.TypedQuery;
 public interface QueryTranslator {
     <T> TypedQuery<T> constructListQuery(
             EntityManager entityManager,
-            Class<T> entityClz, CriteriaTransferObject criteriaTransferObject);
-
+            Class<T> entityClz,
+            ClassTreeMetadata classTreeMetadata,
+            CriteriaTransferObject cto);
 }

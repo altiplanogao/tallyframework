@@ -73,6 +73,10 @@ public class NodeList<T>{
         return this;
     }
 
+    public boolean isEmpty(){
+        return mNodes.isEmpty();
+    }
+
     public int count() {
         return mNodes.size();
     }
