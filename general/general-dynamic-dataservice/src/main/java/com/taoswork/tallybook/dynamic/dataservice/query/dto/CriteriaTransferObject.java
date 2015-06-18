@@ -1,31 +1,46 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class CriteriaTransferObject {
-    private int firstResult;
-    private int maxResultCount;
+public class CriteriaTransferObject implements Cloneable {
+    public static final int SINGLE_QUERY_DEFAULT_RESULT_COUNT = 50;
+    public static final int SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED = 200;
 
-    private final Map<String, PropertyFilterCriteria> filterCriterias = new HashMap<String, PropertyFilterCriteria>();
-    private final List<PropertySortCriteria> sortCriterias = new ArrayList<PropertySortCriteria>();
+    private long firstResult = 0;
+    private int maxResultCount = SINGLE_QUERY_DEFAULT_RESULT_COUNT;
 
-    public int getFirstResult() {
+    private Map<String, PropertyFilterCriteria> filterCriterias = new HashMap<String, PropertyFilterCriteria>();
+    private List<PropertySortCriteria> sortCriterias = new ArrayList<PropertySortCriteria>();
+
+    public long getFirstResult() {
         return firstResult;
     }
 
-    public void setFirstResult(int firstResult) {
-        this.firstResult = firstResult;
+    public CriteriaTransferObject setFirstResult(long firstResult) {
+        if(firstResult >= 0){
+            this.firstResult = firstResult;
+        }
+        return this;
     }
 
     public int getMaxResultCount() {
         return maxResultCount;
     }
 
-    public void setMaxResultCount(int maxResults) {
-        this.maxResultCount = maxResults;
+    public CriteriaTransferObject setMaxResultCount(int maxResults) {
+        if(maxResults > SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED){
+            maxResults = SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED;
+        }
+        if(maxResults > 0){
+            this.maxResultCount = maxResults;
+        }
+        return this;
     }
 
     public CriteriaTransferObject addFilterCriteria(PropertyFilterCriteria criteria){
@@ -93,4 +108,40 @@ public class CriteriaTransferObject {
         return criteria;
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+
+        if (!(o instanceof CriteriaTransferObject)) return false;
+
+        CriteriaTransferObject that = (CriteriaTransferObject) o;
+
+        return new EqualsBuilder()
+                .append(firstResult, that.firstResult)
+                .append(maxResultCount, that.maxResultCount)
+                .append(filterCriterias, that.filterCriterias)
+                .append(sortCriterias, that.sortCriterias)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(firstResult)
+                .append(maxResultCount)
+                .append(filterCriterias)
+                .append(sortCriterias)
+                .toHashCode();
+    }
+
+    @Override
+    public CriteriaTransferObject clone() throws CloneNotSupportedException {
+        CriteriaTransferObject cto = (CriteriaTransferObject) super.clone();
+        cto.filterCriterias = new HashMap<String, PropertyFilterCriteria>();
+        cto.sortCriterias = new ArrayList<PropertySortCriteria>();
+        cto.sortCriterias.addAll(sortCriterias);
+        cto.filterCriterias.putAll(filterCriterias);
+        return cto;
+    }
 }

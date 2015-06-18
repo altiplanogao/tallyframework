@@ -96,7 +96,7 @@ public class PersistenceConfigHelper {
             }
         }
         RuntimeEnvironmentPropertyPlaceholderConfigurer configurer = new RuntimeEnvironmentPropertyPlaceholderConfigurer();
-        configurer.setPropertyPathResources(SetBuilder.instance(resourcePath).result());
+        configurer.setPropertyPathResources(new SetBuilder<Resource>().append(resourcePath));
         configurer.setOverrideFileResources(overrideResources);
         return configurer;
     }

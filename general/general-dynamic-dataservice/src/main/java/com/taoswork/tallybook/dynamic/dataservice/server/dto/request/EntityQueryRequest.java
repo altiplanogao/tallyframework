@@ -64,7 +64,7 @@ public class EntityQueryRequest {
         return criteriaTransferObject.getFilterCriteriasCollection();
     }
 
-    public int getFirstResult() {
+    public long getFirstResult() {
         return criteriaTransferObject.getFirstResult();
     }
 

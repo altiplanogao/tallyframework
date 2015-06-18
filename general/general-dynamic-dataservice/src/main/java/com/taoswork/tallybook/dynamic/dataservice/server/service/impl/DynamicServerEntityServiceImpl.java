@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.response.EntityQueryResponse;
@@ -14,7 +15,6 @@ import com.taoswork.tallybook.dynamic.dataservice.server.service.translate.Reque
 import com.taoswork.tallybook.dynamic.dataservice.server.service.utils.EntityMaker;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/5/29.
@@ -41,11 +41,12 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
         ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(rootPersistiveClz);
         ClassEdo classEdo = entityDescriptionService.getClassEdo(classTreeMetadata);
         CriteriaTransferObject cto = RequestTranslator.translate(request);
-        List<?> data = dynamicEntityService.query(entityType, cto);
-        EntityQueryResponse response = new EntityQueryResponse();
-
-        response.setEntities(EntityMaker.makeGridEntityList(data, classEdo));
-        response.setClassEdo(classEdo);
+        CriteriaQueryResult<?> data = dynamicEntityService.query(entityType, cto);
+        EntityQueryResponse response = new EntityQueryResponse()
+                .setEntities(EntityMaker.makeGridEntityList(data.getEntityCollection(), classEdo))
+                .setStartIndex(request.getFirstResult())
+                .setTotalCount(data.getTotalCount())
+                .setClassEdo(classEdo);
         return response;
     }
 }

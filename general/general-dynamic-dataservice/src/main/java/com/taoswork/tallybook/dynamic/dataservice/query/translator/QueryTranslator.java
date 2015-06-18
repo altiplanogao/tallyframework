@@ -15,4 +15,11 @@ public interface QueryTranslator {
             Class<T> entityClz,
             ClassTreeMetadata classTreeMetadata,
             CriteriaTransferObject cto);
+
+    <T> TypedQuery<Long> constructCountQuery(
+            EntityManager entityManager,
+            Class<T> entityClz,
+            ClassTreeMetadata classTreeMetadata,
+            CriteriaTransferObject cto);
+
 }

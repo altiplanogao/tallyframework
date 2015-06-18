@@ -18,4 +18,11 @@ public class ListUtility {
             list.add(ele);
         }
     }
+
+    public static <T> void reversedCopy(List<T> src, List<T> dest){
+        dest.clear();
+        for(T e : src){
+            dest.add(0, e);
+        }
+    }
 }

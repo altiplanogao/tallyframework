@@ -10,6 +10,7 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import org.junit.After;
 import org.junit.Assert;
@@ -106,8 +107,8 @@ public class TallyUserEntityServiceTest {
             Assert.assertNotNull(person);
             Assert.assertTrue(person.getName().equals("admin")); //Loaded from load_person.xml
         }
-        List<Person> personsExisting = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
-        int existingCount = personsExisting.size();
+        CriteriaQueryResult<Person> personsExisting = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+        long existingCount = personsExisting.getTotalCount();
         Assert.assertTrue(existingCount >= 1);
 
         int createAttempt = 10;
@@ -131,7 +132,7 @@ public class TallyUserEntityServiceTest {
             Assert.assertEquals(createAttempt, created);
         }
 
-        List<Person> persons = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
-        Assert.assertEquals(persons.size(), createAttempt + existingCount);
+        CriteriaQueryResult<Person> persons = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+        Assert.assertEquals(persons.getTotalCount().longValue(), existingCount + createAttempt);
     }
 }

@@ -1,56 +1,146 @@
 package com.taoswork.tallybook.general.extension.collections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/4/21.
  */
-public class ListBuilder<TE> {
-    protected List<TE> innerList;
+public class ListBuilder<E> implements List<E>{
+    private final List<E> innerList;
 
     public ListBuilder(){
-        innerList = new ArrayList<TE>();
+        innerList = new ArrayList<E>();
     }
 
-    public ListBuilder(List<TE> list){
+    public ListBuilder(List<E> list){
         innerList = list;
     }
 
-    public static <TTE> ListBuilder<TTE> instance(){
-        ListBuilder<TTE> obj = new ListBuilder<TTE>();
-        return obj;
+
+    @Override
+    public int size() {
+        return innerList.size();
     }
 
-    public static <TTK> ListBuilder<TTK> instance(List<TTK> list) {
-        ListBuilder<TTK> lb = new ListBuilder<TTK>(list);
-        return lb;
+    @Override
+    public boolean isEmpty() {
+        return innerList.isEmpty();
     }
 
-    public static <TTK> ListBuilder<TTK> instance(TTK element){
-        ListBuilder<TTK> obj = new ListBuilder<TTK>();
-        obj.put(element);
-        return obj;
+    @Override
+    public boolean contains(Object o) {
+        return innerList.contains(o);
     }
 
-    public ListBuilder put(TE element){
-        innerList.add(element);
+    @Override
+    public Iterator<E> iterator() {
+        return innerList.iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return innerList.toArray();
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return innerList.toArray(a);
+    }
+
+    @Override
+    public boolean add(E e) {
+        return innerList.add(e);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return innerList.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return innerList.containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return innerList.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return innerList.addAll(index, c);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return innerList.retainAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return innerList.retainAll(c);
+    }
+
+    @Override
+    public void clear() {
+        innerList.clear();
+    }
+
+    @Override
+    public E get(int index) {
+        return innerList.get(index);
+    }
+
+    @Override
+    public E set(int index, E element) {
+        return innerList.set(index, element);
+    }
+
+    @Override
+    public void add(int index, E element) {
+        innerList.add(index, element);
+    }
+
+    @Override
+    public E remove(int index) {
+        return innerList.remove(index);
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return innerList.indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return innerList.lastIndexOf(o);
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        return innerList.listIterator();
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        return innerList.listIterator(index);
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return innerList.subList(fromIndex, toIndex);
+    }
+
+    public ListBuilder<E> append(E e){
+        innerList.add(e);
         return this;
     }
 
-    public ListBuilder put(TE... elements){
-        for(TE e : elements) {
+    public ListBuilder<E> append(E... elements){
+        for(E e : elements) {
             innerList.add(e);
         }
-        return this;
-    }
-
-    public List<TE> result(){
-        return innerList;
-    }
-
-    public ListBuilder clear(){
-        innerList.clear();
         return this;
     }
 }

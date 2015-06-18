@@ -3,8 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 /**
  * Created by Gao Yuan on 2015/6/15.
  */
-public abstract class PropertyCriteria {
-
+public abstract class PropertyCriteria implements Cloneable {
 
     protected String propertyName;
 
@@ -21,6 +20,11 @@ public abstract class PropertyCriteria {
         return this;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        PropertyCriteria clone = (PropertyCriteria) super.clone();
+        return clone;
+    }
 
     /** Example url:
      * Assume we have an rest api for 'telephone' resources:

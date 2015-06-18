@@ -1,5 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Created by Gao Yuan on 2015/6/15.
  */
@@ -21,11 +24,11 @@ public class PropertySortCriteria extends PropertyCriteria{
         return (sortDirection == null) ? null : SortDirection.ASCENDING.equals(sortDirection);
     }
 
-    public void setSortAscending(Boolean sortAscending) {
+    public PropertySortCriteria setSortAscending(Boolean sortAscending) {
         if(null == sortAscending){
-            setSortDirection(null);
+            return setSortDirection(null);
         }else {
-            setSortDirection((sortAscending) ? SortDirection.ASCENDING : SortDirection.DESCENDING);
+            return setSortDirection((sortAscending) ? SortDirection.ASCENDING : SortDirection.DESCENDING);
         }
     }
 
@@ -36,6 +39,35 @@ public class PropertySortCriteria extends PropertyCriteria{
     public PropertySortCriteria setSortDirection(SortDirection sortDirection) {
         this.sortDirection = sortDirection;
         return this;
+    }
+
+    @Override
+    public PropertySortCriteria clone() throws CloneNotSupportedException {
+        PropertySortCriteria criteria = (PropertySortCriteria) super.clone();
+        criteria.setSortDirection(this.sortDirection);
+        return criteria;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof PropertySortCriteria)) return false;
+
+        PropertySortCriteria criteria = (PropertySortCriteria) o;
+
+        return new EqualsBuilder()
+                .append(propertyName, criteria.propertyName)
+                .append(sortDirection, criteria.sortDirection)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(propertyName)
+                .append(sortDirection)
+                .toHashCode();
     }
 
     @Override

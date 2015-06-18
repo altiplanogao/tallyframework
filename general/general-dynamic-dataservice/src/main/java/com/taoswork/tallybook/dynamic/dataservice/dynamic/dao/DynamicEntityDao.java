@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.dao;
 
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import java.util.List;
@@ -22,10 +23,10 @@ public interface DynamicEntityDao {
 
     <T> T find(Class<T> entityClz, Object key);
 
-    <T> T merge(T entity);
+    <T> T update(T entity);
 
     <T> void remove(T entity);
 
-    <T> List<T> query(Class<T> entityClz, CriteriaTransferObject query);
+    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query);
 
 }

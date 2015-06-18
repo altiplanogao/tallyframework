@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.service;
 
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +25,5 @@ public interface DynamicEntityService {
     @Transactional
     <T> void delete(T entity);
 
-    <T> List<T> query(Class<T> entityClz, CriteriaTransferObject query);
+    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query);
 }

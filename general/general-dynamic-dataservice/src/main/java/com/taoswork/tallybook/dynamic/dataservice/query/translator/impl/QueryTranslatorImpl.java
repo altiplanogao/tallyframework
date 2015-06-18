@@ -30,13 +30,40 @@ public class QueryTranslatorImpl implements QueryTranslator {
             Class<T> entityClz,
             ClassTreeMetadata classTreeMetadata,
             CriteriaTransferObject cto) {
-        Integer firstResult = cto.getFirstResult();
+        return constructGeneralQuery(entityManager,
+                entityClz,
+                classTreeMetadata,
+                cto, false);
+    }
+
+    @Override
+    public <T> TypedQuery<Long> constructCountQuery(
+            EntityManager entityManager,
+            Class<T> entityClz,
+            ClassTreeMetadata classTreeMetadata,
+            CriteriaTransferObject cto) {
+        return constructGeneralQuery(entityManager,
+                entityClz,
+                classTreeMetadata,
+                cto, true);
+    }
+
+    private <T> TypedQuery constructGeneralQuery(
+            EntityManager entityManager,
+            Class<T> entityClz,
+            ClassTreeMetadata classTreeMetadata,
+            CriteriaTransferObject cto, boolean isCount) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteria = criteriaBuilder.createQuery(entityClz);
         Root<T> original = criteria.from(entityClz);
 
-        criteria.select(original);
+        if (isCount) {
+            CriteriaQuery rawCriteria = criteria;
+            rawCriteria.select(criteriaBuilder.count(original));
+        } else {
+            criteria.select(original);
+        }
 
         List<Predicate> restrictions = new ArrayList<Predicate>();
         List<Order> sorts = new ArrayList<Order>();
@@ -57,32 +84,34 @@ public class QueryTranslatorImpl implements QueryTranslator {
                 }
             }
         }
+        criteria.where(restrictions.toArray(new Predicate[restrictions.size()]));
 
-        for (PropertySortCriteria psc : cto.getSortCriterias()) {
-            String propertyName = psc.getPropertyName();
-            SortDirection direction = psc.getSortDirection();
-            if (null == direction) {
-                continue;
-            } else {
-                FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
-                FieldPathBuilder fpb = new FieldPathBuilder();
-                Path path = fpb.buildPath(original, propertyName);
-
-                Expression exp = path;
-                if (SortDirection.ASCENDING == direction) {
-                    sorts.add(criteriaBuilder.asc(exp));
+        if(!isCount) {
+            for (PropertySortCriteria psc : cto.getSortCriterias()) {
+                String propertyName = psc.getPropertyName();
+                SortDirection direction = psc.getSortDirection();
+                if (null == direction) {
+                    continue;
                 } else {
-                    sorts.add(criteriaBuilder.desc(exp));
+                    FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                    FieldPathBuilder fpb = new FieldPathBuilder();
+                    Path path = fpb.buildPath(original, propertyName);
+
+                    Expression exp = path;
+                    if (SortDirection.ASCENDING == direction) {
+                        sorts.add(criteriaBuilder.asc(exp));
+                    } else {
+                        sorts.add(criteriaBuilder.desc(exp));
+                    }
                 }
             }
+            criteria.orderBy(sorts);
         }
 
-        criteria.where(restrictions.toArray(new Predicate[restrictions.size()]));
-        criteria.orderBy(sorts);
-
-        TypedQuery<T> typedQuery = entityManager.createQuery(criteria);
-        addPaging(typedQuery, cto);
-
+        TypedQuery typedQuery = entityManager.createQuery(criteria);
+        if(!isCount) {
+            addPaging(typedQuery, cto);
+        }
         return typedQuery;
     }
 
@@ -90,11 +119,11 @@ public class QueryTranslatorImpl implements QueryTranslator {
         addPaging(response, query.getFirstResult(), query.getMaxResultCount());
     }
 
-    protected static void addPaging(Query query, Integer firstResult, Integer maxResults) {
-        if (firstResult != null) {
-            query.setFirstResult(firstResult);
+    protected static void addPaging(Query query, long firstResult, int maxResults) {
+        if (firstResult > 0) {
+            query.setFirstResult((int)firstResult);
         }
-        if (maxResults != null) {
+        if (maxResults > 0) {
             query.setMaxResults(maxResults);
         }
     }

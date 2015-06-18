@@ -1,5 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.*;
 
 /**
@@ -57,6 +60,36 @@ public class PropertyFilterCriteria extends PropertyCriteria{
 
     public List<String> getFilterValues(){
         return Collections.unmodifiableList(filterValues);
+    }
+
+    @Override
+    public PropertyFilterCriteria clone() throws CloneNotSupportedException {
+        PropertyFilterCriteria criteria = (PropertyFilterCriteria) super.clone();
+        criteria.filterValues = new ArrayList<String>();
+        criteria.filterValues.addAll(filterValues);
+        return criteria;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof PropertyFilterCriteria)) return false;
+
+        PropertyFilterCriteria that = (PropertyFilterCriteria) o;
+
+        return new EqualsBuilder()
+                .append(propertyName, that.propertyName)
+                .append(filterValues, that.filterValues)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(propertyName)
+                .append(filterValues)
+                .toHashCode();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.general.solution.web.view.thymeleaf;
 
 import com.taoswork.tallybook.general.extension.utils.UrlUtility;
+import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
 import org.springframework.web.servlet.View;
 import org.thymeleaf.spring4.view.AbstractThymeleafView;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -63,5 +64,15 @@ public class TallyBookThymeleafViewResolver extends ThymeleafViewResolver {
         AbstractThymeleafView view = (AbstractThymeleafView) super.loadView(viewName, locale);
         view.addStaticVariable(TEMPLATE_VIEW_SLOT_NAME, originalViewName);
         return view;
+    }
+
+    @Override
+    public boolean isCache() {
+        boolean cacheEnabled = RuntimePropertiesPublisher.instance().getBoolean("thymeleaf.tallybook.extension.cache.enable", true);
+        if(cacheEnabled){
+            return super.isCache();
+        }else {
+            return false;
+        }
     }
 }

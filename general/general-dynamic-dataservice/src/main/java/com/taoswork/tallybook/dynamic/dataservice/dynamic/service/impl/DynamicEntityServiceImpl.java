@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.dynamic.service.impl;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.annotation.Resource;
@@ -41,7 +42,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T> T update(T entity){
-        return dynamicEntityDao.merge(entity);
+        return dynamicEntityDao.update(entity);
     }
 
     @Override
@@ -50,7 +51,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> List<T> query(Class<T> entityClz, CriteriaTransferObject query){
+    public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query){
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootPersistiveEntityClass(entityClz);
         return dynamicEntityDao.query(entityRootClz, query);
     }
