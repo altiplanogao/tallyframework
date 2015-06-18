@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.EntityMetadataHelper;
-import com.taoswork.tallybook.general.solution.cache.CacheDecider;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallybook.general.solution.time.IntervalSensitive;
 import org.apache.commons.collections.map.LRUMap;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;
@@ -23,14 +23,14 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
 
     private HibernateEntityManager hibernateEntityManager;
 
-    protected CacheDecider cacheDecider;
+    protected IntervalSensitive cacheDecider;
 
-    private CacheDecider getCacheDecider(){
+    private IntervalSensitive getCacheDecider(){
         if (cacheDecider == null){
             Long cacheTtl = RuntimePropertiesPublisher.instance().getLong("cache.entity.dao.metadata.ttl", -1L);
-            cacheDecider = new CacheDecider(cacheTtl) {
+            cacheDecider = new IntervalSensitive(cacheTtl) {
                 @Override
-                protected void clearCache() {
+                protected void onExpireOccur() {
                     clearCache();
                 }
             };
@@ -56,7 +56,7 @@ public class EntityMetadataHelper4Hibernate extends EntityMetadataHelper {
     @Override
     public Class<?>[] getAllPolymorphicEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities) {
         return getAllPolymorphicEntitiesFromCeiling(ceilingClz,
-                includeUnqualifiedPolymorphicEntities, getCacheDecider().useCache());
+                includeUnqualifiedPolymorphicEntities, getCacheDecider().isIntervalExpired());
     }
 
     private Class<?>[] getAllPolymorphicEntitiesFromCeiling(

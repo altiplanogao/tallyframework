@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.dataservice.entity.edo.EdoBuilder;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
+import com.taoswork.tallybook.general.solution.cache.ehcache.CacheType;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
 import com.taoswork.tallybook.general.solution.cache.ehcache.HasCacheScope;
 import com.taoswork.tallybook.general.solution.cache.ehcache.ICacheMap;
@@ -22,7 +23,7 @@ public class EntityDescriptionServiceImpl implements
     private EntityMetadataService entityMetadataService;
 
     private static ICacheMap<ClassMetadata, ClassEdo> defaultClassEdoCache =
-            CachedRepoManager.getCacheMap(EntityDescriptionService.class.getSimpleName());
+            CachedRepoManager.getCacheMap(CacheType.EhcacheCache, EntityDescriptionService.class.getSimpleName());
 
     private ICacheMap<ClassMetadata, ClassEdo> classEdoCache = defaultClassEdoCache;
 //    private Map<ClassMetadata, ClassEdo> classEdoCache = new LRUMap();
@@ -35,7 +36,7 @@ public class EntityDescriptionServiceImpl implements
 
     @Override
     public void setCacheScope(String scope) {
-        classEdoCache = CachedRepoManager.getCacheMap(scope);
+        classEdoCache = CachedRepoManager.getCacheMap(CacheType.EhcacheCache, scope);
     }
 
     public EntityMetadataService getEntityMetadataService() {

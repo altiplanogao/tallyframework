@@ -139,9 +139,10 @@ public class CriteriaTransferObject implements Cloneable {
     public CriteriaTransferObject clone() throws CloneNotSupportedException {
         CriteriaTransferObject cto = (CriteriaTransferObject) super.clone();
         cto.filterCriterias = new HashMap<String, PropertyFilterCriteria>();
+        cto.filterCriterias.putAll(filterCriterias);
+
         cto.sortCriterias = new ArrayList<PropertySortCriteria>();
         cto.sortCriterias.addAll(sortCriterias);
-        cto.filterCriterias.putAll(filterCriterias);
         return cto;
     }
 }

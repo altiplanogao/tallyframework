@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.han
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.facet.MapFieldFacet;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ProcessResult;
+import com.taoswork.tallybook.general.solution.reflect.GenericTypeUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,17 +14,22 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class MapFieldHandler extends CollectionFieldHanalder {
+public class MapFieldHandler extends CollectionFieldHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(MapFieldHandler.class);
 
     @Override
     public ProcessResult processCollectionField(Field field, FieldMetadata fieldMetadata) {
-        Class type = field.getType();
-        if(Map.class.isAssignableFrom(type)){
+        Class clazz = field.getType();
+        if(Map.class.isAssignableFrom(clazz)){
             Type genericType = field.getGenericType();
-            if(!genericType.equals(type)){
-                LOGGER.error("The Map field should specify its parameter type.");
+            if(GenericTypeUtility.isTypeArgumentMissing(genericType)){
+                LOGGER.info("Field '{}.{}' having Type '{}' -> '{}' ",
+                        field.getDeclaringClass().getSimpleName(), field.getName(),
+                        clazz, genericType);
+                LOGGER.warn("Field '{}.{}' having type '{}' should specify its type argument.",
+                        field.getDeclaringClass().getSimpleName(), field.getName(), clazz);
             }
+
             MapFieldFacet facet = new MapFieldFacet(genericType);
             fieldMetadata.addFacet(facet);
             return ProcessResult.HANDLED;

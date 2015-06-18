@@ -2,7 +2,6 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.han
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.facet.ArrayFieldFacet;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.facet.ListFieldFacet;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.processor.ProcessResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,8 @@ import java.lang.reflect.Type;
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class ArrayFieldHandler extends CollectionFieldHanalder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListFieldFacet.class);
+public class ArrayFieldHandler extends CollectionFieldHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArrayFieldHandler.class);
 
     @Override
     public ProcessResult processCollectionField(Field field, FieldMetadata fieldMetadata) {
