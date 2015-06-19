@@ -4,7 +4,7 @@ import com.taoswork.tallybook.dynamic.dataservice.dynamic.entity.conf.DynamicCon
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.*;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.*;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
 import com.taoswork.tallybook.testframework.persistence.TestApplicationContext;

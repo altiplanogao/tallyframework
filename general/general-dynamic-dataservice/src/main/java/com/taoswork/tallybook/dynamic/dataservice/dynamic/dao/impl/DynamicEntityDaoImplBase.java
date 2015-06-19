@@ -3,10 +3,10 @@ package com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.impl;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.query.translator.QueryTranslator;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.query.translator.impl.QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.translator.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.translator.impl.QueryTranslatorImpl;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;

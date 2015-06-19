@@ -10,14 +10,13 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.UUID;
 
 /**

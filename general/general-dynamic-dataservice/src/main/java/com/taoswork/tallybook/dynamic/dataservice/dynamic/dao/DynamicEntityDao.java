@@ -1,9 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.dao;
 
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
-
-import java.util.List;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
 
 /**
  * Created by Gao Yuan on 2015/5/21.
