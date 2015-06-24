@@ -9,11 +9,11 @@ import java.util.*;
  * Created by Gao Yuan on 2015/5/22.
  */
 public class CriteriaTransferObject implements Cloneable {
-    public static final int SINGLE_QUERY_DEFAULT_RESULT_COUNT = 50;
-    public static final int SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED = 200;
+    public static final int SINGLE_QUERY_DEFAULT_PAGE_SIZE = 50;
+    public static final int SINGLE_QUERY_MAX_PAGE_SIZE_ALLOWED = 200;
 
     private long firstResult = 0;
-    private int maxResultCount = SINGLE_QUERY_DEFAULT_RESULT_COUNT;
+    private int pageSize = SINGLE_QUERY_DEFAULT_PAGE_SIZE;
 
     private Map<String, PropertyFilterCriteria> filterCriterias = new HashMap<String, PropertyFilterCriteria>();
     private List<PropertySortCriteria> sortCriterias = new ArrayList<PropertySortCriteria>();
@@ -29,16 +29,16 @@ public class CriteriaTransferObject implements Cloneable {
         return this;
     }
 
-    public int getMaxResultCount() {
-        return maxResultCount;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public CriteriaTransferObject setMaxResultCount(int maxResults) {
-        if(maxResults > SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED){
-            maxResults = SINGLE_QUERY_MAX_RESULT_COUNT_ALLOWED;
+    public CriteriaTransferObject setPageSize(int maxResults) {
+        if(maxResults > SINGLE_QUERY_MAX_PAGE_SIZE_ALLOWED){
+            maxResults = SINGLE_QUERY_MAX_PAGE_SIZE_ALLOWED;
         }
         if(maxResults > 0){
-            this.maxResultCount = maxResults;
+            this.pageSize = maxResults;
         }
         return this;
     }
@@ -119,7 +119,7 @@ public class CriteriaTransferObject implements Cloneable {
 
         return new EqualsBuilder()
                 .append(firstResult, that.firstResult)
-                .append(maxResultCount, that.maxResultCount)
+                .append(pageSize, that.pageSize)
                 .append(filterCriterias, that.filterCriterias)
                 .append(sortCriterias, that.sortCriterias)
                 .isEquals();
@@ -129,7 +129,7 @@ public class CriteriaTransferObject implements Cloneable {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(firstResult)
-                .append(maxResultCount)
+                .append(pageSize)
                 .append(filterCriterias)
                 .append(sortCriterias)
                 .toHashCode();

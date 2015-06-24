@@ -10,7 +10,7 @@ public class RequestTranslator {
     public static CriteriaTransferObject translate(EntityQueryRequest request){
         CriteriaTransferObject cto = new CriteriaTransferObject();
         cto.setFirstResult(request.getFirstResult());
-        cto.setMaxResultCount(request.getMaxResultCount());
+        cto.setPageSize(request.getPageSize());
         cto.addFilterCriterias(request.getFilterCriterias());
         cto.addSortCriterias(request.getSortCriterias());
 

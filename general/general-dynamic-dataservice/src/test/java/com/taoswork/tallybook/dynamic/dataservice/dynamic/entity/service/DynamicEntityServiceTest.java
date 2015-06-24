@@ -173,7 +173,7 @@ public class DynamicEntityServiceTest {
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
             CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
 
-            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_RESULT_COUNT);
+            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
         }
 
@@ -183,7 +183,7 @@ public class DynamicEntityServiceTest {
             ctoFetchA.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameAAA));
             CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchA);
 
-            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_RESULT_COUNT);
+            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(createAttemptA));
         }
 
@@ -193,7 +193,7 @@ public class DynamicEntityServiceTest {
             ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
             CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchB);
 
-            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_RESULT_COUNT);
+            Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(createAttemptB));
         }
 
@@ -203,7 +203,7 @@ public class DynamicEntityServiceTest {
             // start = 0
             {
                 CriteriaTransferObject ctoFetchFirst25AAA = new CriteriaTransferObject()
-                        .setMaxResultCount(requestCount)
+                        .setPageSize(requestCount)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
                     CriteriaQueryResult<TPerson> personsAAA = dynamicEntityService.query(TPerson.class, ctoFetchFirst25AAA);
@@ -220,7 +220,7 @@ public class DynamicEntityServiceTest {
                 int startIndex = createAttemptA;
                 //After index 100, result should be BBB
                 CriteriaTransferObject ctoFetchFirst25AfterAAA = new CriteriaTransferObject()
-                        .setMaxResultCount(requestCount)
+                        .setPageSize(requestCount)
                         .setFirstResult(startIndex)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
@@ -240,7 +240,7 @@ public class DynamicEntityServiceTest {
             int requestCount = 25;
             {
                 // start = 0
-                CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject().setMaxResultCount(requestCount)
+                CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject().setPageSize(requestCount)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
                     CriteriaQueryResult<TPerson> personsBBB = dynamicEntityService.query(TPerson.class, ctoFetchFirst25BBB);
@@ -256,7 +256,7 @@ public class DynamicEntityServiceTest {
                 // start = createAttemptB
                 int startIndex = createAttemptB;
                 CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject()
-                        .setMaxResultCount(requestCount)
+                        .setPageSize(requestCount)
                         .setFirstResult(startIndex)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
@@ -280,7 +280,7 @@ public class DynamicEntityServiceTest {
             int returned = 0;
             List<TPerson> cache = new ArrayList<TPerson>();
             do{
-                CriteriaTransferObject ctoFetchB = new CriteriaTransferObject().setFirstResult(startIndex).setMaxResultCount(eachQuerySize);
+                CriteriaTransferObject ctoFetchB = new CriteriaTransferObject().setFirstResult(startIndex).setPageSize(eachQuerySize);
                 ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
                 CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchB);
 

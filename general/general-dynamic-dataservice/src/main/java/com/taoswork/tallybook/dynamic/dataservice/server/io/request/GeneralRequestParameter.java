@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.SortDirection;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 /**
@@ -10,7 +11,7 @@ public class GeneralRequestParameter {
 
     public static final String REQUEST_START_INDEX = "startIndex";
     public static final String REQUEST_MAX_INDEX = "maxIndex";
-    public static final String REQUEST_MAX_RESULT_COUNT = "maxResult";
+    public static final String REQUEST_PAGE_SIZE = "pageSize";
     public static final String SORT_PARAMETER = "sort_";
     public static final String SORT_ASCENDING = "asc";
     public static final String SORT_DESCENDING = "desc";

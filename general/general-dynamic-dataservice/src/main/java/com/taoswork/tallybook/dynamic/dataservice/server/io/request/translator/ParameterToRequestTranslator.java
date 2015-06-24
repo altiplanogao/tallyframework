@@ -22,7 +22,7 @@ public class ParameterToRequestTranslator {
     static {
         staticParaNames.add(GeneralRequestParameter.REQUEST_START_INDEX);
         staticParaNames.add(GeneralRequestParameter.REQUEST_MAX_INDEX);
-        staticParaNames.add(GeneralRequestParameter.REQUEST_MAX_RESULT_COUNT);
+        staticParaNames.add(GeneralRequestParameter.REQUEST_PAGE_SIZE);
     }
 
     private static Integer getIntegerValue(List<String> values) {
@@ -93,20 +93,21 @@ public class ParameterToRequestTranslator {
 
         int startIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_START_INDEX, 0);
         Integer maxIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_INDEX, null);
-        Integer maxResultCount = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_RESULT_COUNT, null);
+        Integer pageSize = integerValues.getOrDefault(GeneralRequestParameter.
+                REQUEST_PAGE_SIZE, null);
 
         request.setStartIndex(startIndex);
-        if (maxResultCount == null && maxIndex == null) {
-            request.setMaxResultCount(EntityQueryRequest.DEFAULT_REQUEST_MAX_RESULT_COUNT);
+        if (pageSize == null && maxIndex == null) {
+            request.setPageSize(EntityQueryRequest.DEFAULT_REQUEST_MAX_RESULT_COUNT);
             return;
-        } else if (maxResultCount != null) {
-            request.setMaxResultCount(maxResultCount);
+        } else if (pageSize != null) {
+            request.setPageSize(pageSize);
         } else if (maxIndex != null) {
-            maxResultCount = maxIndex - startIndex;
-            if (maxResultCount > 0) {
-                request.setMaxResultCount(maxResultCount);
+            pageSize = maxIndex - startIndex;
+            if (pageSize > 0) {
+                request.setPageSize(pageSize);
             } else {
-                request.setMaxResultCount(EntityQueryRequest.DEFAULT_REQUEST_MAX_RESULT_COUNT);
+                request.setPageSize(EntityQueryRequest.DEFAULT_REQUEST_MAX_RESULT_COUNT);
             }
         }
     }

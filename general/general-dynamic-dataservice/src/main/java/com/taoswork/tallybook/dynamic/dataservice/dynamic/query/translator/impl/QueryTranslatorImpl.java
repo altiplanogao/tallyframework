@@ -74,6 +74,9 @@ public class QueryTranslatorImpl implements QueryTranslator {
             if (!CollectionUtility.isEmpty(values)) {
                 FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
                 FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                if(fieldMetadata == null){
+                    continue;
+                }
                 SupportedFieldType fieldType = fieldMetadata.getFieldType();
                 Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType);
                 List<Object> convertedValues = restriction.convertValues(values);
@@ -116,7 +119,7 @@ public class QueryTranslatorImpl implements QueryTranslator {
     }
 
     protected static void addPaging(Query response, CriteriaTransferObject query) {
-        addPaging(response, query.getFirstResult(), query.getMaxResultCount());
+        addPaging(response, query.getFirstResult(), query.getPageSize());
     }
 
     protected static void addPaging(Query query, long firstResult, int maxResults) {

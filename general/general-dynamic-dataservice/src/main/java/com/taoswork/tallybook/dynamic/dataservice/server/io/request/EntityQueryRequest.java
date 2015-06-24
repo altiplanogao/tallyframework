@@ -52,8 +52,8 @@ public class EntityQueryRequest {
         criteriaTransferObject.setFirstResult(startIndex);
     }
 
-    public void setMaxResultCount(int maxResultCount) {
-        criteriaTransferObject.setMaxResultCount(maxResultCount);
+    public void setPageSize(int pageSize) {
+        criteriaTransferObject.setPageSize(pageSize);
     }
 
     public Collection<PropertySortCriteria> getSortCriterias() {
@@ -68,7 +68,7 @@ public class EntityQueryRequest {
         return criteriaTransferObject.getFirstResult();
     }
 
-    public int getMaxResultCount() {
-        return criteriaTransferObject.getMaxResultCount();
+    public int getPageSize() {
+        return criteriaTransferObject.getPageSize();
     }
 }

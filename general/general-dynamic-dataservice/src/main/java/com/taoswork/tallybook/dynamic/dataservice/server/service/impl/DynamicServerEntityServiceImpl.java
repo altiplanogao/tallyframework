@@ -26,7 +26,7 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
     EntityDescriptionService entityDescriptionService;
 
     @Override
-    public EntityQueryResponse getGridRecords(EntityQueryRequest request){
+    public EntityQueryResponse getQueryRecords(EntityQueryRequest request){
         Class<?> entityType = request.getEntityType();
 
         CriteriaTransferObject cto = RequestTranslator.translate(request);

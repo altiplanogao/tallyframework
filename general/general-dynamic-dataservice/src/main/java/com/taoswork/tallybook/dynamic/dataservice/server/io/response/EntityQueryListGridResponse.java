@@ -1,30 +1,31 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
+import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 
 import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/6/1.
  */
-public class EntityQueryResponse extends AEntityQueryResponse{
+public class EntityQueryListGridResponse  extends AEntityQueryResponse{
     private ClassEdo classEdo;
-    private List<?> entities;
+    private List<Entity> entities;
 
     public ClassEdo getClassEdo() {
         return classEdo;
     }
 
-    public EntityQueryResponse setClassEdo(ClassEdo classEdo) {
+    public EntityQueryListGridResponse setClassEdo(ClassEdo classEdo) {
         this.classEdo = classEdo;
         return this;
     }
 
-    public List<?> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 
-    public EntityQueryResponse setEntities(List<?> entities) {
+    public EntityQueryListGridResponse setEntities(List<Entity> entities) {
         this.entities = entities;
         return this;
     }

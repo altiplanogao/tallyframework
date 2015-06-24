@@ -9,5 +9,5 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQuery
 public interface DynamicServerEntityService {
     public static final String SERVICE_NAME = "DynamicServerEntityService";
 
-    EntityQueryResponse getGridRecords(EntityQueryRequest request);
+    EntityQueryResponse getQueryRecords(EntityQueryRequest request);
 }

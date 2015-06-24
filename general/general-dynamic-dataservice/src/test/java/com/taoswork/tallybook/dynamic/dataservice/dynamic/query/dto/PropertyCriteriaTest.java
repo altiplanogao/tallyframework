@@ -44,7 +44,7 @@ public class PropertyCriteriaTest {
         filterCriteria.addFilterValue("abc").addFilterValue("def");
 
         CriteriaTransferObject cto = new CriteriaTransferObject();
-        cto.setFirstResult(111).setMaxResultCount(123)
+        cto.setFirstResult(111).setPageSize(123)
                 .addFilterCriteria(filterCriteria)
                 .addSortCriteria(sortCriteria);
 

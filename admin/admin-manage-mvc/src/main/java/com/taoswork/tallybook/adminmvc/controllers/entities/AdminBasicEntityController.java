@@ -5,8 +5,10 @@ import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelServic
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryListGridResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.ParameterToRequestTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.solution.menu.Menu;
@@ -60,8 +62,11 @@ public class AdminBasicEntityController extends BaseController {
 //        new AdminModelDataBuilder()
 //                .appendMenu(model, adminMenuService);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
+
         EntityQueryRequest entityRequest = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams);
-        EntityQueryResponse entityResponse = dynamicServerEntityService.getGridRecords(entityRequest);
+        EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
+
+        EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse);
 
 
         Person person = adminCommonModelService.getPersistentPerson();
@@ -74,7 +79,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
-        model.addAttribute("entitylist", entityResponse);
+        model.addAttribute("listGridData", entityResponse);
 
         return "entity/mainframe";
     }
