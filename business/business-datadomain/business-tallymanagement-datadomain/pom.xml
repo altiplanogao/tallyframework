@@ -11,5 +11,11 @@
 
     <artifactId>business-tallymanagement-datadomain</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-datadomain-support</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

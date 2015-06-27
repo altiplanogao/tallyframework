@@ -133,6 +133,11 @@
       </dependency>
       <dependency>
         <groupId>com.taoswork.tallybook</groupId>
+        <artifactId>general-dynamic-dataservice-server</artifactId>
+        <version>${tallybook.framework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.taoswork.tallybook</groupId>
         <artifactId>general-dynamic-datadomain</artifactId>
         <version>${tallybook.framework.version}</version>
       </dependency>

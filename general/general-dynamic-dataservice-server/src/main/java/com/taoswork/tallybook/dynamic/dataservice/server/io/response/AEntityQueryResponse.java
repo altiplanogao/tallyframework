@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
 
@@ -69,6 +70,7 @@ public abstract class AEntityQueryResponse {
         return (T) entityInfos.getOrDefault(infoType, null);
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public Map<String, IEntityInfo> getEntityInfos(){
         if (null == entityInfos){
             return null;

@@ -20,5 +20,6 @@
         <module>general-datadomain-support</module>
         <module>general-dynamic-dataservice</module>
         <module>general-dynamic-datadomain</module>
+        <module>general-dynamic-dataservice-server</module>
     </modules>
 </project>
