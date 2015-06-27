@@ -18,6 +18,4 @@ public interface EntityMetadataService {
     ClassMetadata getClassMetadata(Class clz);
 
     ClassMetadata getClassMetadata(String clzName);
-
-    FieldMetadata getFieldMetadata(Field field);
 }

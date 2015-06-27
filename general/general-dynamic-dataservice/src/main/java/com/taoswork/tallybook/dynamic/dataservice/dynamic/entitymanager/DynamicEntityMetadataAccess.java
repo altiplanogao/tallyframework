@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
 

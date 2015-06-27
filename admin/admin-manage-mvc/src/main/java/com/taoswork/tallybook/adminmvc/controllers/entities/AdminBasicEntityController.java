@@ -4,6 +4,8 @@ import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.EntityInfoTypes;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryListGridResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
@@ -63,7 +65,8 @@ public class AdminBasicEntityController extends BaseController {
 //                .appendMenu(model, adminMenuService);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest entityRequest = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams);
+        EntityQueryRequest entityRequest = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams)
+                .addEntityInfoNames(EntityInfoTypes.ENTITY_INFO_TYPE_GRID);
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
 
         EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse);
@@ -79,7 +82,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
-        model.addAttribute("listGridData", entityResponse);
+        model.addAttribute("entityResponse", entityResponse);
 
         return "entity/mainframe";
     }

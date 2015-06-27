@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
 
 /**

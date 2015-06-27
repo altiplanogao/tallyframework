@@ -16,6 +16,8 @@ public class GeneralRequestParameter {
     public static final String SORT_ASCENDING = "asc";
     public static final String SORT_DESCENDING = "desc";
 
+    public static final String ENTITY_INFO_TYPE = "einfo";
+
     public static SortDirection getSortDirection(String directionStr) {
         if(StringUtils.isEmpty(directionStr)){
             return null;

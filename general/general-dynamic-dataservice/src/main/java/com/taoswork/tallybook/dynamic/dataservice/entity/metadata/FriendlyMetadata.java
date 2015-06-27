@@ -1,9 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity.metadata;
 
+import java.io.Serializable;
+
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public abstract class FriendlyMetadata {
+public abstract class FriendlyMetadata implements Cloneable, Serializable {
 
     public String name;
     public String friendlyName;

@@ -14,6 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface PresentationField {
+    public final static int ORDER_NOT_DEFINED = 99999;
+    public final static int DEFAULT_ORDER_BIAS = 100000;
 
     /**
      * Optional - only required if you want to order the appearance of this field in the UI
@@ -22,7 +24,7 @@ public @interface PresentationField {
      *
      * @return the display order
      */
-    int order() default 99999;
+    int order() default ORDER_NOT_DEFINED;
 
     /**
      * Optional - only required if you want to restrict the visibility of this field in the admin tool

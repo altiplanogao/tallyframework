@@ -1,7 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.FieldEdo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.easy.grid.EntityGridInfo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.ClassEdo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.FieldEdo;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeFieldHelper;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Property;
@@ -16,13 +19,13 @@ import java.util.List;
  * Created by Gao Yuan on 2015/6/1.
  */
 public class EntityMaker {
-    public static <T> Entity makeGridEntity(T entityObj, ClassEdo classEdo) {
+    public static <T> Entity makeGridEntity(T entityObj, EntityGridInfo entityGridInfo) {
         Entity entity = new Entity();
         Class entityClz = entityObj.getClass();
         entity.setType(entityClz.getName());
-   //     List<Property> properties = entity.getRWProperties();
+        //     List<Property> properties = entity.getRWProperties();
         try {
-            for (FieldEdo fieldEdo : classEdo.getGridFields()) {
+            for (FieldInfo fieldEdo : entityGridInfo.getFields()) {
                 String fieldName = fieldEdo.getName();
                 Property property = new Property();
                 property.setName(fieldName);
@@ -46,10 +49,10 @@ public class EntityMaker {
         return entity;
     }
 
-    public static List<Entity> makeGridEntityList(List<?> entityObjArray, ClassEdo classEdo) {
+    public static List<Entity> makeGridEntityList(List<?> entityObjArray, EntityGridInfo entityGridInfo) {
         List<Entity> entities = new ArrayList<Entity>();
         for (Object entityObj : entityObjArray) {
-            Entity entity = makeGridEntity(entityObj, classEdo);
+            Entity entity = makeGridEntity(entityObj, entityGridInfo);
             entities.add(entity);
         }
         return entities;

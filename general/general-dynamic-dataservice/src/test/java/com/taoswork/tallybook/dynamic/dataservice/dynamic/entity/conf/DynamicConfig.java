@@ -6,8 +6,8 @@ import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicE
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.impl.DynamicEntityMetadataAccessImplBase;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.impl.DynamicEntityServiceImpl;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.impl.EntityDescriptionServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.impl.EntityDescriptionServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.impl.EntityMetadataServiceImpl;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;

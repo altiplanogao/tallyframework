@@ -5,6 +5,9 @@ import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.PropertyFilt
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.PropertySortCriteria;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/1.
@@ -19,6 +22,7 @@ public class EntityQueryRequest {
 
     private Class<?> entityType;
     private CriteriaTransferObject criteriaTransferObject = new CriteriaTransferObject();
+    private final Set<String> entityInfoNames = new HashSet<String>();
 
     public EntityQueryRequest withEntityType(String entityType){
         try {
@@ -70,5 +74,26 @@ public class EntityQueryRequest {
 
     public int getPageSize() {
         return criteriaTransferObject.getPageSize();
+    }
+
+    public Collection<String> getEntityInfoNames() {
+        return Collections.unmodifiableCollection(entityInfoNames);
+    }
+
+    public EntityQueryRequest setEntityInfoName(String entityInfoName){
+        entityInfoNames.clear();
+        entityInfoNames.add(entityInfoName);
+        return this;
+    }
+
+    public EntityQueryRequest addEntityInfoNames(String... entityInfoNames){
+        for (String entityInfoName : entityInfoNames) {
+            this.entityInfoNames.add(entityInfoName);
+        }
+        return this;
+    }
+
+    public boolean hasEntityInfoName(String entityInfoName){
+        return entityInfoNames.contains(entityInfoName);
     }
 }

@@ -6,7 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +34,7 @@ public class NativeClassHelper {
     public static FieldScanMethod scanAllPersistentNoSuper = new NativeClassHelper.FieldScanMethod()
             .setScanSuper(false).setIncludeId(true).setIncludeStatic(false).setIncludeTransient(false);
 
-    public static class FieldScanMethod{
+    public static class FieldScanMethod {
         boolean includeId = false;
         boolean includeStatic = false;
         boolean includeTransient = false;
@@ -57,32 +59,50 @@ public class NativeClassHelper {
             this.scanSuper = scanSuper;
             return this;
         }
+
+
+        public Class<?> getTheSuper(Class<?> clz) {
+            if (!this.scanSuper) {
+                return null;
+            } else {
+                return clz.getSuperclass();
+            }
+        }
     }
 
-    public static Map<String, Field> getFields(Class<?> clz){
+    public static List<Field> getFields(Class<?> clz){
         return getFields(clz, new FieldScanMethod());
     }
 
-    public static Map<String, Field> getFields(Class<?> clz,
-                                               FieldScanMethod scanMethod){
-        Map<String, Field> fieldMap = new HashMap<String, Field>();
-        boolean eof = false;
-        Class<?> currentClass = clz;
-        while (!eof) {
-            fetchFileds(currentClass, scanMethod, fieldMap);
-            if(!scanMethod.scanSuper){
-                eof = true;
-            }
-            if (currentClass.getSuperclass() != null) {
-                currentClass = currentClass.getSuperclass();
-            } else {
-                eof = true;
-            }
-        }
-        return fieldMap;
+    public static List<Field> getFields(Class<?> clz,
+                                        FieldScanMethod scanMethod){
+        List<Field> fieldList = new ArrayList<Field>();
+        scanHierarchySuperFirst(clz, scanMethod, fieldList);
+
+        return fieldList;
     }
 
-    private static void fetchFileds(Class<?> clz, FieldScanMethod scanMethod, Map<String, Field> fieldMap) {
+    private static void scanHierarchySuperFirst(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList){
+        Class<?> superClz = scanMethod.getTheSuper(clz);
+
+        if(superClz != null){
+            scanHierarchySuperFirst(superClz, scanMethod, fieldList);
+        }
+
+        fetchFileds(clz, scanMethod, fieldList);
+    }
+
+    private static void scanHierarchyChildFirst(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList){
+        Class<?> superClz = scanMethod.getTheSuper(clz);
+
+        fetchFileds(clz, scanMethod, fieldList);
+
+        if(superClz != null){
+            scanHierarchyChildFirst(superClz, scanMethod, fieldList);
+        }
+    }
+
+    private static void fetchFileds(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList) {
         Field[] fields = clz.getDeclaredFields();
         for (Field field : fields){
             boolean abandon = false;
@@ -104,9 +124,8 @@ public class NativeClassHelper {
                 }
             }
             if(!abandon){
-                fieldMap.put(field.getName(), field);
+                fieldList.add(field);
             }
         }
     }
-
 }

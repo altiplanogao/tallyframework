@@ -72,12 +72,12 @@ public class EntityMetadataServiceImpl implements EntityMetadataService {
         return classMetadata;
     }
 
-    @Override
-    public FieldMetadata getFieldMetadata(Field field){
-        FieldMetadata fieldMetadata = new FieldMetadata(field);
-        fieldProcessor.process(field, fieldMetadata);
-        return fieldMetadata;
-    }
+//    @Override
+//    public FieldMetadata getFieldMetadata(Field field){
+//        FieldMetadata fieldMetadata = new FieldMetadata(field);
+//        fieldProcessor.process(field, fieldMetadata);
+//        return fieldMetadata;
+//    }
 
     private ClassMetadata generateClassMetadata(Class<?> clz){
         ClassMetadata classMetadata = new ClassMetadata();

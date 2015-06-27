@@ -9,7 +9,7 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertifica
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
 import org.junit.After;

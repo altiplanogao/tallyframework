@@ -14,8 +14,6 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/5/24.
  */
 public class FieldMetadata extends FriendlyMetadata implements Serializable {
-//    public Field field;
-
     private String name;
     private String declaringClassName;
 
@@ -25,16 +23,15 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
 
     private SupportedFieldType fieldType;
 
+    private final int originalOrder;
+
     public final Map<FieldFacetType, IFieldFacet> facets = new HashMap<FieldFacetType, IFieldFacet>();
 
-    public FieldMetadata(Field field){
+    public FieldMetadata(int originalOrder, Field field){
         setField(field);
+        this.originalOrder = originalOrder;
     }
 
-//    public Field getField() {
-//        return field;
-//    }
-//
     public void setField(Field field) {
         name = field.getName();
         declaringClassName = field.getDeclaringClass().getSimpleName();
@@ -119,5 +116,14 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
                 name + "'@" + declaringClassName +
                 " " + Visibility.makeString(visibility) +
                 '}';
+    }
+
+    public int getOriginalOrder() {
+        return originalOrder;
+    }
+
+    @Override
+    public FriendlyMetadata setOrder(int order) {
+        return super.setOrder(order);
     }
 }

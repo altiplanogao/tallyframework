@@ -22,13 +22,16 @@ public class BasicFieldHandler implements IFieldHandler {
 
         fieldMetadata.setTabName(PresentationClass.Tab.DEFAULT_NAME);
         fieldMetadata.setGroupName(PresentationClass.Group.DEFAULT_NAME);
+        fieldMetadata.setOrder(PresentationField.DEFAULT_ORDER_BIAS + fieldMetadata.getOriginalOrder());
         fieldMetadata.setVisibility(Visibility.DEFAULT);
         fieldMetadata.setNameField(false);
 
         if(presentationField != null){
             fieldMetadata.setTabName(presentationField.tab());
             fieldMetadata.setGroupName(presentationField.group());
-            fieldMetadata.setOrder(presentationField.order());
+            if(presentationField.order() != PresentationField.ORDER_NOT_DEFINED){
+                fieldMetadata.setOrder(presentationField.order());
+            }
             fieldMetadata.setVisibility(presentationField.visibility());
             fieldMetadata.setFieldType(presentationField.fieldType());
             fieldMetadata.setNameField(presentationField.nameField());

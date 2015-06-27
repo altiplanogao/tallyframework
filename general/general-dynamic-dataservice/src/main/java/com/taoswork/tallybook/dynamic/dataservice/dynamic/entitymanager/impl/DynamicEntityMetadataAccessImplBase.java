@@ -2,10 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.EntityMetadataHelper;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl.EntityMetadataHelper4Hibernate;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.helper.impl.EntityMetadataHelper4JPA;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.ClassEdo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.edo.service.EntityDescriptionService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClass;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
@@ -14,9 +11,7 @@ import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.Entity
 import com.taoswork.tallybook.general.solution.autotree.AutoTree;
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
 import com.taoswork.tallybook.general.solution.quickinterface.DataHolder;
-import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
-import org.hibernate.ejb.HibernateEntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

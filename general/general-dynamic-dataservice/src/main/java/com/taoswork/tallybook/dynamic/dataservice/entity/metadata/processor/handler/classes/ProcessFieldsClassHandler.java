@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,21 +32,23 @@ public class ProcessFieldsClassHandler implements IClassHandler {
         NativeClassHelper.FieldScanMethod fsm = new NativeClassHelper.FieldScanMethod();
         fsm.setIncludeStatic(false).setIncludeTransient(false).setIncludeId(true)
                 .setScanSuper(false);
-        Map<String, Field> fields = NativeClassHelper.getFields(clz, fsm);
+        List<Field> fields = NativeClassHelper.getFields(clz, fsm);
         FieldMetadata rawNameFieldMetadata = null;
         FieldMetadata nameFieldMetadata = null;
-        for (Map.Entry<String, Field> entry : fields.entrySet()) {
+        int fieldOrigIndex = 0;
+        for (Field field: fields) {
             totalfields++;
-            Field field = entry.getValue();
-            FieldMetadata fieldMetadata = new FieldMetadata(field);
+            String fieldName = field.getName();
+
+            FieldMetadata fieldMetadata = new FieldMetadata(fieldOrigIndex, field);
             if(field.getName().toLowerCase().equals("name")){
                 rawNameFieldMetadata = fieldMetadata;
             }
             ProcessResult pr = fieldHandler.process(field, fieldMetadata);
-            if (classMetadata.getRWFieldMetadataMap().containsKey(entry.getKey())) {
-                LOGGER.error("FieldMetadata with name '{}' already exist.", entry.getKey());
+            if (classMetadata.getRWFieldMetadataMap().containsKey(fieldName)) {
+                LOGGER.error("FieldMetadata with name '{}' already exist.", fieldName);
             }
-            classMetadata.getRWFieldMetadataMap().put(entry.getKey(), fieldMetadata);
+            classMetadata.getRWFieldMetadataMap().put(fieldName, fieldMetadata);
             if (ProcessResult.FAILED.equals(pr)) {
                 failed++;
                 LOGGER.error("FAILURE happened on field '{}' processing of class '{}'", field.getName(), clz.getSimpleName());
@@ -55,6 +58,7 @@ public class ProcessFieldsClassHandler implements IClassHandler {
             if(fieldMetadata.isNameField()){
                 nameFieldMetadata = fieldMetadata;
             }
+            fieldOrigIndex++;
         }
 
         if((nameFieldMetadata == null) && (rawNameFieldMetadata != null)){
