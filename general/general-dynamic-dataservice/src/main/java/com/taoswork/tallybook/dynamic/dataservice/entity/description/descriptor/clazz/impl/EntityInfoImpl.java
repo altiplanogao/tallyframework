@@ -103,28 +103,28 @@ public class EntityInfoImpl
                 }
             }
             {
-                FieldInfo nameFieldEdo = null;
-                FieldInfo firstFieldEdo = null;
+                FieldInfo nameFieldInfo = null;
+                FieldInfo firstFieldInfo = null;
                 for (Map.Entry<OrderedName, FieldInfo> fieldInfoEntry : gridNameOrdered.entrySet()) {
-                    FieldInfo fieldEdo = fieldInfoEntry.getValue();
-                    if (fieldEdo == null) {
+                    FieldInfo fieldInfo = fieldInfoEntry.getValue();
+                    if (fieldInfo == null) {
                         continue;
                     }
-                    if (firstFieldEdo == null) {
-                        firstFieldEdo = fieldEdo;
+                    if (firstFieldInfo == null) {
+                        firstFieldInfo = fieldInfo;
                     }
-                    if (fieldEdo.isNameField()) {
-                        nameFieldEdo = fieldEdo;
+                    if (fieldInfo.isNameField()) {
+                        nameFieldInfo = fieldInfo;
                         break;
                     }
-                    if (fieldEdo.getName().toLowerCase().equals("name")) {
-                        nameFieldEdo = fieldEdo;
+                    if (fieldInfo.getName().toLowerCase().equals("name")) {
+                        nameFieldInfo = fieldInfo;
                     }
                 }
-                if (null != nameFieldEdo) {
-                    primarySearchField = nameFieldEdo.getName();
-                }else if(null != firstFieldEdo){
-                    primarySearchField = firstFieldEdo.getName();
+                if (null != nameFieldInfo) {
+                    primarySearchField = nameFieldInfo.getName();
+                }else if(null != firstFieldInfo){
+                    primarySearchField = firstFieldInfo.getName();
                 }else {
                     primarySearchField = null;
                 }

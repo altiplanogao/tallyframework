@@ -2,8 +2,6 @@ package com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service;
 
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.data4test.domain.FieldsZoo;
 import com.taoswork.tallybook.dynamic.dataservice.dynamic.data4test.domain.meta.AAA;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.EdoBuilder;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.FieldEdo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.impl.EntityMetadataServiceImpl;
@@ -66,7 +64,6 @@ public class EntityMetadataServiceTest {
             ////////////
             FieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().getOrDefault(field.getName(), null);
             Assert.assertNotNull(fieldMetadata);
-            FieldEdo fieldEdo = EdoBuilder.createFieldEdo(fieldMetadata);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.ClassEdo;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 
 import java.util.List;

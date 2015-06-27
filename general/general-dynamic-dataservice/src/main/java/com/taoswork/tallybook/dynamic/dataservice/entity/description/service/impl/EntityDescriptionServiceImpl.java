@@ -29,18 +29,18 @@ public class EntityDescriptionServiceImpl implements
     private static ICacheMap<ClassMetadata, EntityInfo> defaultClassInfoCache =
             CachedRepoManager.getCacheMap(CacheType.EhcacheCache, EntityDescriptionService.class.getSimpleName());
 
-    private ICacheMap<ClassMetadata, EntityInfo> classEdoCache = defaultClassInfoCache;
-//    private Map<ClassMetadata, EntityInfo> classEdoCache = new LRUMap();
+    private ICacheMap<ClassMetadata, EntityInfo> entityInfoCache = defaultClassInfoCache;
+//    private Map<ClassMetadata, EntityInfo> entityInfoCache = new LRUMap();
 
 
     @Override
     public String getCacheScope() {
-        return classEdoCache.getScopeName();
+        return entityInfoCache.getScopeName();
     }
 
     @Override
     public void setCacheScope(String scope) {
-        classEdoCache = CachedRepoManager.getCacheMap(CacheType.EhcacheCache, scope);
+        entityInfoCache = CachedRepoManager.getCacheMap(CacheType.EhcacheCache, scope);
     }
 
     public EntityMetadataService getEntityMetadataService() {
@@ -52,9 +52,9 @@ public class EntityDescriptionServiceImpl implements
     }
 
     private EntityInfo createClassInfo(ClassMetadata classMetadata) {
-        EntityInfo classEdo = EntityInfoBuilder.buildClassInfo(classMetadata, null, entityMetadataService);
-        classEdoCache.put(classMetadata, classEdo);
-        return classEdo;
+        EntityInfo entityInfo = EntityInfoBuilder.buildClassInfo(classMetadata, null, entityMetadataService);
+        entityInfoCache.put(classMetadata, entityInfo);
+        return entityInfo;
     }
 
     @Override
@@ -65,12 +65,12 @@ public class EntityDescriptionServiceImpl implements
 
     @Override
     public EntityInfo getEntityInfo(ClassMetadata classMetadata){
-        EntityInfo classEdo = classEdoCache.get(classMetadata);
-        if(classEdo == null){
-            classEdo = createClassInfo(classMetadata);
-            classEdoCache.put(classMetadata, classEdo);
+        EntityInfo entityInfo = entityInfoCache.get(classMetadata);
+        if(entityInfo == null){
+            entityInfo = createClassInfo(classMetadata);
+            entityInfoCache.put(classMetadata, entityInfo);
         }
-        return classEdo;
+        return entityInfo;
     }
 
     @Override

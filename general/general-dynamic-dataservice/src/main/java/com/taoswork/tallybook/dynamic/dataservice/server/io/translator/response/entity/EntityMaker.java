@@ -2,9 +2,6 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.dataservice.entity.description.easy.grid.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.ClassEdo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.edo.FieldEdo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeFieldHelper;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Property;
@@ -25,20 +22,20 @@ public class EntityMaker {
         entity.setType(entityClz.getName());
         //     List<Property> properties = entity.getRWProperties();
         try {
-            for (FieldInfo fieldEdo : entityGridInfo.getFields()) {
-                String fieldName = fieldEdo.getName();
+            for (FieldInfo fieldIndo : entityGridInfo.getFields()) {
+                String fieldName = fieldIndo.getName();
                 Property property = new Property();
                 property.setName(fieldName);
                 Field nativeField = NativeFieldHelper.getSingleField(entityClz, fieldName);
                 nativeField.setAccessible(true);
-                IFieldValueProcessor fieldValueProcessor = FieldValueProcessorManager.instance().getProperProcessor(fieldEdo);
+                IFieldValueProcessor fieldValueProcessor = FieldValueProcessorManager.instance().getProperProcessor(fieldIndo);
                 Object value = nativeField.get(entityObj);
                 String valueInStr = fieldValueProcessor.getStringValue(value);
                 property.setValue(valueInStr);
 
                 entity.putProperty(property);
 
-                if(fieldEdo.isNameField()){
+                if(fieldIndo.isNameField()){
                     entity.setId(valueInStr);
                 }
             }

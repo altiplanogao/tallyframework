@@ -28,8 +28,8 @@ public class EntityGridInfoBuilder {
         }
 
         for (Map.Entry<OrderedName, FieldInfo> fieldInfoEntry : gridNameOrdered.entrySet()) {
-            FieldInfo fieldEdo = fieldInfoEntry.getValue();
-            classGridInfo.addField(fieldEdo);
+            FieldInfo fieldInfo = fieldInfoEntry.getValue();
+            classGridInfo.addField(fieldInfo);
         }
         return classGridInfo;
     }

@@ -32,28 +32,28 @@ public class EntityDescriptionServiceTest_CompanyImpl {
     }
 
     @Test
-    public void testClassInfo() {
+    public void testEntityInfo() {
         ClassMetadata classMetadata = entityDescriptionService.createClassMetadata(CompanyImpl.class);
-        EntityInfo classEdo = entityDescriptionService.getEntityInfo(classMetadata);
-        Assert.assertNotNull(classEdo);
-        if (classEdo != null) {
-            Assert.assertNotNull(classEdo);
-            TabInfo[] tabEdos = classEdo.getTabs().toArray(new TabInfo[]{});
-            Assert.assertEquals(tabEdos.length, 3);
+        EntityInfo entityInfo = entityDescriptionService.getEntityInfo(classMetadata);
+        Assert.assertNotNull(entityInfo);
+        if (entityInfo != null) {
+            Assert.assertNotNull(entityInfo);
+            TabInfo[] tabInfos = entityInfo.getTabs().toArray(new TabInfo[]{});
+            Assert.assertEquals(tabInfos.length, 3);
 
-            TabInfo generalTab = tabEdos[0];
+            TabInfo generalTab = tabInfos[0];
             Assert.assertEquals(generalTab.getName(), "General");
             Assert.assertEquals(generalTab.getGroups().size(), 3);
 
-            TabInfo marketingTab = tabEdos[1];
+            TabInfo marketingTab = tabInfos[1];
             Assert.assertEquals(marketingTab.getName(), "Marketing");
             Assert.assertEquals(marketingTab.getGroups().size(), 2);
 
-            TabInfo contactTab = tabEdos[2];
+            TabInfo contactTab = tabInfos[2];
             Assert.assertEquals(contactTab.getName(), "Contact");
             Assert.assertEquals(contactTab.getGroups().size(), 1);
 
-            Assert.assertEquals(classEdo.getGridFields().size(), 8);
+            Assert.assertEquals(entityInfo.getGridFields().size(), 8);
         }
 
         EntityGridInfo entityGridInfo = entityDescriptionService.getEntityGridInfo(classMetadata);

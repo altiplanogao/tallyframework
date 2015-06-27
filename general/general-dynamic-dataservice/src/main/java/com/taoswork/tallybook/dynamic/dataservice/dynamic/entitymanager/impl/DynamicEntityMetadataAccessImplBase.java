@@ -103,20 +103,4 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         EntityClassTree entityClassTree = getEntityClassTree(entityClz);
         return entityMetadataService.getClassTreeMetadata(entityClassTree);
     }
-//
-//    @Override
-//    public ClassEdo getMergedClassEdo(Class<?> entityClz) {
-//        EntityClassTree entityClassTree = getEntityClassTree(entityClz);
-//        final ClassEdo root = entityDescriptionService.createClassEdo(entityClassTree.getData().clz.getName());
-//        entityClassTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
-//            @Override
-//            public Void callback(EntityClass parameter) throws AutoTreeException {
-//                ClassEdo node =entityDescriptionService.createClassEdo(parameter.clz.getName());
-//                root.merge(node);
-//                return null;
-//            }
-//        }, true);
-//
-//        return root;
-//    }
 }

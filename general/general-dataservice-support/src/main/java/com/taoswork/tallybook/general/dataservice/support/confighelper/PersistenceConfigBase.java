@@ -51,7 +51,6 @@ public abstract class PersistenceConfigBase implements IPersistenceBeanList{
 
     protected JpaTransactionManager helperCreateJpaTransactionManager(EntityManagerFactory refEmf) {
         JpaTransactionManager jtm = new JpaTransactionManager();
-        //jtm.setEntityManagerFactory(entityManagerFacto_ry());
         jtm.setEntityManagerFactory(refEmf);
         return jtm;
     }
