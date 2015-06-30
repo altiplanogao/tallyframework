@@ -70,6 +70,7 @@ public class AdminBasicEntityController extends BaseController {
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
 
         EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse);
+        entityResponse.setBaseUrl(entityKey);
 
 
         Person person = adminCommonModelService.getPersistentPerson();

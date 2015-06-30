@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class EntityQueryListGridResponse  extends AEntityQueryResponse{
     private List<Entity> entities;
+    private String baseUrl;
 
     public List<Entity> getEntities() {
         return entities;
@@ -19,4 +20,12 @@ public class EntityQueryListGridResponse  extends AEntityQueryResponse{
         return this;
     }
 
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public EntityQueryListGridResponse setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+        return this;
+    }
 }
