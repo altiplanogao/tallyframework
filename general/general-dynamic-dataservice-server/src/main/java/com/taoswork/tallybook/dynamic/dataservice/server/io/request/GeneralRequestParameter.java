@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.SortDirection;
-import org.springframework.util.MultiValueMap;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
 import org.springframework.util.StringUtils;
 
 /**

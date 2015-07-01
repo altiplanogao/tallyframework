@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-dynamic-datameta-descriptor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
             <artifactId>general-solution</artifactId>
         </dependency>
         <dependency>

@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.general.dataservice.support.confighelper;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.impl.EntityDescriptionServiceImpl;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.EntityMetadataService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.service.impl.EntityMetadataServiceImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
+import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaDescriptionServiceImpl;
+import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
+import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
 import com.taoswork.tallybook.general.solution.cache.ehcache.HasCacheScope;
 import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
@@ -45,18 +45,18 @@ public abstract class DataServiceConfigBase {
 //        return new BeanCreationMonitor(clz.getSimpleName().replace("Config", ""));
     }
 
-    @Bean(name = EntityMetadataService.SERVICE_NAME)
-    public EntityMetadataService metadataService() {
-        return new EntityMetadataServiceImpl();
+    @Bean(name = MetadataService.SERVICE_NAME)
+    public MetadataService metadataService() {
+        return new MetadataServiceImpl();
     }
 
-    @Bean(name = EntityDescriptionService.SERVICE_NAME)
-    public EntityDescriptionService entityDescriptionService() {
-        EntityDescriptionService entityDescriptionService = new EntityDescriptionServiceImpl();
-        if(entityDescriptionService instanceof HasCacheScope){
-            ((HasCacheScope) entityDescriptionService).setCacheScope(
-                    dataServiceName() + "." + EntityDescriptionService.class.getSimpleName());
+    @Bean(name = MetaDescriptionService.SERVICE_NAME)
+    public MetaDescriptionService metaDescriptionService() {
+        MetaDescriptionService metaDescriptionService = new MetaDescriptionServiceImpl();
+        if(metaDescriptionService instanceof HasCacheScope){
+            ((HasCacheScope) metaDescriptionService).setCacheScope(
+                    dataServiceName() + "." + MetaDescriptionService.class.getSimpleName());
         }
-        return entityDescriptionService;
+        return metaDescriptionService;
     }
 }

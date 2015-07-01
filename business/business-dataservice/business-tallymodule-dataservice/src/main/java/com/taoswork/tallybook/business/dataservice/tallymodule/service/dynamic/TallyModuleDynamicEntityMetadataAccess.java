@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.dataservice.tallymodule.service.dynamic;
 
 import com.taoswork.tallybook.business.dataservice.tallymodule.TallyModuleDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.impl.DynamicEntityMetadataAccessImplBase;
+import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.DynamicEntityMetadataAccessImplBase;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

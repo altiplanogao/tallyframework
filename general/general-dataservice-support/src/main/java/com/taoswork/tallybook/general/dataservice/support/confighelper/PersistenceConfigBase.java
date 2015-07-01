@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.dataservice.support.confighelper;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.impl.DynamicEntityServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.service.impl.DynamicEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.impl.DynamicServerEntityServiceImpl;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;

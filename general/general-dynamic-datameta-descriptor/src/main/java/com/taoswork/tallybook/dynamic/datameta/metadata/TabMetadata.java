@@ -1,0 +1,11 @@
+package com.taoswork.tallybook.dynamic.datameta.metadata;
+
+import java.io.Serializable;
+
+/**
+ * Created by Gao Yuan on 2015/5/25.
+ */
+public class TabMetadata extends FriendlyMetadata implements Serializable {
+    public TabMetadata(){
+    }
+}

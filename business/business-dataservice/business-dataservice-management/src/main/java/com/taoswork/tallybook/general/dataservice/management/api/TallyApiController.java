@@ -2,8 +2,7 @@ package com.taoswork.tallybook.general.dataservice.management.api;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.EntityInfoTypes;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypes;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.ParameterToRequestTranslator;

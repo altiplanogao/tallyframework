@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.dataservice.management.manager;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
 

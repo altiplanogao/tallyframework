@@ -1,14 +1,14 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.EntityInfoTypes;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.clazz.EntityInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.easy.form.EntityFormInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.easy.grid.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypes;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.EntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.easy.form.EntityFormInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.request.RequestTranslator;
@@ -25,8 +25,8 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
     @Resource(name = DynamicEntityService.COMPONENT_NAME)
     DynamicEntityService dynamicEntityService;
 
-    @Resource(name = EntityDescriptionService.SERVICE_NAME)
-    EntityDescriptionService entityDescriptionService;
+    @Resource(name = MetaDescriptionService.SERVICE_NAME)
+    MetaDescriptionService metaDescriptionService;
 
     @Override
     public EntityQueryResponse getQueryRecords(EntityQueryRequest request) {
@@ -39,13 +39,13 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
         EntityGridInfo entityGridInfo = null;
         EntityFormInfo entityFormInfo = null;
         if (request.hasEntityInfoName(EntityInfoTypes.ENTITY_INFO_TYPE_FULL)) {
-            entityInfo = entityDescriptionService.getEntityInfo(classTreeMetadata);
+            entityInfo = metaDescriptionService.getEntityInfo(classTreeMetadata);
         }
         if (request.hasEntityInfoName(EntityInfoTypes.ENTITY_INFO_TYPE_GRID)) {
-            entityGridInfo = entityDescriptionService.getEntityGridInfo(classTreeMetadata);
+            entityGridInfo = metaDescriptionService.getEntityGridInfo(classTreeMetadata);
         }
         if (request.hasEntityInfoName(EntityInfoTypes.ENTITY_INFO_TYPE_FORM)) {
-            entityFormInfo = entityDescriptionService.getEntityFormInfo(classTreeMetadata);
+            entityFormInfo = metaDescriptionService.getEntityFormInfo(classTreeMetadata);
         }
 
         return ResponseTranslator.translate(request, data, entityInfo, entityGridInfo, entityFormInfo);
@@ -54,21 +54,21 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
     @Override
     public EntityInfo inspect(Class<?> entityType) {
         ClassTreeMetadata classTreeMetadata = dynamicEntityService.inspect(entityType);
-        EntityInfo classInfo = entityDescriptionService.getEntityInfo(classTreeMetadata);
+        EntityInfo classInfo = metaDescriptionService.getEntityInfo(classTreeMetadata);
         return classInfo;
     }
 
     @Override
     public EntityGridInfo inspectForGrid(Class<?> entityType) {
         ClassTreeMetadata classTreeMetadata = dynamicEntityService.inspect(entityType);
-        EntityGridInfo classGridInfo = entityDescriptionService.getEntityGridInfo(classTreeMetadata);
+        EntityGridInfo classGridInfo = metaDescriptionService.getEntityGridInfo(classTreeMetadata);
         return classGridInfo;
     }
 
     @Override
     public EntityFormInfo inspectForForm(Class<?> entityType) {
         ClassTreeMetadata classTreeMetadata = dynamicEntityService.inspect(entityType);
-        EntityFormInfo classFormInfo = entityDescriptionService.getEntityFormInfo(classTreeMetadata);
+        EntityFormInfo classFormInfo = metaDescriptionService.getEntityFormInfo(classTreeMetadata);
         return classFormInfo;
     }
 }

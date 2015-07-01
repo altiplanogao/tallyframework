@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.general.dataservice.support.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.entitymanager.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.classtree.EntityClassTree;
+import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
 import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;

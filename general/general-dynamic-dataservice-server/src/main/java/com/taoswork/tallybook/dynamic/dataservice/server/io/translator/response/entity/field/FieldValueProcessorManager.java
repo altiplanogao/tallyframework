@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field;
 
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.PhoneFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.SimpleFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.UnknownFieldValueProcessor;

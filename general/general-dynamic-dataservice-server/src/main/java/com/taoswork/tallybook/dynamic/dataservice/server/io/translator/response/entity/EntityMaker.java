@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity;
 
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.descriptor.field.FieldInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.easy.grid.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.dataservice.entity.metadata.utils.NativeFieldHelper;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
+import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeFieldHelper;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Property;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.FieldValueProcessorManager;

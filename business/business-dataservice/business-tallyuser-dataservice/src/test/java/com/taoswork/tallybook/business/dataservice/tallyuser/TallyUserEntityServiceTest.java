@@ -8,10 +8,10 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestP
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.description.service.EntityDescriptionService;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.dynamic.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
+import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -87,9 +87,9 @@ public class TallyUserEntityServiceTest {
     }
 
     @Test
-    public void testEntityDescriptionService(){
-        EntityDescriptionService entityDescriptionService = dataService.getService(EntityDescriptionService.SERVICE_NAME);
-        Assert.assertNotNull(entityDescriptionService);
+    public void testMetaDescriptionService(){
+        MetaDescriptionService metaDescriptionService = dataService.getService(MetaDescriptionService.SERVICE_NAME);
+        Assert.assertNotNull(metaDescriptionService);
     }
 
     @Test
