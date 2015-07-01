@@ -60,6 +60,11 @@ public class FieldInfoImpl
     }
 
     @Override
+    public boolean isIdField() {
+        return getFieldType().equals(SupportedFieldType.ID);
+    }
+
+    @Override
     public void setFieldType(SupportedFieldType fieldType) {
         this.fieldType = fieldType;
     }

@@ -35,8 +35,10 @@ public class EntityMaker {
 
                 entity.putProperty(property);
 
-                if(fieldIndo.isNameField()){
+                if(fieldIndo.isIdField()){
                     entity.setId(valueInStr);
+                } else if(fieldIndo.isNameField()){
+                    entity.setName(valueInStr);
                 }
             }
         } catch (IllegalAccessException e) {

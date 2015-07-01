@@ -12,6 +12,7 @@ import java.util.Map;
 public class Entity {
     private String type;
     private String id;
+    private String name;
     private String path;
     private final Map<String, Property> properties = new HashMap<String, Property>();
 
@@ -33,6 +34,15 @@ public class Entity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Entity setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public String getPath() {

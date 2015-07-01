@@ -15,5 +15,7 @@ public interface FieldInfo extends NamedInfo {
 
     boolean isNameField();
 
+    boolean isIdField();
+
     SupportedFieldType getFieldType();
 }
