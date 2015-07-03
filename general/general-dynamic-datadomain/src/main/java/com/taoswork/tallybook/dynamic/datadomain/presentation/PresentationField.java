@@ -26,6 +26,12 @@ public @interface PresentationField {
      */
     int order() default ORDER_NOT_DEFINED;
 
+    String tab() default PresentationClass.Tab.DEFAULT_NAME;
+
+    String group() default PresentationClass.Group.DEFAULT_NAME;
+
+    boolean nameField() default false;
+
     /**
      * Optional - only required if you want to restrict the visibility of this field in the admin tool
      *
@@ -45,10 +51,4 @@ public @interface PresentationField {
      * @return the field type
      */
     SupportedFieldType fieldType() default SupportedFieldType.UNKNOWN;
-
-    String tab() default PresentationClass.Tab.DEFAULT_NAME;
-
-    String group() default PresentationClass.Group.DEFAULT_NAME;
-
-    boolean nameField() default false;
 }

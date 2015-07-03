@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,6 +48,17 @@ public class AdminBasicEntityController extends BaseController {
 
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
+
+    private ThreadLocal<ObjectMapper> objectMapperThreadLocal = new ThreadLocal<ObjectMapper>();
+    private ObjectMapper getObjectMapper(){
+        ObjectMapper objectMapper = objectMapperThreadLocal.get();
+        if(objectMapper == null){
+            objectMapper = new ObjectMapper();
+            objectMapperThreadLocal.set(objectMapper);
+        }
+        return objectMapper;
+    }
+
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String viewEntityList(
@@ -68,6 +82,17 @@ public class AdminBasicEntityController extends BaseController {
                 .addEntityInfoNames(EntityInfoTypes.ENTITY_INFO_TYPE_GRID);
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
 
+        String rawJsons = "";
+
+        try{
+            Map<String, Object> rawObjs = new HashMap<String, Object>();
+            rawObjs.put("entities", entityRawResponse);
+            ObjectMapper objectMapper = getObjectMapper();
+            rawJsons = objectMapper.writeValueAsString(rawObjs);
+        }catch (JsonProcessingException exp){
+            throw new RuntimeException(exp);
+        }
+
         EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse);
         entityResponse.setBaseUrl(entityKey);
 
@@ -83,6 +108,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
         model.addAttribute("entityResponse", entityResponse);
+        model.addAttribute("rawdata", rawJsons);
 
         return "entity/mainframe";
     }

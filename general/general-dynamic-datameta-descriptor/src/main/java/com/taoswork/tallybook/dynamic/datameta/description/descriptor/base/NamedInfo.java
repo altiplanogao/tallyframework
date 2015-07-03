@@ -8,7 +8,7 @@ import java.util.Comparator;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public interface NamedInfo {
+public interface NamedInfo extends Serializable {
 
     String getName();
 

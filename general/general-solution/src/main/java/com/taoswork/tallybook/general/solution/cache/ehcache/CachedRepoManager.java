@@ -34,6 +34,10 @@ public class CachedRepoManager {
         return getCacheMap(cacheType, uuid);
     }
 
+    public static <K, V> ICacheMap<K, V> getCacheMap(CacheType cacheType){
+        return  getCacheMap(cacheType, UUID.randomUUID().toString());
+    }
+
     public static <K, V> ICacheMap<K, V> getCacheMap(CacheType cacheType, String cacheScope) {
         switch (cacheType) {
             case LRUMap:

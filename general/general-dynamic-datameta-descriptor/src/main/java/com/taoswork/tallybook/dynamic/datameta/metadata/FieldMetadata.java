@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/5/24.
  */
 public class FieldMetadata extends FriendlyMetadata implements Serializable {
-    private String name;
+
     private String declaringClassName;
 
     private String tabName;

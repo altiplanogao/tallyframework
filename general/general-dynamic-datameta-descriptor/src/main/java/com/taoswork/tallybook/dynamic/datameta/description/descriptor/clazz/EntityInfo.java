@@ -12,8 +12,6 @@ import java.util.Collection;
 public interface EntityInfo extends IEntityInfo {
     FieldInfo getField(String fieldName);
 
-    Collection<? extends FieldInfo> getFields();
-
     TabInfo getTab(String tabName);
 
     Collection<? extends TabInfo> getTabs();

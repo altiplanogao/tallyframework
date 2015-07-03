@@ -54,8 +54,8 @@ public class NamedInfoImpl implements NamedInfoRW {
 
     @Override
     public void copyNamedInfo(NamedInfo source){
-        this.setFriendlyName(source.getFriendlyName())
-                .setName(source.getName())
-                .setOrder(source.getOrder());
+        this.name = source.getName();
+        this.friendlyName = source.getFriendlyName();
+        this.order = source.getOrder();
     }
 }

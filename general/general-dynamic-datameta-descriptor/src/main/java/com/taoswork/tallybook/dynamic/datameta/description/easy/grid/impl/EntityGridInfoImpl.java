@@ -25,7 +25,7 @@ public class EntityGridInfoImpl extends NamedInfoImpl
     }
 
     @Override
-    public Collection<FieldInfo> getFields() {
+    public Collection<? extends FieldInfo> getFields() {
         return Collections.unmodifiableCollection(fields);
     }
 

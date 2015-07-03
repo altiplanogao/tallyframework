@@ -22,7 +22,7 @@ public class EntityFormInfoImpl
     }
 
     @Override
-    public Collection<FieldInfo> getFields() {
+    public Collection<? extends FieldInfo> getFields() {
         return Collections.unmodifiableCollection(fields.values());
     }
 

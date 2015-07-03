@@ -15,7 +15,7 @@ public abstract class AEntityQueryResponse {
     private Long startIndex;
     private int pageSize;
     private Long totalCount;
-    private Map<String, IEntityInfo> entityInfos;
+    private Map<String, IEntityInfo> infos;
 
     public Long getStartIndex() {
         return startIndex;
@@ -49,31 +49,31 @@ public abstract class AEntityQueryResponse {
                 pageSize, totalCount);
     }
 
-    public AEntityQueryResponse addEntityInfo(String infoType, IEntityInfo entityInfo){
-        if(this.entityInfos == null){
-            this.entityInfos = new HashMap<String, IEntityInfo>();
+    public AEntityQueryResponse addInfo(String infoType, IEntityInfo entityInfo){
+        if(this.infos == null){
+            this.infos = new HashMap<String, IEntityInfo>();
         }
-        this.entityInfos.put(infoType, entityInfo);
+        this.infos.put(infoType, entityInfo);
         return this;
     }
 
-    public AEntityQueryResponse addEntityInfos(Map<String, IEntityInfo> entityInfoMap){
-        if(this.entityInfos == null){
-            this.entityInfos = new HashMap<String, IEntityInfo>();
+    public AEntityQueryResponse addInfos(Map<String, IEntityInfo> entityInfoMap){
+        if(this.infos == null){
+            this.infos = new HashMap<String, IEntityInfo>();
         }
-        this.entityInfos.putAll(entityInfoMap);
+        this.infos.putAll(entityInfoMap);
         return this;
     }
 
-    public <T extends IEntityInfo> T getEntityInfo(String infoType){
-        return (T) entityInfos.getOrDefault(infoType, null);
+    public <T extends IEntityInfo> T getInfo(String infoType){
+        return (T) infos.getOrDefault(infoType, null);
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Map<String, IEntityInfo> getEntityInfos(){
-        if (null == entityInfos){
+    public Map<String, IEntityInfo> getInfos(){
+        if (null == infos){
             return null;
         }
-        return Collections.unmodifiableMap(entityInfos);
+        return Collections.unmodifiableMap(infos);
     }
 }

@@ -10,8 +10,6 @@ import java.util.Collection;
  */
 public interface EntityGridInfo extends IEntityInfo {
 
-    Collection<FieldInfo> getFields();
-
     String getPrimarySearchField();
 
     String fetchPrimarySearchFieldFriendlyName();

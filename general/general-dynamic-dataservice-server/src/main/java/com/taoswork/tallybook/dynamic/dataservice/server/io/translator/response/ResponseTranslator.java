@@ -22,13 +22,13 @@ public class ResponseTranslator {
         EntityQueryResponse response = new EntityQueryResponse()
                 .setEntities(criteriaResult.getEntityCollection());
         if(null != entityInfo){
-            response.addEntityInfo(EntityInfoTypes.ENTITY_INFO_TYPE_FULL, entityInfo);
+            response.addInfo(EntityInfoTypes.ENTITY_INFO_TYPE_FULL, entityInfo);
         }
         if(null != entityGridInfo){
-            response.addEntityInfo(EntityInfoTypes.ENTITY_INFO_TYPE_GRID, entityGridInfo);
+            response.addInfo(EntityInfoTypes.ENTITY_INFO_TYPE_GRID, entityGridInfo);
         }
         if(null!= entityFormInfo){
-            response.addEntityInfo(EntityInfoTypes.ENTITY_INFO_TYPE_FORM, entityFormInfo);
+            response.addInfo(EntityInfoTypes.ENTITY_INFO_TYPE_FORM, entityFormInfo);
         }
         response.setStartIndex(request.getFirstResult())
                 .setPageSize(request.getPageSize())
@@ -37,11 +37,11 @@ public class ResponseTranslator {
     }
 
     public static EntityQueryListGridResponse translate(EntityQueryResponse rawResponse){
-        EntityGridInfo entityGridInfo = rawResponse.getEntityInfo(EntityInfoTypes.ENTITY_INFO_TYPE_GRID);
+        EntityGridInfo entityGridInfo = rawResponse.getInfo(EntityInfoTypes.ENTITY_INFO_TYPE_GRID);
         EntityQueryListGridResponse response = new EntityQueryListGridResponse()
                 .setEntities(EntityMaker.makeGridEntityList(rawResponse.getEntities(), entityGridInfo));
 
-        response.addEntityInfos(rawResponse.getEntityInfos());
+        response.addInfos(rawResponse.getInfos());
 
         response.setStartIndex(rawResponse.getStartIndex())
                 .setPageSize(rawResponse.getPageSize())

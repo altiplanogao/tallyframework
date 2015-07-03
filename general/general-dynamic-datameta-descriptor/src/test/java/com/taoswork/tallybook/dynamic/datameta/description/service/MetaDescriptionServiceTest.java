@@ -59,7 +59,7 @@ public class MetaDescriptionServiceTest {
         EntityGridInfo entityGridInfo = metaDescriptionService.getEntityGridInfo(classMetadata);
         Assert.assertNotNull(entityGridInfo);
         {
-            Collection<FieldInfo> gridFieldInfos = entityGridInfo.getFields();
+            Collection<? extends FieldInfo> gridFieldInfos = entityGridInfo.getFields();
             FieldInfo[] gridFieldNameArray = gridFieldInfos.toArray(new FieldInfo[]{});
 //            Assert.assertTrue("a".equals(gridFieldNameArray[0].getName()));
 //            Assert.assertTrue("aa".equals(gridFieldNameArray[1].getName()));
