@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.easy.form.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.easy.form.TabFormInfo;
@@ -15,6 +16,11 @@ public class EntityFormInfoImpl
 
     private Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
     private Set<TabFormInfoRW> tabs = new TreeSet<TabFormInfoRW>(new InfoOrderedComparator());
+
+    @Override
+    public EntityInfoType getInfoType() {
+        return EntityInfoType.Form;
+    }
 
     @Override
     public FieldInfo getField(String fieldName) {

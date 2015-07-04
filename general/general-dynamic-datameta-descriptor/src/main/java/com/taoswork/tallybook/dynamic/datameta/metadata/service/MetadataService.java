@@ -2,18 +2,15 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
 public interface MetadataService {
-    public static final String SERVICE_NAME = "MetadataService";
+    public static final String SERVICE_NAME = "MetadataAnalyzeService";
 
-    ClassTreeMetadata getClassTreeMetadata(EntityClassTree entityClassTree);
+    ClassTreeMetadata generateMetadata(EntityClassTree entityClassTree, boolean handleSuper);
 
-    ClassMetadata getClassMetadata(Class clz);
-
-    ClassMetadata getClassMetadata(String clzName);
+    ClassMetadata generateMetadata(Class clz);
 }

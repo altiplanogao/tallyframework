@@ -6,7 +6,7 @@ import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypes;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryListGridResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
@@ -79,7 +79,7 @@ public class AdminBasicEntityController extends BaseController {
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
         EntityQueryRequest entityRequest = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams)
-                .addEntityInfoNames(EntityInfoTypes.ENTITY_INFO_TYPE_GRID);
+                .addEntityInfoType(EntityInfoType.Grid);
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
 
         String rawJsons = "";

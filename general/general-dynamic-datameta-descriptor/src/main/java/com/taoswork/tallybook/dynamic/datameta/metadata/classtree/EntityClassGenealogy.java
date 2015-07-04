@@ -1,21 +1,16 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.classtree;
 
-import com.taoswork.tallybook.general.solution.autotree.AutoTree;
-import com.taoswork.tallybook.general.solution.autotree.AutoTreeGenealogyHelper;
+import com.taoswork.tallybook.general.solution.autotree.AutoTreeGenealogy;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class EntityClassGenealogyHelper extends AutoTreeGenealogyHelper<EntityClass> {
-    @Override
-    public AutoTree<EntityClass> createNode(EntityClass entityClass) {
-        return new EntityClassTree(entityClass);
-    }
+public class EntityClassGenealogy extends AutoTreeGenealogy<EntityClass> {
 
     @Override
-    public EntityClass calcDataParent(EntityClass a, EntityClass referenceAncestor) {
+    public EntityClass calcDirectSuper(EntityClass a, EntityClass referenceSuper) {
         Class<?> clzA = a.clz;
-        Class<?> clzRefAncestor = referenceAncestor.clz;
+        Class<?> clzRefAncestor = referenceSuper.clz;
         if(!isAncestorOf(clzRefAncestor, clzA)){
             return null;
         }
@@ -36,7 +31,7 @@ public class EntityClassGenealogyHelper extends AutoTreeGenealogyHelper<EntityCl
     }
 
     @Override
-    public EntityClass calcDataParentRegardBranchNode(EntityClass a, EntityClass referenceBranchNode) {
+    public EntityClass calcDirectSuperRegardBranch(EntityClass a, EntityClass referenceBranch) {
         return null;
     }
 
@@ -48,7 +43,7 @@ public class EntityClassGenealogyHelper extends AutoTreeGenealogyHelper<EntityCl
     }
 
     @Override
-    public boolean isAncestorOf(EntityClass ancestor, EntityClass descendant) {
+    public boolean isSuperOf(EntityClass ancestor, EntityClass descendant) {
         Class<?> clzA = ancestor.clz;
         Class<?> clzB = descendant.clz;
         return isAncestorOf(clzA, clzB);

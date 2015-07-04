@@ -8,7 +8,7 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestP
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
-import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
@@ -88,7 +88,7 @@ public class TallyUserEntityServiceTest {
 
     @Test
     public void testMetaDescriptionService(){
-        MetaDescriptionService metaDescriptionService = dataService.getService(MetaDescriptionService.SERVICE_NAME);
+        MetaInfoService metaDescriptionService = dataService.getService(MetaInfoService.SERVICE_NAME);
         Assert.assertNotNull(metaDescriptionService);
     }
 

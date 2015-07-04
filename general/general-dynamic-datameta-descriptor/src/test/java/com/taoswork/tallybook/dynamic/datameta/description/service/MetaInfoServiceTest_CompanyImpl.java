@@ -1,10 +1,11 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.CompanyImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaDescriptionServiceImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import org.junit.After;
@@ -15,26 +16,25 @@ import org.junit.Test;
 /**
  * Created by Gao Yuan on 2015/6/26.
  */
-public class MetaDescriptionServiceTest_CompanyImpl {
-    private MetaDescriptionService metaDescriptionService;
+public class MetaInfoServiceTest_CompanyImpl {
+    private MetadataService metadataService;
+    private MetaInfoService metaInfoService;
 
     @Before
     public void setup() {
-        MetaDescriptionServiceImpl metaDescriptionServiceImpl
-                = new MetaDescriptionServiceImpl();
-        metaDescriptionServiceImpl.setMetadataService(new MetadataServiceImpl());
-        metaDescriptionService = metaDescriptionServiceImpl;
+        metadataService = new MetadataServiceImpl();
+        metaInfoService = new MetaInfoServiceImpl();
     }
 
     @After
     public void teardown() {
-        metaDescriptionService = null;
+        metaInfoService = null;
     }
 
     @Test
     public void testEntityInfo() {
-        ClassMetadata classMetadata = metaDescriptionService.createClassMetadata(CompanyImpl.class);
-        EntityInfo entityInfo = metaDescriptionService.getEntityInfo(classMetadata);
+        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
+        EntityInfo entityInfo = metaInfoService.generateEntityInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
             Assert.assertNotNull(entityInfo);
@@ -56,7 +56,7 @@ public class MetaDescriptionServiceTest_CompanyImpl {
             Assert.assertEquals(entityInfo.getGridFields().size(), 8);
         }
 
-        EntityGridInfo entityGridInfo = metaDescriptionService.getEntityGridInfo(classMetadata);
+        EntityGridInfo entityGridInfo = metaInfoService.generateEntityGridInfo(classMetadata);
         Assert.assertNotNull(entityGridInfo);
         if (entityGridInfo != null) {
             Assert.assertEquals(entityGridInfo.getFields().size(), 8);

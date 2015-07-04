@@ -2,7 +2,8 @@ package com.taoswork.tallybook.general.dataservice.management.api;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypes;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.ParameterToRequestTranslator;
@@ -47,9 +48,10 @@ public class TallyApiController  {
 
         List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
         if(infoTypes != null){
-            for (String infoType : infoTypes){
-                if(EntityInfoTypes.isEntityInfoType(infoType)){
-                    request.addEntityInfoNames(infoType);
+            for (String infoTypeString : infoTypes){
+                EntityInfoType entityInfoType = EntityInfoTypeNames.entityInfoTypeOf(infoTypeString);
+                if(entityInfoType != null){
+                    request.addEntityInfoType(entityInfoType);
                 }
             }
         }

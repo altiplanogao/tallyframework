@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
 
@@ -49,11 +50,11 @@ public abstract class AEntityQueryResponse {
                 pageSize, totalCount);
     }
 
-    public AEntityQueryResponse addInfo(String infoType, IEntityInfo entityInfo){
+    public AEntityQueryResponse addInfo(EntityInfoType infoType, IEntityInfo entityInfo){
         if(this.infos == null){
             this.infos = new HashMap<String, IEntityInfo>();
         }
-        this.infos.put(infoType, entityInfo);
+        this.infos.put(infoType.getName(), entityInfo);
         return this;
     }
 

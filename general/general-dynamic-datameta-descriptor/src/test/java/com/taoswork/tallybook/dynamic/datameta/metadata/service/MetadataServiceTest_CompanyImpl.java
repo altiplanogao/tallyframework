@@ -29,7 +29,7 @@ public class MetadataServiceTest_CompanyImpl {
 
     @Test
     public void testClassMetadata(){
-        ClassMetadata classMetadata = metadataService.getClassMetadata(CompanyImpl.class);
+        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
 
         Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         Assert.assertTrue(fieldMetadataMap.size() == NativeClassHelper.getFields(CompanyImpl.class,

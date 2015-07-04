@@ -11,11 +11,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.impl
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.impl.TabInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.impl.TabInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.*;
-import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClass;
-import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
-import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
-import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
-import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,22 +58,28 @@ public class EntityInfoBuilder {
         }
     }
 
-    public static EntityInfo buildClassInfo(ClassMetadata classMetadata, EntityClassTree polymorphicEntityClzTree, final MetadataService metadataService) {
+    public static EntityInfo buildClassInfo(ClassMetadata classMetadata) {
         final EntityInfoRW classInfo = InfoCreator.createClassInfo(classMetadata);
         classInfoAppendMetadata(classInfo, classMetadata);
-        if (polymorphicEntityClzTree != null) {
-            polymorphicEntityClzTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
-                @Override
-                public Void callback(EntityClass parameter) throws AutoTreeException {
-                    ClassMetadata childClassMetadata = metadataService.getClassMetadata(parameter.clz.getName());
-                    classInfoAppendMetadata(classInfo, childClassMetadata);
-                    return null;
-                }
-            }, true);
-        }
-        //polymorphicEntityClzTree.
         return classInfo;
     }
+//
+//    public static EntityInfo buildClassInfo(ClassMetadata classMetadata, EntityClassTree polymorphicEntityClzTree, final MetadataService metadataService) {
+//        final EntityInfoRW classInfo = InfoCreator.createClassInfo(classMetadata);
+//        classInfoAppendMetadata(classInfo, classMetadata);
+//        if (polymorphicEntityClzTree != null) {
+//            polymorphicEntityClzTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
+//                @Override
+//                public Void callback(EntityClass parameter) throws AutoTreeException {
+//                    ClassMetadata childClassMetadata = metadataService.getClassMetadata(parameter.clz.getName());
+//                    classInfoAppendMetadata(classInfo, childClassMetadata);
+//                    return null;
+//                }
+//            }, true);
+//        }
+//        //polymorphicEntityClzTree.
+//        return classInfo;
+//    }
 
     private static void classInfoAppendMetadata(EntityInfoRW classInfo, ClassMetadata classMetadata) {
 

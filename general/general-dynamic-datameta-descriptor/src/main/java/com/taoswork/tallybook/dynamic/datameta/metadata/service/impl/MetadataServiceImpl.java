@@ -7,20 +7,31 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTre
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.FieldProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
+import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
+import com.taoswork.tallybook.general.solution.cache.ehcache.CacheType;
+import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
+import com.taoswork.tallybook.general.solution.cache.ehcache.ICacheMap;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
-import org.apache.commons.collections.map.LRUMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
 public class MetadataServiceImpl implements MetadataService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetadataService.class);
+
     protected final ClassProcessor classProcessor;
     protected final FieldProcessor fieldProcessor;
 
-    private Map<String, ClassMetadata> classMetadataCache = new LRUMap();
+    //Just cache for Class, not for EntityClassTree
+    private ICacheMap<String, ClassMetadata> classMetadataCache =
+            CachedRepoManager.getCacheMap(CacheType.EhcacheCache);;
 
     public MetadataServiceImpl(){
         fieldProcessor = new FieldProcessor();
@@ -28,62 +39,68 @@ public class MetadataServiceImpl implements MetadataService {
     }
 
     @Override
-    public ClassTreeMetadata getClassTreeMetadata(final EntityClassTree entityClassTree) {
+    public ClassTreeMetadata generateMetadata(final EntityClassTree entityClassTree, boolean handleSuper) {
         final ClassTreeMetadata classTreeMetadata = new ClassTreeMetadata();
         classTreeMetadata.setEntityClassTree(entityClassTree);
-        generateClassMetadata(entityClassTree.getData().clz, classTreeMetadata);
+        final Class rootClz = entityClassTree.getData().clz;
 
+        //Handle the fields in current class
+        {
+            classProcessor.process(rootClz, classTreeMetadata);
+        }
+
+        final List<ClassMetadata> metadatasTobeMerged = new ArrayList<ClassMetadata>();
+
+        //Handle the fields in super classes
+        if(handleSuper) {
+            Class[] superClasses = NativeClassHelper.getSuperClasses(rootClz, true);
+            for (Class superClz : superClasses) {
+                ClassMetadata classMetadata = generateMetadata(superClz);
+                metadatasTobeMerged.add(classMetadata);
+            }
+        }
+
+        //Handle the fields in polymorphic children classes
         entityClassTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
             @Override
             public Void callback(EntityClass parameter) throws AutoTreeException {
                 Class clz = parameter.clz;
-                ClassMetadata classMetadata = getClassMetadata(clz);
-                if(clz.equals(entityClassTree.getData().clz)){
-                    classTreeMetadata.copyFrom(classMetadata);
+                ClassMetadata classMetadata = generateMetadata(clz);
+                metadatasTobeMerged.add(classMetadata);
+
+                if (clz.equals(rootClz)) {
+                    LOGGER.error("{} should not be processed here", rootClz.getName());
+                    throw new RuntimeException(rootClz.getName() + "should not be processed here.");
                 }
-                classTreeMetadata.getRWTabMetadataMap().putAll(classMetadata.getReadonlyTabMetadataMap());
-                classTreeMetadata.getRWGroupMetadataMap().putAll(classMetadata.getReadonlyGroupMetadataMap());
-                classTreeMetadata.getRWFieldMetadataMap().putAll(classMetadata.getReadonlyFieldMetadataMap());
+
                 return null;
             }
         }, false);
+
+        for(ClassMetadata classMetadata : metadatasTobeMerged){
+            classTreeMetadata.getRWTabMetadataMap().putAll(classMetadata.getReadonlyTabMetadataMap());
+            classTreeMetadata.getRWGroupMetadataMap().putAll(classMetadata.getReadonlyGroupMetadataMap());
+            classTreeMetadata.getRWFieldMetadataMap().putAll(classMetadata.getReadonlyFieldMetadataMap());
+        }
 
         return classTreeMetadata;
     }
 
     @Override
-    public ClassMetadata getClassMetadata(Class clz){
-        return this.getClassMetadata(clz.getName());
-    }
-
-    @Override
-    public ClassMetadata getClassMetadata(String clzName){
+    public ClassMetadata generateMetadata(Class clz) {
+        String clzName = clz.getName();
         ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);
-        if(classMetadata == null){
-            try{
-                classMetadata = generateClassMetadata(Class.forName(clzName));
-                classMetadataCache.put(clzName, classMetadata);
-            } catch (ClassNotFoundException exp){
-                throw new RuntimeException(exp);
-            }
+        if(null == classMetadata) {
+            classMetadata = new ClassMetadata();
+            classProcessor.process(clz, classMetadata);
+            //doGenerateClassMetadata(clz, classMetadata);
+            classMetadataCache.put(clzName, classMetadata);
         }
         return classMetadata;
     }
 
-//    @Override
-//    public FieldMetadata getFieldMetadata(Field field){
-//        FieldMetadata fieldMetadata = new FieldMetadata(field);
-//        fieldProcessor.process(field, fieldMetadata);
-//        return fieldMetadata;
+//    private void doGenerateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
+//        classProcessor.process(clz, classMetadata);
 //    }
 
-    private ClassMetadata generateClassMetadata(Class<?> clz){
-        ClassMetadata classMetadata = new ClassMetadata();
-        generateClassMetadata(clz, classMetadata);
-        return classMetadata;
-    }
-
-    private void generateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
-        classProcessor.process(clz, classMetadata);
-    }
 }

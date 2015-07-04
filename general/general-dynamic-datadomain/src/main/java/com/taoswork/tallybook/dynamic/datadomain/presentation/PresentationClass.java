@@ -15,7 +15,7 @@ public @interface PresentationClass {
 
     PresentationClass.Group[] groups() default { @PresentationClass.Group(name = Group.DEFAULT_NAME) };
 
-    boolean excludeFromPolymorphism() default false;
+    boolean instanceable() default true;
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({})

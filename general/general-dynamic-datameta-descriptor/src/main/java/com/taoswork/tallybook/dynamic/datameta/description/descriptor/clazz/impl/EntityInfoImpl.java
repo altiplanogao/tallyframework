@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
@@ -23,6 +24,11 @@ public class EntityInfoImpl
     private String primarySearchField;
 
     private transient boolean dirty = false;
+
+    @Override
+    public EntityInfoType getInfoType() {
+        return EntityInfoType.Full;
+    }
 
     @Override
     public void addField(FieldInfoRW fieldInfo) {

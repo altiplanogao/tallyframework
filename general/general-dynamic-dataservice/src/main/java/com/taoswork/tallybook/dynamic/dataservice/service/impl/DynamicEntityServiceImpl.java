@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.service.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
@@ -24,19 +26,13 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public Class<?> getRootPersistiveEntityClass(Class<?> entityClz){
-        Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootPersistiveEntityClass(entityClz);
-        return entityClz;
-    }
-
-    @Override
     public <T> T save(T entity){
         return dynamicEntityDao.persist(entity);
     }
 
     @Override
     public <T> T find(Class<T> entityClz, Object key){
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootPersistiveEntityClass(entityClz);
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         return dynamicEntityDao.find(entityRootClz, key);
     }
 
@@ -52,12 +48,23 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query){
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootPersistiveEntityClass(entityClz);
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         return dynamicEntityDao.query(entityRootClz, query);
+    }
+
+    @Override
+    public Class<?> getRootInstanceableEntityClass(Class<?> entityClz){
+        Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
+        return entityClz;
     }
 
     @Override
     public <T> ClassTreeMetadata inspect(Class<T> entityClz){
         return dynamicEntityMetadataAccess.getClassTreeMetadata(entityClz);
+    }
+
+    @Override
+    public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType) {
+        return dynamicEntityMetadataAccess.getEntityInfo(entityType, infoType);
     }
 }

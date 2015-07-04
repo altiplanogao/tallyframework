@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.service;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.datamork.conf.DynamicConfig;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.*;
@@ -16,10 +17,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/26.
@@ -90,11 +88,15 @@ public class DynamicEntityServiceTest {
         DynamicEntityMetadataAccess dynamicEntityMetadataAccess = (DynamicEntityMetadataAccess)applicationContext.getBean(DynamicEntityMetadataAccess.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityMetadataAccess);
 
-        Map<String, EntityClassTree> entityClassTrees = dynamicEntityMetadataAccess.getAllEntityClassTree();
-        Assert.assertNotNull(entityClassTrees);
-        Assert.assertEquals(entityClassTrees.size(), 1);
-        EntityClassTree entityClassTree = entityClassTrees.getOrDefault(TPerson.class.getName(), null);
+        Collection<Class> entityInterfaces = dynamicEntityMetadataAccess.getAllEntityInterfaces();
+        Assert.assertNotNull(entityInterfaces);
+        Assert.assertEquals(entityInterfaces.size(), 1);
+
+        EntityClassTree entityClassTree = dynamicEntityMetadataAccess.getEntityClassTree(TPerson.class);
         Assert.assertEquals(TPerson.class.getName(), entityClassTree.getData().clz.getName());
+
+        ClassTreeMetadata entityClassTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(TPerson.class);
+        Assert.assertEquals(TPerson.class.getName(), entityClassTreeMetadata.getName());
     }
 
     @Test

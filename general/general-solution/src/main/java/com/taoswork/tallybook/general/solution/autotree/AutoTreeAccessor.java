@@ -1,87 +1,78 @@
 package com.taoswork.tallybook.general.solution.autotree;
 
-import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class AutoTreeAccessor<D> {
+public abstract class AutoTreeAccessor<D, N extends AutoTree<D>> extends AutoTreeAccessorSetting {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoTreeAccessor.class);
 
-    boolean allowChild = true;
-    boolean allowParent = false;
-    boolean allowBranch = false;
+    private AutoTreeGenealogy<D> genealogy = null;
 
-    private AutoTreeGenealogyHelper<D> genealogyHelper = null;
+    public abstract N createNode(D d);
 
-    public AutoTreeAccessor(AutoTreeGenealogyHelper<D> genealogyHelper){
-        this.genealogyHelper = genealogyHelper;
+    public AutoTreeAccessor(AutoTreeGenealogy<D> genealogy) {
+        this.genealogy = genealogy;
     }
 
-    public AutoTreeGenealogyHelper<D> getGenealogyHelper() {
-        return genealogyHelper;
+    public AutoTreeGenealogy<D> getGenealogy() {
+        return genealogy;
     }
 
-    public boolean isAllowChild() {
-        return allowChild;
-    }
-
-    public AutoTreeAccessor setAllowChild(boolean allowChild) {
-        this.allowChild = allowChild;
-        return this;
-    }
-
-    public boolean isAllowParent() {
-        return allowParent;
-    }
-
-    public AutoTreeAccessor setAllowParent(boolean allowParent) {
-        this.allowParent = allowParent;
-        return this;
-    }
-
-    public boolean isAllowBranch() {
-        return allowBranch;
-    }
-
-    public AutoTreeAccessor setAllowBranch(boolean allowBranch) {
-        this.allowBranch = allowBranch;
-        if(allowBranch){
-            allowAll();
-        }
-        return this;
-    }
-
-    public AutoTreeAccessor allowAll(){
-        allowChild = true;
-        allowParent = true;
-        allowBranch = true;
-        return this;
-    }
-
-    public AutoTreeAccessor denyAll(){
-        allowChild = false;
-        allowParent = false;
-        allowBranch = false;
-        return this;
-    }
-
-    public AutoTree<D> add(AutoTree<D> existingNode, D newNodeData){
-        return existingNode.add(this, newNodeData);
-    }
-
-    public <T extends AutoTree<D>> T copy(final T src){
-        final AutoTree<D> newRoot = genealogyHelper.createNode(src.data);
-        src.traverse(true, new ICallback2<Void, D, AutoTree.TraverseControl, AutoTreeException>(){
-            @Override
-            public Void callback(D parameter, AutoTree.TraverseControl control) throws AutoTreeException {
-                newRoot.add(AutoTreeAccessor.this, parameter);
-                return null;
+    public N add(N existingNode, D newNodeData) {
+        D existingNodeData = existingNode.data;
+        if (genealogy.isSuperOf(existingNodeData, newNodeData)) {
+            if (allowChild) {
+                List<D> superChain = genealogy.superChain(existingNodeData, newNodeData);
+                N currentNode = existingNode;
+                for (D d : superChain) {
+                    D currentD = currentNode.data;
+                    D expectedP = genealogy.calcDirectSuper(d, currentD);
+                    if (genealogy.checkEqual(expectedP, currentD)) {
+                        N newNode = createNode(d);
+                        AddResult<N> result = currentNode.safeDirectAddChild(newNode, genealogy);
+                        if (result.isOk()) {
+                            currentNode = result.node;
+                        } else {
+                            return null;
+                        }
+                    }
+                }
+                return currentNode;
             }
-        }, true);
+        } else if (genealogy.isSuperOf(newNodeData, existingNodeData)) {
+            if (allowParent) {
+                List<D> superChain = genealogy.superChain(newNodeData, existingNodeData);
+                superChain.add(0, newNodeData);
+                superChain.remove(superChain.size() - 1);
+                N currentNode = existingNode;
+                for (int i = superChain.size() - 1; i >= 0; --i) {
+                    D candParent = superChain.get(i);
+                    N candNode = createNode(candParent);
+                    AddResult<N> result = currentNode.safeDirectAddParent(candNode, genealogy);
+                    if (result.isOk()) {
+                        currentNode = result.node;
+                    } else {
+                        return null;
+                    }
+                }
+                return currentNode;
+            }
+        } else if (allowBranch) {
+            D p = genealogy.calcDirectSuperRegardBranch(existingNodeData, newNodeData);
+            N newNode = this.add(existingNode, p);
+            if (newNode != null) {
+                return this.add(newNode, newNodeData);
+            }
+        }
+        return null;
+    }
 
-        return (T)newRoot;
+    public N find(N existingNode, D data, boolean searchSuper){
+        return existingNode.find(data, this.genealogy, searchSuper);
     }
 }

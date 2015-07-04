@@ -13,20 +13,37 @@ import java.util.List;
  * Created by Gao Yuan on 2015/5/22.
  */
 public class NativeClassHelper {
-    public static boolean isExcludeClassFromPolymorphism(Class<?> clazz) {
+    public static Class[] getSuperClasses(Class clz, boolean reverseOrder) {
+        List<Class> classes = new ArrayList<Class>();
+        if (clz != null) {
+            do {
+                clz = clz.getSuperclass();
+                if (clz != null) {
+                    if(reverseOrder){
+                        classes.add(0, clz);
+                    }else {
+                        classes.add(clz);
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
+        }
+        return classes.toArray(new Class[classes.size()]);
+    }
+    public static boolean isInstanceable(Class<?> clazz) {
         //We filter out abstract classes because they can't be instantiated.
         if (Modifier.isAbstract(clazz.getModifiers())) {
-            return true;
+            return false;
         }
 
         //We filter out classes that are marked to exclude from polymorphism
-        PresentationClass adminPresentationClass = clazz.getAnnotation(PresentationClass.class);
-        if (adminPresentationClass == null) {
-            return false;
-        } else if (adminPresentationClass.excludeFromPolymorphism()) {
+        PresentationClass presentationClass = clazz.getAnnotation(PresentationClass.class);
+        if (presentationClass == null) {
             return true;
+        } else {
+            return presentationClass.instanceable();
         }
-        return false;
     }
 
     public static FieldScanMethod scanAllPersistentNoSuper = new NativeClassHelper.FieldScanMethod()

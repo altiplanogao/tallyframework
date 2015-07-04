@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.dynamic.dataservice.datamork.conf;
 
-import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dao.impl.DynamicEntityDaoImplBase;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.DynamicEntityMetadataAccessImplBase;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.service.impl.DynamicEntityServiceImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaDescriptionServiceImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
@@ -59,8 +59,8 @@ public class DynamicConfig {
         return new MetadataServiceImpl();
     }
 
-    @Bean(name = MetaDescriptionService.SERVICE_NAME)
-    MetaDescriptionService metaDescriptionService(){
-        return new MetaDescriptionServiceImpl();
+    @Bean(name = MetaInfoService.SERVICE_NAME)
+    MetaInfoService metaDescriptionService(){
+        return new MetaInfoServiceImpl();
     }
 }

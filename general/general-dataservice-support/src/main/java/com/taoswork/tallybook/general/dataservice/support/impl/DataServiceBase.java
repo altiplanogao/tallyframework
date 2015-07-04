@@ -46,7 +46,7 @@ public abstract class DataServiceBase implements IDataService {
     private void loadAnnotatedClasses(Class<?>... annotatedClasses) {
         onServiceStart();
 
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(){
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext() {
             @Override
             protected void onClose() {
                 super.onClose();
@@ -69,11 +69,11 @@ public abstract class DataServiceBase implements IDataService {
     protected void postConstruct() {
     }
 
-    protected void onServiceStart(){
+    protected void onServiceStart() {
         CachedRepoManager.startEhcache();
     }
 
-    protected void onServiceStop(){
+    protected void onServiceStop() {
         CachedRepoManager.stopEhcache();
     }
 
@@ -160,10 +160,9 @@ public abstract class DataServiceBase implements IDataService {
             entityEntryMap = new HashMap<String, EntityEntry>();
 
             DynamicEntityMetadataAccess dynamicEntityMetadataAccess = getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
-            Map<String, EntityClassTree> entityClassTreeMap = dynamicEntityMetadataAccess.getAllEntityClassTree();
-            for (Map.Entry<String, EntityClassTree> entityClassTreeEntry : entityClassTreeMap.entrySet()) {
-                String interfaceName = entityClassTreeEntry.getKey();
-                EntityClassTree classTree = entityClassTreeEntry.getValue();
+
+            for (Class entityInterface : dynamicEntityMetadataAccess.getAllEntityInterfaces()) {
+                String interfaceName = entityInterface.getName();
                 if (entityEntryMap.containsKey(interfaceName)) {
                     LOGGER.error("EntityEntry with name '{}' already exist, over-writing", interfaceName);
                 }
@@ -210,6 +209,4 @@ public abstract class DataServiceBase implements IDataService {
             entityResourceNameOverride.put(interfaceName, resourceName);
         }
     }
-
-
 }

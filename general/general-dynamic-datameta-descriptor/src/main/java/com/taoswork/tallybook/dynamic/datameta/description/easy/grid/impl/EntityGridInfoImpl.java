@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.easy.grid.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
@@ -18,6 +19,11 @@ public class EntityGridInfoImpl extends NamedInfoImpl
 
     private String primarySearchField;
     private final Set<FieldInfo> fields = new TreeSet<FieldInfo>(new InfoOrderedComparator());
+
+    @Override
+    public EntityInfoType getInfoType() {
+        return EntityInfoType.Grid;
+    }
 
     @Override
     public void addField(FieldInfo fieldInfo){

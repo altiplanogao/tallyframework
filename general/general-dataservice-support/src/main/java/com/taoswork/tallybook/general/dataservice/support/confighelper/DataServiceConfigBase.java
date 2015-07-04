@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.dataservice.support.confighelper;
 
-import com.taoswork.tallybook.dynamic.datameta.description.service.MetaDescriptionService;
-import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaDescriptionServiceImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
+import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
@@ -50,13 +50,13 @@ public abstract class DataServiceConfigBase {
         return new MetadataServiceImpl();
     }
 
-    @Bean(name = MetaDescriptionService.SERVICE_NAME)
-    public MetaDescriptionService metaDescriptionService() {
-        MetaDescriptionService metaDescriptionService = new MetaDescriptionServiceImpl();
-        if(metaDescriptionService instanceof HasCacheScope){
-            ((HasCacheScope) metaDescriptionService).setCacheScope(
-                    dataServiceName() + "." + MetaDescriptionService.class.getSimpleName());
+    @Bean(name = MetaInfoService.SERVICE_NAME)
+    public MetaInfoService metaDescriptionService() {
+        MetaInfoService metaInfoService = new MetaInfoServiceImpl();
+        if(metaInfoService instanceof HasCacheScope){
+            ((HasCacheScope) metaInfoService).setCacheScope(
+                    dataServiceName() + "." + MetaInfoService.class.getSimpleName());
         }
-        return metaDescriptionService;
+        return metaInfoService;
     }
 }

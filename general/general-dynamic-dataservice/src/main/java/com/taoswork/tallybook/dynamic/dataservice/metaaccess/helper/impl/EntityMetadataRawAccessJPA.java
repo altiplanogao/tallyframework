@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.metaaccess.helper.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.helper.EntityMetadataHelper;
+import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
+import com.taoswork.tallybook.dynamic.dataservice.metaaccess.helper.AEntityMetadataRawAccess;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
 import com.taoswork.tallybook.general.solution.time.IntervalSensitive;
 import org.apache.commons.collections.map.LRUMap;
@@ -15,18 +16,16 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/5/21.
  */
-public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
+public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
 
     public static final Object LOCK_OBJECT = new Object();
     public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE = new LRUMap(100, 1000);
     public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS = new LRUMap(100, 1000);
-
+    protected IntervalSensitive cacheDecider;
     private EntityManager entityManager;
 
-    protected IntervalSensitive cacheDecider;
-
-    private IntervalSensitive getCacheDecider(){
-        if (cacheDecider == null){
+    private IntervalSensitive getCacheDecider() {
+        if (cacheDecider == null) {
             Long cacheTtl = RuntimePropertiesPublisher.instance().getLong("cache.entity.dao.metadata.ttl", -1L);
             cacheDecider = new IntervalSensitive(cacheTtl) {
                 @Override
@@ -49,24 +48,24 @@ public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
     }
 
     @Override
-    public Class<?>[] getAllPolymorphicEntitiesFromCeiling(Class<?> ceilingClz) {
-        return getAllPolymorphicEntitiesFromCeiling(ceilingClz, true);
+    public Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz) {
+        return getAllInstanceableEntitiesFromCeiling(ceilingClz, true);
     }
 
     @Override
-    public Class<?>[] getAllPolymorphicEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities) {
-        return getAllPolymorphicEntitiesFromCeiling(ceilingClz,
+    public Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities) {
+        return getAllInstanceableEntitiesFromCeiling(ceilingClz,
                 includeUnqualifiedPolymorphicEntities, getCacheDecider().isIntervalExpired());
     }
 
-    private Class<?>[] getAllPolymorphicEntitiesFromCeiling(
+    private Class<?>[] getAllInstanceableEntitiesFromCeiling(
             Class<?> ceilingClz,
             boolean includeUnqualifiedPolymorphicEntities,
             boolean useCache) {
         Metamodel mm = entityManager.getMetamodel();
         Set<EntityType<?>> entityTypes = mm.getEntities();
         Class<?>[] cache = null;
-        synchronized(LOCK_OBJECT) {
+        synchronized (LOCK_OBJECT) {
             if (useCache) {
                 if (includeUnqualifiedPolymorphicEntities) {
                     cache = POLYMORPHIC_ENTITY_CACHE.get(ceilingClz);
@@ -91,10 +90,10 @@ public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
                     if (includeUnqualifiedPolymorphicEntities) {
                         filteredSortedEntities.add(sortedEntities[i]);
                     } else {
-                        if (isExcludeClassFromPolymorphism(item)) {
-                            continue;
-                        } else {
+                        if (NativeClassHelper.isInstanceable(item)) {
                             filteredSortedEntities.add(sortedEntities[i]);
+                        } else {
+                            continue;
                         }
                     }
                 }
@@ -137,7 +136,7 @@ public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
         Metamodel mm = entityManager.getMetamodel();
         EntityType<?> entityType = mm.entity(entityClz);
         List<String> propertyNames = new ArrayList<String>();
-        for(Attribute attribute : entityType.getAttributes()){
+        for (Attribute attribute : entityType.getAttributes()) {
             propertyNames.add(attribute.getName());
         }
         return propertyNames;
@@ -151,7 +150,7 @@ public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
 //        return propertyTypes;
 //    }
 
-    private void clearCache(){
+    private void clearCache() {
         POLYMORPHIC_ENTITY_CACHE.clear();
         POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS.clear();
     }
@@ -162,9 +161,9 @@ public class EntityMetadataHelper4JPA extends EntityMetadataHelper {
         Set<EntityType<?>> entityTypes = mm.getEntities();
 
         List<Class<?>> entityClasses = new ArrayList<Class<?>>();
-        for (EntityType<?> entityType : entityTypes){
+        for (EntityType<?> entityType : entityTypes) {
             Class<?> mappedClz = entityType.getJavaType();
-            if(mappedClz != null){
+            if (mappedClz != null) {
                 entityClasses.add(mappedClz);
             }
         }

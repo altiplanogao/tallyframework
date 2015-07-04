@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
@@ -22,7 +23,7 @@ public class EntityQueryRequest {
 
     private Class<?> entityType;
     private CriteriaTransferObject criteriaTransferObject = new CriteriaTransferObject();
-    private final Set<String> entityInfoNames = new HashSet<String>();
+    private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
 
     public EntityQueryRequest withEntityType(String entityType){
         try {
@@ -76,24 +77,24 @@ public class EntityQueryRequest {
         return criteriaTransferObject.getPageSize();
     }
 
-    public Collection<String> getEntityInfoNames() {
-        return Collections.unmodifiableCollection(entityInfoNames);
+    public Collection<EntityInfoType> getEntityInfoTypes() {
+        return Collections.unmodifiableCollection(entityInfoTypes);
     }
 
-    public EntityQueryRequest setEntityInfoName(String entityInfoName){
-        entityInfoNames.clear();
-        entityInfoNames.add(entityInfoName);
+    public EntityQueryRequest setEntityInfoType(EntityInfoType entityInfoType){
+        entityInfoTypes.clear();
+        entityInfoTypes.add(entityInfoType);
         return this;
     }
 
-    public EntityQueryRequest addEntityInfoNames(String... entityInfoNames){
-        for (String entityInfoName : entityInfoNames) {
-            this.entityInfoNames.add(entityInfoName);
+    public EntityQueryRequest addEntityInfoType(EntityInfoType... entityInfoTypes){
+        for (EntityInfoType entityInfoType : entityInfoTypes) {
+            this.entityInfoTypes.add(entityInfoType);
         }
         return this;
     }
 
-    public boolean hasEntityInfoName(String entityInfoName){
-        return entityInfoNames.contains(entityInfoName);
+    public boolean hasEntityInfoType(EntityInfoType entityInfoType){
+        return entityInfoTypes.contains(entityInfoType);
     }
 }

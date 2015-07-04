@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.base;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 
 import java.io.Serializable;
@@ -11,5 +12,7 @@ import java.util.Collection;
 public interface IEntityInfo extends NamedInfo, Serializable{
 
     Collection<? extends FieldInfo> getFields();
+
+    EntityInfoType getInfoType();
 
 }

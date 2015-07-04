@@ -8,15 +8,13 @@ import java.util.Map;
  */
 public interface EntityMetadataRawAccess {
 
-    Class<?>[] getAllPolymorphicEntitiesFromCeiling(Class<?> ceilingClz);
+    Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz);
 
-    Class<?>[] getAllPolymorphicEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities);
+    Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities);
 
     Map<String, String> getIdMetadata(Class<?> entityClass);
 
     List<String> getPropertyNames(Class<?> entityClass);
-
- //   List<Type> getPropertyTypes(Class<?> entityClass);
 
     Class<?>[] getAllEntityClasses();
 }

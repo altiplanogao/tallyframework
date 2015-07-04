@@ -38,7 +38,7 @@ public class MetadataServiceTest {
     public void testGenericFields() {
         Class<FieldsZoo> fieldsZooClz = FieldsZoo.class;
         Field[] fields = fieldsZooClz.getDeclaredFields();
-        ClassMetadata classMetadata = metadataService.getClassMetadata(fieldsZooClz);
+        ClassMetadata classMetadata = metadataService.generateMetadata(fieldsZooClz);
 
         for (Field field : fields) {
             Class type = field.getType();
@@ -71,7 +71,7 @@ public class MetadataServiceTest {
     public void testScanFieldsHierarchy() {
         Class<AAA> clz = AAA.class;
         Field[] fields = clz.getDeclaredFields();
-        ClassMetadata classMetadata = metadataService.getClassMetadata(clz);
+        ClassMetadata classMetadata = metadataService.generateMetadata(clz);
 
         int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
         Assert.assertEquals(fieldCount, 1);
