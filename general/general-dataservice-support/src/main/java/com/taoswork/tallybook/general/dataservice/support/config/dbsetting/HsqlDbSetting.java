@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting;
+package com.taoswork.tallybook.general.dataservice.support.config.dbsetting;
 
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
 import org.apache.commons.dbcp.BasicDataSource;

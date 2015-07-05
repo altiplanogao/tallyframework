@@ -6,7 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.query.criteria.restriction.Restriction;
 import com.taoswork.tallybook.dynamic.dataservice.query.criteria.restriction.RestrictionFactory;
 import com.taoswork.tallybook.dynamic.dataservice.query.criteria.util.FieldPathBuilder;
-import com.taoswork.tallybook.dynamic.dataservice.query.translator.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.query.translator.Cto2QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/5/29.
  */
-public class QueryTranslatorImpl implements QueryTranslator {
+public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
     @Override
     public <T> TypedQuery<T> constructListQuery(
             EntityManager entityManager,

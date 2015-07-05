@@ -1,9 +1,9 @@
-package com.taoswork.tallybook.general.dataservice.support.confighelper;
+package com.taoswork.tallybook.general.dataservice.support.config.helper;
 
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.HsqlDbSetting;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.IDbSetting;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.MysqlDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.HsqlDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.IDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.MysqlDbSetting;
 import com.taoswork.tallybook.general.extension.collections.PropertiesUtility;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
 import com.taoswork.tallybook.general.solution.jpa.JPAPropertiesPersistenceUnitPostProcessor;

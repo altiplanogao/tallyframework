@@ -10,7 +10,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfo
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryListGridResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.ParameterToRequestTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
@@ -78,7 +78,7 @@ public class AdminBasicEntityController extends BaseController {
 //                .appendMenu(model, adminMenuService);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest entityRequest = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams)
+        EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityType, requestParams)
                 .addEntityInfoType(EntityInfoType.Grid);
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
 

@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataServiceDefinition;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.PersistenceConfigBase;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.IDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.PersistenceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
@@ -14,7 +14,7 @@ import javax.sql.DataSource;
  * Created by Gao Yuan on 2015/5/10.
  */
 
-class TallyUserPersistenceConfigBase extends PersistenceConfigBase {
+public class TallyUserPersistenceConfigBase extends PersistenceConfigBase {
 
     public TallyUserPersistenceConfigBase() {
         this(IDbSetting.DEFAULT_DB_SETTING);

@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin.conf;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.DataServiceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.config.DataServiceConfigBase;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;

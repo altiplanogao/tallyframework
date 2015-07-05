@@ -6,7 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfo
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.ParameterToRequestTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
@@ -44,7 +44,7 @@ public class TallyApiController  {
         String entityType = dataServiceManager.getEntityInterfaceName(entityKey);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest request = ParameterToRequestTranslator.makeQueryRequest(entityType, requestParams);
+        EntityQueryRequest request = Parameter2RequestTranslator.makeQueryRequest(entityType, requestParams);
 
         List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
         if(infoTypes != null){

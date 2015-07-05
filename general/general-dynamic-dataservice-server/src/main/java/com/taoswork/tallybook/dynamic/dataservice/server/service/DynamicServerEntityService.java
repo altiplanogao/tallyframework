@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 
@@ -11,4 +13,7 @@ public interface DynamicServerEntityService {
 
     EntityQueryResponse getQueryRecords(EntityQueryRequest request);
 
+    IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType);
+
+    // IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale);
 }

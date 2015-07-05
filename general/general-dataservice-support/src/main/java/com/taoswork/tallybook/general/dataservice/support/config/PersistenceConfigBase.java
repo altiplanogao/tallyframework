@@ -1,11 +1,12 @@
-package com.taoswork.tallybook.general.dataservice.support.confighelper;
+package com.taoswork.tallybook.general.dataservice.support.config;
 
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.service.impl.DynamicEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.impl.DynamicServerEntityServiceImpl;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.IDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.IDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.helper.PersistenceConfigHelper;
 import com.taoswork.tallybook.general.solution.property.PropertiesSubCollectionProvider;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;

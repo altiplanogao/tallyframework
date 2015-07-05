@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.dataservice.support.confighelper;
+package com.taoswork.tallybook.general.dataservice.support.config;
 
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;

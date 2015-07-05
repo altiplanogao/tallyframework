@@ -20,7 +20,7 @@ public class DataServiceManagerImpl implements DataServiceManager {
 
     private final Map<String, IDataService> dataServiceMap = new HashMap<String, IDataService>();
     private final Map<String, ManagedEntityEntry> entityEntryMap = new HashMap<String, ManagedEntityEntry>();
-    private final Map<String, String> resouceNameToInterface = new HashMap<String, String>();
+    private final Map<String, String> resourceNameToInterface = new HashMap<String, String>();
 
     @Override
     public DataServiceManager buildingAppendDataService(String dataServiceBeanName, IDataService dataService){
@@ -43,10 +43,10 @@ public class DataServiceManagerImpl implements DataServiceManager {
             EntityEntry managedEntityEntry = entryEntry.getValue().getEntityEntry();
 
             String resourceName = managedEntityEntry.getResourceName();
-            if(resouceNameToInterface.containsKey(resourceName)){
+            if(resourceNameToInterface.containsKey(resourceName)){
                 LOGGER.error("ResourceName '{}' for interface '{}' already used.", resourceName, interfaceName);
             }
-            resouceNameToInterface.put(resourceName, interfaceName);
+            resourceNameToInterface.put(resourceName, interfaceName);
         }
 
         return this;
@@ -59,7 +59,7 @@ public class DataServiceManagerImpl implements DataServiceManager {
 
     @Override
     public String getEntityInterfaceName(String resourceName) {
-        return resouceNameToInterface.getOrDefault(resourceName, null);
+        return resourceNameToInterface.getOrDefault(resourceName, null);
     }
 
     @Override

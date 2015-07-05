@@ -4,9 +4,9 @@ import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.query.translator.QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.query.translator.Cto2QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.query.translator.impl.QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.query.translator.impl.Cto2QueryTranslatorImpl;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -21,10 +21,10 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
-    private final QueryTranslator queryTranslator;
+    private final Cto2QueryTranslator cto2QueryTranslator;
     
     public DynamicEntityDaoImplBase(){
-        queryTranslator = new QueryTranslatorImpl();
+        cto2QueryTranslator = new Cto2QueryTranslatorImpl();
     }
 
     public abstract EntityManager getEntityManager();
@@ -88,8 +88,8 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) {
         EntityManager em = getEntityManager();
         ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityClz);
-        TypedQuery<T> listQuery = queryTranslator.constructListQuery(em, entityClz, classTreeMetadata, query);
-        TypedQuery<Long> countQuery = queryTranslator.constructCountQuery(em, entityClz, classTreeMetadata, query);
+        TypedQuery<T> listQuery = cto2QueryTranslator.constructListQuery(em, entityClz, classTreeMetadata, query);
+        TypedQuery<Long> countQuery = cto2QueryTranslator.constructCountQuery(em, entityClz, classTreeMetadata, query);
 
         List<T> resultList = listQuery.getResultList();
         long count = countQuery.getSingleResult().longValue();

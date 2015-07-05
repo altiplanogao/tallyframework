@@ -23,8 +23,11 @@ public class TallyManagementDataServiceDefinition  implements IDataServiceDefini
 
     public static final String TMANAGEMENT_TRANSACTION_MANAGER_NAME = "tallymanagementTransactionManager";
 
+    public static final String TMANAGEMENT_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
+            "tallymanagement/";
+
     public static final String TMANAGEMENT_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
-            "tallymanagement-ds/";
+            "tallymanagement/";
 
     @Override
     public String getDbName() {
@@ -59,6 +62,11 @@ public class TallyManagementDataServiceDefinition  implements IDataServiceDefini
     @Override
     public String getTransactionManagerName() {
         return TMANAGEMENT_TRANSACTION_MANAGER_NAME;
+    }
+
+    @Override
+    public String getEntityMessageDirectory() {
+        return TMANAGEMENT_ENTITY_MESSAGES;
     }
 
     @Override

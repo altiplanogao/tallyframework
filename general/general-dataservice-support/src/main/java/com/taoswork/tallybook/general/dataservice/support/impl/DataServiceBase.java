@@ -2,9 +2,10 @@ package com.taoswork.tallybook.general.dataservice.support.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
+import com.taoswork.tallybook.general.dataservice.support.config.DataServiceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.config.PersistenceConfigBase;
 import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
@@ -17,31 +18,40 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/11.
  */
 public abstract class DataServiceBase implements IDataService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceBase.class);
+    private static final Map<String, Integer> constructCounter = new HashMap<String, Integer>();
 
-    public DataServiceBase(Class<?>... annotatedClasses) {
+    private final Map<String, String> entityResourceNameOverride = new HashMap<String, String>();
+    private final Map<String, String> resourceNameToEntityInterface = new HashMap<String, String>();
+    protected ApplicationContext applicationContext;
+    //key is interface name
+    private Map<String, EntityEntry> entityEntryMap;
+
+    public DataServiceBase(
+            Class<? extends DataServiceConfigBase> dataServiceConf,
+            Class<? extends PersistenceConfigBase> persistenceConf,
+            List<Class> annotatedClasses) {
         String clzName = this.getClass().getName();
         int oldCount = constructCounter.getOrDefault(clzName, 0).intValue();
         constructCounter.put(clzName, oldCount + 1);
 
-        loadAnnotatedClasses(annotatedClasses);
+        List<Class> annotatedClassesList = new ArrayList<Class>();
+        annotatedClassesList.add(dataServiceConf);
+        annotatedClassesList.add(persistenceConf);
+        if(annotatedClasses != null) {
+            for (Class ac : annotatedClasses) {
+                annotatedClassesList.add(ac);
+            }
+        }
+
+        loadAnnotatedClasses(annotatedClassesList.toArray(new Class[annotatedClassesList.size()]));
     }
-
-    private static final Map<String, Integer> constructCounter = new HashMap<String, Integer>();
-
-    protected ApplicationContext applicationContext;
-    //key is interface name
-    private Map<String, EntityEntry> entityEntryMap;
-    private final Map<String, String> entityResourceNameOverride = new HashMap<String, String>();
-    private final Map<String, String> resourceNameToEntityInterface = new HashMap<String, String>();
 
     private void loadAnnotatedClasses(Class<?>... annotatedClasses) {
         onServiceStart();

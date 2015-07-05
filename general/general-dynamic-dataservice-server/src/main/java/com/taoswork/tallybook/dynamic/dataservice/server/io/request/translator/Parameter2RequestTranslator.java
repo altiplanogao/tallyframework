@@ -15,8 +15,8 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/6/2.
  */
-public class ParameterToRequestTranslator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParameterToRequestTranslator.class);
+public class Parameter2RequestTranslator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Parameter2RequestTranslator.class);
     private static final Set<String> staticParaNames = new HashSet<String>();
 
     static {

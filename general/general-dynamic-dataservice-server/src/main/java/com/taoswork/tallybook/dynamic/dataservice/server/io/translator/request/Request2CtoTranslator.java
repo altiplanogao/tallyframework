@@ -6,7 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryR
 /**
  * Created by Gao Yuan on 2015/6/15.
  */
-public class RequestTranslator {
+public class Request2CtoTranslator {
     public static CriteriaTransferObject translate(EntityQueryRequest request){
         CriteriaTransferObject cto = new CriteriaTransferObject();
         cto.setFirstResult(request.getFirstResult());

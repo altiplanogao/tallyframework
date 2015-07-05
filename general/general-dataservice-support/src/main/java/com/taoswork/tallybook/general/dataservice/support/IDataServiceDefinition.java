@@ -7,6 +7,7 @@ public interface IDataServiceDefinition {
     public static final String DATA_SERVICE_DEFINITION_BEAN_NAME = "IDataServiceDefinition";
     public static final String PERSISTENCE_XML_PREFIX = "classpath:/META-INF/persistence/";
     public static final String RUNTIME_PROPERTIES_FILE_PREFIX = "/runtime-properties/";
+    public static final String ENTITY_MESSAGES_FILE_PREFIX = "/entity-messages/";
 
     String getDbName();
 
@@ -21,6 +22,8 @@ public interface IDataServiceDefinition {
     String getEntityManagerName();
 
     String getTransactionManagerName();
+
+    String getEntityMessageDirectory();
 
     String getPropertiesResourceDirectory();
 

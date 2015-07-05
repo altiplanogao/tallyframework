@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 /**
  * Created by Gao Yuan on 2015/5/29.
  */
-public interface QueryTranslator {
+public interface Cto2QueryTranslator {
     <T> TypedQuery<T> constructListQuery(
             EntityManager entityManager,
             Class<T> entityClz,

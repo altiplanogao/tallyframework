@@ -30,8 +30,8 @@ public class TallyUserEntityServiceTest {
     public void setupDataSource() {
         counter++;
         dataService = new TallyUserDataService(
-                TallyUserTestPersistenceConfig.class,
-                TallyUserDataServiceConfig.class);
+                TallyUserDataServiceConfig.class,
+                TallyUserTestPersistenceConfig.class, null);
     }
 
     @After

@@ -23,8 +23,11 @@ public class TallyAdminDataServiceDefinition implements IDataServiceDefinition {
 
     public static final String TADMIN_TRANSACTION_MANAGER_NAME = "tallyadminTransactionManager";
 
+    public static final String TADMIN_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
+            "tallyadmin/";
+
     public static final String TADMIN_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
-            "tallyadmin-ds/";
+            "tallyadmin/";
 
     @Override
     public String getDbName() {
@@ -59,6 +62,11 @@ public class TallyAdminDataServiceDefinition implements IDataServiceDefinition {
     @Override
     public String getTransactionManagerName() {
         return TADMIN_TRANSACTION_MANAGER_NAME;
+    }
+
+    @Override
+    public String getEntityMessageDirectory() {
+        return TADMIN_ENTITY_MESSAGES;
     }
 
     @Override

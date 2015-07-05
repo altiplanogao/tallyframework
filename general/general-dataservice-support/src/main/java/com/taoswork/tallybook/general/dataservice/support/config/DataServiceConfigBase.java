@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.dataservice.support.confighelper;
+package com.taoswork.tallybook.general.dataservice.support.config;
 
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
@@ -18,31 +18,28 @@ public abstract class DataServiceConfigBase {
 
     private final String name;
 
-    public DataServiceConfigBase(){
+    public DataServiceConfigBase() {
         this("");
     }
 
-    public DataServiceConfigBase(String name){
-        if(StringUtils.isEmpty(name)){
+    public DataServiceConfigBase(String name) {
+        if (StringUtils.isEmpty(name)) {
             Class thisClz = this.getClass();
             Class clz = ClassUtility.getSuperClassWithout(thisClz, "spring");
             this.name = clz.getSimpleName().replace("Config", "");
-        }else {
+        } else {
             this.name = name;
         }
     }
 
     @Bean(name = IDataService.DATASERVICE_NAME_S_BEAN_NAME)
-    public String dataServiceName(){
+    public String dataServiceName() {
         return name;
     }
 
     @Bean
     public BeanCreationMonitor beanCreationMonitor() {
         return new BeanCreationMonitor(dataServiceName());
-//        Class thisClz = this.getClass();
-//        Class clz = ClassUtility.getSuperClassWithout(thisClz, "spring");
-//        return new BeanCreationMonitor(clz.getSimpleName().replace("Config", ""));
     }
 
     @Bean(name = MetadataService.SERVICE_NAME)
@@ -51,9 +48,9 @@ public abstract class DataServiceConfigBase {
     }
 
     @Bean(name = MetaInfoService.SERVICE_NAME)
-    public MetaInfoService metaDescriptionService() {
+    public MetaInfoService metaInfoService() {
         MetaInfoService metaInfoService = new MetaInfoServiceImpl();
-        if(metaInfoService instanceof HasCacheScope){
+        if (metaInfoService instanceof HasCacheScope) {
             ((HasCacheScope) metaInfoService).setCacheScope(
                     dataServiceName() + "." + MetaInfoService.class.getSimpleName());
         }

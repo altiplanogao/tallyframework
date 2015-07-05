@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.conf;
 
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.HsqlDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.HsqlDbSetting;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 

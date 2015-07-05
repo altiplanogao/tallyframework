@@ -19,8 +19,8 @@ public class TallyAdminDataServiceTest {
     @Before
     public void setDataService(){
         dataService = new TallyAdminDataService(
-                TallyAdminTestPersistenceConfig.class,
-                TallyAdminDataServiceConfig.class);
+                TallyAdminDataServiceConfig.class,
+                TallyAdminTestPersistenceConfig.class, null);
     }
 
     @Test

@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataServiceDefinition;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.PersistenceConfigBase;
-import com.taoswork.tallybook.general.dataservice.support.confighelper.dbsetting.IDbSetting;
+import com.taoswork.tallybook.general.dataservice.support.config.PersistenceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
