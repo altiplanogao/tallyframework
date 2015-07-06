@@ -2,8 +2,7 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceConfig;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestPersistenceConfig;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestDataServiceBeanConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
 import org.junit.Assert;
@@ -17,14 +16,13 @@ public class TallyAdminDataServiceTest {
     TallyAdminDataService dataService = null;
 
     @Before
-    public void setDataService(){
+    public void setDataService() {
         dataService = new TallyAdminDataService(
-                TallyAdminDataServiceConfig.class,
-                TallyAdminTestPersistenceConfig.class, null);
+                TallyAdminTestDataServiceBeanConfiguration.class, null);
     }
 
     @Test
-    public void testDataService(){
+    public void testDataService() {
         AdminEmployeeDao employeeDao = dataService.getService(AdminEmployeeDao.COMPONENT_NAME);
         Assert.assertNotNull(employeeDao);
 
@@ -40,8 +38,8 @@ public class TallyAdminDataServiceTest {
 
         int createAttempt = 10;
         int created = 0;
-        try{
-            for (int i = 0 ; i < createAttempt ; ++i){
+        try {
+            for (int i = 0; i < createAttempt; ++i) {
                 int expected = i + 1;
                 Long personId = i + 2L;
                 AdminEmployee employee = new AdminEmployeeImpl();
@@ -53,11 +51,11 @@ public class TallyAdminDataServiceTest {
 
                 Assert.assertTrue(personId.equals(employeeLoaded.getPersonId()));
                 Assert.assertTrue(employee.getTitle().equals(employeeLoaded.getTitle()));
-                Assert.assertTrue(employee.getTitle().equals("Title"+expected));
+                Assert.assertTrue(employee.getTitle().equals("Title" + expected));
 
                 created++;
             }
-        }finally {
+        } finally {
             Assert.assertEquals(createAttempt, created);
         }
     }

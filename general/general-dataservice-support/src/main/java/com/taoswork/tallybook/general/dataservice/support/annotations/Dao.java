@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Created by Gao Yuan on 2015/4/24.
  */
-@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@EntityService
+@Target({ElementType.TYPE})
 public @interface Dao {
     String value() default "";
 }

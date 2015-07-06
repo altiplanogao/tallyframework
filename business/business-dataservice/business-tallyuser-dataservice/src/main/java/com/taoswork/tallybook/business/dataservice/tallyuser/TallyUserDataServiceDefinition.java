@@ -6,6 +6,9 @@ import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition
  * Created by Gao Yuan on 2015/5/8.
  */
 public final class TallyUserDataServiceDefinition implements IDataServiceDefinition {
+    //DataServiceName
+    public final static String DATA_SERVICE_NAME = "TallyUserDataService";
+
     //TUSER_DSD : Data Source Definition
     public final static String TUSER_DSD = "tallyuser";
 
@@ -28,6 +31,11 @@ public final class TallyUserDataServiceDefinition implements IDataServiceDefinit
 
     public static final String TUSER_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallyuser/";
+
+    @Override
+    public String getDataServiceName() {
+        return DATA_SERVICE_NAME;
+    }
 
     @Override
     public String getDbName() {

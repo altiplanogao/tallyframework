@@ -3,15 +3,14 @@ package com.taoswork.tallybook.business.dataservice.tallyuser;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserDataServiceConfig;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestPersistenceConfig;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestDataServiceBeanConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,8 +29,7 @@ public class TallyUserEntityServiceTest {
     public void setupDataSource() {
         counter++;
         dataService = new TallyUserDataService(
-                TallyUserDataServiceConfig.class,
-                TallyUserTestPersistenceConfig.class, null);
+                TallyUserTestDataServiceBeanConfiguration.class, null);
     }
 
     @After

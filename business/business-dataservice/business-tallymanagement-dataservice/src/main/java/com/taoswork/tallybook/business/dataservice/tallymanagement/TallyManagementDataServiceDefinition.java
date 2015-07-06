@@ -6,6 +6,9 @@ import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition
  * Created by Gao Yuan on 2015/6/5.
  */
 public class TallyManagementDataServiceDefinition  implements IDataServiceDefinition {
+    //DataServiceName
+    public final static String DATA_SERVICE_NAME = "TallyManagementDataService";
+
     //TMANAGEMENT_DSD : Data Source Definition
     public final static String TMANAGEMENT_DSD = "tallymanagement";
 
@@ -28,6 +31,11 @@ public class TallyManagementDataServiceDefinition  implements IDataServiceDefini
 
     public static final String TMANAGEMENT_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallymanagement/";
+
+    @Override
+    public String getDataServiceName() {
+        return DATA_SERVICE_NAME;
+    }
 
     @Override
     public String getDbName() {

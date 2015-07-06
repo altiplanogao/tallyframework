@@ -1,16 +1,12 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistenceConfig;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceConfig;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistenceConfigBase;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceBeanConfiguration;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Role;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceType;
 import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
-import com.taoswork.tallybook.general.dataservice.support.config.DataServiceConfigBase;
-import com.taoswork.tallybook.general.dataservice.support.config.PersistenceConfigBase;
 import com.taoswork.tallybook.general.dataservice.support.impl.DataServiceBase;
 
 import java.util.List;
@@ -21,18 +17,16 @@ import java.util.List;
 @DataService
 //@Component(TallyAdminDataService.COMPONENT_NAME)
 public class TallyAdminDataService extends DataServiceBase {
-    public static final String COMPONENT_NAME = "TallyAdminDataService";
+    public static final String COMPONENT_NAME = TallyAdminDataServiceDefinition.DATA_SERVICE_NAME;
 
     public TallyAdminDataService() {
-        this(TallyAdminDataServiceConfig.class,
-                TallyAdminPersistenceConfig.class, null);
+        this(TallyAdminDataServiceBeanConfiguration.class, null);
     }
 
     public TallyAdminDataService(
-            Class<? extends TallyAdminDataServiceConfig> dataServiceConf,
-            Class<? extends TallyAdminPersistenceConfigBase> persistenceConf,
+            Class<? extends TallyAdminDataServiceBeanConfiguration> dataServiceConf,
             List<Class> annotatedClasses) {
-        super(dataServiceConf, persistenceConf, annotatedClasses);
+        super(new TallyAdminDataServiceDefinition(), dataServiceConf, annotatedClasses);
     }
 
     @Override

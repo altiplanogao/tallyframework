@@ -4,13 +4,14 @@ import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.dataservice.support.IDataService;
 import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
-import com.taoswork.tallybook.general.dataservice.support.config.DataServiceConfigBase;
-import com.taoswork.tallybook.general.dataservice.support.config.PersistenceConfigBase;
+import com.taoswork.tallybook.general.dataservice.support.spring.IDataServiceDelegate;
+import com.taoswork.tallybook.general.dataservice.support.config.ADataServiceBeanConfiguration;
 import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -25,7 +26,9 @@ import java.util.*;
  */
 public abstract class DataServiceBase implements IDataService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceBase.class);
-    private static final Map<String, Integer> constructCounter = new HashMap<String, Integer>();
+    private static final Map<String, Integer> loadCounter = new HashMap<String, Integer>();
+
+    private final IDataServiceDefinition dataServiceDefinition;
 
     private final Map<String, String> entityResourceNameOverride = new HashMap<String, String>();
     private final Map<String, String> resourceNameToEntityInterface = new HashMap<String, String>();
@@ -34,35 +37,60 @@ public abstract class DataServiceBase implements IDataService {
     private Map<String, EntityEntry> entityEntryMap;
 
     public DataServiceBase(
-            Class<? extends DataServiceConfigBase> dataServiceConf,
-            Class<? extends PersistenceConfigBase> persistenceConf,
+            IDataServiceDefinition dataServiceDefinition,
+            Class<? extends ADataServiceBeanConfiguration> dataServiceConf,
             List<Class> annotatedClasses) {
-        String clzName = this.getClass().getName();
-        int oldCount = constructCounter.getOrDefault(clzName, 0).intValue();
-        constructCounter.put(clzName, oldCount + 1);
+        this.dataServiceDefinition = dataServiceDefinition;
 
         List<Class> annotatedClassesList = new ArrayList<Class>();
         annotatedClassesList.add(dataServiceConf);
-        annotatedClassesList.add(persistenceConf);
         if(annotatedClasses != null) {
             for (Class ac : annotatedClasses) {
                 annotatedClassesList.add(ac);
             }
         }
 
-        loadAnnotatedClasses(annotatedClassesList.toArray(new Class[annotatedClassesList.size()]));
+        load(annotatedClassesList);
+    }
+
+    public DataServiceBase(
+            IDataServiceDefinition dataServiceDefinition,
+            List<Class> annotatedClasses) {
+        this.dataServiceDefinition = dataServiceDefinition;
+
+        load(annotatedClasses);
+    }
+
+
+    private void load(
+            List<Class> annotatedClasses) {
+        String clzName = this.getClass().getName();
+        int oldCount = loadCounter.getOrDefault(clzName, 0).intValue();
+        loadCounter.put(clzName, oldCount + 1);
+
+        loadAnnotatedClasses(annotatedClasses.toArray(new Class[annotatedClasses.size()]));
     }
 
     private void loadAnnotatedClasses(Class<?>... annotatedClasses) {
         onServiceStart();
 
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext() {
+        class DataServiceInsideAnnotationConfigApplicationContext
+                extends AnnotationConfigApplicationContext
+                implements IDataServiceDelegate {
             @Override
             protected void onClose() {
                 super.onClose();
                 onServiceStop();
             }
-        };
+
+            @Override
+            public IDataServiceDefinition getDataServiceDefinition() {
+                return dataServiceDefinition;
+            }
+        }
+
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new DataServiceInsideAnnotationConfigApplicationContext();
+
         annotationConfigApplicationContext.setDisplayName(this.getClass().getSimpleName());
         annotationConfigApplicationContext.register(annotatedClasses);
         annotationConfigApplicationContext.refresh();

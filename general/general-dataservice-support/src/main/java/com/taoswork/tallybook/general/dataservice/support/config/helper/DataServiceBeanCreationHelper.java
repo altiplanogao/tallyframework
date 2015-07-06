@@ -14,17 +14,19 @@ import org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitPostProcessor;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
  * Created by Gao Yuan on 2015/5/12.
  */
-public class PersistenceConfigHelper {
+public class DataServiceBeanCreationHelper {
 
     //The following 2 static final Class name is useless, except avoiding missing dependency.
     protected static final Class<SingletonEhCacheRegionFactory> ensureClzLoaded = null;
@@ -33,7 +35,11 @@ public class PersistenceConfigHelper {
     protected final IDataServiceDefinition dataServiceDefinition;
     protected final IDbSetting dbSetting;
 
-    public PersistenceConfigHelper(IDataServiceDefinition dataServiceDefinition, IDbSetting dbSetting) {
+    // **************************************************** //
+    //  Constructor                                         //
+    // **************************************************** //
+
+    public DataServiceBeanCreationHelper(IDataServiceDefinition dataServiceDefinition, IDbSetting dbSetting) {
         this.dataServiceDefinition = dataServiceDefinition;
         if (dbSetting != null) {
             this.dbSetting = dbSetting;
@@ -46,30 +52,27 @@ public class PersistenceConfigHelper {
         }
     }
 
-    public RuntimeEnvironmentPropertyPlaceholderConfigurer createDefaultRuntimeEnvironmentPropertyPlaceholderConfigurer(){
-        return createAPropertyPlaceholderConfigurer(
-                new ClassPathResource(dataServiceDefinition.getPropertiesResourceDirectory()));
-    }
+    // **************************************************** //
+    //  DataSource                                          //
+    // **************************************************** //
 
     public DataSource createDefaultDataSource(){
         return dbSetting.publishDataSourceWithDefinition(dataServiceDefinition);
     }
+
+    public DataSource createAJndiDataSource(){
+        return dbSetting.publishDataSourceWithDefinition(this.dataServiceDefinition);
+    }
+
+    // **************************************************** //
+    //  EntityManagerFactory                                //
+    // **************************************************** //
 
     public AbstractEntityManagerFactoryBean createDefaultEntityManagerFactory(
             DataSource dataSource,
             PropertiesSubCollectionProvider propertiesProvider) {
         return createAnEntityManagerFactory(dataSource,
                 createAPersistenceUnitPostProcessor(propertiesProvider));
-    }
-
-    /////////////////////////////////////////////////////
-
-    public IDataServiceDefinition getDefinition(){
-        return dataServiceDefinition;
-    }
-
-    public DataSource createAJndiDataSource(){
-        return dbSetting.publishDataSourceWithDefinition(this.dataServiceDefinition);
     }
 
     public AbstractEntityManagerFactoryBean createAnEntityManagerFactory(
@@ -88,6 +91,15 @@ public class PersistenceConfigHelper {
         return entityManagerFactory;
     }
 
+    // **************************************************** //
+    //  RuntimeEnvironmentPropertyPlaceholderConfigurer     //
+    // **************************************************** //
+
+    public RuntimeEnvironmentPropertyPlaceholderConfigurer createDefaultRuntimeEnvironmentPropertyPlaceholderConfigurer(){
+        return createAPropertyPlaceholderConfigurer(
+                new ClassPathResource(dataServiceDefinition.getPropertiesResourceDirectory()));
+    }
+
     public RuntimeEnvironmentPropertyPlaceholderConfigurer createAPropertyPlaceholderConfigurer(Resource resourcePath, Resource... overrideResources){
         if(resourcePath instanceof ClassPathResource){
             ClassPathResource classPathResource = (ClassPathResource)resourcePath;
@@ -100,6 +112,23 @@ public class PersistenceConfigHelper {
         configurer.setOverrideFileResources(overrideResources);
         return configurer;
     }
+
+    // **************************************************** //
+    //  JpaTransactionManager                               //
+    // **************************************************** //
+    public JpaTransactionManager createJpaTransactionManager(EntityManagerFactory refEmf) {
+        JpaTransactionManager jtm = new JpaTransactionManager();
+        jtm.setEntityManagerFactory(refEmf);
+        return jtm;
+    }
+
+    // **************************************************** //
+    //                                                      //
+    // **************************************************** //
+
+    // **************************************************** //
+    //                                                      //
+    // **************************************************** //
 
     public PersistenceUnitPostProcessor createAPersistenceUnitPostProcessor(PropertiesSubCollectionProvider propertyConfigurer){
         JPAPropertiesPersistenceUnitPostProcessor postProcessor =
