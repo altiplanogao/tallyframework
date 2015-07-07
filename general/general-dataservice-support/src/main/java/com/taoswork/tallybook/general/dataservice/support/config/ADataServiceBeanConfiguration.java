@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.general.dataservice.support.config;
 
+import com.taoswork.tallybook.dynamic.dataservice.description.FriendlyMetaInfoService;
+import com.taoswork.tallybook.dynamic.dataservice.description.impl.FriendlyMetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.impl.DynamicServerEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
@@ -19,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
@@ -90,6 +93,17 @@ public abstract class ADataServiceBeanConfiguration
         return helper.createDefaultRuntimeEnvironmentPropertyPlaceholderConfigurer();
     }
 
+    @Override
+    @Bean(name = FriendlyMetaInfoService.MESSAGE_SOURCE_BEAN_NAME)
+    public MessageSource entityFriendlyMessageSource(){
+        return helper.createFriendlyMessageSource();
+    }
+
+    @Override
+    @Bean(name = FriendlyMetaInfoService.SERVICE_NAME)
+    public FriendlyMetaInfoService friendlyMetaInfoService(){
+        return new FriendlyMetaInfoServiceImpl();
+    }
     // **************************************************** //
     //  IEntityBeanList                                     //
     // **************************************************** //

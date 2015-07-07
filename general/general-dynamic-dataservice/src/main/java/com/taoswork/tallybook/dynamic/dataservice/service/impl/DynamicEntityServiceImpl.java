@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 
 import javax.annotation.Resource;
+import java.util.Locale;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
@@ -66,5 +67,10 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     @Override
     public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType) {
         return dynamicEntityMetadataAccess.getEntityInfo(entityType, infoType);
+    }
+
+    @Override
+    public <T> IEntityInfo friendlyDescribe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
+        return dynamicEntityMetadataAccess.getFriendlyEntityInfo(entityType, infoType, locale);
     }
 }

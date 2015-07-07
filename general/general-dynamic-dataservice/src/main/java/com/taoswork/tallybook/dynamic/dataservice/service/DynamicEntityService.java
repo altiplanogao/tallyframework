@@ -7,6 +7,8 @@ import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
+
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
@@ -31,5 +33,7 @@ public interface DynamicEntityService {
     <T> ClassTreeMetadata inspect(Class<T> entityType);
 
     <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType);
+
+    <T> IEntityInfo friendlyDescribe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 
 }

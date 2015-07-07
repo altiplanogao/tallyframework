@@ -3,6 +3,8 @@ package com.taoswork.tallybook.dynamic.dataservice.datamork.conf;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.dao.impl.DynamicEntityDaoImplBase;
+import com.taoswork.tallybook.dynamic.dataservice.description.FriendlyMetaInfoService;
+import com.taoswork.tallybook.dynamic.dataservice.description.impl.FriendlyMetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.DynamicEntityMetadataAccessImplBase;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
@@ -11,8 +13,10 @@ import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfo
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -63,4 +67,15 @@ public class DynamicConfig {
     MetaInfoService metaDescriptionService(){
         return new MetaInfoServiceImpl();
     }
+
+    @Bean(name = FriendlyMetaInfoService.MESSAGE_SOURCE_BEAN_NAME)
+    public MessageSource entityFriendlyMessageSource(){
+        return new ReloadableResourceBundleMessageSource();
+    }
+
+    @Bean(name = FriendlyMetaInfoService.SERVICE_NAME)
+    public FriendlyMetaInfoService friendlyMetaInfoService(){
+        return new FriendlyMetaInfoServiceImpl();
+    }
+
 }

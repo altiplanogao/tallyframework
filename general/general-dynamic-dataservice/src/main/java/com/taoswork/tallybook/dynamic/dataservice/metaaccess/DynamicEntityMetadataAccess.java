@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Assume we have classes as following:
@@ -31,4 +32,6 @@ public interface DynamicEntityMetadataAccess {
     ClassTreeMetadata getClassTreeMetadata(Class<?> entityType);
 
     IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType);
+
+    IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale);
 }
