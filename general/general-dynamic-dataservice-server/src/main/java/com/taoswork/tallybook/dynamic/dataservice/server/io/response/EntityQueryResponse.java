@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class EntityQueryResponse extends AEntityQueryResponse{
     private List<?> details;
+    private String baseUrl;
 
     public List<?> getDetails() {
         return details;
@@ -17,4 +18,23 @@ public class EntityQueryResponse extends AEntityQueryResponse{
         return this;
     }
 
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public EntityQueryResponse setResourceName(String resourceName) {
+        String baseUrl = resourceName;
+        if(baseUrl.startsWith("/")){
+            baseUrl = baseUrl.substring(1);
+        }
+        if(!baseUrl.endsWith("/")){
+            baseUrl += "/";
+        }
+        return setBaseUrl(baseUrl);
+    }
+
+    public EntityQueryResponse setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+        return this;
+    }
 }

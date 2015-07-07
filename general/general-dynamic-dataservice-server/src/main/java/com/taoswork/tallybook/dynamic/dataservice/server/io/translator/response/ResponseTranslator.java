@@ -23,6 +23,7 @@ public class ResponseTranslator {
             CriteriaQueryResult<?> criteriaResult){
         EntityQueryResponse response = new EntityQueryResponse()
                 .setDetails(criteriaResult.getEntityCollection());
+        response.setResourceName(request.getResourceName());
         response.setStartIndex(request.getFirstResult())
                 .setPageSize(request.getPageSize())
                 .setTotalCount(criteriaResult.getTotalCount());
@@ -32,7 +33,7 @@ public class ResponseTranslator {
     public static EntityInfoResponse translate(
             EntityQueryRequest request,
             IEntityInfo[] entityInfos){
-        EntityInfoResponse response = new EntityInfoResponse(request.getEntityType(), request.getEntitySimpleType());
+        EntityInfoResponse response = new EntityInfoResponse(request.getEntityType(), request.getResourceName());
         for (IEntityInfo entityInfo : entityInfos){
             if(entityInfo != null){
                 response.addDetail(entityInfo.getInfoType(), entityInfo);
