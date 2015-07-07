@@ -1,7 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.description.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+<<<<<<< HEAD
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
+=======
+>>>>>>> 0abb84cba5f91cc65dd989acf3c11c41377f7613
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
@@ -26,6 +29,7 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     @Override
     public IEntityInfo makeFriendly(IEntityInfo rawEntityInfo, Locale locale) {
         IEntityInfo freshEntityInfo = CloneUtility.makeClone(rawEntityInfo);
+<<<<<<< HEAD
         if (freshEntityInfo instanceof NamedInfoRW){
             String oldFriendly = freshEntityInfo.getFriendlyName();
             String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
@@ -35,6 +39,8 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
         }else {
             LOGGER.error("new EntityInfo by Clone has un-writeable IEntityInfo {}", freshEntityInfo);
         }
+=======
+>>>>>>> 0abb84cba5f91cc65dd989acf3c11c41377f7613
         for (FieldInfo fieldInfo : freshEntityInfo.getFields()) {
             String oldFriendly = fieldInfo.getFriendlyName();
             String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
