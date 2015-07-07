@@ -8,6 +8,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityInfoResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryListGridResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
@@ -70,6 +71,7 @@ public class AdminBasicEntityController extends BaseController {
             @RequestParam MultiValueMap<String, String> requestParams){
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityKey);
+        //TODO: what if entityType == null
 
 //        String entityType = entry.getEntity();
 //        model.addAttribute("menu", entry);
@@ -78,22 +80,25 @@ public class AdminBasicEntityController extends BaseController {
 //                .appendMenu(model, adminMenuService);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityType, requestParams)
+        EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityKey, entityType, requestParams)
                 .addEntityInfoType(EntityInfoType.Grid);
         EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
+        EntityInfoResponse entityInfoResponse = dynamicServerEntityService.getInfoResponse(entityRequest);
+        EntityInfoResponse entityInfoFriendlyResponse = dynamicServerEntityService.getFriendlyInfoResponse(entityRequest, request.getLocale());
 
         String rawJsons = "";
 
         try{
             Map<String, Object> rawObjs = new HashMap<String, Object>();
-            rawObjs.put("entities", entityRawResponse);
+            ResponseTranslator.mergeResult(rawObjs, entityRawResponse, entityInfoFriendlyResponse, null);
+
             ObjectMapper objectMapper = getObjectMapper();
             rawJsons = objectMapper.writeValueAsString(rawObjs);
         }catch (JsonProcessingException exp){
             throw new RuntimeException(exp);
         }
 
-        EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse);
+        EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse, entityInfoResponse);
         entityResponse.setBaseUrl(entityKey);
 
 
@@ -108,6 +113,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
         model.addAttribute("entityResponse", entityResponse);
+        model.addAttribute("entityInfoResponse", entityInfoResponse);
         model.addAttribute("rawdata", rawJsons);
 
         return "entity/mainframe";

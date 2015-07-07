@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassGen
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTreeAccessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
+import com.taoswork.tallybook.dynamic.dataservice.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.helper.AEntityMetadataRawAccess;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.helper.impl.EntityMetadataRawAccessJPA;
@@ -44,6 +45,9 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     @Resource(name = MetaInfoService.SERVICE_NAME)
     private MetaInfoService metaInfoService;
 
+    @Resource(name = FriendlyMetaInfoService.SERVICE_NAME)
+    private FriendlyMetaInfoService friendlyMetaInfoService;
+
     private AEntityMetadataRawAccess entityMetaRawAccess;
 
     private EntityClassGenealogy entityClassGenealogy;
@@ -53,7 +57,8 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     private Map<Class, Class> type2RootInstanceableMap = null;
     private Map<Class, EntityClassTree> type2ClassTreeMap = null;
     private Map<ClassScope, ClassMetadata> classMetadataMap = null;
-    private Map<ClassScopeForInfo, IEntityInfo> entityInfoMap = null;
+    private Map<_ClassScopeForInfo, IEntityInfo> entityInfoMap = null;
+    private Map<_ClassScopeForFriendlyInfo, IEntityInfo> entityFriendlyInfoMap = null;
 
     public abstract EntityManager getEntityManager();
 
@@ -90,6 +95,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         type2RootInstanceableMap = new LRUMap();
         classMetadataMap = new LRUMap();
         entityInfoMap = new LRUMap();
+        entityFriendlyInfoMap = new LRUMap();
     }
 
     /**
@@ -122,6 +128,10 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
 
     private IEntityInfo calcEntityInfo(ClassTreeMetadata classTreeMetadata, EntityInfoType infoType) {
         return metaInfoService.generateEntityInfo(classTreeMetadata, infoType);
+    }
+
+    private IEntityInfo calcFriendlyEntityInfo(IEntityInfo rawEntityInfo, Locale locale){
+        return friendlyMetaInfoService.makeFriendly(rawEntityInfo, locale);
     }
 
     @Override
@@ -172,7 +182,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     @Override
     public IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType) {
         ClassScope classScope = new ClassScope(entityType, true, true);
-        ClassScopeForInfo classScopeForInfo = new ClassScopeForInfo(classScope, infoType);
+        _ClassScopeForInfo classScopeForInfo = new _ClassScopeForInfo(classScope, infoType);
 
         IEntityInfo entityInfo = entityInfoMap.getOrDefault(classScopeForInfo, null);
         if (entityInfo == null) {
@@ -181,6 +191,20 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
             entityInfoMap.put(classScopeForInfo, entityInfo);
         }
         return entityInfo;
+    }
+
+    @Override
+    public IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale) {
+        ClassScope classScope = new ClassScope(entityType, true, true);
+        _ClassScopeForFriendlyInfo classScopeForFriendlyInfo = new _ClassScopeForFriendlyInfo(classScope, new _FriendlyEntityInfoType(infoType, locale));
+
+        IEntityInfo friendlyEntityInfo = entityFriendlyInfoMap.getOrDefault(classScopeForFriendlyInfo, null);
+        if(friendlyEntityInfo == null){
+            IEntityInfo rawEntityInfo = this.getEntityInfo(entityType, infoType);
+            friendlyEntityInfo = this.calcFriendlyEntityInfo(rawEntityInfo, locale);
+            entityFriendlyInfoMap.put(classScopeForFriendlyInfo, friendlyEntityInfo);
+        }
+        return friendlyEntityInfo;
     }
 
     //    private void codeSni(){

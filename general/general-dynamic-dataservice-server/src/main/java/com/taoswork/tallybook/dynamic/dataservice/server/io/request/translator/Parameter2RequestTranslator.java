@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
@@ -39,11 +41,13 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityQueryRequest makeQueryRequest(
+            String entitySimpleType,
             String entityClz,
             MultiValueMap<String, String> requestParams) {
         EntityQueryRequest request = new EntityQueryRequest();
-        request.withEntityType(entityClz);
+        request.withEntitySimpleType(entitySimpleType).withEntityType(entityClz);
         setPropertyCriterias(request, requestParams);
+        setInfoCriterias(request, requestParams);
         return request;
     }
 
@@ -108,6 +112,18 @@ public class Parameter2RequestTranslator {
                 request.setPageSize(pageSize);
             } else {
                 request.setPageSize(EntityQueryRequest.DEFAULT_REQUEST_MAX_RESULT_COUNT);
+            }
+        }
+    }
+
+    protected static void setInfoCriterias(EntityQueryRequest request, Map<String, List<String>> requestParams) {
+        List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
+        if(infoTypes != null){
+            for (String infoTypeString : infoTypes){
+                EntityInfoType entityInfoType = EntityInfoTypeNames.entityInfoTypeOf(infoTypeString);
+                if(entityInfoType != null){
+                    request.addEntityInfoType(entityInfoType);
+                }
             }
         }
     }

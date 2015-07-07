@@ -16,7 +16,6 @@ public abstract class AEntityQueryResponse {
     private Long startIndex;
     private int pageSize;
     private Long totalCount;
-    private Map<String, IEntityInfo> infos;
 
     public Long getStartIndex() {
         return startIndex;
@@ -48,33 +47,5 @@ public abstract class AEntityQueryResponse {
     public QueryResultRange makeRange(){
         return new QueryResultRange(startIndex,
                 pageSize, totalCount);
-    }
-
-    public AEntityQueryResponse addInfo(EntityInfoType infoType, IEntityInfo entityInfo){
-        if(this.infos == null){
-            this.infos = new HashMap<String, IEntityInfo>();
-        }
-        this.infos.put(infoType.getName(), entityInfo);
-        return this;
-    }
-
-    public AEntityQueryResponse addInfos(Map<String, IEntityInfo> entityInfoMap){
-        if(this.infos == null){
-            this.infos = new HashMap<String, IEntityInfo>();
-        }
-        this.infos.putAll(entityInfoMap);
-        return this;
-    }
-
-    public <T extends IEntityInfo> T getInfo(String infoType){
-        return (T) infos.getOrDefault(infoType, null);
-    }
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Map<String, IEntityInfo> getInfos(){
-        if (null == infos){
-            return null;
-        }
-        return Collections.unmodifiableMap(infos);
     }
 }

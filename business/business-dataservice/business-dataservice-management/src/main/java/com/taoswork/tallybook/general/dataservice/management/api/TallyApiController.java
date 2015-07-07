@@ -2,16 +2,17 @@ package com.taoswork.tallybook.general.dataservice.management.api;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityInfoResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
+import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/6/13.
@@ -38,29 +41,22 @@ public class TallyApiController  {
 
     @RequestMapping("/{entityKey:^[\\w|-]+$}")
     @ResponseBody
-    public HttpEntity<TallyResource> getEntityList(
+    public HttpEntity<?> getEntityList(
             @PathVariable(value="entityKey") String entityKey,
             @RequestParam MultiValueMap<String, String> requestParams){
         String entityType = dataServiceManager.getEntityInterfaceName(entityKey);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest request = Parameter2RequestTranslator.makeQueryRequest(entityType, requestParams);
-
-        List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
-        if(infoTypes != null){
-            for (String infoTypeString : infoTypes){
-                EntityInfoType entityInfoType = EntityInfoTypeNames.entityInfoTypeOf(infoTypeString);
-                if(entityInfoType != null){
-                    request.addEntityInfoType(entityInfoType);
-                }
-            }
-        }
+        EntityQueryRequest request = Parameter2RequestTranslator.makeQueryRequest(
+                entityKey, entityType,
+                requestParams);
 
         EntityQueryResponse response = dynamicServerEntityService.getQueryRecords(request);
-        TallyResource resource = new TallyResource();
-        resource.setData(response);
+        EntityInfoResponse infoResponse = dynamicServerEntityService.getFriendlyInfoResponse(request, null);
 
-        resource.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParams)).withSelfRel());
+        ResourceSupport resourceSupport = new ResourceSupport();
+
+        resourceSupport.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParams)).withSelfRel());
         QueryResultRange currentRange = response.makeRange();
 
         QueryResultRange next = currentRange.next();
@@ -74,7 +70,7 @@ public class TallyApiController  {
                 v.add("" + pre.getStart());
                 requestParamsCopy.put(GeneralRequestParameter.REQUEST_START_INDEX, v);
             }
-            resource.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParamsCopy)).withRel("pre_page"));
+            resourceSupport.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParamsCopy)).withRel("pre_page"));
         }
         if(next.isValid()){
             MultiValueMap<String, String> requestParamsCopy = CloneUtility.makeClone(requestParams);
@@ -83,10 +79,13 @@ public class TallyApiController  {
             v.add("" + next.getStart());
             requestParamsCopy.put(GeneralRequestParameter.REQUEST_START_INDEX, v);
 
-            resource.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParamsCopy)).withRel("next_page"));
+            resourceSupport.add(linkTo(methodOn(TallyApiController.class).getEntityList(entityKey, requestParamsCopy)).withRel("next_page"));
         }
 
-        return new ResponseEntity<TallyResource>(resource, HttpStatus.OK);
+        Map<String, Object> resourceResult = new HashMap<String, Object>();
+        ResponseTranslator.mergeResult(resourceResult, response, infoResponse, resourceSupport.getLinks());
+
+        return new ResponseEntity<Object>(resourceResult, HttpStatus.OK);
     }
 
  /*   @RequestMapping("/greeting")

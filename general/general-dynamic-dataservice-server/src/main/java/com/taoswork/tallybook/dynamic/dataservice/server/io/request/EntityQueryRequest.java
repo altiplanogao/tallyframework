@@ -21,9 +21,15 @@ public class EntityQueryRequest {
 
     }
 
+    private String entitySimpleType;
     private Class<?> entityType;
     private CriteriaTransferObject criteriaTransferObject = new CriteriaTransferObject();
     private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
+
+    public EntityQueryRequest withEntitySimpleType(String entitySimpleType){
+        this.entitySimpleType = entitySimpleType;
+        return this;
+    }
 
     public EntityQueryRequest withEntityType(String entityType){
         try {
@@ -41,6 +47,10 @@ public class EntityQueryRequest {
 
     public Class<?> getEntityType() {
         return entityType;
+    }
+
+    public String getEntitySimpleType() {
+        return entitySimpleType;
     }
 
     public EntityQueryRequest appendSortCriteria(PropertySortCriteria sortCriteria){
