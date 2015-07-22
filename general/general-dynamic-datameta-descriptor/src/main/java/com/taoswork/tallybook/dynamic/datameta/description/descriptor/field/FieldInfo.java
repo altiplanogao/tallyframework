@@ -18,4 +18,8 @@ public interface FieldInfo extends NamedInfo {
     boolean isIdField();
 
     SupportedFieldType getFieldType();
+
+    boolean isSupportSort();
+
+    boolean isSupportFilter();
 }

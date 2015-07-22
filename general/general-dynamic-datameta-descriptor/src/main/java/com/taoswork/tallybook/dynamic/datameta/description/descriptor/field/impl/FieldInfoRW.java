@@ -15,4 +15,8 @@ public interface FieldInfoRW extends NamedInfoRW, FieldInfo {
     void setFieldType(SupportedFieldType fieldType);
 
     void merge(FieldInfo another);
+
+    FieldInfo setSupportSort(boolean supportSort);
+
+    FieldInfo setSupportFilter(boolean supportFilter);
 }

@@ -15,6 +15,9 @@ public class FieldInfoImpl
     public int visibility = Visibility.DEFAULT;
     public boolean nameField = false;
     private boolean isCollection;
+    private boolean supportSort = true;
+    private boolean supportFilter = true;
+
     private SupportedFieldType fieldType = SupportedFieldType.UNKNOWN;
 
     public FieldInfoImpl(){
@@ -80,5 +83,27 @@ public class FieldInfoImpl
     @Override
     public NamedInfoImpl setOrder(int order) {
         return super.setOrder(order);
+    }
+
+    @Override
+    public boolean isSupportSort() {
+        return supportSort;
+    }
+
+    @Override
+    public FieldInfo setSupportSort(boolean supportSort) {
+        this.supportSort = supportSort;
+        return this;
+    }
+
+    @Override
+    public boolean isSupportFilter() {
+        return supportFilter;
+    }
+
+    @Override
+    public FieldInfo setSupportFilter(boolean supportFilter) {
+        this.supportFilter = supportFilter;
+        return this;
     }
 }
