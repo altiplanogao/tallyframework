@@ -43,9 +43,12 @@ public class Parameter2RequestTranslator {
     public static EntityQueryRequest makeQueryRequest(
             String entitySimpleType,
             String entityClz,
+            String entityUri,
             MultiValueMap<String, String> requestParams) {
         EntityQueryRequest request = new EntityQueryRequest();
-        request.withEntitySimpleType(entitySimpleType).withEntityType(entityClz);
+        request.setEntitySimpleType(entitySimpleType)
+            .withEntityType(entityClz)
+            .setResourceURI(entityUri);
         setPropertyCriterias(request, requestParams);
         setInfoCriterias(request, requestParams);
         return request;

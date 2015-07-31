@@ -22,5 +22,6 @@
         <module>general-dynamic-dataservice-server</module>
         <module>general-datadomain-support</module>
         <module>general-dataservice-support</module>
+        <module>general-web</module>
     </modules>
 </project>

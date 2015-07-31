@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.solution.web;
+package com.taoswork.tallybook.general.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

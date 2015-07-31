@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.solution.web.view.thymeleaf;
+package com.taoswork.tallybook.general.web.view.thymeleaf;
 
 import com.taoswork.tallybook.general.extension.utils.UrlUtility;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;

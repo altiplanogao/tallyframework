@@ -23,7 +23,7 @@ public class ResponseTranslator {
             CriteriaQueryResult<?> criteriaResult){
         EntityQueryResponse response = new EntityQueryResponse()
                 .setDetails(criteriaResult.getEntityCollection());
-        response.setResourceName(request.getResourceName());
+        response.setBaseUrl(request.getResourceURI());
         response.setStartIndex(request.getFirstResult())
                 .setPageSize(request.getPageSize())
                 .setTotalCount(criteriaResult.getTotalCount());

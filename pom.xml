@@ -120,6 +120,11 @@
         <artifactId>general-solution</artifactId>
         <version>${tallybook.framework.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.taoswork.tallybook</groupId>
+        <artifactId>general-web</artifactId>
+        <version>${tallybook.framework.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.taoswork.tallybook</groupId>

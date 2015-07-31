@@ -18,7 +18,9 @@ import com.taoswork.tallybook.general.dataservice.management.manager.DataService
 import com.taoswork.tallybook.general.solution.menu.Menu;
 import com.taoswork.tallybook.general.solution.menu.MenuEntry;
 import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
-import com.taoswork.tallybook.general.solution.web.control.BaseController;
+import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallybook.general.web.control.BaseController;
+import com.taoswork.tallybook.general.web.view.thymeleaf.TallyBookDataViewResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -80,27 +81,31 @@ public class AdminBasicEntityController extends BaseController {
 //                .appendMenu(model, adminMenuService);
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
-        EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityKey, entityType, requestParams)
+        EntityQueryRequest entityRequest =
+            Parameter2RequestTranslator.makeQueryRequest(entityKey, entityType, request.getRequestURI(), requestParams)
                 .addEntityInfoType(EntityInfoType.Grid);
-        EntityQueryResponse entityRawResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
+        EntityQueryResponse entityQueryResponse = dynamicServerEntityService.getQueryRecords(entityRequest);
         EntityInfoResponse entityInfoResponse = dynamicServerEntityService.getInfoResponse(entityRequest);
         EntityInfoResponse entityInfoFriendlyResponse = dynamicServerEntityService.getFriendlyInfoResponse(entityRequest, request.getLocale());
 
-        String rawJsons = "";
-
+        String entityResultInJson = "";
         try{
-            Map<String, Object> rawObjs = new HashMap<String, Object>();
-            ResponseTranslator.mergeResult(rawObjs, entityRawResponse, entityInfoFriendlyResponse, null);
+            Map<String, Object> entityResult = ResponseTranslator.mergeResult(null, entityQueryResponse, entityInfoFriendlyResponse, null);
+
+            if(isAjaxRequest(request)){
+                model.addAttribute("data", entityResult);
+                return TallyBookDataViewResolver.JASON_VIEW_NAME;
+            }
 
             ObjectMapper objectMapper = getObjectMapper();
-            rawJsons = objectMapper.writeValueAsString(rawObjs);
+            entityResultInJson = objectMapper.writeValueAsString(entityResult);
+
         }catch (JsonProcessingException exp){
             throw new RuntimeException(exp);
         }
 
-        EntityQueryListGridResponse entityResponse = ResponseTranslator.translate(entityRawResponse, entityInfoResponse);
-        entityResponse.setBaseUrl(entityKey);
-
+        EntityQueryListGridResponse entityQueryListGridResponse = ResponseTranslator.translate(entityQueryResponse, entityInfoResponse);
+        entityQueryListGridResponse.setBaseUrl(request.getRequestURI());
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee =adminCommonModelService.getPersistentAdminEmployee();
@@ -108,13 +113,16 @@ public class AdminBasicEntityController extends BaseController {
 
         CurrentPath currentPath = buildCurrentPath(entityKey, request);
 
+        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
 //        model.addAttribute("currentUrl", request.getRequestURL().toString());
+        model.addAttribute("production", production);
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
-        model.addAttribute("entityResponse", entityResponse);
+        model.addAttribute("entityResponse", entityQueryListGridResponse);
         model.addAttribute("entityInfoResponse", entityInfoResponse);
-        model.addAttribute("rawdata", rawJsons);
+
+        model.addAttribute("entityQueryResult", entityResultInJson);
 
         return "entity/mainframe";
     }
