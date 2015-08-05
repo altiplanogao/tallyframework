@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityInfoResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
 
 import java.util.Locale;
 
@@ -14,9 +14,9 @@ import java.util.Locale;
 public interface DynamicServerEntityService {
     public static final String SERVICE_NAME = "DynamicServerEntityService";
 
-    EntityQueryResponse getQueryRecords(EntityQueryRequest request);
+    EntityQueryResponse queryRecords(EntityQueryRequest request, Locale locale);
 
-    EntityInfoResponse getInfoResponse(EntityQueryRequest request);
+    EntityResponse getInfoResponse(EntityQueryRequest request, Locale locale);
 
-    EntityInfoResponse getFriendlyInfoResponse(EntityQueryRequest request, Locale locale);
+    EntityReadResponse readRecord(EntityReadRequest readRequest, Locale locale);
 }

@@ -6,6 +6,8 @@ import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriter
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -19,12 +21,12 @@ import java.util.*;
  */
 public class Parameter2RequestTranslator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Parameter2RequestTranslator.class);
-    private static final Set<String> staticParaNames = new HashSet<String>();
+    private static final Set<String> indexParaNames = new HashSet<String>();
 
     static {
-        staticParaNames.add(GeneralRequestParameter.REQUEST_START_INDEX);
-        staticParaNames.add(GeneralRequestParameter.REQUEST_MAX_INDEX);
-        staticParaNames.add(GeneralRequestParameter.REQUEST_PAGE_SIZE);
+        indexParaNames.add(GeneralRequestParameter.REQUEST_START_INDEX);
+        indexParaNames.add(GeneralRequestParameter.REQUEST_MAX_INDEX);
+        indexParaNames.add(GeneralRequestParameter.REQUEST_PAGE_SIZE);
     }
 
     private static Integer getIntegerValue(List<String> values) {
@@ -40,22 +42,8 @@ public class Parameter2RequestTranslator {
         }
     }
 
-    public static EntityQueryRequest makeQueryRequest(
-            String entitySimpleType,
-            String entityClz,
-            String entityUri,
-            MultiValueMap<String, String> requestParams) {
-        EntityQueryRequest request = new EntityQueryRequest();
-        request.setEntitySimpleType(entitySimpleType)
-            .withEntityType(entityClz)
-            .setResourceURI(entityUri);
-        setPropertyCriterias(request, requestParams);
-        setInfoCriterias(request, requestParams);
-        return request;
-    }
-
-    private static boolean handleIndexParameter(String propertyName, List<String> values, Map<String, Integer> integerValues) {
-        if (staticParaNames.contains(propertyName)) {
+    private static boolean _queryRequestHandleIndexParameter(String propertyName, List<String> values, Map<String, Integer> integerValues) {
+        if (indexParaNames.contains(propertyName)) {
             Integer value = getIntegerValue(values);
             integerValues.put(propertyName, value);
             return true;
@@ -63,8 +51,7 @@ public class Parameter2RequestTranslator {
         return false;
     }
 
-    protected static void setPropertyCriterias(EntityQueryRequest request, Map<String, List<String>> requestParams) {
-
+    protected static void _queryRequestSetPropertyCriterias(EntityQueryRequest request, Map<String, List<String>> requestParams) {
         Map<String, Integer> integerValues = new HashMap<String, Integer>();
 
         if (requestParams == null || requestParams.isEmpty()) {
@@ -75,7 +62,7 @@ public class Parameter2RequestTranslator {
                 String key = entry.getKey();
                 List<String> value = entry.getValue();
                 String propertyName = key;
-                if (handleIndexParameter(propertyName, value, integerValues)) {
+                if (_queryRequestHandleIndexParameter(propertyName, value, integerValues)) {
                     continue;
                 } else if (key.startsWith(GeneralRequestParameter.SORT_PARAMETER)) {
                     propertyName = key.substring(GeneralRequestParameter.SORT_PARAMETER.length());
@@ -119,7 +106,37 @@ public class Parameter2RequestTranslator {
         }
     }
 
-    protected static void setInfoCriterias(EntityQueryRequest request, Map<String, List<String>> requestParams) {
+    public static EntityQueryRequest makeQueryRequest(
+        String entityResName,
+        String entityType,
+        String entityUri,
+        String fullUrl,
+        MultiValueMap<String, String> requestParams) {
+        EntityQueryRequest request = new EntityQueryRequest();
+        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        _queryRequestSetPropertyCriterias(request, requestParams);
+        _fillInfoCriterias(request, requestParams);
+        request.addEntityInfoType(EntityInfoType.Grid);
+
+        return request;
+    }
+
+    public static EntityReadRequest makeReadRequest(
+        String entityResName,
+        String entityType,
+        String entityUri,
+        String fullUrl,
+        String id) {
+        EntityReadRequest request = new EntityReadRequest();
+        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        request.setId(id);
+//        _fillInfoCriterias(request, requestParams);
+        request.addEntityInfoType(EntityInfoType.Form);
+
+        return request;
+    }
+
+    protected static void _fillInfoCriterias(EntityRequest request, Map<String, List<String>> requestParams) {
         List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
         if(infoTypes != null){
             for (String infoTypeString : infoTypes){
@@ -130,4 +147,5 @@ public class Parameter2RequestTranslator {
             }
         }
     }
+
 }

@@ -5,10 +5,16 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEnti
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityInfoResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.request.Request2CtoTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.LinkBuilder;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
 
@@ -31,37 +37,61 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
 //    @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
 //    private DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
+    private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale){
+        Class<?> entityType = request.getEntityType();
+
+        List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
+        for (EntityInfoType infoType : request.getEntityInfoTypes()){
+            IEntityInfo entityInfo = null;
+            if(locale == null){
+                entityInfo = dynamicEntityService.describe(entityType, infoType);
+            }else{
+                entityInfo = dynamicEntityService.friendlyDescribe(entityType, infoType, locale);
+            }
+            entityInfos.add(entityInfo);
+        }
+
+        EntityInfoResult infoResult = null;
+        for(IEntityInfo entityInfo : entityInfos){
+            if(infoResult == null){
+                infoResult = ResultTranslator.convertEntityInfoResult(request);
+            }
+            if(entityInfo != null){
+                infoResult.addDetail(entityInfo.getInfoType(), entityInfo);
+            }
+        }
+
+        response.setInfo(infoResult);
+    }
+
     @Override
-    public EntityQueryResponse getQueryRecords(EntityQueryRequest request) {
+    public EntityQueryResponse queryRecords(EntityQueryRequest request, Locale locale) {
         Class<?> entityType = request.getEntityType();
 
         CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
         CriteriaQueryResult<?> data = dynamicEntityService.query(entityType, cto);
 
-        return ResponseTranslator.translate(request, data);
+        EntityQueryResponse response = ResponseTranslator.translateQueryResponse(request, data);
+        this.appendInfoFields(request, response, locale);
+        LinkBuilder.buildLinkForQueryResults(request.getFullUrl(), response);
+        return response;
     }
 
     @Override
-    public EntityInfoResponse getInfoResponse(EntityQueryRequest request) {
-        Class<?> entityType = request.getEntityType();
-
-        List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
-        for (EntityInfoType infoType : request.getEntityInfoTypes()){
-            IEntityInfo entityInfo = dynamicEntityService.describe(entityType, infoType);
-            entityInfos.add(entityInfo);
-        }
-        return ResponseTranslator.translate(request, entityInfos.toArray(new IEntityInfo[3]));
+    public EntityResponse getInfoResponse(EntityQueryRequest request, Locale locale){
+        EntityResponse response = new EntityResponse();
+        this.appendInfoFields(request, response, locale);
+        return response;
     }
 
     @Override
-    public EntityInfoResponse getFriendlyInfoResponse(EntityQueryRequest request, Locale locale) {
+    public EntityReadResponse readRecord(EntityReadRequest request, Locale locale) {
         Class<?> entityType = request.getEntityType();
+        Object data = dynamicEntityService.find(entityType, request.getId());
 
-        List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
-        for (EntityInfoType infoType : request.getEntityInfoTypes()){
-            IEntityInfo entityInfo = dynamicEntityService.friendlyDescribe(entityType, infoType, locale);
-            entityInfos.add(entityInfo);
-        }
-        return ResponseTranslator.translate(request, entityInfos.toArray(new IEntityInfo[3]));
+        EntityReadResponse response = ResponseTranslator.translateReadResponse(request, data);
+        this.appendInfoFields(request, response, locale);
+        LinkBuilder.buildLinkForReadResults(request.getFullUrl(), response);
+        return response;
     }
 }

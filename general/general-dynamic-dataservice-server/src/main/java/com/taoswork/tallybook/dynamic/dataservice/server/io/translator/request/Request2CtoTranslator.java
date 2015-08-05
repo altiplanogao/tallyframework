@@ -9,7 +9,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryR
 public class Request2CtoTranslator {
     public static CriteriaTransferObject translate(EntityQueryRequest request){
         CriteriaTransferObject cto = new CriteriaTransferObject();
-        cto.setFirstResult(request.getFirstResult());
+        cto.setFirstResult(request.getStartIndex());
         cto.setPageSize(request.getPageSize());
         cto.addFilterCriterias(request.getFilterCriterias());
         cto.addSortCriterias(request.getSortCriterias());
