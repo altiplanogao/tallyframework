@@ -3,13 +3,14 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.imp
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
 public class FieldInfoImpl
-        extends NamedInfoImpl
+        extends NamedOrderedInfoImpl
         implements FieldInfoRW {
 
     public int visibility = Visibility.DEFAULT;
@@ -78,11 +79,6 @@ public class FieldInfoImpl
             return;
         }
         //TODO
-    }
-
-    @Override
-    public NamedInfoImpl setOrder(int order) {
-        return super.setOrder(order);
     }
 
     @Override

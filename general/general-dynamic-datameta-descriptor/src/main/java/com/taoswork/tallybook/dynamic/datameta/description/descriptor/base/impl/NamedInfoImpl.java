@@ -8,7 +8,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.Named
 public class NamedInfoImpl implements NamedInfoRW {
     public String name;
     public String friendlyName;
-    public int order;
 
     public NamedInfoImpl(){
         this("","");
@@ -42,20 +41,8 @@ public class NamedInfoImpl implements NamedInfoRW {
     }
 
     @Override
-    public int getOrder() {
-        return order;
-    }
-
-    @Override
-    public NamedInfoImpl setOrder(int order) {
-        this.order = order;
-        return this;
-    }
-
-    @Override
     public void copyNamedInfo(NamedInfo source){
         this.name = source.getName();
         this.friendlyName = source.getFriendlyName();
-        this.order = source.getOrder();
     }
 }

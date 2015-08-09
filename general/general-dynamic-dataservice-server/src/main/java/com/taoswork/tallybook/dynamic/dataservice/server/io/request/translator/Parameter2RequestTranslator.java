@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
@@ -111,12 +110,12 @@ public class Parameter2RequestTranslator {
         String entityType,
         String entityUri,
         String fullUrl,
-        MultiValueMap<String, String> requestParams) {
+        MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
+
         EntityQueryRequest request = new EntityQueryRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         _queryRequestSetPropertyCriterias(request, requestParams);
-        _fillInfoCriterias(request, requestParams);
-        request.addEntityInfoType(EntityInfoType.Grid);
+        _fillInfoCriterias(request, requestParams, infoFilter);
 
         return request;
     }
@@ -136,13 +135,14 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    protected static void _fillInfoCriterias(EntityRequest request, Map<String, List<String>> requestParams) {
+    protected static void _fillInfoCriterias(EntityRequest request,
+                                             Map<String, List<String>> requestParams,
+                                             Set<String> infoFilter) {
         List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
         if(infoTypes != null){
             for (String infoTypeString : infoTypes){
-                EntityInfoType entityInfoType = EntityInfoTypeNames.entityInfoTypeOf(infoTypeString);
-                if(entityInfoType != null){
-                    request.addEntityInfoType(entityInfoType);
+                if(infoFilter.contains(infoTypeString)){
+                    request.addEntityInfoType(EntityInfoType.instance(infoTypeString));
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeFieldHelper;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.dto.entity.Property;
@@ -22,7 +22,7 @@ public class EntityMaker {
         entity.setType(entityClz.getName());
         //     List<Property> properties = entity.getRWProperties();
         try {
-            for (FieldInfo fieldIndo : entityGridInfo.getFields()) {
+            for (FieldInfo fieldIndo : entityGridInfo.fields) {
                 String fieldName = fieldIndo.getName();
                 Property property = new Property();
                 property.setName(fieldName);

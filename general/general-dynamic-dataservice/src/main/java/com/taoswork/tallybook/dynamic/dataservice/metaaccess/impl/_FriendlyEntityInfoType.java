@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

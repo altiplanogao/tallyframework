@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.metaaccess;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
@@ -31,7 +31,5 @@ public interface DynamicEntityMetadataAccess {
 
     ClassTreeMetadata getClassTreeMetadata(Class<?> entityType);
 
-    IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType);
-
-    IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale);
+    IEntityInfo getEntityInfo(Class<?> entityType, Locale locale, EntityInfoType infoType);
 }

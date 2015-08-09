@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.service;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
@@ -32,8 +32,6 @@ public interface DynamicEntityService {
 
     <T> ClassTreeMetadata inspect(Class<T> entityType);
 
-    <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType);
-
-    <T> IEntityInfo friendlyDescribe(Class<T> entityType, EntityInfoType infoType, Locale locale);
+    <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 
 }

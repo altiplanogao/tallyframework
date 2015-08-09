@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;

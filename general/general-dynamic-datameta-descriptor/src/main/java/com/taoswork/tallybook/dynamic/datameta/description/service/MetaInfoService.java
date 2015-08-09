@@ -1,10 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.EntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.easy.form.EntityFormInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 
 /**
@@ -13,12 +11,16 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 public interface MetaInfoService {
     public static final String SERVICE_NAME = "MetaInfoService";
 
+    EntityInfo generateEntityMainInfo(ClassMetadata classMetadata);
+
     IEntityInfo generateEntityInfo(ClassMetadata classMetadata, EntityInfoType infoType);
+//
+//    EntityFullInfo generateEntityFullInfo(ClassMetadata classMetadata);
+//
+//    EntityGridInfo generateEntityGridInfo(ClassMetadata classMetadata);
+//
+//    EntityFormInfo generateEntityFormInfo(ClassMetadata classMetadata);
 
-    EntityInfo generateEntityInfo(ClassMetadata classMetadata);
-
-    EntityGridInfo generateEntityGridInfo(ClassMetadata classMetadata);
-
-    EntityFormInfo generateEntityFormInfo(ClassMetadata classMetadata);
+    IEntityInfo convert(EntityInfo entityInfo, EntityInfoType type);
 
 }

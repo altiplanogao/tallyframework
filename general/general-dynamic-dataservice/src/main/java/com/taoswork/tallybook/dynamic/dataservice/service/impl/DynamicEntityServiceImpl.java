@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.service.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
@@ -56,7 +56,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     @Override
     public Class<?> getRootInstanceableEntityClass(Class<?> entityClz){
         Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
-        return entityClz;
+        return entityRootClz;
     }
 
     @Override
@@ -65,12 +65,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType) {
-        return dynamicEntityMetadataAccess.getEntityInfo(entityType, infoType);
-    }
-
-    @Override
-    public <T> IEntityInfo friendlyDescribe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
-        return dynamicEntityMetadataAccess.getFriendlyEntityInfo(entityType, infoType, locale);
+    public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
+        return dynamicEntityMetadataAccess.getEntityInfo(entityType, locale, infoType);
     }
 }

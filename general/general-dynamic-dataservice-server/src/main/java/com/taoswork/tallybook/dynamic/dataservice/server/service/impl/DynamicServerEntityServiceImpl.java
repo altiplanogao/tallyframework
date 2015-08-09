@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
@@ -43,11 +43,7 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
         List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
         for (EntityInfoType infoType : request.getEntityInfoTypes()){
             IEntityInfo entityInfo = null;
-            if(locale == null){
-                entityInfo = dynamicEntityService.describe(entityType, infoType);
-            }else{
-                entityInfo = dynamicEntityService.friendlyDescribe(entityType, infoType, locale);
-            }
+            entityInfo = dynamicEntityService.describe(entityType, infoType, locale);
             entityInfos.add(entityInfo);
         }
 
@@ -57,7 +53,7 @@ public class DynamicServerEntityServiceImpl implements DynamicServerEntityServic
                 infoResult = ResultTranslator.convertEntityInfoResult(request);
             }
             if(entityInfo != null){
-                infoResult.addDetail(entityInfo.getInfoType(), entityInfo);
+                infoResult.addDetail(entityInfo.getType(), entityInfo);
             }
         }
 

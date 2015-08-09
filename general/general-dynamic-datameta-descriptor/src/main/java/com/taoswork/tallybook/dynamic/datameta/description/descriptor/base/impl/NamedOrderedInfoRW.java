@@ -5,11 +5,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.Named
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public interface NamedInfoRW extends NamedInfo {
-    NamedInfoRW setName(String name);
+public interface NamedOrderedInfoRW extends NamedInfoRW {
 
-    NamedInfoRW setFriendlyName(String friendlyName);
-
-    void copyNamedInfo(NamedInfo source);
+    void setOrder(int order);
 
 }

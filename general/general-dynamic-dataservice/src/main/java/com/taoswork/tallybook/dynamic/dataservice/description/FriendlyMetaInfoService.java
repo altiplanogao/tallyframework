@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.description;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 
 import java.util.Locale;
 
@@ -11,5 +11,5 @@ public interface FriendlyMetaInfoService {
     public static final String SERVICE_NAME = "FriendlyMetaInfoService";
     public static final String MESSAGE_SOURCE_BEAN_NAME = "FriendlyMetaInfoServiceMessageSource";
 
-    IEntityInfo makeFriendly(IEntityInfo rawEntityInfo, Locale locale);
+    EntityInfo makeFriendly(EntityInfo rawEntityInfo, Locale locale);
 }

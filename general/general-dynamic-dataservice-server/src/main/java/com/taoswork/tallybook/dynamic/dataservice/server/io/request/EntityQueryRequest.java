@@ -1,14 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/1.

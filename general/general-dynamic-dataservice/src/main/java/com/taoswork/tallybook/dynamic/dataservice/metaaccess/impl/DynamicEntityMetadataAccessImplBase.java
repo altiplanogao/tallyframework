@@ -1,7 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
@@ -38,6 +39,32 @@ import java.util.*;
 public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEntityMetadataAccess {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicEntityMetadataAccess.class);
+    private static class ClassScopeWithLocale extends ClassScopeExtension<Locale>{
+        public ClassScopeWithLocale(ClassScope classScope, Locale note) {
+            super(classScope, note);
+        }
+
+        public ClassScopeWithLocale(String clazzName, boolean withSuper, boolean withHierarchy, Locale note) {
+            super(clazzName, withSuper, withHierarchy, note);
+        }
+
+        public ClassScopeWithLocale(Class clazz, boolean withSuper, boolean withHierarchy, Locale note) {
+            super(clazz, withSuper, withHierarchy, note);
+        }
+    }
+    private static class ClassScopeWithLocaleAndType extends ClassScopeExtension<_FriendlyEntityInfoType> {
+        public ClassScopeWithLocaleAndType(ClassScope classScope, _FriendlyEntityInfoType note) {
+            super(classScope, note);
+        }
+
+        public ClassScopeWithLocaleAndType(String clazzName, boolean withSuper, boolean withHierarchy, _FriendlyEntityInfoType note) {
+            super(clazzName, withSuper, withHierarchy, note);
+        }
+
+        public ClassScopeWithLocaleAndType(Class clazz, boolean withSuper, boolean withHierarchy, _FriendlyEntityInfoType note) {
+            super(clazz, withSuper, withHierarchy, note);
+        }
+    }
 
     @Resource(name = MetadataService.SERVICE_NAME)
     private MetadataService metadataService;
@@ -56,9 +83,12 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     private List<Class> entityInterfaces = null;
     private Map<Class, Class> type2RootInstanceableMap = null;
     private Map<Class, EntityClassTree> type2ClassTreeMap = null;
+
     private Map<ClassScope, ClassMetadata> classMetadataMap = null;
-    private Map<_ClassScopeForInfo, IEntityInfo> entityInfoMap = null;
-    private Map<_ClassScopeForFriendlyInfo, IEntityInfo> entityFriendlyInfoMap = null;
+
+    private Map<ClassScope, EntityInfo> entityInfoMap = null;
+    private Map<ClassScopeWithLocale, EntityInfo> entityLocaleInfoMap = null;
+    private Map<ClassScopeWithLocaleAndType, IEntityInfo> entityLocaleAndTypeInfoMap = null;
 
     public abstract EntityManager getEntityManager();
 
@@ -95,7 +125,8 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         type2RootInstanceableMap = new LRUMap();
         classMetadataMap = new LRUMap();
         entityInfoMap = new LRUMap();
-        entityFriendlyInfoMap = new LRUMap();
+        entityLocaleInfoMap = new LRUMap();
+        entityLocaleAndTypeInfoMap = new LRUMap();
     }
 
     /**
@@ -121,16 +152,21 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         return result.data;
     }
 
+//    private ClassScope makeClassScope(Class<?> entityType) {
+//        ClassScope classScope = new ClassScope(entityType, true, true);
+//        return classScope;
+//    }
+
     private EntityClassTree calcEntityClassTree(Class<?> entityType) {
         EntityClassTree subTree = entityClassTreeFromSerializable.findChild(new EntityClass(entityType), this.entityClassGenealogy);
         return subTree;
     }
 
-    private IEntityInfo calcEntityInfo(ClassTreeMetadata classTreeMetadata, EntityInfoType infoType) {
-        return metaInfoService.generateEntityInfo(classTreeMetadata, infoType);
+    private EntityInfo calcEntityInfo(ClassTreeMetadata classTreeMetadata) {
+        return metaInfoService.generateEntityMainInfo(classTreeMetadata);
     }
 
-    private IEntityInfo calcFriendlyEntityInfo(IEntityInfo rawEntityInfo, Locale locale){
+    private EntityInfo calcFriendlyEntityInfo(EntityInfo rawEntityInfo, Locale locale){
         return friendlyMetaInfoService.makeFriendly(rawEntityInfo, locale);
     }
 
@@ -157,7 +193,6 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
             type2ClassTreeMap.put(entityType, classTree);
         }
         return classTree;
-
     }
 
     @Override
@@ -180,44 +215,80 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     }
 
     @Override
-    public IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType) {
+    public IEntityInfo getEntityInfo(Class<?> entityType, Locale locale, EntityInfoType infoType) {
         ClassScope classScope = new ClassScope(entityType, true, true);
-        _ClassScopeForInfo classScopeForInfo = new _ClassScopeForInfo(classScope, infoType);
-
-        IEntityInfo entityInfo = entityInfoMap.getOrDefault(classScopeForInfo, null);
-        if (entityInfo == null) {
-            ClassTreeMetadata classTreeMetadata = getClassTreeMetadata(entityType, classScope);
-            entityInfo = calcEntityInfo(classTreeMetadata, infoType);
-            entityInfoMap.put(classScopeForInfo, entityInfo);
+        ClassScopeWithLocaleAndType scope = new ClassScopeWithLocaleAndType(classScope, new _FriendlyEntityInfoType(infoType, locale));
+        IEntityInfo entityInfo = entityLocaleAndTypeInfoMap.getOrDefault(scope, null);
+        if(entityInfo == null){
+            entityInfo = generateEntityInfo(entityType, locale, infoType);
+            entityLocaleAndTypeInfoMap.put(scope, entityInfo);
         }
         return entityInfo;
     }
 
-    @Override
-    public IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale) {
+    private IEntityInfo generateEntityInfo(Class<?> entityType, Locale locale, EntityInfoType infoType) {
         ClassScope classScope = new ClassScope(entityType, true, true);
-        _ClassScopeForFriendlyInfo classScopeForFriendlyInfo = new _ClassScopeForFriendlyInfo(classScope, new _FriendlyEntityInfoType(infoType, locale));
-
-        IEntityInfo friendlyEntityInfo = entityFriendlyInfoMap.getOrDefault(classScopeForFriendlyInfo, null);
-        if(friendlyEntityInfo == null){
-            IEntityInfo rawEntityInfo = this.getEntityInfo(entityType, infoType);
-            friendlyEntityInfo = this.calcFriendlyEntityInfo(rawEntityInfo, locale);
-            entityFriendlyInfoMap.put(classScopeForFriendlyInfo, friendlyEntityInfo);
-        }
-        return friendlyEntityInfo;
+        ClassScopeWithLocale scope = new ClassScopeWithLocale(classScope, locale);
+        EntityInfo entityLocInfo = getEntityInfo(entityType, classScope, locale);
+        return metaInfoService.convert(entityLocInfo, infoType);
     }
 
-    //    private void codeSni(){
+    private EntityInfo getEntityInfo(Class<?> entityType, ClassScope classScope, Locale locale){
+        ClassScopeWithLocale scope = new ClassScopeWithLocale(classScope, locale);
+        EntityInfo entityInfo = entityLocaleInfoMap.getOrDefault(scope, null);
+        if(entityInfo == null){
+            entityInfo = generateEntityInfo(entityType, classScope, locale);
+            entityLocaleInfoMap.put(scope, entityInfo);
+        }
+        return entityInfo;
+    }
+    private EntityInfo generateEntityInfo(Class<?> entityType, ClassScope classScope, Locale locale){
+        EntityInfo entityInfo = getEntityInfo(entityType, classScope);
+        return calcFriendlyEntityInfo(entityInfo, locale);
+    }
+
+    private EntityInfo getEntityInfo(Class<?> entityType, ClassScope classScope) {
+        EntityInfo entityInfo = entityInfoMap.getOrDefault(classScope, null);
+        if(entityInfo == null){
+            entityInfo = generateEntityInfo(entityType, classScope);
+            entityInfoMap.put(classScope, entityInfo);
+        }
+        return entityInfo;
+    }
+
+    private EntityInfo generateEntityInfo(Class<?> entityType, ClassScope classScope) {
+        ClassTreeMetadata classTreeMetadata = getClassTreeMetadata(entityType, classScope);
+        EntityInfo entityInfo = calcEntityInfo(classTreeMetadata);
+        return entityInfo;
+    }
+
+
+    //
+//    @Override
+//    public IEntityInfo getEntityInfo(Class<?> entityType, EntityInfoType infoType) {
+//        ClassScope classScope = new ClassScope(entityType, true, true);
+//        _ClassScopeForInfo classScopeForInfo = new _ClassScopeForInfo(classScope, infoType);
 //
-//        { //EntityClassTree getEntityClassTree(Class<?> entityClz)
-//            Class<?>[] polymorphicClasses = entityMetaRawAccess.getAllInstanceableEntitiesFromCeiling(entityClz);
-//            EntityClassTreeAccessor treeAccessor = new EntityClassTreeAccessor();
-//            treeAccessor.setAllowParent(false).setAllowChild(true).setAllowBranch(false);
-//            EntityClassTree root = new EntityClassTree(entityClz);
-//            for (Class<?> polyClz : polymorphicClasses) {
-//                treeAccessor.add(root, new EntityClass(polyClz));
-//            }
-//            return root;
+//        IEntityInfo entityInfo = entityInfoMap.getOrDefault(classScopeForInfo, null);
+//        if (entityInfo == null) {
+//            ClassTreeMetadata classTreeMetadata = getClassTreeMetadata(entityType, classScope);
+//            entityInfo = calcEntityInfo(classTreeMetadata, infoType);
+//            entityInfoMap.put(classScopeForInfo, entityInfo);
 //        }
+//        return entityInfo;
+//    }
+//
+//    @Override
+//    public IEntityInfo getFriendlyEntityInfo(Class<?> entityType, EntityInfoType infoType, Locale locale) {
+//        ClassScope classScope = new ClassScope(entityType, true, true);
+//        _ClassScopeForFriendlyInfo classScopeForFriendlyInfo = new _ClassScopeForFriendlyInfo(classScope, new _FriendlyEntityInfoType(infoType, locale));
+//
+//        IEntityInfo friendlyEntityInfo = entityLocaleAndTypeInfoMap.getOrDefault(classScopeForFriendlyInfo, null);
+//        if(friendlyEntityInfo == null){
+//            EntityInfo rawEntityInfo = this.getEntityInfo(entityType, infoType);
+//            friendlyEntityInfo = this.calcFriendlyEntityInfo(rawEntityInfo, locale);
+//            entityLocaleAndTypeInfoMap.put(classScopeForFriendlyInfo, friendlyEntityInfo);
+//        }
+//        return friendlyEntityInfo;
 //    }
 }

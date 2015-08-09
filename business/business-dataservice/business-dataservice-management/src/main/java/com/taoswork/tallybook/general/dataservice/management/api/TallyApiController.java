@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.dataservice.management.api;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/13.
@@ -32,6 +32,10 @@ public class TallyApiController  {
 
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
+
+    private Set<String> getParamInfoFilter(){
+        return EntityInfoType.ApiSupportedType;
+    }
 
     @RequestMapping("")
     @ResponseBody
@@ -45,8 +49,7 @@ public class TallyApiController  {
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
             entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request),
-            requestParams);
-        queryRequest.addEntityInfoType(EntityInfoType.Grid);
+            requestParams, getParamInfoFilter());
 
         EntityQueryResponse response = dynamicServerEntityService.queryRecords(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);

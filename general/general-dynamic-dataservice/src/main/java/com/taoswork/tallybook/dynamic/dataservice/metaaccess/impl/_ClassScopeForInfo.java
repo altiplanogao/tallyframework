@@ -1,8 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.ClassScope;
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.ClassScopeExtension;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 
 /**
  * Created by Gao Yuan on 2015/7/6.

@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response.result;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,11 +59,11 @@ public class EntityInfoResult {
     }
 
 
-    public EntityInfoResult addDetail(EntityInfoType infoType, IEntityInfo entityDetail){
+    public EntityInfoResult addDetail(String typeName, IEntityInfo entityDetail){
         if(this.details == null){
             this.details = new HashMap<String, IEntityInfo>();
         }
-        this.details.put(infoType.getName(), entityDetail);
+        this.details.put(typeName, entityDetail);
         return this;
     }
 

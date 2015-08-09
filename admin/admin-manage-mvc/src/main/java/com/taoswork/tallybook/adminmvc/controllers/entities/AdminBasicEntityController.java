@@ -6,7 +6,7 @@ import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
@@ -33,6 +33,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/4/28.
@@ -68,6 +69,10 @@ public class AdminBasicEntityController extends BaseController {
         } catch (JsonProcessingException exp) {
             throw new RuntimeException(exp);
         }
+    }
+
+    private Set<String> getParamInfoFilter(){
+        return EntityInfoType.PageSupportedType;
     }
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
@@ -116,7 +121,10 @@ public class AdminBasicEntityController extends BaseController {
         DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
         EntityQueryRequest entityRequest =
             Parameter2RequestTranslator.makeQueryRequest(entityResName, entityType,
-                request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams);
+                request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
+        entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
+
+
         EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest, request.getLocale());
 
         if (isAjaxRequest(request)) {
@@ -136,7 +144,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
-        model.addAttribute("gridInfo", entityQueryResponse.getInfo().getDetail(EntityInfoType.Grid));
+        model.addAttribute("gridInfo", entityQueryResponse.getInfo().getDetail(EntityInfoType.PageGrid));
         String entityResultInJson = getObjectInJson(entityQueryResponse);
         model.addAttribute("queryResult", entityResultInJson);
 
@@ -152,7 +160,6 @@ public class AdminBasicEntityController extends BaseController {
      * @param model
      * @param pathVars
      * @param id
-     * @param modal    - whether or not to show the entity in a read-only modal
      * @return the return view path
      * @throws Exception
      */

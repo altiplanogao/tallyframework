@@ -1,22 +1,14 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoTypeNames;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.datameta.description.easy.grid.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.ResponseParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityReadResult;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.EntityMaker;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/6/19.

@@ -1,17 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/8/5.
