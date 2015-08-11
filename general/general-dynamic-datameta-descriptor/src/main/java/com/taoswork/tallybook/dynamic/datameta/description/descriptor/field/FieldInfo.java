@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
 
@@ -12,13 +12,15 @@ public interface FieldInfo extends NamedOrderedInfo {
 
     boolean isGridVisible();
 
+    boolean isFormVisible();
+
     boolean isCollection();
 
     boolean isNameField();
 
     boolean isIdField();
 
-    SupportedFieldType getFieldType();
+    FieldType getFieldType();
 
     boolean isSupportSort();
 

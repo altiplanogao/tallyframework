@@ -5,7 +5,7 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 
 import javax.persistence.*;
@@ -46,23 +46,23 @@ public class PersonImpl
             table = TallyUserDataDomain.ID_GENERATOR_TABLE_NAME,
             initialValue = 1)
     @Column(name = "ID")
-    @PresentationField(group = "General", order = 1, fieldType = SupportedFieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(group = "General", order = 2, fieldType = SupportedFieldType.NAME)
+    @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
     protected String name;
 
     @Column(name = "EMAIL")
-    @PresentationField(fieldType = SupportedFieldType.EMAIL)
+    @PresentationField(fieldType = FieldType.EMAIL)
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
-    @PresentationField(fieldType = SupportedFieldType.PHONE)
+    @PresentationField(fieldType = FieldType.PHONE)
     protected String mobile;
 
     @Column(name = "UUID", unique = true)
-    @PresentationField(fieldType = SupportedFieldType.CODE, visibility = Visibility.GRID_HIDE)
+    @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.GRID_HIDE)
     protected String uuid;
 
     @Override

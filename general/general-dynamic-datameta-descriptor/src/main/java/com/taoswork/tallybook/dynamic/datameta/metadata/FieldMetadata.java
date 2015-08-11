@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
@@ -21,7 +21,7 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     private String groupName;
     private int visibility;
 
-    private SupportedFieldType fieldType;
+    private FieldType fieldType;
 
     private final int originalOrder;
 
@@ -38,14 +38,14 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     }
 
     public boolean isId() {
-        return SupportedFieldType.ID == fieldType;
+        return FieldType.ID == fieldType;
     }
 
     public void setId(boolean id) {
         if(id){
-            fieldType = SupportedFieldType.ID;
-        } else if(fieldType == SupportedFieldType.ID){
-            fieldType = SupportedFieldType.UNKNOWN;
+            fieldType = FieldType.ID;
+        } else if(fieldType == FieldType.ID){
+            fieldType = FieldType.UNKNOWN;
         }
     }
 
@@ -74,22 +74,22 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     }
 
     public boolean isNameField() {
-        return SupportedFieldType.NAME == fieldType;
+        return FieldType.NAME == fieldType;
     }
 
     public void setNameField(boolean nameField) {
         if(nameField){
-            fieldType = SupportedFieldType.NAME;
-        } else if(fieldType == SupportedFieldType.NAME){
-            fieldType = SupportedFieldType.UNKNOWN;
+            fieldType = FieldType.NAME;
+        } else if(fieldType == FieldType.NAME){
+            fieldType = FieldType.UNKNOWN;
         }
     }
 
-    public SupportedFieldType getFieldType() {
+    public FieldType getFieldType() {
         return fieldType;
     }
 
-    public void setFieldType(SupportedFieldType fieldType) {
+    public void setFieldType(FieldType fieldType) {
         this.fieldType = fieldType;
     }
 

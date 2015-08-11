@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.criteria.restriction;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 
 /**
  * Created by Gao Yuan on 2015/6/17.
@@ -11,7 +11,7 @@ public class RestrictionFactory {
     private RestrictionFactory(){
     }
 
-    public Restriction getRestriction(SupportedFieldType fieldType){
+    public Restriction getRestriction(FieldType fieldType){
         switch (fieldType){
             case BOOLEAN:
                 break;

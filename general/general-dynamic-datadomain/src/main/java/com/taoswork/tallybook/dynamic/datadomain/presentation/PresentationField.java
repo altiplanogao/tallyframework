@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datadomain.presentation;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 
 import java.lang.annotation.ElementType;
@@ -50,5 +50,5 @@ public @interface PresentationField {
      *
      * @return the field type
      */
-    SupportedFieldType fieldType() default SupportedFieldType.UNKNOWN;
+    FieldType fieldType() default FieldType.UNKNOWN;
 }

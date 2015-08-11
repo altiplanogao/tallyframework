@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.PhoneFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.SimpleFieldValueProcessor;
@@ -17,24 +17,24 @@ import java.util.Set;
 public class FieldValueProcessorManager {
     private static final FieldValueProcessorManager _instance = new FieldValueProcessorManager();
     private final Map<String, IFieldValueProcessor> processors = new HashMap<String, IFieldValueProcessor>();
-    private static final Set<SupportedFieldType> basicFieldTypes;
+    private static final Set<FieldType> basicFieldTypes;
 
     static {
-        basicFieldTypes = new HashSet<SupportedFieldType>();
-        basicFieldTypes.add(SupportedFieldType.ID);
-        basicFieldTypes.add(SupportedFieldType.BOOLEAN);
-        basicFieldTypes.add(SupportedFieldType.INTEGER);
-        basicFieldTypes.add(SupportedFieldType.DECIMAL);
-        basicFieldTypes.add(SupportedFieldType.STRING);
+        basicFieldTypes = new HashSet<FieldType>();
+        basicFieldTypes.add(FieldType.ID);
+        basicFieldTypes.add(FieldType.BOOLEAN);
+        basicFieldTypes.add(FieldType.INTEGER);
+        basicFieldTypes.add(FieldType.DECIMAL);
+        basicFieldTypes.add(FieldType.STRING);
 
-        basicFieldTypes.add(SupportedFieldType.NAME);
-        basicFieldTypes.add(SupportedFieldType.EMAIL);
+        basicFieldTypes.add(FieldType.NAME);
+        basicFieldTypes.add(FieldType.EMAIL);
     }
 
     private FieldValueProcessorManager(){
         processors.put(SimpleFieldValueProcessor.PROCESSOR_NAME, new SimpleFieldValueProcessor());
-        processors.put(SupportedFieldType.PHONE.name(), new PhoneFieldValueProcessor());
-        processors.put(SupportedFieldType.UNKNOWN.name(), new UnknownFieldValueProcessor());
+        processors.put(FieldType.PHONE.name(), new PhoneFieldValueProcessor());
+        processors.put(FieldType.UNKNOWN.name(), new UnknownFieldValueProcessor());
     }
 
     public static FieldValueProcessorManager instance(){
@@ -42,14 +42,14 @@ public class FieldValueProcessorManager {
     }
 
     public IFieldValueProcessor getProperProcessor(FieldInfo fieldInfo){
-        SupportedFieldType fieldType = fieldInfo.getFieldType();
+        FieldType fieldType = fieldInfo.getFieldType();
         if(basicFieldTypes.contains(fieldType)){
             return processors.getOrDefault(SimpleFieldValueProcessor.PROCESSOR_NAME, null);
         }
 
         IFieldValueProcessor processor = processors.getOrDefault(fieldType.name(), null);
         if(processor == null){
-            processor = processors.getOrDefault(SupportedFieldType.UNKNOWN.name(), null);
+            processor = processors.getOrDefault(FieldType.UNKNOWN.name(), null);
         }
 
         return processor;

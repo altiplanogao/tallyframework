@@ -10,6 +10,7 @@ public enum FieldType {
     EMAIL,
     PHONE,
     PASSWORD,
+    PASSWORD_CONFIRM,
     CODE,
     FOREIGN_KEY,
 
@@ -23,7 +24,6 @@ public enum FieldType {
     COLOR,
 
     //Others
-    PASSWORD_CONFIRM,
     ADDITIONAL_FOREIGN_KEY,
     ENUMERATION,
     EXPLICIT_ENUMERATION,

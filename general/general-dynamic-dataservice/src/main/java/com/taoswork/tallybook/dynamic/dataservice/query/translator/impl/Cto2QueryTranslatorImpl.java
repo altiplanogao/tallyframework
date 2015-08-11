@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.query.translator.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.query.criteria.restriction.Restriction;
@@ -77,7 +77,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
                 if(fieldMetadata == null){
                     continue;
                 }
-                SupportedFieldType fieldType = fieldMetadata.getFieldType();
+                FieldType fieldType = fieldMetadata.getFieldType();
                 Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType);
                 List<Object> convertedValues = restriction.convertValues(values);
                 Predicate predicate = restriction.getPredicateProvider().buildPredicate(criteriaBuilder, fieldPathBuilder,

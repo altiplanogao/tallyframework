@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
@@ -13,7 +13,7 @@ public interface FieldInfoRW extends NamedOrderedInfoRW, FieldInfo {
 
     void setNameField(boolean nameField);
 
-    void setFieldType(SupportedFieldType fieldType);
+    void setFieldType(FieldType fieldType);
 
     void merge(FieldInfo another);
 

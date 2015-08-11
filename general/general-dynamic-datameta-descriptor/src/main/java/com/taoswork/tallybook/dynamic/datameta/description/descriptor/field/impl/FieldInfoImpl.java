@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
@@ -19,7 +19,7 @@ public class FieldInfoImpl
     private boolean supportSort = true;
     private boolean supportFilter = true;
 
-    private SupportedFieldType fieldType = SupportedFieldType.UNKNOWN;
+    private FieldType fieldType = FieldType.UNKNOWN;
 
     public FieldInfoImpl(){
 
@@ -41,6 +41,11 @@ public class FieldInfoImpl
     }
 
     @Override
+    public boolean isFormVisible() {
+        return Visibility.formVisible(visibility);
+    }
+
+    @Override
     public boolean isCollection() {
         return isCollection;
     }
@@ -56,20 +61,20 @@ public class FieldInfoImpl
     }
 
     @Override
-    public SupportedFieldType getFieldType() {
+    public FieldType getFieldType() {
         if (fieldType == null) {
-            return SupportedFieldType.UNKNOWN;
+            return FieldType.UNKNOWN;
         }
         return fieldType;
     }
 
     @Override
     public boolean isIdField() {
-        return getFieldType().equals(SupportedFieldType.ID);
+        return getFieldType().equals(FieldType.ID);
     }
 
     @Override
-    public void setFieldType(SupportedFieldType fieldType) {
+    public void setFieldType(FieldType fieldType) {
         this.fieldType = fieldType;
     }
 

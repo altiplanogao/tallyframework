@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallymanagement.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallymanagement.ModuleRegistry;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.SupportedFieldType;
+import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 
 import javax.persistence.*;
@@ -15,10 +15,10 @@ import javax.persistence.*;
 public class ModuleRegistryImpl implements ModuleRegistry {
     @Id
     @Column(name = "ID")
-    @PresentationField(group = "General", order = 1, fieldType = SupportedFieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(group = "General", order = 2, fieldType = SupportedFieldType.NAME)
+    @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
     protected String name;
 }
