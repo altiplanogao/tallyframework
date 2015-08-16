@@ -2,7 +2,6 @@ package com.taoswork.tallybook.general.web.view.thymeleaf;
 
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 

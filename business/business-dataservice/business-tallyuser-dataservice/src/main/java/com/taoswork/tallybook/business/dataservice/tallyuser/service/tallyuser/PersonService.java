@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
-import com.taoswork.tallybook.general.dataservice.support.entity.IService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.IService;
 
 /**
  * Created by Gao Yuan on 2015/5/8.

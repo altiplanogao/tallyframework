@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-datadomain-support</artifactId>
+            <artifactId>general-dynamic-datadomain</artifactId>
         </dependency>
     </dependencies>
 

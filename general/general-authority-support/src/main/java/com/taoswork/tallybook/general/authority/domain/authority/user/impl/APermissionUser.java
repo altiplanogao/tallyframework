@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.general.authority.domain.authority.user.impl;
 
-import com.taoswork.tallybook.general.authority.domain.authority.user.IPermissionUser;
 import com.taoswork.tallybook.general.authority.domain.authority.access.AccessType;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
+import com.taoswork.tallybook.general.authority.domain.authority.user.IPermissionUser;
 import com.taoswork.tallybook.general.authority.engine.utils.PermissionUtility;
 
 import java.lang.ref.WeakReference;

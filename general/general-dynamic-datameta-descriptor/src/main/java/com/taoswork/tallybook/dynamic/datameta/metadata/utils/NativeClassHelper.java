@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.utils;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 
 import javax.persistence.Id;
 import javax.persistence.Transient;

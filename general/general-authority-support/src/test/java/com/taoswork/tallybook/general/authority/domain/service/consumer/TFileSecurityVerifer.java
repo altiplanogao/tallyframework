@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.service.consumer;
 
 import com.taoswork.tallybook.general.authority.domain.authority.access.AccessType;
-import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
 import com.taoswork.tallybook.general.authority.domain.authority.user.IPermissionUser;
 import com.taoswork.tallybook.general.authority.engine.resource.ResourceSecured;
 import com.taoswork.tallybook.general.authority.service.consumer.ISecurityVerifier;

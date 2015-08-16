@@ -1,22 +1,5 @@
 package com.taoswork.tallybook.general.authority.domain;
 
-import com.taoswork.tallybook.general.authority.domain.authority.access.AccessType;
-import com.taoswork.tallybook.general.authority.domain.authority.access.ResourceAccess;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.PermissionEntry;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.impl.PermissionEntryImpl;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.impl.PermissionImpl;
-import com.taoswork.tallybook.general.authority.domain.authority.resource.*;
-import com.taoswork.tallybook.general.authority.domain.authority.user.EasyPermissionUser4Test;
-import com.taoswork.tallybook.general.authority.domain.authority.user.IPermissionUser;
-import com.taoswork.tallybook.general.authority.domain.service.consumer.TFileSecurityVerifer;
-import com.taoswork.tallybook.general.authority.engine.resource.ResourceSecured;
-import com.taoswork.tallybook.general.authority.service.consumer.ISecurityVerifier;
-import com.taoswork.tallybook.general.authority.service.consumer.ResourceSecurityException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
  * Created by Gao Yuan on 2015/6/4.
  */

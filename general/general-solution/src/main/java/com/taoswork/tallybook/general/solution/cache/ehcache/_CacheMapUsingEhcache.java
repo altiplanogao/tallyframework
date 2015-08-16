@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.general.solution.cache.ehcache;
 
 import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 import java.util.*;

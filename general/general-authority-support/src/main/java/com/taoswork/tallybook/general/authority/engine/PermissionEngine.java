@@ -1,12 +1,13 @@
 package com.taoswork.tallybook.general.authority.engine;
 
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
-import com.taoswork.tallybook.general.authority.engine.filter.IResourceFilter;
-import com.taoswork.tallybook.general.authority.engine.filter.utils.FilterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/5.

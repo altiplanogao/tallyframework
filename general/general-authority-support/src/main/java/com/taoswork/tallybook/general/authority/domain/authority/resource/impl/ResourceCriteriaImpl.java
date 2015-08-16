@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.general.authority.domain.authority.resource.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 
 import javax.persistence.*;
 

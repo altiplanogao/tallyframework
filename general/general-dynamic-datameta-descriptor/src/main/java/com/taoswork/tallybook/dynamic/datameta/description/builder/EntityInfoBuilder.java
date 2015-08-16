@@ -5,12 +5,12 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.Enti
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.GroupInsight;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInsight;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.GroupInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.TabInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 
 import java.util.ArrayList;
 import java.util.List;

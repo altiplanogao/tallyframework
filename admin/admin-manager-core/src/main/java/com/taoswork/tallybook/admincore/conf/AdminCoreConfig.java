@@ -7,10 +7,10 @@ import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetail
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.dataservice.management.manager.impl.DataServiceManagerImpl;
+import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
+import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

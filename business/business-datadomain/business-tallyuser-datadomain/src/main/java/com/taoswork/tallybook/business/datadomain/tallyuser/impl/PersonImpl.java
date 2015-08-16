@@ -3,10 +3,10 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.*;
 
@@ -62,7 +62,7 @@ public class PersonImpl
     protected String mobile;
 
     @Column(name = "UUID", unique = true)
-    @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.GRID_HIDE)
+    @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.HIDDEN_ALL)
     protected String uuid;
 
     @Override

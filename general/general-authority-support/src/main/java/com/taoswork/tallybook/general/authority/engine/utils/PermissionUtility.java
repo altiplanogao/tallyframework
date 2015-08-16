@@ -1,7 +1,9 @@
 package com.taoswork.tallybook.general.authority.engine.utils;
 
-import com.taoswork.tallybook.general.authority.domain.authority.permission.*;
 import com.taoswork.tallybook.general.authority.domain.authority.access.ResourceAccess;
+import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
+import com.taoswork.tallybook.general.authority.domain.authority.permission.PermissionEntry;
+import com.taoswork.tallybook.general.authority.domain.authority.permission.Role;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
 
 import java.util.*;

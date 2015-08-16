@@ -7,17 +7,20 @@ import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelServic
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndDynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndDynamicEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.solution.menu.Menu;
 import com.taoswork.tallybook.general.solution.menu.MenuEntry;
 import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import com.taoswork.tallybook.general.web.control.BaseController;
 import com.taoswork.tallybook.general.web.view.thymeleaf.TallyBookDataViewResolver;
 import org.springframework.security.web.util.UrlUtils;
@@ -52,20 +55,12 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    private ThreadLocal<ObjectMapper> objectMapperThreadLocal = new ThreadLocal<ObjectMapper>();
+    private ThreadLocal<ObjectMapper> objectMapper = ThreadLocalHelper.createThreadLocal(ObjectMapper.class);
     private Helper helper = new Helper();
 
-    private ObjectMapper getObjectMapper() {
-        ObjectMapper objectMapper = objectMapperThreadLocal.get();
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapperThreadLocal.set(objectMapper);
-        }
-        return objectMapper;
-    }
     private String getObjectInJson(Object data) {
         try {
-            return getObjectMapper().writeValueAsString(data);
+            return objectMapper.get().writeValueAsString(data);
         } catch (JsonProcessingException exp) {
             throw new RuntimeException(exp);
         }
@@ -87,7 +82,7 @@ public class AdminBasicEntityController extends BaseController {
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null
 
-//        DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
+//        FrontEndDynamicEntityService dynamicServerEntityService = dataServiceManager.getFrontEndDynamicEntityService(entityType);
 //        EntityRequest entityRequest =
 //            Parameter2RequestTranslator.makeInfoRequest(entityResName, entityType, request.getRequestURI(), requestParams);
 //        EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest);
@@ -118,12 +113,13 @@ public class AdminBasicEntityController extends BaseController {
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null
 
-        DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
         EntityQueryRequest entityRequest =
             Parameter2RequestTranslator.makeQueryRequest(entityResName, entityType,
                 request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
         entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
 
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
         EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest, request.getLocale());
 
@@ -171,9 +167,11 @@ public class AdminBasicEntityController extends BaseController {
         @PathVariable Map<String, String> pathVars) throws Exception {
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
-        DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
+
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
         EntityReadResponse readResponse = dynamicServerEntityService.readRecord(readRequest, request.getLocale());
 

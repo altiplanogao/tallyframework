@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-dataservice-support</artifactId>
+            <artifactId>general-dynamic-dataservice</artifactId>
         </dependency>
 
     </dependencies>

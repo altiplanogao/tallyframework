@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response.result;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 
 import java.util.Collections;
 import java.util.HashMap;

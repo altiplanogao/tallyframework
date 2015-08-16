@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.testframework.domain.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 
 import javax.persistence.*;

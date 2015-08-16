@@ -16,9 +16,5 @@
         <groupId>com.taoswork.tallybook</groupId>
         <artifactId>general-extension</artifactId>
     </dependency>
-    <dependency>
-        <groupId>com.taoswork.tallybook</groupId>
-        <artifactId>general-dynamic-datadomain</artifactId>
-    </dependency>
 </dependencies>
 </project>

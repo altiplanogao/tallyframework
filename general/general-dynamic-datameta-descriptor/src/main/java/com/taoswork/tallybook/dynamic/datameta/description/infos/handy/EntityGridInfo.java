@@ -2,9 +2,9 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 
 import java.util.ArrayList;
 import java.util.List;

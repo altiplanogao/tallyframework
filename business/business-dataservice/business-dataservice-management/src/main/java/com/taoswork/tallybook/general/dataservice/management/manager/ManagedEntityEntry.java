@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.dataservice.management.manager;
 
-import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 
 /**
  * Created by Gao Yuan on 2015/6/2.

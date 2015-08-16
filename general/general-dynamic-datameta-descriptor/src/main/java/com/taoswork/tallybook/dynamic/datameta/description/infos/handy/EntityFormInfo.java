@@ -2,10 +2,10 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 
 import java.util.List;

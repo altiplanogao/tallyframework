@@ -2,10 +2,8 @@ package com.taoswork.tallybook.general.solution.i18n;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by Gao Yuan on 2015/6/3.

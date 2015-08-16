@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;

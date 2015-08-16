@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.SortDirection;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;

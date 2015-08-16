@@ -2,11 +2,10 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataServiceDefinition;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.general.dataservice.support.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.general.dataservice.support.config.dbsetting.IDbSetting;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

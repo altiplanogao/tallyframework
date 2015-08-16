@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
-import com.taoswork.tallybook.general.solution.menu.Menu;
 import com.taoswork.tallybook.general.solution.menu.MenuEntry;
 import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
 

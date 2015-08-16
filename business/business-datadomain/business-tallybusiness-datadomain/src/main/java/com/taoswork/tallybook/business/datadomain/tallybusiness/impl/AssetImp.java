@@ -4,8 +4,8 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Asset;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

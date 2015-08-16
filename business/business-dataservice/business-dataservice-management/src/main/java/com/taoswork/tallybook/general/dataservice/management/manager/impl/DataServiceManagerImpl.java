@@ -1,11 +1,10 @@
 package com.taoswork.tallybook.general.dataservice.management.manager.impl;
 
-import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
-import com.taoswork.tallybook.general.dataservice.support.entity.EntityEntry;
-import com.taoswork.tallybook.general.dataservice.management.manager.ManagedEntityEntry;
-import com.taoswork.tallybook.general.dataservice.support.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
+import com.taoswork.tallybook.general.dataservice.management.manager.ManagedEntityEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,11 +79,11 @@ public class DataServiceManagerImpl implements DataServiceManager {
         return dataService.getService(DynamicEntityService.COMPONENT_NAME);
     }
 
-    @Override
-    public DynamicServerEntityService getDynamicServerEntityService(String entityClz) {
-        IDataService dataService = getDataService(entityClz);
-        return dataService.getService(DynamicServerEntityService.SERVICE_NAME);
-    }
+//    @Override
+//    public FrontEndDynamicEntityService getFrontEndDynamicEntityService(String entityClz) {
+//        IDataService dataService = getDataService(entityClz);
+//        return dataService.getService(FrontEndDynamicEntityService.SERVICE_NAME);
+//    }
     
     
 }

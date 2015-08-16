@@ -1,12 +1,14 @@
 package com.taoswork.tallybook.general.dataservice.management.api;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndDynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndDynamicEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -44,12 +46,14 @@ public class TallyApiController  {
         @PathVariable(value="entityResName") String entityResName,
         @RequestParam MultiValueMap<String, String> requestParams){
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
-        DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
 
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
             entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request),
             requestParams, getParamInfoFilter());
+
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
         EntityQueryResponse response = dynamicServerEntityService.queryRecords(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
@@ -64,9 +68,11 @@ public class TallyApiController  {
         @PathVariable Map<String, String> pathVars) throws Exception {
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
-        DynamicServerEntityService dynamicServerEntityService = dataServiceManager.getDynamicServerEntityService(entityType);
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
+
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
         EntityReadResponse response = dynamicServerEntityService.readRecord(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);

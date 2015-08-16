@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
-import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.CompanyImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.CompanyImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

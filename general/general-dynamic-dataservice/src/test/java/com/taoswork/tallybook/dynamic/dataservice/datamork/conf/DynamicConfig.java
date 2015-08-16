@@ -1,17 +1,17 @@
 package com.taoswork.tallybook.dynamic.dataservice.datamork.conf;
 
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.dao.impl.DynamicEntityDaoImplBase;
-import com.taoswork.tallybook.dynamic.dataservice.description.FriendlyMetaInfoService;
-import com.taoswork.tallybook.dynamic.dataservice.description.impl.FriendlyMetaInfoServiceImpl;
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.impl.DynamicEntityMetadataAccessImplBase;
-import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.service.impl.DynamicEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.impl.DynamicEntityDaoImplBase;
+import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
+import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.impl.DynamicEntityMetadataAccessImplBase;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

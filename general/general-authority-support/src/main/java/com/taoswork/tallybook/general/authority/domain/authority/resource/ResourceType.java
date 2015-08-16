@@ -1,8 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.authority.resource;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

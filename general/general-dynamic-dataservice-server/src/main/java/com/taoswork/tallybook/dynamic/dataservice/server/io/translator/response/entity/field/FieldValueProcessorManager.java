@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.PhoneFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.SimpleFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.UnknownFieldValueProcessor;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import java.util.HashMap;
 import java.util.HashSet;

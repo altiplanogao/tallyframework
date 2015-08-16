@@ -7,8 +7,8 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertifica
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonKeyType;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityServiceBase;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.general.dataservice.support.entity.EntityServiceBase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

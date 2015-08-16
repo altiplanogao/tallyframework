@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser;
 
-import com.taoswork.tallybook.general.dataservice.support.IDataServiceDefinition;
+import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 
 /**
  * Created by Gao Yuan on 2015/5/8.

@@ -4,8 +4,8 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityServiceBase;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.general.dataservice.support.entity.EntityServiceBase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

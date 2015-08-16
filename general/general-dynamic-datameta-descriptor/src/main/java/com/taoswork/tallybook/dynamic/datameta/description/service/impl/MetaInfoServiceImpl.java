@@ -3,12 +3,9 @@ package com.taoswork.tallybook.dynamic.datameta.description.service.impl;
 import com.taoswork.tallybook.dynamic.datameta.description.builder.EntityInfoBuilder;
 import com.taoswork.tallybook.dynamic.datameta.description.builder.EntityInsightBuilder;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.EntityInsight;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFormInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFullInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import org.slf4j.Logger;
@@ -35,27 +32,6 @@ public class MetaInfoServiceImpl implements
         EntityInfo entityInfo = EntityInfoBuilder.build(entityInsight);
         return entityInfo;
     }
-//
-//    @Override
-//    public EntityFullInfo generateEntityFullInfo(ClassMetadata classMetadata) {
-//        EntityInsight entityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
-//        EntityInfo entityInfo = EntityInfoBuilder.build(entityInsight);
-//        return new EntityFullInfo(entityInfo);
-//    }
-//
-//    @Override
-//    public EntityGridInfo generateEntityGridInfo(ClassMetadata classMetadata) {
-//        EntityInsight entityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
-//        EntityInfo entityInfo = EntityInfoBuilder.build(entityInsight);
-//        return new EntityGridInfo(entityInfo);
-//    }
-//
-//    @Override
-//    public EntityFormInfo generateEntityFormInfo(ClassMetadata classMetadata) {
-//        EntityInsight entityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
-//        EntityInfo entityInfo = EntityInfoBuilder.build(entityInsight);
-//        return new EntityFormInfo(entityInfo);
-//    }
 
     @Override
     public IEntityInfo convert(EntityInfo entityInfo, EntityInfoType type) {

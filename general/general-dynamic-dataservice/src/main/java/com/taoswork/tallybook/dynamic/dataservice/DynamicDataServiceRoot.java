@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice;
 
-import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 
 /**
  * Created by Gao Yuan on 2015/5/27.

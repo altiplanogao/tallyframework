@@ -2,7 +2,10 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.imp
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/25.

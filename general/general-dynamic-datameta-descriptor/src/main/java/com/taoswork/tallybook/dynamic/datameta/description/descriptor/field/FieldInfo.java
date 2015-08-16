@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 /**
  * Created by Gao Yuan on 2015/6/25.

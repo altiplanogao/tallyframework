@@ -2,7 +2,6 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.base;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
-import javax.persistence.criteria.Order;
 import java.io.Serializable;
 import java.util.*;
 

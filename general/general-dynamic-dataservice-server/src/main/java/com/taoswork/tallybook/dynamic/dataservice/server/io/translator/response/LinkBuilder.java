@@ -8,11 +8,6 @@ import com.taoswork.tallybook.general.extension.utils.UriUtility;
 import gumi.builders.UrlBuilder;
 import org.springframework.hateoas.Link;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 /**
  * Created by Gao Yuan on 2015/8/5.
  */

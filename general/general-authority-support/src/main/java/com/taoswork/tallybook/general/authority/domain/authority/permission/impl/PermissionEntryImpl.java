@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.general.authority.domain.authority.permission.impl;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
 import com.taoswork.tallybook.general.authority.domain.authority.access.ResourceAccess;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.authority.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.ResourceCriteria;
 import com.taoswork.tallybook.general.authority.domain.authority.resource.impl.ResourceCriteriaImpl;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -3,8 +3,8 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin.dao.impl;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
+import com.taoswork.tallybook.dynamic.dataservice.entity.DaoBase;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.entity.DaoBase;
 import com.taoswork.tallybook.general.extension.collections.ListUtility;
 import org.springframework.stereotype.Repository;
 

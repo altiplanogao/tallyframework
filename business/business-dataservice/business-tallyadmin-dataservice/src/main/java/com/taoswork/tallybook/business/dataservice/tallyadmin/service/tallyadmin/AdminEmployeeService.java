@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.general.dataservice.support.entity.IService;
+import com.taoswork.tallybook.dynamic.dataservice.entity.IService;
 
 /**
  * Created by Gao Yuan on 2015/5/12.

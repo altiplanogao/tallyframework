@@ -2,7 +2,6 @@ package com.taoswork.tallybook.general.extension.utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/4/21.

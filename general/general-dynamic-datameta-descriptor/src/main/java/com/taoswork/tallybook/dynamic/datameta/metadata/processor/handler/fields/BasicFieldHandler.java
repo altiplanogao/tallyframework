@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationClass;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import java.lang.reflect.Field;
 

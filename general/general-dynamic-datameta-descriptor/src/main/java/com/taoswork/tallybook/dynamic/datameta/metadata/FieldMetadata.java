@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.FieldType;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

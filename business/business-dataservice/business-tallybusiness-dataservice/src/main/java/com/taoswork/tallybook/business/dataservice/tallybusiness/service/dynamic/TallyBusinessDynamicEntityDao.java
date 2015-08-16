@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness.service.dynamic;
 
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.dao.impl.DynamicEntityDaoImplBase;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.impl.DynamicEntityDaoImplBase;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

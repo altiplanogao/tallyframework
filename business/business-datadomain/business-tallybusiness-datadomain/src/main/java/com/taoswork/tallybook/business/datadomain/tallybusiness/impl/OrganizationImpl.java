@@ -1,14 +1,13 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
-import com.taoswork.tallybook.business.datadomain.tallybusiness.*;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.PresentationField;
-import com.taoswork.tallybook.dynamic.datadomain.presentation.client.Visibility;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/4/16.

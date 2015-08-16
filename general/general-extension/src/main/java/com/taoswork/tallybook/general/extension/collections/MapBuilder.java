@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.general.extension.collections;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/4/21.

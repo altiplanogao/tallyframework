@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness;
 
 import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessDataServiceBeanConfiguration;
-import com.taoswork.tallybook.general.dataservice.support.impl.DataServiceBase;
+import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
 
 import java.util.List;
 

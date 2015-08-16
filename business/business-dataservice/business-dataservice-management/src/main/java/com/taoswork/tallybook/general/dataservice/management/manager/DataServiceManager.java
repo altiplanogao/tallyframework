@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.general.dataservice.management.manager;
 
-import com.taoswork.tallybook.dynamic.dataservice.service.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.DynamicServerEntityService;
-import com.taoswork.tallybook.general.dataservice.support.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 
 /**
  * Created by Gao Yuan on 2015/6/2.
@@ -24,5 +23,5 @@ public interface DataServiceManager {
 
     DynamicEntityService getDynamicEntityService(String entityClz);
 
-    DynamicServerEntityService getDynamicServerEntityService(String entityClz);
+//    FrontEndDynamicEntityService getFrontEndDynamicEntityService(String entityClz);
 }

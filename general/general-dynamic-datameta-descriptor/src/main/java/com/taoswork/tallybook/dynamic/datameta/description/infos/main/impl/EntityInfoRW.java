@@ -2,8 +2,8 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 
 import java.util.List;
 import java.util.Map;

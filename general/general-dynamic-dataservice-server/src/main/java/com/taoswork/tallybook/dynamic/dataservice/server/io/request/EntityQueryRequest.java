@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertyFilterCriteria;
-import com.taoswork.tallybook.dynamic.dataservice.query.dto.PropertySortCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
 
 import java.util.Collection;
 
