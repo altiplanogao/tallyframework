@@ -1,8 +1,8 @@
-package com.taoswork.tallybook.business.dataservice.tallymanagement.service.dynamic;
+package com.taoswork.tallybook.dynamic.dataservice.servicemockup.service.dynamic;
 
-import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataServiceDefinition;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.impl.DynamicEntityDaoImplBase;
+import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataServiceDefinition;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,8 @@ import javax.persistence.PersistenceContext;
  */
 @Component(DynamicEntityDao.COMPONENT_NAME)
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TallyManagementDynamicEntityDao extends DynamicEntityDaoImplBase {
-    @PersistenceContext(name = TallyManagementDataServiceDefinition.TMANAGEMENT_PU_NAME)
+public class TallyMockupDynamicEntityDao extends DynamicEntityDaoImplBase {
+    @PersistenceContext(name = TallyMockupDataServiceDefinition.TMOCKUP_PU_NAME)
     protected EntityManager entityManager;
 
     @Override

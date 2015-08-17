@@ -108,7 +108,7 @@ public class AdminBasicEntityController extends BaseController {
         HttpServletRequest request, HttpServletResponse response, Model model,
         @PathVariable(value = "entityResName") String entityResName,
         @PathVariable Map<String, String> pathVars,
-        @RequestParam MultiValueMap<String, String> requestParams) {
+        @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null

@@ -1,0 +1,48 @@
+package com.taoswork.tallybook.dynamic.dataservice.core.persistence;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+/**
+ * Created by Gao Yuan on 2015/8/16.
+ */
+public class PersistenceManagerFactory implements ApplicationContextAware {
+    public static final String COMPONENT_NAME = "PersistenceManagerFactory";
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public PersistenceManager getPersistenceManager(){
+        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        if (context != null) {
+            return context.getPersistenceManager();
+        }
+        throw new IllegalStateException("PersistenceManager getPersistenceManager");
+    }
+
+    public PersistenceManager makePersistenceManager(){
+        PersistenceManager persistenceManager = (PersistenceManager)applicationContext.getBean(PersistenceManager.COMPONENT_NAME);
+        return persistenceManager;
+    }
+
+    public void startPersistenceManager() {
+        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        if (context == null) {
+            context = new PersistenceManagerContext();
+            PersistenceManagerContext.addPersistenceManagerContext(context);
+        }
+        context.addPersistenceManager(makePersistenceManager());
+    }
+
+    public void endPersistenceManager() {
+        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        if (context != null) {
+            context.remove();
+        }
+    }
+}

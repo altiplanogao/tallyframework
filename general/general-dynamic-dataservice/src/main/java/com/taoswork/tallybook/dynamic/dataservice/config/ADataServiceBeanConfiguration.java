@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.config;
 
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDelegate;
 import com.taoswork.tallybook.dynamic.dataservice.config.beanlist.IDataServiceSupporterBeanList;
@@ -11,17 +12,23 @@ import com.taoswork.tallybook.dynamic.dataservice.config.helper.DataServiceBeanC
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerFactory;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl.PersistenceManagerImpl;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
@@ -74,6 +81,11 @@ public abstract class ADataServiceBeanConfiguration
         return new BeanCreationMonitor(dataServiceDefinition.getDataServiceName());
     }
 
+    @Override
+    @Bean(name = IDataService.DATASERVICE_NAME_S_BEAN_NAME)
+    public String dataServiceName() {
+        return dataServiceDefinition.getDataServiceName();
+    }
 
     // **************************************************** //
     //  IDataServiceSupporterBeanList                       //
@@ -133,6 +145,25 @@ public abstract class ADataServiceBeanConfiguration
     @Override
     public JpaTransactionManager jpaTransactionManager() {
         return helper.createJpaTransactionManager(entityManagerFactory().getObject());
+    }
+
+    @Override
+    @Bean(name = PersistenceManagerFactory.COMPONENT_NAME)
+    public PersistenceManagerFactory persistenceManagerFactory() {
+        return new PersistenceManagerFactory();
+    }
+
+    @Override
+    @Bean(name = PersistenceManager.COMPONENT_NAME)
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public PersistenceManager persistenceManager() {
+        return new PersistenceManagerImpl();
+    }
+
+    @Override
+    @Bean(name = PersistenceManagerInvoker.COMPONENT_NAME)
+    public PersistenceManagerInvoker persistenceManagerInvoker() {
+        return new PersistenceManagerInvoker();
     }
 
     // **************************************************** //

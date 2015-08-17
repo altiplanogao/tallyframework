@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
@@ -66,7 +67,7 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
     }
 
     @Override
-    public EntityQueryResponse queryRecords(EntityQueryRequest request, Locale locale) {
+    public EntityQueryResponse queryRecords(EntityQueryRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
 
         CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
@@ -86,7 +87,7 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
     }
 
     @Override
-    public EntityReadResponse readRecord(EntityReadRequest request, Locale locale) {
+    public EntityReadResponse readRecord(EntityReadRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
         Object data = dynamicEntityService.find(entityType, request.getId());
 

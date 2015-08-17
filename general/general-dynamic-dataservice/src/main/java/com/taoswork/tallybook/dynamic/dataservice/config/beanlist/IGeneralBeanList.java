@@ -8,4 +8,6 @@ import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 public interface IGeneralBeanList {
     BeanCreationMonitor beanCreationMonitor();
 
+    String dataServiceName();
+
 }

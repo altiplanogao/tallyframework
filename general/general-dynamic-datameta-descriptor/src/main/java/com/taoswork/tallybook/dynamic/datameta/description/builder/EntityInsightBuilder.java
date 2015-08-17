@@ -20,8 +20,12 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public class EntityInsightBuilder {
+public final class EntityInsightBuilder {
     private static Logger LOGGER = LoggerFactory.getLogger(EntityInsightBuilder.class);
+
+    private EntityInsightBuilder() throws IllegalAccessException{
+        throw new IllegalAccessException("EntityInsightBuilder: Not instance-able object");
+    }
 
     private static class InfoCreator {
         static EntityInsightRW createEntityInsight(ClassMetadata classMetadata) {

@@ -7,8 +7,8 @@ public class IntervalSensitive {
     public static long NEVER_EXPIRE = -1L;
     public static long ALWAYS_EXPIRE = 0;
 
-    private long intervalThreshold = 0;
-    protected long lastAccess = 0;
+    private final long intervalThreshold;
+    protected volatile long lastAccess = 0;
 
     public IntervalSensitive(long intervalThreshold) {
         this.intervalThreshold = intervalThreshold;
@@ -24,11 +24,6 @@ public class IntervalSensitive {
      */
     long getLastAccess() {
         return lastAccess;
-    }
-
-    public IntervalSensitive setIntervalThreshold(long intervalThreshold) {
-        this.intervalThreshold = intervalThreshold;
-        return this;
     }
 
     public boolean isIntervalExpired() {

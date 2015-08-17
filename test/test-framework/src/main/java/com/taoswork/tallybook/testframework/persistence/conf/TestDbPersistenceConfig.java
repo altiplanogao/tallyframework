@@ -54,7 +54,7 @@ public class TestDbPersistenceConfig {
         entityManagerFactory.setPersistenceXmlLocation(
                 "classpath:/META-INF/persistence/" + "persistence-test.xml");
         entityManagerFactory.setDataSource(testDbDataSource());
-        PersistenceUnitPostProcessor puPostProcessor = createPersistenceUnitPostProcessor(theDbCreator());
+        PersistenceUnitPostProcessor puPostProcessor = createPersistenceUnitPostProcessor();
         entityManagerFactory.setPersistenceUnitPostProcessors(puPostProcessor);
         //       entityManagerFactory.setPersistenceXmlLocation("classpath*:/persistence/persistence-admin-tallyuser.xml");
 //        entityManagerFactory.setDataSource(hostUserDataSource());
@@ -70,7 +70,7 @@ public class TestDbPersistenceConfig {
         return jtm;
     }
 
-    private PersistenceUnitPostProcessor createPersistenceUnitPostProcessor (TestDataSourceCreator.ITestDbCreator dbCreator){
+    public static PersistenceUnitPostProcessor createPersistenceUnitPostProcessor (){
         PersistenceUnitPostProcessor postProcessor =
                 new PersistenceUnitPostProcessor(){
                     @Override

@@ -3,9 +3,14 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.IPersistentMethod;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 
@@ -17,40 +22,67 @@ import java.util.Locale;
  */
 public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
-    @Resource(name=DynamicEntityDao.COMPONENT_NAME)
-    protected DynamicEntityDao dynamicEntityDao;
-
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+
+    @Resource(name = IDataService.DATASERVICE_NAME_S_BEAN_NAME)
+    private String dataServiceName;
+
+    @Resource(name = PersistenceManagerInvoker.COMPONENT_NAME)
+    protected PersistenceManagerInvoker persistenceManagerInvoker;
 
     public DynamicEntityServiceImpl(){
     }
 
     @Override
-    public <T> T save(T entity){
-        return dynamicEntityDao.persist(entity);
+    public <T> T save(final T entity) throws ServiceException {
+        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+            @Override
+            public T execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.persist(entity);
+            }
+        });
     }
 
     @Override
-    public <T> T find(Class<T> entityClz, Object key){
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
-        return dynamicEntityDao.find(entityRootClz, key);
+    public <T> T find(final Class<T> entityClz, final Object key) throws ServiceException{
+        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+            @Override
+            public T execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.find(entityClz, key);
+            }
+        });
     }
 
     @Override
-    public <T> T update(T entity){
-        return dynamicEntityDao.update(entity);
+    public <T> T update(final T entity)throws ServiceException{
+        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+            @Override
+            public T execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.update(entity);
+            }
+        });
     }
 
     @Override
-    public <T> void delete(T entity){
-        dynamicEntityDao.remove(entity);
+    public <T> void delete(final T entity)throws ServiceException{
+        persistenceManagerInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
+            @Override
+            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
+                persistenceManager.delete(entity);
+                return null;
+            }
+        });
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query){
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
-        return dynamicEntityDao.query(entityRootClz, query);
+    public <T> CriteriaQueryResult<T> query(final Class<T> entityClz, final CriteriaTransferObject query)throws ServiceException{
+        return persistenceManagerInvoker.operation(new IPersistentMethod<CriteriaQueryResult<T>, ServiceException>() {
+            @Override
+            public CriteriaQueryResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.query(entityClz, query);
+            }
+        });
     }
 
     @Override

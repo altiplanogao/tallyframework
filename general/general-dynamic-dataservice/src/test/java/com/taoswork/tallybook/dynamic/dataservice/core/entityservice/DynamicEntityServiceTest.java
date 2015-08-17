@@ -2,21 +2,18 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.*;
-import com.taoswork.tallybook.dynamic.dataservice.datamork.conf.DynamicConfig;
+import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
-import com.taoswork.tallybook.testframework.persistence.TestApplicationContext;
-import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
-import com.taoswork.tallybook.testframework.persistence.em.EntityManagerHolder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,13 +23,13 @@ import java.util.UUID;
  * Created by Gao Yuan on 2015/6/26.
  */
 public class DynamicEntityServiceTest {
-    static class EntityCreateHelper{
+    static class EntityCreateHelper {
         static int createPeopleEntityWith(DynamicEntityService dynamicEntityService,
-                                          String namePrefix, int postfixStartingIndex, int createAttempt){
+                                          String namePrefix, int postfixStartingIndex, int createAttempt) {
             int created = 0;
             try {
                 for (int i = 0; i < createAttempt; ++i) {
-                    String name = namePrefix + (int)(postfixStartingIndex + i);
+                    String name = namePrefix + (int) (postfixStartingIndex + i);
 
 //                    int expected = i + 1;
                     TPerson admin = new TPersonImpl();
@@ -44,7 +41,7 @@ public class DynamicEntityServiceTest {
                     TPerson admin2FromDb = dynamicEntityService.find(TPersonImpl.class, Long.valueOf(id));
 
                     Assert.assertEquals("Created and Read should be same: " + admin.getId() + " : " + adminFromDb.getId(),
-                            admin.getId(), adminFromDb.getId());
+                        admin.getId(), adminFromDb.getId());
 //                    Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
 
                     Assert.assertEquals(admin.getUuid(), adminFromDb.getUuid());
@@ -58,37 +55,30 @@ public class DynamicEntityServiceTest {
 
                     created++;
                 }
+            } catch (ServiceException exp) {
+                Assert.fail();
             } finally {
                 Assert.assertEquals(createAttempt, created);
             }
             return created;
         }
     }
-    private ApplicationContext applicationContext;
+
+    private IDataService dataService = null;
 
     @Before
     public void setup(){
-        applicationContext = TestApplicationContext.getApplicationContext(DynamicConfig.class);
+        dataService = new TallyMockupDataService();
     }
 
     @After
     public void teardown(){
-        applicationContext = null;
-    }
-
-    @Test
-    public void testGeneralService() {
-        EntityManagerHolder entityManagerHolder = (EntityManagerHolder) applicationContext.getBean(TestDbPersistenceConfig.ENTITY_MANAGER_HOLDER);
-        Assert.assertNotNull(entityManagerHolder);
-
-        EntityManager entityManager = entityManagerHolder.getEntityManager();
-        Assert.assertNotNull(entityManager);
-
+        dataService = null;
     }
 
     @Test
     public void testEntityMetadataAccess() {
-        DynamicEntityMetadataAccess dynamicEntityMetadataAccess = (DynamicEntityMetadataAccess)applicationContext.getBean(DynamicEntityMetadataAccess.COMPONENT_NAME);
+        DynamicEntityMetadataAccess dynamicEntityMetadataAccess = dataService.getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityMetadataAccess);
 
         Collection<Class> entityInterfaces = dynamicEntityMetadataAccess.getAllEntityInterfaces();
@@ -103,8 +93,8 @@ public class DynamicEntityServiceTest {
     }
 
     @Test
-    public void testDynamicEntityService1() {
-        DynamicEntityService dynamicEntityService = (DynamicEntityService) applicationContext.getBean(DynamicEntityService.COMPONENT_NAME);
+    public void testDynamicEntityService1() throws ServiceException{
+        DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
         String nameFieldName = "name";
@@ -147,8 +137,8 @@ public class DynamicEntityServiceTest {
         }
     }
     @Test
-    public void testDynamicEntityService() {
-        DynamicEntityService dynamicEntityService = (DynamicEntityService)applicationContext.getBean(DynamicEntityService.COMPONENT_NAME);
+    public void testDynamicEntityService()  throws ServiceException{
+        DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
         String nameFieldName = "name";
@@ -328,7 +318,5 @@ public class DynamicEntityServiceTest {
                 Assert.assertEquals(persons.getTotalCount().intValue(), createAttemptA);
             }
         }
-
-
     }
 }

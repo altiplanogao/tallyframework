@@ -44,7 +44,7 @@ public class TallyApiController  {
     public HttpEntity<?> getEntityList(
         HttpServletRequest request,
         @PathVariable(value="entityResName") String entityResName,
-        @RequestParam MultiValueMap<String, String> requestParams){
+        @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
 
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(

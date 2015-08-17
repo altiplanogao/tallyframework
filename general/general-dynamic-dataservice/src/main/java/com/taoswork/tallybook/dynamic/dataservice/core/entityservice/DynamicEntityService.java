@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +17,17 @@ public interface DynamicEntityService {
     public static final String COMPONENT_NAME = "DynamicEntityService";
 
     @Transactional
-    <T> T save(T entity);
+    <T> T save(T entity) throws ServiceException;
 
-    <T> T find(Class<T> entityClz, Object key);
-
-    @Transactional
-    <T> T update(T entity);
+    <T> T find(Class<T> entityClz, Object key) throws ServiceException;
 
     @Transactional
-    <T> void delete(T entity);
+    <T> T update(T entity) throws ServiceException;
 
-    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query);
+    @Transactional
+    <T> void delete(T entity) throws ServiceException;
+
+    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
 
     Class<?> getRootInstanceableEntityClass(Class<?> entityType);
 

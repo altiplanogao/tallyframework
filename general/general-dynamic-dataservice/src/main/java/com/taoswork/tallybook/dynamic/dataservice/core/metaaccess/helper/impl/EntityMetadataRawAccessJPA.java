@@ -3,6 +3,8 @@ package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.impl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.AEntityMetadataRawAccess;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import com.taoswork.tallybook.general.solution.time.IntervalSensitive;
 import org.apache.commons.collections.map.LRUMap;
 
@@ -16,26 +18,27 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/5/21.
  */
+
+@ThreadSafe
 public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
-
-    public static final Object LOCK_OBJECT = new Object();
-    public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE = new LRUMap(100, 1000);
-    public static final Map<Class<?>, Class<?>[]> POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS = new LRUMap(100, 1000);
-    protected IntervalSensitive cacheDecider;
-    private EntityManager entityManager;
-
-    private IntervalSensitive getCacheDecider() {
-        if (cacheDecider == null) {
-            Long cacheTtl = RuntimePropertiesPublisher.instance().getLong("cache.entity.dao.metadata.ttl", -1L);
-            cacheDecider = new IntervalSensitive(cacheTtl) {
-                @Override
-                protected void onExpireOccur() {
-                    clearCache();
-                }
-            };
-        }
-        return cacheDecider;
+    public EntityMetadataRawAccessJPA(){
+        Long cacheTtl = RuntimePropertiesPublisher.instance().getLong("cache.entity.dao.metadata.ttl", -1L);
+        cacheDecider = new IntervalSensitive(cacheTtl) {
+            @Override
+            protected void onExpireOccur() {
+                clearCache();
+            }
+        };
     }
+
+    public static final Object lock = new Object();
+    @GuardedBy("lock")
+    public static final Map<Class<?>, Class<?>[]> ENTITY_CACHE = new LRUMap(100, 1000);
+    @GuardedBy("lock")
+    public static final Map<Class<?>, Class<?>[]> ENTITY_CACHE_FOR_INSTANCEABLE = new LRUMap(100, 1000);
+    protected final IntervalSensitive cacheDecider;
+
+    private EntityManager entityManager;
 
     @Override
     public EntityManager getEntityManager() {
@@ -48,29 +51,29 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     }
 
     @Override
-    public Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz) {
-        return getAllInstanceableEntitiesFromCeiling(ceilingClz, true);
+    public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz) {
+        return getAllEntitiesFromCeiling(ceilingClz, true);
     }
 
     @Override
-    public Class<?>[] getAllInstanceableEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities) {
-        return getAllInstanceableEntitiesFromCeiling(ceilingClz,
-                includeUnqualifiedPolymorphicEntities, getCacheDecider().isIntervalExpired());
+    public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable) {
+        return getAllEntitiesFromCeiling(ceilingClz,
+            includeNotInstanceable, !cacheDecider.isIntervalExpired());
     }
 
-    private Class<?>[] getAllInstanceableEntitiesFromCeiling(
-            Class<?> ceilingClz,
-            boolean includeUnqualifiedPolymorphicEntities,
-            boolean useCache) {
+    private Class<?>[] getAllEntitiesFromCeiling(
+        Class<?> ceilingClz,
+        boolean includeNotInstanceable,
+        boolean useCache) {
         Metamodel mm = entityManager.getMetamodel();
         Set<EntityType<?>> entityTypes = mm.getEntities();
         Class<?>[] cache = null;
-        synchronized (LOCK_OBJECT) {
+        synchronized (lock) {
             if (useCache) {
-                if (includeUnqualifiedPolymorphicEntities) {
-                    cache = POLYMORPHIC_ENTITY_CACHE.get(ceilingClz);
+                if (includeNotInstanceable) {
+                    cache = ENTITY_CACHE.get(ceilingClz);
                 } else {
-                    cache = POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS.get(ceilingClz);
+                    cache = ENTITY_CACHE_FOR_INSTANCEABLE.get(ceilingClz);
                 }
             }
             if (cache == null) {
@@ -87,7 +90,7 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
 
                 for (int i = 0; i < sortedEntities.length; i++) {
                     Class<?> item = sortedEntities[i];
-                    if (includeUnqualifiedPolymorphicEntities) {
+                    if (includeNotInstanceable) {
                         filteredSortedEntities.add(sortedEntities[i]);
                     } else {
                         if (NativeClassHelper.isInstanceable(item)) {
@@ -101,10 +104,10 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
                 Class<?>[] filteredEntities = new Class<?>[filteredSortedEntities.size()];
                 filteredEntities = filteredSortedEntities.toArray(filteredEntities);
                 cache = filteredEntities;
-                if (includeUnqualifiedPolymorphicEntities) {
-                    POLYMORPHIC_ENTITY_CACHE.put(ceilingClz, filteredEntities);
+                if (includeNotInstanceable) {
+                    ENTITY_CACHE.put(ceilingClz, filteredEntities);
                 } else {
-                    POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS.put(ceilingClz, filteredEntities);
+                    ENTITY_CACHE_FOR_INSTANCEABLE.put(ceilingClz, filteredEntities);
                 }
             }
         }
@@ -151,8 +154,10 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
 //    }
 
     private void clearCache() {
-        POLYMORPHIC_ENTITY_CACHE.clear();
-        POLYMORPHIC_ENTITY_CACHE_WO_EXCLUSIONS.clear();
+        synchronized (lock) {
+            ENTITY_CACHE.clear();
+            ENTITY_CACHE_FOR_INSTANCEABLE.clear();
+        }
     }
 
     @Override

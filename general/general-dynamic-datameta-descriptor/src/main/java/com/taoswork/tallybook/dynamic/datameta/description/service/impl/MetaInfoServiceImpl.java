@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ import java.lang.reflect.Constructor;
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
+@ThreadSafe
 public class MetaInfoServiceImpl implements
         MetaInfoService {
     private static Logger LOGGER = LoggerFactory.getLogger(MetaInfoServiceImpl.class);

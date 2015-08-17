@@ -1,11 +1,14 @@
 package com.taoswork.tallybook.general.solution.autotree;
 
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/7/3.
  */
+@ThreadSafe
 public abstract class AutoTreeGenealogy<D> {
     public abstract D calcDirectSuper(D a, D referenceSuper);
 
@@ -16,7 +19,7 @@ public abstract class AutoTreeGenealogy<D> {
     public abstract boolean checkEqual(D a, D b);
 
     //returns a list: (a, b]
-    public List<D> superChain(D a, D b) {
+    public List<D> superChain(final D a, final D b) {
         List<D> list = new ArrayList<D>();
         if (checkEqual(a, b)) {
             return list;

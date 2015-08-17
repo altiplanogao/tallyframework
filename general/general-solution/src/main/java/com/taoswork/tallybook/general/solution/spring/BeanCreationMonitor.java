@@ -72,9 +72,10 @@ public class BeanCreationMonitor implements
             }
         });
 
-        if (fit != null) {
-            LOGGER.warn("Bean [" + beanName + "]@" + name + " already initialized: " + fit + ".");
-        }
+//          //comment following, because of too much warning for beans with 'scope = prototype'
+//        if (fit != null) {
+//            LOGGER.warn("Bean [" + beanName + "] @ " + name + " already initialized: " + fit + ".");
+//        }
         return bean;
     }
 

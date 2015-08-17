@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.classtree;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
+@ThreadSafe
 public class EntityClass implements Serializable {
     public final Class<?> clz;
     protected final boolean instanceable;

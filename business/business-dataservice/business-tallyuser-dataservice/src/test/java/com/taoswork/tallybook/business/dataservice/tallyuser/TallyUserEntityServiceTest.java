@@ -9,6 +9,7 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import org.junit.After;
@@ -91,7 +92,7 @@ public class TallyUserEntityServiceTest {
     }
 
     @Test
-    public void testDynamicEntityService(){
+    public void testDynamicEntityService() throws ServiceException {
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 

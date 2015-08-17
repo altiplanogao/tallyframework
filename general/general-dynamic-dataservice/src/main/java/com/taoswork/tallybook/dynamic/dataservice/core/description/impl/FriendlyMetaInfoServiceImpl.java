@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -18,6 +19,7 @@ import java.util.Locale;
 /**
  * Created by Gao Yuan on 2015/7/5.
  */
+@ThreadSafe
 public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendlyMetaInfoServiceImpl.class);
 

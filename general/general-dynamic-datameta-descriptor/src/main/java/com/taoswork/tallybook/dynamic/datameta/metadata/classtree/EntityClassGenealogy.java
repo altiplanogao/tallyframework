@@ -1,10 +1,12 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.classtree;
 
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeGenealogy;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
+@ThreadSafe
 public class EntityClassGenealogy extends AutoTreeGenealogy<EntityClass> {
 
     @Override

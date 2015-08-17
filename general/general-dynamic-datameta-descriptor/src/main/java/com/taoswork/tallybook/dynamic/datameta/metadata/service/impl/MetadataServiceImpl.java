@@ -13,6 +13,8 @@ import com.taoswork.tallybook.general.solution.cache.ehcache.CacheType;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
 import com.taoswork.tallybook.general.solution.cache.ehcache.ICacheMap;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
+import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
+import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,7 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
+@ThreadSafe
 public class MetadataServiceImpl implements MetadataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataService.class);
@@ -30,8 +33,10 @@ public class MetadataServiceImpl implements MetadataService {
     protected final FieldProcessor fieldProcessor;
 
     //Just cache for Class, not for EntityClassTree
+    @GuardedBy("lock")
     private ICacheMap<String, ClassMetadata> classMetadataCache =
-            CachedRepoManager.getCacheMap(CacheType.EhcacheCache);;
+            CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
+    private Object lock = new Object();
 
     public MetadataServiceImpl(){
         fieldProcessor = new FieldProcessor();
@@ -49,6 +54,7 @@ public class MetadataServiceImpl implements MetadataService {
             classProcessor.process(rootClz, classTreeMetadata);
         }
 
+        //Thread confinement object
         final List<ClassMetadata> metadatasTobeMerged = new ArrayList<ClassMetadata>();
 
         //Handle the fields in super classes
@@ -89,14 +95,16 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public ClassMetadata generateMetadata(Class clz) {
         String clzName = clz.getName();
-        ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);
-        if(null == classMetadata) {
-            classMetadata = new ClassMetadata();
-            classProcessor.process(clz, classMetadata);
-            //doGenerateClassMetadata(clz, classMetadata);
-            classMetadataCache.put(clzName, classMetadata);
+        synchronized (lock) {
+            ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);
+            if (null == classMetadata) {
+                classMetadata = new ClassMetadata();
+                classProcessor.process(clz, classMetadata);
+                //doGenerateClassMetadata(clz, classMetadata);
+                classMetadataCache.put(clzName, classMetadata);
+            }
+            return classMetadata;
         }
-        return classMetadata;
     }
 
 //    private void doGenerateClassMetadata(Class<?> clz, ClassMetadata classMetadata){

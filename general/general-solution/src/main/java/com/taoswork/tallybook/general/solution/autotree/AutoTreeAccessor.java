@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.general.solution.autotree;
 
+import com.taoswork.tallybook.general.solution.threading.annotations.NotThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public abstract class AutoTreeAccessor<D, N extends AutoTree<D>> extends AutoTreeAccessorSetting {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoTreeAccessor.class);
 
-    private AutoTreeGenealogy<D> genealogy = null;
+    private final AutoTreeGenealogy<D> genealogy;
 
     public abstract N createNode(D d);
 
@@ -23,6 +24,7 @@ public abstract class AutoTreeAccessor<D, N extends AutoTree<D>> extends AutoTre
         return genealogy;
     }
 
+    @NotThreadSafe(reason = "This method will update nodes' relationship")
     public N add(N existingNode, D newNodeData) {
         D existingNodeData = existingNode.data;
         if (genealogy.isSuperOf(existingNodeData, newNodeData)) {

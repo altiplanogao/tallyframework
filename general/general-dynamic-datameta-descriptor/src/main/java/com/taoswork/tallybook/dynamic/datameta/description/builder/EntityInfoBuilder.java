@@ -19,7 +19,11 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public class EntityInfoBuilder {
+public final class EntityInfoBuilder {
+
+    private EntityInfoBuilder() throws IllegalAccessException{
+        throw new IllegalAccessException("EntityInfoBuilder: Not instance-able object");
+    }
 
     public static EntityInfo build(EntityInsight entityInsight) {
         Map<String, FieldInfo> fields = entityInsight.getFields();
