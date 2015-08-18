@@ -140,7 +140,6 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
-        model.addAttribute("gridInfo", entityQueryResponse.getInfo().getDetail(EntityInfoType.PageGrid));
         String entityResultInJson = getObjectInJson(entityQueryResponse);
         model.addAttribute("queryResult", entityResultInJson);
 
