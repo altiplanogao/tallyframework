@@ -4,8 +4,8 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.Employee;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.EmployeeOwnedSetting;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.EmployeeStatus;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.Permission;
-import com.taoswork.tallybook.general.authority.domain.authority.permission.Role;
+import com.taoswork.tallybook.general.authority.core.authority.permission.Permission;
+import com.taoswork.tallybook.general.authority.core.authority.permission.Role;
 
 import java.util.Set;
 

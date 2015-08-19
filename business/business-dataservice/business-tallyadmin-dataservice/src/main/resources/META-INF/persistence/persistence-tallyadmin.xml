@@ -9,12 +9,12 @@
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl</class>
 
 
-        <class>com.taoswork.tallybook.general.authority.domain.authority.resource.impl.ResourceTypeImpl</class>
-        <class>com.taoswork.tallybook.general.authority.domain.authority.resource.impl.ResourceCriteriaImpl</class>
+        <class>com.taoswork.tallybook.general.authority.core.authority.resource.impl.ResourceTypeImpl</class>
+        <class>com.taoswork.tallybook.general.authority.core.authority.resource.impl.ResourceCriteriaImpl</class>
 
-        <class>com.taoswork.tallybook.general.authority.domain.authority.permission.impl.PermissionEntryImpl</class>
-        <class>com.taoswork.tallybook.general.authority.domain.authority.permission.impl.PermissionImpl</class>
-        <class>com.taoswork.tallybook.general.authority.domain.authority.permission.impl.RoleImpl</class>
+        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.PermissionEntryImpl</class>
+        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.PermissionImpl</class>
+        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.RoleImpl</class>
 
         <!--
         <class>AdminRoleImpl</class>

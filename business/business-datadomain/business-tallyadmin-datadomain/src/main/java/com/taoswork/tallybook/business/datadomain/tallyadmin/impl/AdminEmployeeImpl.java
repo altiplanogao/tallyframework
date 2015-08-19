@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.TallyAdminDataDomain;
-import com.taoswork.tallybook.general.authority.domain.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 
 import javax.persistence.*;
 

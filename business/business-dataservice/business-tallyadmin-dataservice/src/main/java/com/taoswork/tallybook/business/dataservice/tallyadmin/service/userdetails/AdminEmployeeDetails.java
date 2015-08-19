@@ -4,7 +4,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.FacetType;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.FacetDetails;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetails;
-import com.taoswork.tallybook.general.authority.domain.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

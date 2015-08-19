@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.general.authority.domain.authority.user.IPermissionUser;
+import com.taoswork.tallybook.general.authority.core.authority.user.IPermissionUser;
 
 import java.io.Serializable;
 
