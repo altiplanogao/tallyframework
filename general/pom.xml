@@ -23,5 +23,6 @@
         <module>general-datadomain-support</module>
         <module>general-dataservice-support</module>
         <module>general-web</module>
+        <module>general-authority</module>
     </modules>
 </project>

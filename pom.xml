@@ -165,6 +165,11 @@
       </dependency>
       <dependency>
         <groupId>com.taoswork.tallybook</groupId>
+        <artifactId>general-authority</artifactId>
+        <version>${tallybook.framework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.taoswork.tallybook</groupId>
         <artifactId>general-authority-support</artifactId>
         <version>${tallybook.framework.version}</version>
       </dependency>
