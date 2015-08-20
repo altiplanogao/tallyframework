@@ -1,13 +1,11 @@
 package com.taoswork.tallybook.general.authority.core.engine;
 
-import com.taoswork.tallybook.general.authority.core.ISecurityVerifier;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceInstance;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceProtection;
 import com.taoswork.tallybook.general.authority.core.resource.ResourceFitting;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
-public class SecuredResourceManager {
+public final class SecuredResourceManager {
     private Map<String, IResourceProtection> resourceEntityRegistry = new ConcurrentHashMap<String, IResourceProtection>();
 
     public SecuredResourceManager(){}
@@ -79,4 +77,5 @@ public class SecuredResourceManager {
             protection.getProtectionMode(),
             matchingFilter, unmatchedFilter);
     }
+
 }

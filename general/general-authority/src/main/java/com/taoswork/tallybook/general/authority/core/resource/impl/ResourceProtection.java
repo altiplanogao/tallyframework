@@ -1,6 +1,8 @@
-package com.taoswork.tallybook.general.authority.core.resource;
+package com.taoswork.tallybook.general.authority.core.resource.impl;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
+import com.taoswork.tallybook.general.authority.core.resource.IResourceProtection;
 
 import java.util.Collection;
 import java.util.Map;
@@ -24,7 +26,7 @@ public final class ResourceProtection implements IResourceProtection {
      */
     private boolean masterControlled = true;
 
-    private Map<String, IResourceFilter> filterMap = new ConcurrentHashMap<String, IResourceFilter>();
+    private ConcurrentHashMap<String, IResourceFilter> filterMap = new ConcurrentHashMap<String, IResourceFilter>();
 
     public ResourceProtection(String resourceEntity) {
         this.resourceEntity = resourceEntity;

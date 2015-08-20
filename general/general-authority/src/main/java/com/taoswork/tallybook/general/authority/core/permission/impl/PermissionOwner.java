@@ -20,7 +20,7 @@ public class PermissionOwner implements IPermissionOwner {
     @Override
     public IPermissionOwner addEntityPermission(IEntityPermission... entityPermissions){
         for(IEntityPermission perm : entityPermissions){
-            entityPermissionMap.put(perm.resourceEntity(), perm);
+            entityPermissionMap.put(perm.getResourceEntity(), perm);
         }
         return this;
     }

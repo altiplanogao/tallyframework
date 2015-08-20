@@ -26,11 +26,6 @@ public class DocTagFilter implements IResourceFilter {
     }
 
     @Override
-    public boolean isMaster() {
-        return false;
-    }
-
-    @Override
     public boolean isMatch(IResourceInstance instance) {
         GuardedDoc doc = ((GuardedDocInstance)instance).getDomainObject();
         if(doc == null)

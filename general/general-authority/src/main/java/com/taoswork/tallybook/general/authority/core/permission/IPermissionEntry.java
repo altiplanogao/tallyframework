@@ -3,7 +3,8 @@ package com.taoswork.tallybook.general.authority.core.permission;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 /**
- * Created by Gao Yuan on 2015/8/19.
+ * IPermissionEntry, owned by user, directly or indirectly.
+ * And always has a corresponding IResourceFilter in SecuredResourceManager (mapped by filter's code)
  */
 public interface IPermissionEntry {
 

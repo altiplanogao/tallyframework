@@ -9,20 +9,22 @@ import java.util.Collection;
  * EntityPermission, owned by user, directly or indirectly. (Grouped by resourceEntity)
  */
 public interface IEntityPermission {
-    public String resourceEntity();
+    public String getResourceEntity();
 
     Access getMasterAccess();
 
     void setMasterAccess(Access masterAccess);
 
     /**
-     * Merge all the access in AuthorityOnFilter,
+     * Merge all the access in IEntityPermission,
      * Used for quick check.
      * @return
      */
-    public Access mergedAccess();
+    public Access getQuickCheckAccess();
 
-    public Access accessByFilters(Collection<String> filterCodes, boolean masterControlled, ProtectionMode protectionMode);
+    public Access getAccessByFilters(Collection<String> filterCodes, boolean masterControlled, ProtectionMode protectionMode);
+
+    Access getAccessByFilter(String filterCode);
 
     IEntityPermission addEntries(IPermissionEntry... permEntries);
 }
