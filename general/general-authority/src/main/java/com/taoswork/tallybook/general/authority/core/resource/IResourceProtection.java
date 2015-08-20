@@ -9,23 +9,23 @@ import java.util.Collection;
  */
 public interface IResourceProtection {
 
-    public String getResourceEntity();
+    String getResourceEntity();
 
     void setCategory(String category);
 
-    public String getCategory();
+    String getCategory();
 
     void setProtectionMode(ProtectionMode protectionMode);
 
     ProtectionMode getProtectionMode();
 
-    public void setFriendlyName(String friendlyName);
+    void setFriendlyName(String friendlyName);
 
-    public String getFriendlyName();
+    String getFriendlyName();
 
     void setMasterControlled(boolean isMasterControlled);
 
-    public boolean isMasterControlled();
+    boolean isMasterControlled();
 
     Collection<IResourceFilter> getFilters();
 

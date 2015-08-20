@@ -10,7 +10,7 @@ public interface IPermissionEntry {
 
     void merge(IPermissionEntry permissionEntry);
 
-    public String getFilterCode();
+    String getFilterCode();
 
-    public Access getAccess();
+    Access getAccess();
 }

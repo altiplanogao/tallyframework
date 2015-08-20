@@ -11,9 +11,9 @@ public interface IResourceFilter {
      * an unique code for the resourceEntity;
      * @return
      */
-    public String getCode();
+    String getCode();
 
-    public String getFriendlyName();
+    String getFriendlyName();
 
     boolean isMatch(IResourceInstance instance);
 

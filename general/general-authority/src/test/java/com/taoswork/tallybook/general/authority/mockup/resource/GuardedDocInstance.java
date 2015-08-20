@@ -12,7 +12,7 @@ public class GuardedDocInstance implements IResourceInstance {
         domainObject = doc;
     }
     @Override
-    public String resourceEntity() {
+    public String getResourceEntity() {
         return TypesEnums.DOC;
     }
 

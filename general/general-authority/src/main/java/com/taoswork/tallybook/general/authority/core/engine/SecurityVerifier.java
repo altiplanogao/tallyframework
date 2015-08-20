@@ -36,7 +36,7 @@ public class SecurityVerifier implements ISecurityVerifier{
         if(resources.length == 0){
             throw new IllegalArgumentException();
         }
-        String resourceEntity = resources[0].resourceEntity();
+        String resourceEntity = resources[0].getResourceEntity();
         IEntityPermission entityPermission = perms.getEntityPermission(resourceEntity);
 
         ResourceFitting fitting = null;

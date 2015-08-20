@@ -28,7 +28,7 @@ public final class SecuredResourceManager {
     }
 
     public ResourceFitting getResourceFitting(IResourceInstance resource) {
-        String resourceEntity = resource.resourceEntity();
+        String resourceEntity = resource.getResourceEntity();
         IResourceProtection protection = getResourceProtection(resourceEntity);
 
         List<String> matchingFilter = new ArrayList<String>();
@@ -50,7 +50,7 @@ public final class SecuredResourceManager {
         if(resources.length == 0){
             throw new IllegalArgumentException();
         }
-        String resourceEntity = resources[0].resourceEntity();
+        String resourceEntity = resources[0].getResourceEntity();
         IResourceProtection protection = getResourceProtection(resourceEntity);
 
         List<String> matchingFilter = new ArrayList<String>();

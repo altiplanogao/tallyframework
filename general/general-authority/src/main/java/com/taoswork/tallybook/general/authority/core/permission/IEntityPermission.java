@@ -9,7 +9,7 @@ import java.util.Collection;
  * EntityPermission, owned by user, directly or indirectly. (Grouped by resourceEntity)
  */
 public interface IEntityPermission {
-    public String getResourceEntity();
+    String getResourceEntity();
 
     Access getMasterAccess();
 
@@ -20,9 +20,9 @@ public interface IEntityPermission {
      * Used for quick check.
      * @return
      */
-    public Access getQuickCheckAccess();
+    Access getQuickCheckAccess();
 
-    public Access getAccessByFilters(Collection<String> filterCodes, boolean masterControlled, ProtectionMode protectionMode);
+    Access getAccessByFilters(Collection<String> filterCodes, boolean masterControlled, ProtectionMode protectionMode);
 
     Access getAccessByFilter(String filterCode);
 
