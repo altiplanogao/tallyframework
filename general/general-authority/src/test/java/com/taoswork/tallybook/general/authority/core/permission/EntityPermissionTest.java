@@ -53,7 +53,7 @@ public class EntityPermissionTest {
             docPerAbcdExp.addEntries(aClassQU, bClassDC, cClassR, dClassC);
         }
         {
-            IEntityPermission docPerAbcMerged = docPerAbc.clone().merge(docPerAbd);
+            IEntityPermission docPerAbcMerged = new EntityPermission(docPerAbc).merge(docPerAbd);
             Assert.assertEquals(docPerAbcMerged, docPerAbcdExp);
         }
 
@@ -66,7 +66,7 @@ public class EntityPermissionTest {
                 docPerAbd.setMasterAccess(Access.Create);
                 docPerAbd.addEntries(aClassQ, cClassC);
             }
-            IEntityPermission docPerAbcMerged = docPerAbc.clone().merge(picPerAc);
+            IEntityPermission docPerAbcMerged = new EntityPermission(docPerAbc).merge(picPerAc);
             Assert.assertEquals(docPerAbcMerged, docPerAbcdExp);
 
             Assert.fail();

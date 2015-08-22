@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionEntry;
+import com.taoswork.tallybook.general.authority.core.permission.wirte.IEntityPermissionWrite;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -18,8 +19,11 @@ import java.util.function.Function;
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
-public final class EntityPermission implements IEntityPermission {
+public final class EntityPermission implements IEntityPermissionWrite {
     private final String resourceEntity;
+    /**
+     * Key is IPermissionEntry.getFilterCode()
+     */
     private final ConcurrentHashMap<String, IPermissionEntry> permissionEntries = new ConcurrentHashMap<String, IPermissionEntry>();
     private Access masterAccess = Access.None;
 
@@ -29,6 +33,11 @@ public final class EntityPermission implements IEntityPermission {
 
     public EntityPermission(String resourceEntity) {
         this.resourceEntity = resourceEntity;
+    }
+
+    public EntityPermission(IEntityPermission that) {
+        this.resourceEntity = that.getResourceEntity();
+        this.merge(that);
     }
 
     @Override
@@ -160,35 +169,40 @@ public final class EntityPermission implements IEntityPermission {
     }
 
     @Override
-    public IEntityPermission merge(IEntityPermission entityPermission) {
-        if(entityPermission == null)
+    public IEntityPermissionWrite merge(IEntityPermission that) {
+        if(that == null)
             return this;
-        if (!resourceEntity.equals(entityPermission.getResourceEntity())) {
+        if (!resourceEntity.equals(that.getResourceEntity())) {
             throw new IllegalArgumentException();
         }
         synchronized (lock) {
-            EntityPermission epthat = (EntityPermission) entityPermission;
+            EntityPermission epthat = (EntityPermission) that;
+            final  EntityPermission epthis = this;
             if (epthat == null) {
                 throw new IllegalStateException("Need to implement !!");
             }
 
             masterAccess = masterAccess.merge(epthat.masterAccess);
             quickCheckAccess = Access.None;
+
+            //copy that, into this
             epthat.permissionEntries.forEach(new BiConsumer<String, IPermissionEntry>() {
                 @Override
-                public void accept(String s, final IPermissionEntry permissionEntryInThat) {
-                    final IPermissionEntry thatPeClone = permissionEntryInThat.clone();
-                    permissionEntries.computeIfPresent(s, new BiFunction<String, IPermissionEntry, IPermissionEntry>() {
+                public void accept(String s, final IPermissionEntry entryInThat) {
+
+                    epthis.permissionEntries.computeIfPresent(s, new BiFunction<String, IPermissionEntry, IPermissionEntry>() {
                         @Override
-                        public IPermissionEntry apply(String s, IPermissionEntry permissionEntryInThis) {
-                            permissionEntryInThis.merge(thatPeClone);
-                            return permissionEntryInThis;
+                        public IPermissionEntry apply(String s, IPermissionEntry entryInThis) {
+                            PermissionEntry thisEntryClone = new PermissionEntry(entryInThis);
+                            thisEntryClone.merge(entryInThat);
+                            return thisEntryClone;
                         }
                     });
-                    permissionEntries.computeIfAbsent(s, new Function<String, IPermissionEntry>() {
+                    epthis.permissionEntries.computeIfAbsent(s, new Function<String, IPermissionEntry>() {
                         @Override
                         public IPermissionEntry apply(String s) {
-                            return thatPeClone;
+                            final IPermissionEntry thatEntryClone = entryInThat.clone();
+                            return thatEntryClone;
                         }
                     });
                 }

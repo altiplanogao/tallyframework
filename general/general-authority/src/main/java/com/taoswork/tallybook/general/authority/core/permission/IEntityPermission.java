@@ -29,7 +29,5 @@ public interface IEntityPermission {
 
     IEntityPermission addEntries(IPermissionEntry... permEntries);
 
-    IEntityPermission merge(IEntityPermission entityPermission);
-
     IEntityPermission clone();
 }

@@ -26,7 +26,7 @@ public class PermissionEntryTest {
 
         try {
             IPermissionEntry entryBU = new PermissionEntry("bbb", Access.Update);
-            IPermissionEntry entryManualARU = entryAR.clone().merge(entryBU);
+            IPermissionEntry entryManualARU = new PermissionEntry(entryAR).merge(entryBU);
             Assert.fail();
         } catch (IllegalArgumentException e) {
 
@@ -34,11 +34,8 @@ public class PermissionEntryTest {
             Assert.fail();
         }
 
-        IPermissionEntry entryManualARU = entryAR.clone().merge(entryAU);
+        IPermissionEntry entryManualARU = new PermissionEntry(entryAR).merge(entryAU);
         Assert.assertEquals(entryARU, entryManualARU);
-//        IPermissionEntry entryARU =
-//        IPermissionEntry clone = permissionEntry.clone();
-//        Assert.assertEquals(permissionEntry, clone);
     }
 
 }

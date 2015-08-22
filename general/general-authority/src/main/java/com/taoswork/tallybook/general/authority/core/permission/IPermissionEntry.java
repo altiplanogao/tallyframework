@@ -12,7 +12,5 @@ public interface IPermissionEntry {
 
     Access getAccess();
 
-    IPermissionEntry merge(IPermissionEntry permissionEntry);
-
     IPermissionEntry clone();
 }

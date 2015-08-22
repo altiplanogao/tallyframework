@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.general.authority.core.permission.authorities;
 
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
+import com.taoswork.tallybook.general.authority.core.permission.impl.EntityPermission;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -30,24 +31,27 @@ public class SimplePermissionAuthority implements ISimplePermissionAuthority {
 
     @Override
     public ISimplePermissionAuthority merge(ISimplePermissionAuthority that) {
-        SimplePermissionAuthority thatpo = (SimplePermissionAuthority) that;
-        if (thatpo == null) {
+        SimplePermissionAuthority pathat = (SimplePermissionAuthority) that;
+        final SimplePermissionAuthority pathis = this;
+        if (pathat == null) {
             throw new IllegalArgumentException("Need to implement");
         }
-        thatpo.entityPermissionMap.forEach(new BiConsumer<String, IEntityPermission>() {
+        pathat.entityPermissionMap.forEach(new BiConsumer<String, IEntityPermission>() {
             @Override
-            public void accept(String s, IEntityPermission entityPermissionInThat) {
-                final IEntityPermission epThatClone = entityPermissionInThat.clone();
-                entityPermissionMap.computeIfPresent(s, new BiFunction<String, IEntityPermission, IEntityPermission>() {
+            public void accept(String s, final IEntityPermission entityInThat) {
+
+                pathis.entityPermissionMap.computeIfPresent(s, new BiFunction<String, IEntityPermission, IEntityPermission>() {
                     @Override
-                    public IEntityPermission apply(String s, IEntityPermission entityPermission) {
-                        entityPermission.merge(epThatClone);
-                        return entityPermission;
+                    public IEntityPermission apply(String s, IEntityPermission entityInThis) {
+                        EntityPermission thisEntityClone = new EntityPermission(entityInThis);
+                        thisEntityClone.merge(entityInThat);
+                        return thisEntityClone;
                     }
                 });
-                entityPermissionMap.computeIfAbsent(s, new Function<String, IEntityPermission>() {
+                pathis.entityPermissionMap.computeIfAbsent(s, new Function<String, IEntityPermission>() {
                     @Override
                     public IEntityPermission apply(String s) {
+                        final IEntityPermission epThatClone = entityInThat.clone();
                         return epThatClone;
                     }
                 });
