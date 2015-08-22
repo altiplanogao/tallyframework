@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.general.authority.core.authority.permission;
 
+import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +12,7 @@ import java.util.Set;
  * User owns permission, and resource requires permission.
  *
  * Permission controls Resource access:
- * ResourceCriteria {@link com.taoswork.tallybook.general.authority.core.authority.resource.ResourceCriteria}
+ * ResourceCriteria {@link SecuredResourceFilter}
  * defines a kind of resource need to be secured.
  *
  * {@link PermissionEntry} defines the access permission for a specified kind of resource (specified by ResourceCriteria).
@@ -57,35 +59,11 @@ public interface Permission extends Serializable {
 
     void setScreenName(String screenName);
 
-    String getInsideName();
-
-    void setInsideName(String insideName);
-
-//    int getAccessSymbol();
-//
-//    void setAccessSymbol(int accessSymbol);
-
-    boolean isUserFriendly();
-
-    void setUserFriendly(boolean userFriendly);
-
     Long getOrganizationId();
 
     void setOrganizationId(Long organizationId);
 
-    List<Permission> getChildrenPermission();
-
-    void setChildrenPermission(List<Permission> childrenPermission);
-
     List<PermissionEntry> getAllEntries();
 
     void setAllEntries(List<PermissionEntry> allEntries);
-
-    List<Permission> getParentPermission();
-
-    void setParentPermission(List<Permission> parentPermission);
-
-    Set<Role> getAllRoles();
-
-    void setAllRoles(Set<Role> allRoles);
 }

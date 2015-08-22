@@ -9,6 +9,10 @@ import java.util.Collection;
  */
 public final class ResourceFitting {
 
+    public final boolean isMasterControlled;
+    public final ProtectionMode protectionMode;
+    public final Collection<String> matchingFilters;
+    public final Collection<String> unmatchedFilters;
     public ResourceFitting(boolean isMasterControlled,
                            ProtectionMode protectionMode,
                            Collection<String> matchingFilters,
@@ -18,9 +22,4 @@ public final class ResourceFitting {
         this.matchingFilters = matchingFilters;
         this.unmatchedFilters = unmatchedFilters;
     }
-
-    public final boolean isMasterControlled;
-    public final ProtectionMode protectionMode;
-    public final Collection<String> matchingFilters;
-    public final Collection<String> unmatchedFilters;
 }

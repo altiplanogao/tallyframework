@@ -11,7 +11,7 @@ import com.taoswork.tallybook.general.authority.mockup.resource.domain.GuardedDo
 public class DocTagFilter implements IResourceFilter {
     private final String tag;
 
-    public DocTagFilter(String tag){
+    public DocTagFilter(String tag) {
         this.tag = tag;
     }
 
@@ -21,14 +21,9 @@ public class DocTagFilter implements IResourceFilter {
     }
 
     @Override
-    public String getFriendlyName() {
-        return "Filter By Tag: " + tag;
-    }
-
-    @Override
     public boolean isMatch(IResourceInstance instance) {
-        GuardedDoc doc = ((GuardedDocInstance)instance).getDomainObject();
-        if(doc == null)
+        GuardedDoc doc = ((GuardedDocInstance) instance).getDomainObject();
+        if (doc == null)
             return false;
         return doc.hasTag(tag);
     }

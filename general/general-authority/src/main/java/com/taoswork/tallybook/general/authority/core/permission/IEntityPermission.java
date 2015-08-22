@@ -18,6 +18,7 @@ public interface IEntityPermission {
     /**
      * Merge all the access in IEntityPermission,
      * Used for quick check.
+     *
      * @return
      */
     Access getQuickCheckAccess();
@@ -27,4 +28,8 @@ public interface IEntityPermission {
     Access getAccessByFilter(String filterCode);
 
     IEntityPermission addEntries(IPermissionEntry... permEntries);
+
+    IEntityPermission merge(IEntityPermission entityPermission);
+
+    IEntityPermission clone();
 }

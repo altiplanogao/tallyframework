@@ -34,22 +34,35 @@ public final class Access {
         this.extended = extended;
     }
 
-    public static Access makeGeneralAccess(int ... accesses){
+    public static Access makeGeneralAccess(int... accesses) {
         int accAll = NONE;
-        for(int acc : accesses){
+        for (int acc : accesses) {
             accAll |= acc;
         }
         return new Access(accAll);
     }
-    public static Access makeExtendedAccess(int ... accesses){
+
+    public static Access makeExtendedAccess(int... accesses) {
         int accAll = EXTENDED_NONE;
-        for(int acc : accesses){
+        for (int acc : accesses) {
             accAll |= acc;
         }
         return new Access(NONE, accAll);
     }
 
-    public Access clone(){
+    public static int bitSet(int original, int mask, boolean value) {
+        return value ? original | mask : original & (~mask);
+    }
+
+    public static boolean bitCoversAny(int value, int mask) {
+        return (value & mask) != NONE;
+    }
+
+    public static boolean bitCoversAll(int value, int mask) {
+        return (value & mask) == mask;
+    }
+
+    public Access clone() {
         return new Access(this.general, this.extended);
     }
 
@@ -57,25 +70,25 @@ public final class Access {
         return general;
     }
 
-    public int getExtended(){
+    public int getExtended() {
         return extended;
     }
 
-    public int getExtended(int mask){
+    public int getExtended(int mask) {
         return extended & mask;
     }
 
-    public Access or(Access access){
+    public Access or(Access access) {
         return new Access(
             this.general | access.general,
             this.extended | access.extended);
     }
 
-    public Access merge(Access access){
+    public Access merge(Access access) {
         return or(access);
     }
 
-    public Access and(Access access){
+    public Access and(Access access) {
         return new Access(
             this.general & access.general,
             this.extended & access.extended);
@@ -88,77 +101,67 @@ public final class Access {
             this.extended ^ access.extended);
     }
 
-    public Access not(){
+    public Access not() {
         return not(0xFFFFFFFF);
     }
 
-    public Access not(int extendedMask){
+    public Access not(int extendedMask) {
         return new Access(
-            ((~this.general)& CRUDQ_ALL),
-            ((~this.extended) & extendedMask) );
+            ((~this.general) & CRUDQ_ALL),
+            ((~this.extended) & extendedMask));
     }
 
-    public Access generalPart(){
+    public Access generalPart() {
         return new Access(this.general);
     }
 
-    public Access extendedPart(){
+    public Access extendedPart() {
         return new Access(NONE, this.extended);
     }
 
-    public boolean hasGeneral(){
+    public boolean hasGeneral() {
         return (general & CRUDQ_ALL) != NONE;
     }
 
-    public boolean hasGeneral(int acc){
+    public boolean hasGeneral(int acc) {
         return (general & acc) == acc;
     }
 
-    public boolean hasAnyGeneral(int acc){
+    public boolean hasAnyGeneral(int acc) {
         return (general & acc) != NONE;
     }
 
-    public boolean hasExtended(){
+    public boolean hasExtended() {
         return extended != EXTENDED_NONE;
     }
 
-    public boolean hasExtended(int acc){
+    public boolean hasExtended(int acc) {
         return (extended & acc) == acc;
     }
 
-    public boolean hasAnyExtended(int acc){
+    public boolean hasAnyExtended(int acc) {
         return (extended & acc) != EXTENDED_NONE;
     }
 
-    public boolean hasAccess(Access acc){
+    public boolean hasAccess(Access acc) {
         boolean general = ((this.general & acc.general) == acc.general);
         boolean extend = ((this.extended & acc.extended) == acc.extended);
         return (extend && general);
     }
 
-    public boolean hasAnyAccess(Access acc){
+    public boolean hasAnyAccess(Access acc) {
         return ((this.general & acc.general) != NONE) ||
             ((this.extended & acc.extended) != EXTENDED_NONE);
     }
 
-    public Access generalSet(int mask, boolean value){
+    public Access generalSet(int mask, boolean value) {
         int general = value ? this.general | mask : this.general & (~mask);
         return new Access(general, this.extended);
     }
 
-    public Access extendedSet(int mask, boolean value){
+    public Access extendedSet(int mask, boolean value) {
         int extended = value ? this.extended | mask : this.extended & (~mask);
         return new Access(this.general, extended);
-    }
-
-    public static int bitSet(int original, int mask, boolean value){
-        return value ? original | mask : original & (~mask);
-    }
-    public static boolean bitCoversAny(int value, int mask){
-        return (value & mask) != NONE;
-    }
-    public static boolean bitCoversAll(int value, int mask){
-        return (value & mask) == mask;
     }
 
     @Override
@@ -183,13 +186,13 @@ public final class Access {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[Access: ");
-        if(hasGeneral(CREATE))sb.append("C");
-        if(hasGeneral(READ))sb.append("R");
-        if(hasGeneral(UPDATE))sb.append("U");
-        if(hasGeneral(DELETE))sb.append("D");
-        if(hasGeneral(QUERY))sb.append("Q");
+        if (hasGeneral(CREATE)) sb.append("C");
+        if (hasGeneral(READ)) sb.append("R");
+        if (hasGeneral(UPDATE)) sb.append("U");
+        if (hasGeneral(DELETE)) sb.append("D");
+        if (hasGeneral(QUERY)) sb.append("Q");
 
-        if(hasExtended()){
+        if (hasExtended()) {
             sb.append(" ex:" + this.extended);
         }
         return sb.append("]").toString();

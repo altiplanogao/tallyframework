@@ -38,52 +38,19 @@ public class PermissionImpl
     @PresentationField(order = 2, nameField = true)
     protected String screenName;
 
-    @Column(name = "INSIDE_NAME", nullable = false)
-    @PresentationField(visibility = Visibility.HIDDEN_ALL)
-    protected String insideName;
-
     @Column(name = "ORG_ID", nullable = false)
     @PresentationField(order = 3)
     protected Long organizationId;
 
-//    //The following access symbol is only used for screen display,
-//    //the real access control is defined in IPE.
-//    @Column(name = "ACCESS", nullable = false)
-//    protected int accessSymbol;
-
-    @Column(name = "FRIENDLY", nullable = false)
-    protected boolean userFriendly;
-
-    @ManyToMany(
+    @OneToMany(
             targetEntity = PermissionEntryImpl.class,
+            mappedBy = PermissionEntryImpl.OWN_M2O_PERM,
             fetch = FetchType.LAZY)
-    @JoinTable(name = TABLE_NAME_JOIN_PERM_PERMENTRY,
-            joinColumns = @JoinColumn(name = TABLE_NAME_JOIN_PERM_PERMENTRY_P_COL, referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = TABLE_NAME_JOIN_PERM_PERMENTRY_PE_COL, referencedColumnName = "ID")
-    )
     protected List<PermissionEntry> allEntries = new ArrayList<PermissionEntry>();
     public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            targetEntity = PermissionImpl.class)
-    @JoinTable(name = TABLE_NAME_JOIN_PERM_PERM,
-            joinColumns = @JoinColumn(name = TABLE_NAME_JOIN_PERM_PERM_PARENT_COL, referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = TABLE_NAME_JOIN_PERM_PERM_CHILD_COL, referencedColumnName = "ID"))
-    protected List<Permission> childrenPermission = new ArrayList<Permission>();
-    public static final String OWN_M2M_CHILD_PERMS = "childrenPermission";
-
-    @ManyToMany(
-            targetEntity = PermissionImpl.class,
-            mappedBy = PermissionImpl.OWN_M2M_CHILD_PERMS,
-            fetch = FetchType.LAZY)
-    protected List<Permission> parentPermission = new ArrayList<Permission>();
-
-    @ManyToMany(
-            targetEntity = RoleImpl.class,
-            mappedBy = RoleImpl.OWN_M2M_ALL_PERMS,
-            fetch = FetchType.LAZY)
-    protected Set<Role> allRoles = new HashSet<Role>();
-
+    @Version
+    protected Integer version;
 
     @Override
     public Long getId() {
@@ -106,36 +73,6 @@ public class PermissionImpl
     }
 
     @Override
-    public String getInsideName() {
-        return insideName;
-    }
-
-    @Override
-    public void setInsideName(String insideName) {
-        this.insideName = insideName;
-    }
-//
-//    @Override
-//    public int getAccessSymbol() {
-//        return accessSymbol;
-//    }
-//
-//    @Override
-//    public void setAccessSymbol(int accessSymbol) {
-//        this.accessSymbol = accessSymbol;
-//    }
-
-    @Override
-    public boolean isUserFriendly() {
-        return userFriendly;
-    }
-
-    @Override
-    public void setUserFriendly(boolean userFriendly) {
-        this.userFriendly = userFriendly;
-    }
-
-    @Override
     public Long getOrganizationId() {
         return organizationId;
     }
@@ -143,17 +80,6 @@ public class PermissionImpl
     @Override
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
-    }
-
-
-    @Override
-    public List<Permission> getChildrenPermission() {
-        return childrenPermission;
-    }
-
-    @Override
-    public void setChildrenPermission(List<Permission> childrenPermission) {
-        this.childrenPermission = childrenPermission;
     }
 
     @Override
@@ -166,23 +92,4 @@ public class PermissionImpl
         this.allEntries = allEntries;
     }
 
-    @Override
-    public List<Permission> getParentPermission() {
-        return parentPermission;
-    }
-
-    @Override
-    public void setParentPermission(List<Permission> parentPermission) {
-        this.parentPermission = parentPermission;
-    }
-
-    @Override
-    public Set<Role> getAllRoles() {
-        return allRoles;
-    }
-
-    @Override
-    public void setAllRoles(Set<Role> allRoles) {
-        this.allRoles = allRoles;
-    }
 }

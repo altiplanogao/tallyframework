@@ -17,6 +17,10 @@
             <artifactId>general-dynamic-datadomain</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-authority</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
         </dependency>

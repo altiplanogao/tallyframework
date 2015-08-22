@@ -103,24 +103,24 @@ public class EmployeeImpl implements Employee {
         this.setting = setting;
         return this;
     }
-
-    @Override
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    @Override
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
-    @Override
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+//
+//    @Override
+//    public Set<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    @Override
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
+//
+//    @Override
+//    public Set<Permission> getPermissions() {
+//        return permissions;
+//    }
+//
+//    @Override
+//    public void setPermissions(Set<Permission> permissions) {
+//        this.permissions = permissions;
+//    }
 }

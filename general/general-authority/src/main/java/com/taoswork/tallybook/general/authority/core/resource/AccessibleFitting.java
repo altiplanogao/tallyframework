@@ -6,6 +6,9 @@ import java.util.Collection;
  * Created by Gao Yuan on 2015/8/20.
  */
 public final class AccessibleFitting {
+    public final boolean inAnyMode;
+    public final Collection<String> passFilters;
+    public final Collection<String> blockFilters;
     public AccessibleFitting(
         Collection<String> passFilters,
         Collection<String> blockFilters) {
@@ -18,8 +21,4 @@ public final class AccessibleFitting {
         this.blockFilters = blockFilters;
         this.inAnyMode = inAnyMode;
     }
-
-    public final boolean inAnyMode;
-    public final Collection<String> passFilters;
-    public final Collection<String> blockFilters;
 }

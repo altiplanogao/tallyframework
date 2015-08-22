@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class ResourceAccessTest {
     @Test
-    public void general(){
+    public void general() {
         Access accessCuq = Access.makeGeneralAccess(Access.CREATE, Access.UPDATE, Access.QUERY);
         ResourceAccess resourceAccess = new ResourceAccess();
         resourceAccess.setCanCreate(true).setCanUpdate(true).setCanQuery(true);
@@ -25,7 +25,7 @@ public class ResourceAccessTest {
     }
 
     @Test
-    public void extended(){
+    public void extended() {
         Access rx = Access.makeExtendedAccess(FileResourceAccess.OPEN, FileResourceAccess.EXECUTE);
         FileResourceAccess fileResourceAccess = new FileResourceAccess();
         fileResourceAccess.setByAccess(rx);

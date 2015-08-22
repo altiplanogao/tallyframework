@@ -7,7 +7,7 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.core.authority.permission.Permission;
 import com.taoswork.tallybook.general.authority.core.authority.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.core.authority.permission.Role;
-import com.taoswork.tallybook.general.authority.core.authority.resource.ResourceCriteria;
+import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import com.taoswork.tallybook.general.solution.menu.Menu;
@@ -63,7 +63,7 @@ public class AdminMenuServiceImpl implements AdminMenuService {
                                     .addEntry(new MenuEntryImpl(ME_ORG_ICON, ME_ORG_KEY, getFriendlyName(Organization.class), Organization.class))
                     )
                     .add(new MenuEntryGroupImpl(MG_SECURITY_ICON, MG_SECURITY_KEY)
-                                    .addEntry(new MenuEntryImpl(ME_RES_CRITERIA_ICON, ME_RES_CRITERIA_KEY, getFriendlyName(ResourceCriteria.class), ResourceCriteria.class))
+                                    .addEntry(new MenuEntryImpl(ME_RES_CRITERIA_ICON, ME_RES_CRITERIA_KEY, getFriendlyName(SecuredResourceFilter.class), SecuredResourceFilter.class))
                                     .addEntry(new MenuEntryImpl(ME_PERM_ENTRY_ICON, ME_PERM_ENTRY_KEY, getFriendlyName(PermissionEntry.class), PermissionEntry.class))
                                     .addEntry(new MenuEntryImpl(ME_PERM_ICON, ME_PERM_KEY, getFriendlyName(Permission.class), Permission.class))
                                     .addEntry(new MenuEntryImpl(ME_ROLE_ICON, ME_ROLE_KEY, getFriendlyName(Role.class), Role.class))

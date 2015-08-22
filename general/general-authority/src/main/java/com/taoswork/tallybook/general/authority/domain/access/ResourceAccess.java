@@ -3,9 +3,12 @@ package com.taoswork.tallybook.general.authority.domain.access;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.Embeddable;
+
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
+@Embeddable
 public class ResourceAccess {
     public final static int NONE_EXTENDED = 0x00;
 
@@ -30,7 +33,7 @@ public class ResourceAccess {
         this.extended = access.getExtended();
     }
 
-    public final static ResourceAccess createByAccess(Access access){
+    public final static ResourceAccess createByAccess(Access access) {
         return new ResourceAccess(access);
     }
 
@@ -58,25 +61,13 @@ public class ResourceAccess {
         return canCreate;
     }
 
-    public final boolean isCanRead() {
-        return canRead;
-    }
-
-    public final boolean isCanUpdate() {
-        return canUpdate;
-    }
-
-    public final boolean isCanDelete() {
-        return canDelete;
-    }
-
-    public final boolean isCanQuery() {
-        return canQuery;
-    }
-
     public final ResourceAccess setCanCreate(boolean canCreate) {
         this.canCreate = canCreate;
         return this;
+    }
+
+    public final boolean isCanRead() {
+        return canRead;
     }
 
     public final ResourceAccess setCanRead(boolean canRead) {
@@ -84,9 +75,17 @@ public class ResourceAccess {
         return this;
     }
 
+    public final boolean isCanUpdate() {
+        return canUpdate;
+    }
+
     public final ResourceAccess setCanUpdate(boolean update) {
         this.canUpdate = update;
         return this;
+    }
+
+    public final boolean isCanDelete() {
+        return canDelete;
     }
 
     public final ResourceAccess setCanDelete(boolean canDelete) {
@@ -94,21 +93,25 @@ public class ResourceAccess {
         return this;
     }
 
+    public final boolean isCanQuery() {
+        return canQuery;
+    }
+
     public final ResourceAccess setCanQuery(boolean canQuery) {
         this.canQuery = canQuery;
         return this;
     }
-    
-    public final ResourceAccess setCanOperate(int mask, boolean can){
+
+    public final ResourceAccess setCanOperate(int mask, boolean can) {
         this.extended = Access.bitSet(this.extended, mask, can);
         return this;
     }
-    
-    public final boolean getCanOperate(int mask){
+
+    public final boolean getCanOperate(int mask) {
         return Access.bitCoversAll(this.extended, mask);
     }
 
-    public final ResourceAccess setCrudAll(boolean canAccess){
+    public final ResourceAccess setCrudAll(boolean canAccess) {
         setCanCreate(canAccess);
         setCanRead(canAccess);
         setCanUpdate(canAccess);
@@ -127,17 +130,21 @@ public class ResourceAccess {
         return this;
     }
 
-    public final Access getAsAccess(){
+    public final Access getAsAccess() {
         Access access = Access.makeExtendedAccess(this.extended);
-        if(canCreate){
+        if (canCreate) {
             access = access.or(Access.Create);
-        }if(canRead){
+        }
+        if (canRead) {
             access = access.or(Access.Read);
-        }if(canUpdate){
+        }
+        if (canUpdate) {
             access = access.or(Access.Update);
-        }if(canDelete){
+        }
+        if (canDelete) {
             access = access.or(Access.Delete);
-        }if(canQuery){
+        }
+        if (canQuery) {
             access = access.or(Access.Query);
         }
         return access;

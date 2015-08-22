@@ -13,10 +13,11 @@ public class MenuResourceAccess extends ResourceAccess {
     public static final Access visible = new Access(Access.NONE, VISIBLE);
     public static final Access all = new Access(Access.NONE, ALL);
 
-    public boolean isVisible(){
+    public boolean isVisible() {
         return super.getCanOperate(VISIBLE);
     }
-    public MenuResourceAccess setVisible(boolean value){
+
+    public MenuResourceAccess setVisible(boolean value) {
         super.setCanOperate(VISIBLE, value);
         return this;
     }

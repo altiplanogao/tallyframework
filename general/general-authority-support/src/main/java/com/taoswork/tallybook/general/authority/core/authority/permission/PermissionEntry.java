@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.general.authority.core.authority.permission;
 
-
-import com.taoswork.tallybook.general.authority.core.authority.access.ResourceAccess;
-import com.taoswork.tallybook.general.authority.core.authority.resource.ResourceCriteria;
+import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,9 +19,9 @@ public interface PermissionEntry
 
     PermissionEntry setName(String name);
 
-    ResourceCriteria getResourceCriteria();
+    SecuredResourceFilter getSecuredResourceFilter();
 
-    PermissionEntry setResourceCriteria(ResourceCriteria resourceCriteria);
+    PermissionEntry setSecuredResourceFilter(SecuredResourceFilter resourceCriteria);
 
     ResourceAccess getAccess();
 
@@ -32,7 +31,11 @@ public interface PermissionEntry
 
     PermissionEntry setOrganizationId(Long organizationId);
 
-    List<Permission> getPermissionsUsingThis();
+    String getResourceEntity();
 
-    PermissionEntry setPermissionsUsingThis(List<Permission> permissionsUsingThis);
+    void setResourceEntity(String resourceEntity);
+
+    Permission getPermission();
+
+    void setPermission(Permission permission);
 }

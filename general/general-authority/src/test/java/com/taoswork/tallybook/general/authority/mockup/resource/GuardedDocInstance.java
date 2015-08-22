@@ -8,9 +8,11 @@ import com.taoswork.tallybook.general.authority.mockup.resource.domain.GuardedDo
  */
 public class GuardedDocInstance implements IResourceInstance {
     private final GuardedDoc domainObject;
-    public GuardedDocInstance(GuardedDoc doc){
+
+    public GuardedDocInstance(GuardedDoc doc) {
         domainObject = doc;
     }
+
     @Override
     public String getResourceEntity() {
         return TypesEnums.DOC;
@@ -22,7 +24,7 @@ public class GuardedDocInstance implements IResourceInstance {
 
     @Override
     public String toString() {
-        return "" +domainObject;
+        return "" + domainObject;
 
     }
 }

@@ -17,24 +17,29 @@ public class FileResourceAccess extends ResourceAccess {
     public static final Access execute = new Access(Access.NONE, EXECUTE);
     public static final Access all = new Access(Access.NONE, ALL);
 
-    public boolean canOpen(){
+    public boolean canOpen() {
         return super.getCanOperate(OPEN);
     }
-    public FileResourceAccess setCanOpen(boolean value){
+
+    public FileResourceAccess setCanOpen(boolean value) {
         super.setCanOperate(OPEN, value);
         return this;
     }
-    public boolean canWrite(){
+
+    public boolean canWrite() {
         return super.getCanOperate(WRITE);
     }
-    public FileResourceAccess setCanWrite(boolean value){
+
+    public FileResourceAccess setCanWrite(boolean value) {
         super.setCanOperate(WRITE, value);
         return this;
     }
-    public boolean canExecute(){
+
+    public boolean canExecute() {
         return super.getCanOperate(EXECUTE);
     }
-    public FileResourceAccess setCanExecute(boolean value){
+
+    public FileResourceAccess setCanExecute(boolean value) {
         super.setCanOperate(EXECUTE, value);
         return this;
     }
