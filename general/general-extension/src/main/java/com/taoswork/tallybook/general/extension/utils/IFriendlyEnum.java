@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.authority.snif;
+package com.taoswork.tallybook.general.extension.utils;
 
 /**
  * Created by Gao Yuan on 2015/8/21.
