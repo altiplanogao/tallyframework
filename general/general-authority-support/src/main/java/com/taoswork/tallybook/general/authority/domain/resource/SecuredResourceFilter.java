@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.authority.core.authority.resource;
+package com.taoswork.tallybook.general.authority.domain.resource;
 
 import java.io.Serializable;
 

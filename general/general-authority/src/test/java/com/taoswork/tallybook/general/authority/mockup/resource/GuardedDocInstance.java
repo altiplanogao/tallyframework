@@ -1,21 +1,17 @@
 package com.taoswork.tallybook.general.authority.mockup.resource;
 
-import com.taoswork.tallybook.general.authority.core.resource.IResourceInstance;
 import com.taoswork.tallybook.general.authority.mockup.resource.domain.GuardedDoc;
+
+import java.io.Serializable;
 
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
-public class GuardedDocInstance implements IResourceInstance {
+public class GuardedDocInstance implements Serializable {
     private final GuardedDoc domainObject;
 
     public GuardedDocInstance(GuardedDoc doc) {
         domainObject = doc;
-    }
-
-    @Override
-    public String getResourceEntity() {
-        return TypesEnums.DOC;
     }
 
     public GuardedDoc getDomainObject() {
@@ -25,6 +21,5 @@ public class GuardedDocInstance implements IResourceInstance {
     @Override
     public String toString() {
         return "" + domainObject;
-
     }
 }

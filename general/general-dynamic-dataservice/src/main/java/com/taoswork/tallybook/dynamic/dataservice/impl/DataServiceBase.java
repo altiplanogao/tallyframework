@@ -6,6 +6,8 @@ import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDelegate;
 import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
@@ -233,6 +235,13 @@ public abstract class DataServiceBase implements IDataService {
     @Override
     public String getEntityInterfaceName(String resourceName) {
         return resourceNameToEntityInterface.getOrDefault(resourceName, null);
+    }
+
+    @Override
+    public void setSecurityVerifier(ISecurityVerifier securityVerifier) {
+        SecurityVerifierAgent securityVerifierAgent =
+            getService(SecurityVerifierAgent.COMPONENT_NAME);
+        securityVerifierAgent.setVerifier(securityVerifier);
     }
 
     protected final void setEntityResourceNameOverride(Class interfaceClz, String resourceName) {

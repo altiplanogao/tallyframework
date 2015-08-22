@@ -14,7 +14,7 @@ public interface IResourceFilter {
      */
     String getCode();
 
-    boolean isMatch(IResourceInstance instance);
+    boolean isMatch(Object instance);
 
     String unMatchQueryInterrupter();
 }

@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.general.authority.core.basic;
 
-import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.mockup.accessor.FileResourceAccess;
 import org.junit.Assert;
 import org.junit.Test;

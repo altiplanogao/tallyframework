@@ -1,19 +1,63 @@
 package com.taoswork.tallybook.general.authority.core.engine;
 
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/5.
  */
 public class PermissionEngine {
     private static final Logger LOGGER = LoggerFactory.getLogger(PermissionEngine.class);
+    private static final class ResourceProtectionMaker{
+        public static ResourceProtection make(SecuredResource resource){
+            ResourceProtection resourceProtection = new ResourceProtection(resource.getResourceEntity(), resource.getVersion());
+            resourceProtection.setFriendlyName(resource.getFriendlyName())
+                .setCategory(resource.getCategory())
+                .setMasterControlled(resource.isMasterControlled())
+                .setProtectionMode(resource.getProtectionMode());
+
+            //TODO : ResourceProtection.filterNamespace need tobe handled
+            //TODO: Filters need to be set
+
+            return resourceProtection;
+        }
+    }
+
+    protected EntityManager em;
+
+    public EntityManager getEm() {
+        return em;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    private void buildResources(Long organizationId){
+        TypedQuery<SecuredResource> query = em.createNamedQuery("SecuredResource.findByOrg", SecuredResource.class);
+        query.setParameter("organization", organizationId);
+        List<SecuredResource> resources = query.getResultList();
+
+        ResourceProtectionManager resourceProtectionManager = new ResourceProtectionManager();
+        for(SecuredResource resource : resources){
+            if (resource.isMainLine()){
+                resourceProtectionManager.setVersion(resource.getVersion());
+                continue;
+            }else {
+                ResourceProtection resourceProtection = ResourceProtectionMaker.make(resource);
+                resourceProtectionManager.registerResourceProtection(resourceProtection);
+          }
+        }
+      // em.createQuery()
+    }
 
     private final Map<String, Set<SecuredResourceFilter>> resourceTypesMapping = new HashMap<String, Set<SecuredResourceFilter>>();
 //    private final Map<Long, >
@@ -28,32 +72,5 @@ public class PermissionEngine {
         return resourceCriteriaSet;
     }
 
-    public void registerResourceCriteria(SecuredResourceFilter resourceCriteria){
-        Set<SecuredResourceFilter> resourceCriteriaSet = getResourceCriteriaSet(resourceCriteria.getSecuredResource().getResourceEntity());
-        resourceCriteriaSet.add(resourceCriteria);
-    }
-//
-//    public List<ResourceCriteria> findMatchingCriteria(String resourceType, Object entity){
-//        List<ResourceCriteria> result = new ArrayList<ResourceCriteria>();
-//        Set<ResourceCriteria> resourceCriteriaSet = getResourceCriteriaSet(resourceType);
-//        for (ResourceCriteria securedResourceFilter : resourceCriteriaSet){
-//            if(securedResourceFilter.isRootTypeCriteria()){
-//                result.add(securedResourceFilter);
-//            } else {
-//                IResourceFilter filter = FilterHelper.createFilter(resourceType, securedResourceFilter.filter, securedResourceFilter.filterParameter);
-//                if(filter == null){
-//                    LOGGER.error("[IMPORTANT] Failed to initialize resourceFilter '{}'. But we still treat the resource as a match, in order to avoid permission leak");
-//                    result.add(securedResourceFilter);
-//                }else {
-//                    if(filter.isMatch(entity)){
-//                        result.add(securedResourceFilter);
-//                    }
-//                }
-//            }
-//        }
-//
-//        return result;
-//    }
-//
 
 }

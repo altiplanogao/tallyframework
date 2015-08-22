@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface IDataService {
     String getEntityResourceName(String interfaceName);
 
     String getEntityInterfaceName(String resourceName);
+
+    void setSecurityVerifier(ISecurityVerifier securityVerifier);
 }

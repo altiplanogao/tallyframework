@@ -14,6 +14,11 @@ public final class ResourceProtection implements IResourceProtection {
     private String friendlyName;
     private final String resourceEntity;
     private String category;
+
+    /**
+     * Restrict filter-types could be used for this resourceEntity
+     */
+    private String filterNamespace;
     /**
      * masterControlled, see EntityPermission.masterAccess
      * <p>
@@ -27,8 +32,15 @@ public final class ResourceProtection implements IResourceProtection {
 
     private ConcurrentHashMap<String, IResourceFilter> filterMap = new ConcurrentHashMap<String, IResourceFilter>();
 
+    private final int version;
+
     public ResourceProtection(String resourceEntity) {
+        this(resourceEntity, 0);
+    }
+
+    public ResourceProtection(String resourceEntity, int version) {
         this.resourceEntity = resourceEntity;
+        this.version = version;
     }
 
     @Override
@@ -37,8 +49,9 @@ public final class ResourceProtection implements IResourceProtection {
     }
 
     @Override
-    public void setFriendlyName(String friendlyName) {
+    public IResourceProtection setFriendlyName(String friendlyName) {
         this.friendlyName = friendlyName;
+        return this;
     }
 
     @Override
@@ -52,8 +65,19 @@ public final class ResourceProtection implements IResourceProtection {
     }
 
     @Override
-    public void setCategory(String category) {
+    public String getFilterNamespace() {
+        return filterNamespace;
+    }
+
+    @Override
+    public void setFilterNamespace(String filterNamespace) {
+        this.filterNamespace = filterNamespace;
+    }
+
+    @Override
+    public IResourceProtection setCategory(String category) {
         this.category = category;
+        return this;
     }
 
     @Override
@@ -62,8 +86,9 @@ public final class ResourceProtection implements IResourceProtection {
     }
 
     @Override
-    public void setMasterControlled(boolean isMasterControlled) {
+    public IResourceProtection setMasterControlled(boolean isMasterControlled) {
         this.masterControlled = isMasterControlled;
+        return this;
     }
 
     @Override
@@ -72,8 +97,14 @@ public final class ResourceProtection implements IResourceProtection {
     }
 
     @Override
-    public void setProtectionMode(ProtectionMode protectionMode) {
+    public IResourceProtection setProtectionMode(ProtectionMode protectionMode) {
         this.protectionMode = protectionMode;
+        return this;
+    }
+
+    @Override
+    public int version() {
+        return version;
     }
 
     @Override

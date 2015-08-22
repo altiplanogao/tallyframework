@@ -1,7 +1,7 @@
-package com.taoswork.tallybook.general.authority.core.authority.resource.impl;
+package com.taoswork.tallybook.general.authority.domain.resource.impl;
 
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResource;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;

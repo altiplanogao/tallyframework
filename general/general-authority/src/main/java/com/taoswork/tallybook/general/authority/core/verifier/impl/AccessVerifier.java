@@ -4,23 +4,37 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.resource.*;
-import com.taoswork.tallybook.general.authority.core.verifier.ISecurityVerifier;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionMapping;
+import com.taoswork.tallybook.general.authority.core.verifier.IAccessVerifier;
+import com.taoswork.tallybook.general.authority.core.verifier.IMappedAccessVerifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
-public class SecurityVerifier implements ISecurityVerifier {
+public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     private ResourceProtectionManager securedResourceManager;
+    private final Map<_SimulatedResourceAccess, IResourceProtectionMapping> simulatedResourceProtections
+        = new ConcurrentHashMap<_SimulatedResourceAccess, IResourceProtectionMapping>();
 
-    public SecurityVerifier(ResourceProtectionManager securedResourceManager) {
+    public AccessVerifier(ResourceProtectionManager securedResourceManager) {
         this.securedResourceManager = securedResourceManager;
     }
 
     @Override
+    public IMappedAccessVerifier registerResourceMapping(ResourceProtectionMapping protection){
+        simulatedResourceProtections.put(new _SimulatedResourceAccess(protection), protection);
+        return this;
+    }
+
+    @Override
     public boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity) {
+        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
         IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
         if (entityPermission == null) {
             return false;
@@ -32,18 +46,19 @@ public class SecurityVerifier implements ISecurityVerifier {
     }
 
     @Override
-    public boolean canAccess(IPermissionAuthority auth, Access access, IResourceInstance... resources) {
-        if (resources.length == 0) {
+    public boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity, Object... instances) {
+        if (instances.length == 0) {
             throw new IllegalArgumentException();
         }
-        String resourceEntity = resources[0].getResourceEntity();
+
+        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
         IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
 
         ResourceFitting fitting = null;
-        if (resources.length == 1) {
-            fitting = securedResourceManager.getResourceFitting(resources[0]);
+        if (instances.length == 1) {
+            fitting = securedResourceManager.getResourceFitting(resourceEntity, instances[0]);
         } else {
-            fitting = securedResourceManager.getResourceFitting(true, resources);
+            fitting = securedResourceManager.getResourceFitting(true, resourceEntity, instances);
         }
         Access mergedAccess = entityPermission.getAccessByFilters(fitting.matchingFilters,
             fitting.isMasterControlled, fitting.protectionMode);
@@ -52,6 +67,7 @@ public class SecurityVerifier implements ISecurityVerifier {
 
     @Override
     public AccessibleFitting calcAccessibleFitting(IPermissionAuthority auth, Access access, String resourceEntity) {
+        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
         IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
         if (entityPermission == null) {
             return null;
@@ -127,6 +143,31 @@ public class SecurityVerifier implements ISecurityVerifier {
                         }
                     }
                 }
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+
+    @Override
+    public boolean canAccessMappedResource(IPermissionAuthority auth, Access access, String virtualResource) {
+        _SimulatedResourceAccess simulatedResourceAccess = new _SimulatedResourceAccess(virtualResource, access);
+        IResourceProtectionMapping protection = this.simulatedResourceProtections.getOrDefault(simulatedResourceAccess, null);
+        if (protection == null)
+            return false;
+
+        IEntityPermission entityPermission = auth.getEntityPermission(protection.getTrusteeResourceEntity());
+        if (entityPermission == null) {
+            return false;
+        }
+
+        //We don't know the exact purpose, so just use the merged access;
+        Access mergedAccess = entityPermission.getQuickCheckAccess();
+        switch (protection.getProtectionMode()){
+            case FitAll:
+                return mergedAccess.hasAccess(protection.getTrusteeAccess());
+            case FitAny:
+                return mergedAccess.hasAnyAccess(protection.getTrusteeAccess());
             default:
                 throw new IllegalStateException();
         }

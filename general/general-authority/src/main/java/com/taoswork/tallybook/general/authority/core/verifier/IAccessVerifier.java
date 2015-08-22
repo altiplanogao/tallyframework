@@ -4,15 +4,14 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.resource.AccessibleFitting;
-import com.taoswork.tallybook.general.authority.core.resource.IResourceInstance;
 
 /**
  * Created by Gao Yuan on 2015/8/19.
  */
-public interface ISecurityVerifier {
+public interface IAccessVerifier {
     boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity);
 
-    boolean canAccess(IPermissionAuthority auth, Access access, IResourceInstance... resources);
+    boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity, Object... resources);
 
     AccessibleFitting calcAccessibleFitting(IPermissionAuthority auth, Access access, String resourceEntity);
 

@@ -1,7 +1,7 @@
-package com.taoswork.tallybook.general.authority.core.authority.permission.impl;
+package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
-import com.taoswork.tallybook.general.authority.core.authority.permission.Permission;
-import com.taoswork.tallybook.general.authority.core.authority.permission.Role;
+import com.taoswork.tallybook.general.authority.domain.permission.Permission;
+import com.taoswork.tallybook.general.authority.domain.permission.Role;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 

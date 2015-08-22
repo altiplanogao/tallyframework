@@ -1,10 +1,9 @@
-package com.taoswork.tallybook.general.authority.core.authority.permission;
+package com.taoswork.tallybook.general.authority.domain.permission;
 
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Permission is used to control resource (Resource is described by type ProtectedResource)

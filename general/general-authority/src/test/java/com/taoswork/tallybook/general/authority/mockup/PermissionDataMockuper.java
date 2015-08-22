@@ -3,17 +3,16 @@ package com.taoswork.tallybook.general.authority.mockup;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
-import com.taoswork.tallybook.general.authority.core.permission.IPermissionEntry;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
+import com.taoswork.tallybook.general.authority.core.permission.IPermissionEntry;
 import com.taoswork.tallybook.general.authority.core.permission.authorities.ISimplePermissionAuthority;
+import com.taoswork.tallybook.general.authority.core.permission.authorities.SimplePermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.permission.impl.EntityPermission;
 import com.taoswork.tallybook.general.authority.core.permission.impl.PermissionEntry;
-import com.taoswork.tallybook.general.authority.core.permission.authorities.SimplePermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
-import com.taoswork.tallybook.general.authority.core.resource.IResourceInstance;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceProtection;
-import com.taoswork.tallybook.general.authority.core.resource.ResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.mockup.resource.GuardedDocInstance;
 import com.taoswork.tallybook.general.authority.mockup.resource.domain.GuardedDoc;
 import com.taoswork.tallybook.general.authority.mockup.resource.filters.doc.DocTagFilter;
@@ -40,17 +39,17 @@ public class PermissionDataMockuper {
     public final IPermissionEntry accessB;
     public final IPermissionEntry accessC;
     public final IPermissionEntry accessD;
-    public final IResourceInstance docG;
-    public final IResourceInstance docA;
-    public final IResourceInstance docC;
-    public final IResourceInstance docAB;
-    public final IResourceInstance docAC;
-    public final IResourceInstance docCD;
-    public final IResourceInstance docABC;
-    public final IResourceInstance docACD;
-    public final IResourceInstance docABCD;
-    public final IResourceInstance docE;
-    public final IResourceInstance docABCDE;
+    public final GuardedDocInstance docG;
+    public final GuardedDocInstance docA;
+    public final GuardedDocInstance docC;
+    public final GuardedDocInstance docAB;
+    public final GuardedDocInstance docAC;
+    public final GuardedDocInstance docCD;
+    public final GuardedDocInstance docABC;
+    public final GuardedDocInstance docACD;
+    public final GuardedDocInstance docABCD;
+    public final GuardedDocInstance docE;
+    public final GuardedDocInstance docABCDE;
     public final IPermissionAuthority authN;
     public final IPermissionAuthority authG;
     public final IPermissionAuthority authAB;
@@ -93,7 +92,7 @@ public class PermissionDataMockuper {
         authGABCD = authorityWith(true, true, true, true, true);
     }
 
-    public IResourceInstance docWith(boolean a, boolean b, boolean c, boolean d, boolean e) {
+    public GuardedDocInstance docWith(boolean a, boolean b, boolean c, boolean d, boolean e) {
         StringBuilder sb = new StringBuilder();
         if (a) sb.append(TAGA);
         if (b) sb.append(TAGB);

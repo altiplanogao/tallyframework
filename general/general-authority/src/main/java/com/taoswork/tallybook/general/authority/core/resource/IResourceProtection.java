@@ -11,21 +11,27 @@ public interface IResourceProtection {
 
     String getFriendlyName();
 
-    void setFriendlyName(String friendlyName);
+    IResourceProtection setFriendlyName(String friendlyName);
 
     String getResourceEntity();
 
     String getCategory();
 
-    void setCategory(String category);
+    String getFilterNamespace();
+
+    void setFilterNamespace(String filterNamespace);
+
+    IResourceProtection setCategory(String category);
 
     boolean isMasterControlled();
 
-    void setMasterControlled(boolean isMasterControlled);
+    IResourceProtection setMasterControlled(boolean isMasterControlled);
 
     ProtectionMode getProtectionMode();
 
-    void setProtectionMode(ProtectionMode protectionMode);
+    IResourceProtection setProtectionMode(ProtectionMode protectionMode);
+
+    int version();
 
     Collection<IResourceFilter> getFilters();
 

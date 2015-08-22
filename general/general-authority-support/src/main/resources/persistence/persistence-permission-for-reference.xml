@@ -6,12 +6,12 @@
 
     <persistence-unit name="xxx" transaction-type="RESOURCE_LOCAL">
 
-        <class>com.taoswork.tallybook.general.authority.core.authority.resource.impl.SecuredResourceImpl</class>
-        <class>com.taoswork.tallybook.general.authority.core.authority.resource.impl.SecuredResourceFilterImpl</class>
+        <class>com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceImpl</class>
+        <class>com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterImpl</class>
 
-        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.PermissionEntryImpl</class>
-        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.PermissionImpl</class>
-        <class>com.taoswork.tallybook.general.authority.core.authority.permission.impl.RoleImpl</class>
+        <class>com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionEntryImpl</class>
+        <class>com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionImpl</class>
+        <class>com.taoswork.tallybook.general.authority.domain.permission.impl.RoleImpl</class>
 
         <exclude-unlisted-classes/>
 

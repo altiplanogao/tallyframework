@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.general.authority.mockup.resource.filters.doc;
 
 import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
-import com.taoswork.tallybook.general.authority.core.resource.IResourceInstance;
 import com.taoswork.tallybook.general.authority.mockup.resource.GuardedDocInstance;
 import com.taoswork.tallybook.general.authority.mockup.resource.domain.GuardedDoc;
 
@@ -21,7 +20,7 @@ public class DocTagFilter implements IResourceFilter {
     }
 
     @Override
-    public boolean isMatch(IResourceInstance instance) {
+    public boolean isMatch(Object instance) {
         GuardedDoc doc = ((GuardedDocInstance) instance).getDomainObject();
         if (doc == null)
             return false;

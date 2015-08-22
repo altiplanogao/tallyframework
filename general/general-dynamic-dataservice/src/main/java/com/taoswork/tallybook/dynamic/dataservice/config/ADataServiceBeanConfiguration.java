@@ -17,6 +17,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.Dynami
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerFactory;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl.PersistenceManagerImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
@@ -114,6 +115,13 @@ public abstract class ADataServiceBeanConfiguration
     public FriendlyMetaInfoService friendlyMetaInfoService(){
         return new FriendlyMetaInfoServiceImpl();
     }
+
+    @Override
+    @Bean(name = SecurityVerifierAgent.COMPONENT_NAME)
+    public SecurityVerifierAgent securityVerifierAgent() {
+        return new SecurityVerifierAgent();
+    }
+
     // **************************************************** //
     //  IEntityBeanList                                     //
     // **************************************************** //

@@ -4,9 +4,9 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.permission.authorities.ISimplePermissionAuthority;
-import com.taoswork.tallybook.general.authority.core.resource.ResourceProtectionManager;
-import com.taoswork.tallybook.general.authority.core.resource.impl.VirtualResourceProtectionMapping;
-import com.taoswork.tallybook.general.authority.core.verifier.impl.VirtualResourceSecurityVerifier;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionMapping;
+import com.taoswork.tallybook.general.authority.core.verifier.impl.AccessVerifier;
 import com.taoswork.tallybook.general.authority.mockup.PermissionDataMockuper;
 import com.taoswork.tallybook.general.authority.mockup.resource.TypesEnums;
 import org.junit.Assert;
@@ -31,47 +31,47 @@ public class SecurityVerifierForSimulatedResourceTest {
 
     private final String imgMenu = "menu.img";
 
-    private final VirtualResourceProtectionMapping protectDocMenuAnyAction = new VirtualResourceProtectionMapping(
+    private final ResourceProtectionMapping protectDocMenuAnyAction = new ResourceProtectionMapping(
         docMenu, menuVisible, resourceEntry, Access.Read.merge(Access.Create), ProtectionMode.FitAny);
-    private final VirtualResourceProtectionMapping protectDocMenuClick = new VirtualResourceProtectionMapping(
+    private final ResourceProtectionMapping protectDocMenuClick = new ResourceProtectionMapping(
         docMenu, menuClick, resourceEntry, Access.Read);
-    private final VirtualResourceProtectionMapping protectDocMenuDbClick = new VirtualResourceProtectionMapping(
+    private final ResourceProtectionMapping protectDocMenuDbClick = new ResourceProtectionMapping(
         docMenu, menuDbClick, resourceEntry, Access.Update);
 
-    private final VirtualResourceProtectionMapping protectImgMenuClick = new VirtualResourceProtectionMapping(
+    private final ResourceProtectionMapping protectImgMenuClick = new ResourceProtectionMapping(
         imgMenu, menuClick, TypesEnums.Image, Access.Read);
 
     @Test
     public void testPermissionForType() {
         ResourceProtectionManager resourceManager = mocker.resourceManager(true, ProtectionMode.FitAll);
-        VirtualResourceSecurityVerifier securityVerifier = new VirtualResourceSecurityVerifier(resourceManager);
-        securityVerifier
-            .register(protectDocMenuAnyAction)
-            .register(protectDocMenuClick)
-            .register(protectDocMenuDbClick)
-            .register(protectImgMenuClick);
+        IMappedAccessVerifier accessVerifier = new AccessVerifier(resourceManager);
+        accessVerifier
+            .registerResourceMapping(protectDocMenuAnyAction)
+            .registerResourceMapping(protectDocMenuClick)
+            .registerResourceMapping(protectDocMenuDbClick)
+            .registerResourceMapping(protectImgMenuClick);
 
         for (IPermissionAuthority user : new IPermissionAuthority[]{mocker.authAB, mocker.authG, mocker.authGAB}) {
-            Assert.assertTrue(securityVerifier.canAccess(user, menuVisible, docMenu));
-            Assert.assertTrue(securityVerifier.canAccess(user, menuClick, docMenu));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuDbClick, docMenu));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuClick, imgMenu));
+            Assert.assertTrue(accessVerifier.canAccessMappedResource(user, menuVisible, docMenu));
+            Assert.assertTrue(accessVerifier.canAccessMappedResource(user, menuClick, docMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuDbClick, docMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuClick, imgMenu));
 
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.Image));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.File));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.Menu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.Image));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.File));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.Menu));
         }
 
         {
             IPermissionAuthority user = mocker.authN;
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, docMenu));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuClick, docMenu));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuDbClick, docMenu));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuClick, imgMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, docMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuClick, docMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuDbClick, docMenu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuClick, imgMenu));
 
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.Image));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.File));
-            Assert.assertFalse(securityVerifier.canAccess(user, menuVisible, TypesEnums.Menu));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.Image));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.File));
+            Assert.assertFalse(accessVerifier.canAccessMappedResource(user, menuVisible, TypesEnums.Menu));
         }
     }
 }

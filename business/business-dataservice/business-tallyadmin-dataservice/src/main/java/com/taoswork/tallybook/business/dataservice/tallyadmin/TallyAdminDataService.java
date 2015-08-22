@@ -2,11 +2,11 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceBeanConfiguration;
 import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
-import com.taoswork.tallybook.general.authority.core.authority.permission.Permission;
-import com.taoswork.tallybook.general.authority.core.authority.permission.PermissionEntry;
-import com.taoswork.tallybook.general.authority.core.authority.permission.Role;
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResourceFilter;
-import com.taoswork.tallybook.general.authority.core.authority.resource.SecuredResource;
+import com.taoswork.tallybook.general.authority.domain.permission.Permission;
+import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
+import com.taoswork.tallybook.general.authority.domain.permission.Role;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
 
 import java.util.List;

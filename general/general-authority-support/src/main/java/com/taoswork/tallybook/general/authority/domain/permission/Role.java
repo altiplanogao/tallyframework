@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.authority.core.authority.permission;
+package com.taoswork.tallybook.general.authority.domain.permission;
 
 import java.io.Serializable;
 import java.util.Set;

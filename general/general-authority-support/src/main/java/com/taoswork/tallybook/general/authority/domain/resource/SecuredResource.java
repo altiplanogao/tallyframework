@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.authority.core.authority.resource;
+package com.taoswork.tallybook.general.authority.domain.resource;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 
@@ -14,6 +14,10 @@ public interface SecuredResource extends Serializable{
     Long getId();
 
     void setId(Long id);
+
+    Long getOrganization();
+
+    void setOrganization(Long organization);
 
     String getFriendlyName();
 
@@ -38,4 +42,8 @@ public interface SecuredResource extends Serializable{
     List<SecuredResourceFilter> getFilters();
 
     void setFilters(List<SecuredResourceFilter> criterias);
+
+    int getVersion();
+
+    boolean isMainLine();
 }
