@@ -18,6 +18,10 @@ public interface Person extends Serializable {
 
     Person setUuid(String uuid);
 
+    Gender getGender();
+
+    void setGender(Gender gender);
+
     String getEmail();
 
     Person setEmail(String email);

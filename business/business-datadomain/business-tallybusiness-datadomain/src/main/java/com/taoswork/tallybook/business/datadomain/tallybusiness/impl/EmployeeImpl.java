@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Employee;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.EmployeeOwnedSetting;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.EmployeeStatus;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
 
@@ -16,7 +16,7 @@ public class EmployeeImpl implements Employee {
     protected Long id;
 
     protected Long userId;
-    protected Organization organization;
+    protected BusinessUnit businessUnit;
 
     protected EmployeeStatus activeStatus;
 
@@ -50,13 +50,13 @@ public class EmployeeImpl implements Employee {
     }
 
     @Override
-    public Organization getOrganization() {
-        return organization;
+    public BusinessUnit getBusinessUnit() {
+        return businessUnit;
     }
 
     @Override
-    public Employee setOrganization(Organization organization) {
-        this.organization = organization;
+    public Employee setOrganization(BusinessUnit businessUnit) {
+        this.businessUnit = businessUnit;
         return this;
     }
 

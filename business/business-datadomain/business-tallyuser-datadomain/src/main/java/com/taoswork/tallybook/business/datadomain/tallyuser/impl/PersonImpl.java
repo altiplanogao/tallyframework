@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 
+import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
@@ -53,12 +54,16 @@ public class PersonImpl
     @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
     protected String name;
 
+    @Column(name = "GENDER", nullable = false)
+    @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
+    protected char gender;
+
     @Column(name = "EMAIL")
-    @PresentationField(fieldType = FieldType.EMAIL)
+    @PresentationField(group = "General", order = 4, fieldType = FieldType.EMAIL)
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
-    @PresentationField(fieldType = FieldType.PHONE)
+    @PresentationField(group = "General", order = 5, fieldType = FieldType.PHONE)
     protected String mobile;
 
     @Column(name = "UUID", unique = true)
@@ -85,6 +90,16 @@ public class PersonImpl
     public PersonImpl setName(String name) {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public Gender getGender() {
+        return Gender.fromType(gender);
+    }
+
+    @Override
+    public void setGender(Gender gender) {
+        this.gender = gender.getType();
     }
 
     @Override

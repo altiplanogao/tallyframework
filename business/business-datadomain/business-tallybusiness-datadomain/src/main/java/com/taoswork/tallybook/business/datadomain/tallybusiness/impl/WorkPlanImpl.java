@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlanType;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkTicket;
@@ -15,7 +15,7 @@ public class WorkPlanImpl implements WorkPlan {
     protected Long id;
     protected String name;
     protected String description;
-    protected Organization host;
+    protected BusinessUnit host;
 
     protected WorkPlanType type;
 

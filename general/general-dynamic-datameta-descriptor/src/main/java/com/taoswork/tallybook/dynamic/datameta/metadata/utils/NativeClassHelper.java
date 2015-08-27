@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -137,6 +138,9 @@ public class NativeClassHelper {
                 if(!scanMethod.includeTransient){
                     abandon = true;
                 }
+            }
+            if(field.isAnnotationPresent(Version.class)){
+                abandon = true;
             }
             if(!abandon){
                 fieldList.add(field);

@@ -6,6 +6,9 @@ import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceF
 import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterImpl;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
 import javax.persistence.*;
 
@@ -57,7 +60,7 @@ public class PermissionEntryImpl
 
     @Id
     @Column(name = "ID")
-    @PresentationField(order = 1)
+    @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME")
@@ -69,20 +72,24 @@ public class PermissionEntryImpl
     protected Long organizationId;
 
     @Column(name = "RES_ENTITY", nullable = false)
+    @PresentationField(order = 4)
     protected String resourceEntity;
 
+    @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = SecuredResourceFilterImpl.class)
     @JoinColumn(name = "RES_FILTER_ID")
-    @PresentationField(order = 4)
+    @PresentationField(order = 5)
     protected SecuredResourceFilter securedResourceFilter;
 
     @Embedded
     @Column(name = "ACCESS", nullable=false)
-    @PresentationField(order = 5)
+    @PresentationField(order = 6)
     protected ResourceAccess access;
 
+    @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
     @ManyToOne(targetEntity = PermissionImpl.class)
     @JoinColumn(name = "PERM_ID")
+    @PresentationField(order = 7)
     protected Permission permission;
     public static final String OWN_M2O_PERM = "permission";
 

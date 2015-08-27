@@ -4,6 +4,8 @@ import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -38,6 +40,7 @@ public class RoleImpl implements Role {
     @PresentationField(order = 3)
     protected Long organizationId;
 
+    @FieldRelation(RelationType.OneWay_ManyToMany)
     @ManyToMany(
             targetEntity = PermissionImpl.class,
             fetch = FetchType.LAZY)

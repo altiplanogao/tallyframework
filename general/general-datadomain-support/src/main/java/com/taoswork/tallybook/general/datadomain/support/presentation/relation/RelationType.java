@@ -94,6 +94,7 @@ public enum RelationType {
      * }
      */
     TwoWay_ManyToManyOwner,
+    OneWay_ManyToMany,
     /**
      *
      * @Entity

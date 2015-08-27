@@ -16,9 +16,9 @@ public interface Employee extends
 
     Employee setUserId(Long userId);
 
-    Organization getOrganization();
+    BusinessUnit getBusinessUnit();
 
-    Employee setOrganization(Organization organization);
+    Employee setOrganization(BusinessUnit businessUnit);
 
     EmployeeStatus getActiveStatus();
 

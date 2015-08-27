@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkSuite;
 
 /**
@@ -14,5 +14,5 @@ public class WorkSuiteImpl implements WorkSuite {
     protected String moduleType;
     protected String serviceType;
 
-    protected Organization producer;
+    protected BusinessUnit producer;
 }

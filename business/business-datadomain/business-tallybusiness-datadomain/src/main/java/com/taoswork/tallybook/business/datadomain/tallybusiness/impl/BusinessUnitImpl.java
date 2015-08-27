@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
@@ -14,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TB_ORG")
-public class OrganizationImpl implements Organization {
+public class BusinessUnitImpl implements BusinessUnit {
     @Id
     @Column(name = "ID")
     @PresentationField(order = 1)

@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Asset;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -36,7 +36,7 @@ public class AssetImp implements Asset {
     protected List<WorkPlan> workPlans;
 
     //inverse controlled fields:
-    protected Organization owner;
+    protected BusinessUnit owner;
 
 
 }

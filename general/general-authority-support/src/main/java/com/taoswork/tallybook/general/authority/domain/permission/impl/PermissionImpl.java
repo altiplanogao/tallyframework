@@ -3,6 +3,8 @@ package com.taoswork.tallybook.general.authority.domain.permission.impl;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
+import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class PermissionImpl
     @PresentationField(order = 3)
     protected Long organizationId;
 
+    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
     @OneToMany(
             targetEntity = PermissionEntryImpl.class,
             mappedBy = PermissionEntryImpl.OWN_M2O_PERM,

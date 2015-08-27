@@ -40,7 +40,7 @@ public class SecuredResourceImpl implements SecuredResource {
     @Column(name = "CATEGORY")
     protected String category;
 
-    @Column(name = "HAS_MASTER")
+    @Column(name = "MASTER_CTRL")
     protected boolean masterControlled = true;
 
     @Column(name = "PROT_MOD")

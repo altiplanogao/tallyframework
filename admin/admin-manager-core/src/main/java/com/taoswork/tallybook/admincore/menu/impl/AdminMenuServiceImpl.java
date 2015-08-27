@@ -2,7 +2,7 @@ package com.taoswork.tallybook.admincore.menu.impl;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.Organization;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
@@ -60,7 +60,7 @@ public class AdminMenuServiceImpl implements AdminMenuService {
             return new MenuImpl()
                     .add(new MenuEntryGroupImpl(MG_USER_ICON, MG_USER_KEY)
                                     .addEntry(new MenuEntryImpl(ME_PERSON_ICON, ME_PERSON_KEY, getFriendlyName(Person.class), Person.class))
-                                    .addEntry(new MenuEntryImpl(ME_ORG_ICON, ME_ORG_KEY, getFriendlyName(Organization.class), Organization.class))
+                                    .addEntry(new MenuEntryImpl(ME_ORG_ICON, ME_ORG_KEY, getFriendlyName(BusinessUnit.class), BusinessUnit.class))
                     )
                     .add(new MenuEntryGroupImpl(MG_SECURITY_ICON, MG_SECURITY_KEY)
                                     .addEntry(new MenuEntryImpl(ME_RES_CRITERIA_ICON, ME_RES_CRITERIA_KEY, getFriendlyName(SecuredResourceFilter.class), SecuredResourceFilter.class))
