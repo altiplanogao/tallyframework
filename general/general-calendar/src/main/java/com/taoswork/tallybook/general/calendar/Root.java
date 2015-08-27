@@ -5,6 +5,9 @@ package com.taoswork.tallybook.general.calendar;
  */
 public class Root {
     /**
+     * 实现一个基于日历的事件通知功能，
+     * 使得用户可以通过添加事件到日历，然后在适当的时候获得通知，当用户把事件标记为完成后不再通知
+     * 
      * A. 事件类型,如：
      * 1) 工作计划通知事件
      * 2) 工作单通知事件
