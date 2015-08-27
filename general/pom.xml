@@ -24,5 +24,6 @@
         <module>general-dataservice-support</module>
         <module>general-web</module>
         <module>general-authority</module>
+        <module>general-calendar</module>
     </modules>
 </project>
