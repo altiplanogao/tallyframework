@@ -58,6 +58,7 @@ public class Root {
      * https://github.com/ical4j
      * http://martinfowler.com/apsupp/recurring.pdf
      * http://www.ibm.com/developerworks/cn/java/j-lo-ical4j/
+     *
      */
     private Root(){
         throw new IllegalStateException("You are not expected being here");
