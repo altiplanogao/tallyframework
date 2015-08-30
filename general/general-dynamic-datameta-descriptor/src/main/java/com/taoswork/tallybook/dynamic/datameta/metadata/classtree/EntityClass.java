@@ -46,6 +46,6 @@ public class EntityClass implements Serializable {
 
     @Override
     public String toString() {
-        return clz.getSimpleName();
+        return clz.getSimpleName() + " instanceable:" + instanceable;
     }
 }

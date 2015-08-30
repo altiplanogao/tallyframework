@@ -10,7 +10,7 @@ public interface EntityMetadataRawAccess {
 
     Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz);
 
-    Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeUnqualifiedPolymorphicEntities);
+    Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable);
 
     Map<String, String> getIdMetadata(Class<?> entityClass);
 

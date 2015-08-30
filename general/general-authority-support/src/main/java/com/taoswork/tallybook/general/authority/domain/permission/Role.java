@@ -6,7 +6,8 @@ import java.util.Set;
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
-public interface Role extends Serializable {
+public interface Role<P extends Permission>
+    extends Serializable {
 
     Long getId();
 
@@ -20,9 +21,9 @@ public interface Role extends Serializable {
 
     void setInsideName(String insideName);
 
-    Set<Permission> getAllPermissions();
+    Set<P> getAllPermissions();
 
-    void setAllPermissions(Set<Permission> allPermissions);
+    void setAllPermissions(Set<P> allPermissions);
 
     Long getOrganizationId();
 

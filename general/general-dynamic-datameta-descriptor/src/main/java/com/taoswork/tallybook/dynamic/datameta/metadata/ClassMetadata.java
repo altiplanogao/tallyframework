@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +12,11 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
-public class ClassMetadata extends FriendlyMetadata implements Serializable {
+public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMetadata.class);
 
     public Class<?> entityClz;
+    public boolean containsSuper = false;
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, FieldMetadata> fieldMetadataMap = new HashMap<String, FieldMetadata>();
@@ -32,6 +34,14 @@ public class ClassMetadata extends FriendlyMetadata implements Serializable {
 
     public void setEntityClz(Class<?> entityClz) {
         this.entityClz = entityClz;
+    }
+
+    public boolean isContainsSuper() {
+        return containsSuper;
+    }
+
+    public void setContainsSuper(boolean containsSuper) {
+        this.containsSuper = containsSuper;
     }
 
     public Map<String, TabMetadata> getRWTabMetadataMap(){
@@ -60,6 +70,25 @@ public class ClassMetadata extends FriendlyMetadata implements Serializable {
 
     public FieldMetadata getFieldMetadata(String fieldName){
         return fieldMetadataMap.getOrDefault(fieldName, null);
+    }
+
+    public void absorbSuper(ClassMetadata superMeta){
+        if(superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())){
+            absorb(superMeta);
+        }else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void absorb(ClassMetadata thatMeta) {
+        getRWTabMetadataMap().putAll(thatMeta.getReadonlyTabMetadataMap());
+        getRWGroupMetadataMap().putAll(thatMeta.getReadonlyGroupMetadataMap());
+        getRWFieldMetadataMap().putAll(thatMeta.getReadonlyFieldMetadataMap());
+    }
+
+    @Override
+    public ClassMetadata clone() {
+        return CloneUtility.makeClone(this);
     }
 
     @Override

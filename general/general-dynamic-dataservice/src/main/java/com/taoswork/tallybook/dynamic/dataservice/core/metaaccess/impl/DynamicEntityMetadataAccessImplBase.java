@@ -20,6 +20,7 @@ import com.taoswork.tallybook.general.solution.autotree.AutoTree;
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
 import com.taoswork.tallybook.general.solution.quickinterface.DataHolder;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
+import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.EffectivelyImmutable;
 import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
 import org.apache.commons.collections.map.LRUMap;
@@ -90,9 +91,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
     private final EntityClassGenealogy entityClassGenealogy = new EntityClassGenealogy();
 
     @EffectivelyImmutable
-    private EntityClassTree entityClassTreeFromSerializable;
-    @EffectivelyImmutable
-    private List<Class> entityInterfaces = null;
+    private Collection<Class> entityInterfaces = null;
 
     @GuardedBy("self")
     private Map<Class, Class> type2RootInstanceableMap = null;
@@ -121,22 +120,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
             throw new RuntimeException("entityMetaRawAccess Not initialized !!! DynamicEntityMetadataAccessImplBase cannot continue.");
         } else {
             Class<?>[] entityClasses = entityMetaRawAccess.getAllEntityClasses();
-
-            EntityClassTreeAccessor entityClassTreeAccessor = new EntityClassTreeAccessor(entityClassGenealogy);
-            entityClassTreeAccessor.setAllowBranch(false).setAllowParent(false);
-            EntityClassTree root = new EntityClassTree(Serializable.class);
-            for (Class<?> entityClz : entityClasses) {
-                entityClassTreeAccessor.add(root, entityClz);
-            }
-
-            List<Class> localEntityInterfaces = new ArrayList<Class>();
-            for (Object entityClassTreeObj : root.getReadonlyChildren()) {
-                EntityClassTree entityClassTree = (EntityClassTree) entityClassTreeObj;
-                localEntityInterfaces.add(entityClassTree.getData().clz);
-            }
-            entityInterfaces = localEntityInterfaces;
-            entityClassTreeFromSerializable = root;
-            entityClassTreeAccessor.getGenealogy();
+            entityInterfaces = ClassUtility.getAllImplementedInterfaces(Serializable.class, entityClasses);
         }
 
         type2ClassTreeMap = new LRUMap();
@@ -147,6 +131,17 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         entityInfoMap = new LRUMap();
         entityLocaleInfoMap = new LRUMap();
         entityLocaleAndTypeInfoMap = new LRUMap();
+    }
+
+    //Used for easy debug
+    private void clearCacheMaps(){
+        type2ClassTreeMap.clear();
+        type2RootInstanceableMap.clear();
+        classMetadataMap.clear();
+
+        entityInfoMap.clear();
+        entityLocaleInfoMap.clear();
+        entityLocaleAndTypeInfoMap.clear();
     }
 
     /**
@@ -172,9 +167,16 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         return result.data;
     }
 
-    private EntityClassTree calcEntityClassTree(Class<?> entityType) {
-        EntityClassTree subTree = entityClassTreeFromSerializable.findChild(new EntityClass(entityType), this.entityClassGenealogy);
-        return subTree;
+    private EntityClassTree calcEntityClassTreeFromCeiling(Class<?> ceilingType){
+        Class<?>[] entityClasses = entityMetaRawAccess.getAllEntityClasses();
+
+        EntityClassTreeAccessor entityClassTreeAccessor = new EntityClassTreeAccessor(entityClassGenealogy);
+        entityClassTreeAccessor.setAllowBranch(false).setAllowParent(false);
+        EntityClassTree root = new EntityClassTree(ceilingType);
+        for (Class<?> entityClz : entityClasses) {
+            entityClassTreeAccessor.add(root, entityClz);
+        }
+        return root;
     }
 
     private EntityInfo calcEntityInfo(ClassTreeMetadata classTreeMetadata) {
@@ -207,7 +209,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
         synchronized (type2ClassTreeMap){
             EntityClassTree classTree = type2ClassTreeMap.getOrDefault(entityType, null);
             if (classTree == null) {
-                classTree = calcEntityClassTree(entityType);
+                classTree = calcEntityClassTreeFromCeiling(entityType);
                 type2ClassTreeMap.put(entityType, classTree);
             }
             return classTree;
@@ -226,7 +228,7 @@ public abstract class DynamicEntityMetadataAccessImplBase implements DynamicEnti
             classMetadata = classMetadataMap.getOrDefault(classScope, null);
             if (null == classMetadata) {
                 EntityClassTree entityClassTree = getEntityClassTree(entityType);
-                classMetadata = metadataService.generateMetadata(entityClassTree, classScope.isWithSuper());
+                classMetadata = metadataService.generateMetadata(entityClassTree);
                 classMetadataMap.put(classScope, classMetadata);
             }
         }

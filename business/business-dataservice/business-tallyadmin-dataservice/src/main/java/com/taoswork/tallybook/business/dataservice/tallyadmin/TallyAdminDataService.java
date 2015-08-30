@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceBeanConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermission;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermissionEntry;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminRole;
 import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
@@ -35,9 +38,9 @@ public class TallyAdminDataService extends DataServiceBase {
         super.setEntityResourceNameOverride(SecuredResourceFilter.class, "admin-resource-criteria");
         super.setEntityResourceNameOverride(SecuredResource.class, "admin-resource-type");
 
-        super.setEntityResourceNameOverride(PermissionEntry.class, "admin-permission-entry");
-        super.setEntityResourceNameOverride(Permission.class, "admin-permission");
-        super.setEntityResourceNameOverride(Role.class, "admin-role");
+        super.setEntityResourceNameOverride(AdminPermissionEntry.class, "admin-permission-entry");
+        super.setEntityResourceNameOverride(AdminPermission.class, "admin-permission");
+        super.setEntityResourceNameOverride(AdminRole.class, "admin-role");
 
     }
 }

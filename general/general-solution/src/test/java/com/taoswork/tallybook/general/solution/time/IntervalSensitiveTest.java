@@ -10,95 +10,89 @@ public class IntervalSensitiveTest {
     @Test
     public void neverExpire() throws Exception{
         IntervalSensitive intervalSensitive = new IntervalSensitive(IntervalSensitive.NEVER_EXPIRE);
-        Assert.assertEquals(intervalSensitive.getLastAccess(), 0L);
-        Assert.assertFalse(intervalSensitive.isIntervalExpired());
-        Assert.assertEquals(intervalSensitive.getLastAccess(), 0L);
+        Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);
+        Assert.assertFalse(intervalSensitive.checkExpired());
+        Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);
         Thread.sleep(10);
-        Assert.assertFalse(intervalSensitive.isIntervalExpired());
+        Assert.assertFalse(intervalSensitive.checkExpired());
         Thread.sleep(100);
-        Assert.assertFalse(intervalSensitive.isIntervalExpired());
+        Assert.assertFalse(intervalSensitive.checkExpired());
     }
 
     @Test
     public void alwaysExpire() throws Exception{
         IntervalSensitive intervalSensitive = new IntervalSensitive(IntervalSensitive.ALWAYS_EXPIRE);
-        Assert.assertEquals(intervalSensitive.getLastAccess(), 0L);
-        Assert.assertTrue(intervalSensitive.isIntervalExpired());
-        Assert.assertEquals(intervalSensitive.getLastAccess(), 0L);
+        Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);
+        Assert.assertTrue(intervalSensitive.checkExpired());
+        Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);
         Thread.sleep(10);
-        Assert.assertTrue(intervalSensitive.isIntervalExpired());
+        Assert.assertTrue(intervalSensitive.checkExpired());
         Thread.sleep(100);
-        Assert.assertTrue(intervalSensitive.isIntervalExpired());
+        Assert.assertTrue(intervalSensitive.checkExpired());
     }
 
     @Test
     public void sometimeExpire() throws Exception{
         IntervalSensitive intervalSensitive = new IntervalSensitive(1000);
-        Assert.assertEquals(intervalSensitive.getLastAccess(), 0L);
-        Assert.assertTrue(intervalSensitive.isIntervalExpired());
-        Assert.assertNotEquals(intervalSensitive.getLastAccess(), 0L);
-        long lastAccess = intervalSensitive.getLastAccess();
+        Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);
+        Assert.assertTrue(intervalSensitive.checkExpired());
+        Assert.assertNotEquals(intervalSensitive.getLastTouch(), 0L);
+//        long lastTouch = intervalSensitive.getLastTouch();
 
         final long lagTolerance = 10;
 
         {
             long expectedInterval = 10;
+            long lastTouch = intervalSensitive.touch();
             Thread.sleep(expectedInterval);
-            Assert.assertFalse(intervalSensitive.isIntervalExpired());
+            Assert.assertFalse(intervalSensitive.checkExpired());
             //get now
-            long currentAccess = intervalSensitive.getLastAccess();
+            long currentAccess = intervalSensitive.getLastTouch();
             //check interval
-            long interval = currentAccess - lastAccess;
+            long interval = currentAccess - lastTouch;
             Assert.assertNotEquals(interval, 0);
-            Assert.assertTrue(interval < (expectedInterval + lagTolerance)); //
-
-            //update last
-            lastAccess = currentAccess;
+            Assert.assertTrue(interval >= expectedInterval);
+            Assert.assertTrue(interval < (expectedInterval + lagTolerance));
         }
 
         {
             long expectedInterval = 100;
+            long lastTouch = intervalSensitive.touch();
             Thread.sleep(expectedInterval);
-            Assert.assertFalse(intervalSensitive.isIntervalExpired());
+            Assert.assertFalse(intervalSensitive.checkExpired());
             //get now
-            long currentAccess = intervalSensitive.getLastAccess();
+            long currentAccess = intervalSensitive.getLastTouch();
             //check interval
-            long interval = currentAccess - lastAccess;
-            Assert.assertNotEquals(interval, 0);
-            Assert.assertTrue(interval < (expectedInterval + lagTolerance)); //
-
-            //update last
-            lastAccess = currentAccess;
+            long interval = currentAccess - lastTouch;
+            Assert.assertTrue(interval >= expectedInterval);
+            Assert.assertTrue(interval < (expectedInterval + lagTolerance));
         }
 
         {
             long expectedInterval = 1000;
+            long lastTouch = intervalSensitive.touch();
             Thread.sleep(expectedInterval);
-            Assert.assertTrue(intervalSensitive.isIntervalExpired());
+            Assert.assertTrue(intervalSensitive.checkExpired());
             //get now
-            long currentAccess = intervalSensitive.getLastAccess();
+            long currentAccess = intervalSensitive.getLastTouch();
             //check interval
-            long interval = currentAccess - lastAccess;
+            long interval = currentAccess - lastTouch;
             Assert.assertNotEquals(interval, 0);
-            Assert.assertTrue(interval < (expectedInterval + lagTolerance)); //
-
-            //update last
-            lastAccess = currentAccess;
+            Assert.assertTrue(interval >= expectedInterval);
+            Assert.assertTrue(interval < (expectedInterval + lagTolerance));
         }
 
         {
             long expectedInterval = 1100;
+            long lastTouch = intervalSensitive.touch();
             Thread.sleep(expectedInterval);
-            Assert.assertTrue(intervalSensitive.isIntervalExpired());
+            Assert.assertTrue(intervalSensitive.checkExpired());
             //get now
-            long currentAccess = intervalSensitive.getLastAccess();
+            long currentAccess = intervalSensitive.getLastTouch();
             //check interval
-            long interval = currentAccess - lastAccess;
-            Assert.assertNotEquals(interval, 0);
-            Assert.assertTrue(interval < (expectedInterval + lagTolerance)); //
-
-            //update last
-            lastAccess = currentAccess;
+            long interval = currentAccess - lastTouch;
+            Assert.assertTrue(interval >= expectedInterval);
+            Assert.assertTrue(interval < (expectedInterval + lagTolerance));
         }
     }
 

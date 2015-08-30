@@ -54,9 +54,11 @@ public class PersonImpl
     @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
     protected String name;
 
-    @Column(name = "GENDER", nullable = false)
+    @Column(name = "GENDER", nullable = false
+        ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.UNKNOWN_CHAR + "'"
+    )
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
-    protected char gender;
+    protected char gender = Gender.UNKNOWN_CHAR;
 
     @Column(name = "EMAIL")
     @PresentationField(group = "General", order = 4, fieldType = FieldType.EMAIL)

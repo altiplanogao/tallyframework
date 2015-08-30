@@ -48,7 +48,8 @@ import java.util.List;
  *
  * Created by Gao Yuan on 2015/4/15.
  */
-public interface Permission extends Serializable {
+public interface Permission<PE extends PermissionEntry>
+    extends Serializable {
 
     Long getId();
 
@@ -62,7 +63,7 @@ public interface Permission extends Serializable {
 
     void setOrganizationId(Long organizationId);
 
-    List<PermissionEntry> getAllEntries();
+    List<PE> getAllEntries();
 
-    void setAllEntries(List<PermissionEntry> allEntries);
+    void setAllEntries(List<PE> allEntries);
 }

@@ -9,8 +9,11 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/25.
  */
 public enum Gender implements IFriendlyEnum<Character> {
-    Male('m', "male"),
-    Female('f', "female");
+    Male('M', "male"),
+    Female('F', "female"),
+    Unknown('U', "unknown");
+
+    public static final char UNKNOWN_CHAR = 'U';
 
     private final Character type;
     private final String friendlyType;
@@ -22,7 +25,7 @@ public enum Gender implements IFriendlyEnum<Character> {
         }
     }
 
-    Gender(char type, String friendlyType) {
+    Gender(Character type, String friendlyType) {
         this.type = type;
         this.friendlyType = friendlyType;
     }

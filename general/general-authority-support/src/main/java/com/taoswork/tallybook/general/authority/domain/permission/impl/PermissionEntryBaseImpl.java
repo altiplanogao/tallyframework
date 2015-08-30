@@ -5,6 +5,7 @@ import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntr
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterImpl;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
@@ -52,9 +53,10 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name =PermissionEntryImpl.TABLE_NAME)
-public class PermissionEntryImpl
-        implements PermissionEntry {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@PresentationClass(instanceable=false)
+public abstract class PermissionEntryBaseImpl<P extends Permission>
+        implements PermissionEntry<P> {
 
     public static final String TABLE_NAME = "AUTH_PERM_ENTRY";
 
@@ -86,12 +88,12 @@ public class PermissionEntryImpl
     @PresentationField(order = 6)
     protected ResourceAccess access;
 
-    @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
-    @ManyToOne(targetEntity = PermissionImpl.class)
-    @JoinColumn(name = "PERM_ID")
-    @PresentationField(order = 7)
-    protected Permission permission;
-    public static final String OWN_M2O_PERM = "permission";
+//    @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
+//    @ManyToOne(targetEntity = PermissionBaseImpl.class)
+//    @JoinColumn(name = "PERM_ID")
+//    @PresentationField(order = 7)
+//    protected P permission;
+//    public static final String OWN_M2O_PERM = "permission";
 
     @Override
     public Long getId() {
@@ -109,9 +111,8 @@ public class PermissionEntryImpl
     }
 
     @Override
-    public PermissionEntry setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     @Override
@@ -120,9 +121,8 @@ public class PermissionEntryImpl
     }
 
     @Override
-    public PermissionEntry setAccess(ResourceAccess access) {
+    public void setAccess(ResourceAccess access) {
         this.access = access;
-        return this;
     }
 
     @Override
@@ -131,9 +131,8 @@ public class PermissionEntryImpl
     }
 
     @Override
-    public PermissionEntry setOrganizationId(Long organizationId) {
+    public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
-        return this;
     }
 
     @Override
@@ -142,9 +141,8 @@ public class PermissionEntryImpl
     }
 
     @Override
-    public PermissionEntry setSecuredResourceFilter(SecuredResourceFilter securedResourceFilter) {
+    public void setSecuredResourceFilter(SecuredResourceFilter securedResourceFilter) {
         this.securedResourceFilter = securedResourceFilter;
-        return this;
     }
 
     @Override
@@ -157,13 +155,13 @@ public class PermissionEntryImpl
         this.resourceEntity = resourceEntity;
     }
 
-    @Override
-    public Permission getPermission() {
-        return permission;
-    }
-
-    @Override
-    public void setPermission(Permission permission) {
-        this.permission = permission;
-    }
+//    @Override
+//    public P getPermission() {
+//        return permission;
+//    }
+//
+//    @Override
+//    public void setPermission(P permission) {
+//        this.permission = permission;
+//    }
 }

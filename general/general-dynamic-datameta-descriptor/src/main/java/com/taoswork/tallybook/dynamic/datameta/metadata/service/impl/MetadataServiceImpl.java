@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/5/27.
@@ -44,49 +46,40 @@ public class MetadataServiceImpl implements MetadataService {
     }
 
     @Override
-    public ClassTreeMetadata generateMetadata(final EntityClassTree entityClassTree, boolean handleSuper) {
+    public ClassTreeMetadata generateMetadata(final EntityClassTree entityClassTree) {
         final ClassTreeMetadata classTreeMetadata = new ClassTreeMetadata();
         classTreeMetadata.setEntityClassTree(entityClassTree);
-        final Class rootClz = entityClassTree.getData().clz;
-
         //Handle the fields in current class
         {
+            final Class rootClz = entityClassTree.getData().clz;
             classProcessor.process(rootClz, classTreeMetadata);
         }
 
         //Thread confinement object
-        final List<ClassMetadata> metadatasTobeMerged = new ArrayList<ClassMetadata>();
-
-        //Handle the fields in super classes
-        if(handleSuper) {
-            Class[] superClasses = NativeClassHelper.getSuperClasses(rootClz, true);
-            for (Class superClz : superClasses) {
-                ClassMetadata classMetadata = generateMetadata(superClz);
-                metadatasTobeMerged.add(classMetadata);
-            }
-        }
-
-        //Handle the fields in polymorphic children classes
+        final List<Class> classesInTree = new ArrayList<Class>();
         entityClassTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
             @Override
             public Void callback(EntityClass parameter) throws AutoTreeException {
                 Class clz = parameter.clz;
-                ClassMetadata classMetadata = generateMetadata(clz);
-                metadatasTobeMerged.add(classMetadata);
-
-                if (clz.equals(rootClz)) {
-                    LOGGER.error("{} should not be processed here", rootClz.getName());
-                    throw new RuntimeException(rootClz.getName() + "should not be processed here.");
+                if(!clz.isInterface()){
+                    classesInTree.add(clz);
                 }
-
                 return null;
             }
         }, false);
 
-        for(ClassMetadata classMetadata : metadatasTobeMerged){
-            classTreeMetadata.getRWTabMetadataMap().putAll(classMetadata.getReadonlyTabMetadataMap());
-            classTreeMetadata.getRWGroupMetadataMap().putAll(classMetadata.getReadonlyGroupMetadataMap());
-            classTreeMetadata.getRWFieldMetadataMap().putAll(classMetadata.getReadonlyFieldMetadataMap());
+        final Set<Class> classesWithSuper = new HashSet<Class>();
+        for(Class clz : classesInTree){
+            Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
+            classesWithSuper.add(clz);
+            for (Class spClz : superClasses){
+                classesWithSuper.add(spClz);
+            }
+        }
+
+        for(Class clz : classesWithSuper){
+            ClassMetadata classMetadata = generateMetadata(clz);
+            classTreeMetadata.absorb(classMetadata);
         }
 
         return classTreeMetadata;
@@ -95,10 +88,12 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public ClassMetadata generateMetadata(Class clz) {
         String clzName = clz.getName();
+
         synchronized (lock) {
             ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);
             if (null == classMetadata) {
                 classMetadata = new ClassMetadata();
+
                 classProcessor.process(clz, classMetadata);
                 //doGenerateClassMetadata(clz, classMetadata);
                 classMetadataCache.put(clzName, classMetadata);
@@ -107,7 +102,28 @@ public class MetadataServiceImpl implements MetadataService {
         }
     }
 
-//    private void doGenerateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
+    @Override
+    public ClassMetadata generateMetadata(Class clz, boolean handleSuper) {
+        if(!handleSuper){
+            return generateMetadata(clz);
+        }
+        ClassMetadata mergedMetadata = generateMetadata(clz).clone();
+        final List<ClassMetadata> tobeMerged = new ArrayList<ClassMetadata>();
+
+        Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
+        for (Class superClz : superClasses) {
+            ClassMetadata classMetadata = generateMetadata(superClz);
+            tobeMerged.add(classMetadata);
+        }
+
+        for(ClassMetadata classMetadata : tobeMerged){
+            mergedMetadata.absorbSuper(classMetadata);
+        }
+
+        return mergedMetadata;
+    }
+
+    //    private void doGenerateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
 //        classProcessor.process(clz, classMetadata);
 //    }
 

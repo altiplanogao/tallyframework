@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
-public interface PermissionEntry
+public interface PermissionEntry<P extends Permission>
          extends Serializable {
     Long getId();
 
@@ -16,25 +16,25 @@ public interface PermissionEntry
 
     String getName();
 
-    PermissionEntry setName(String name);
+    void setName(String name);
 
     SecuredResourceFilter getSecuredResourceFilter();
 
-    PermissionEntry setSecuredResourceFilter(SecuredResourceFilter resourceCriteria);
+    void setSecuredResourceFilter(SecuredResourceFilter resourceCriteria);
 
     ResourceAccess getAccess();
 
-    PermissionEntry setAccess(ResourceAccess access);
+    void setAccess(ResourceAccess access);
 
     Long getOrganizationId();
 
-    PermissionEntry setOrganizationId(Long organizationId);
+    void setOrganizationId(Long organizationId);
 
     String getResourceEntity();
 
     void setResourceEntity(String resourceEntity);
 
-    Permission getPermission();
+    P getPermission();
 
-    void setPermission(Permission permission);
+    void setPermission(P permission);
 }

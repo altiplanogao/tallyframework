@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
@@ -13,10 +14,12 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
+
 @Entity
-@Table(name = PermissionImpl.TABLE_NAME)
-public class PermissionImpl
-        implements Permission {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@PresentationClass(instanceable=false)
+public abstract class PermissionBaseImpl<PE extends PermissionEntry>
+        implements Permission<PE> {
 
     public static final String TABLE_NAME = "AUTH_PERM";
     public static final String TABLE_NAME_JOIN_PERM_PERM = "AUTH_PERM_PERM_XREF";
@@ -40,13 +43,13 @@ public class PermissionImpl
     @PresentationField(order = 3)
     protected Long organizationId;
 
-    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
-    @OneToMany(
-            targetEntity = PermissionEntryImpl.class,
-            mappedBy = PermissionEntryImpl.OWN_M2O_PERM,
-            fetch = FetchType.LAZY)
-    protected List<PermissionEntry> allEntries = new ArrayList<PermissionEntry>();
-    public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
+//    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
+//    @OneToMany(
+//            targetEntity = PermissionEntryBaseImpl.class,
+//            mappedBy = PermissionEntryBaseImpl.OWN_M2O_PERM,
+//            fetch = FetchType.LAZY)
+//    protected List<PE> allEntries = new ArrayList<PE>();
+//    public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
     @Version
     protected Integer version;
@@ -80,15 +83,15 @@ public class PermissionImpl
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
     }
-
-    @Override
-    public List<PermissionEntry> getAllEntries() {
-        return allEntries;
-    }
-
-    @Override
-    public void setAllEntries(List<PermissionEntry> allEntries) {
-        this.allEntries = allEntries;
-    }
+//
+//    @Override
+//    public List<PE> getAllEntries() {
+//        return allEntries;
+//    }
+//
+//    @Override
+//    public void setAllEntries(List<PE> allEntries) {
+//        this.allEntries = allEntries;
+//    }
 
 }

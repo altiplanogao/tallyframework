@@ -8,7 +8,7 @@ public class IntervalSensitive {
     public static long ALWAYS_EXPIRE = 0;
 
     private final long intervalThreshold;
-    protected volatile long lastAccess = 0;
+    protected volatile long lastTouch = 0;
 
     public IntervalSensitive(long intervalThreshold) {
         this.intervalThreshold = intervalThreshold;
@@ -22,11 +22,20 @@ public class IntervalSensitive {
      * Package method, no public
      * @return the access ms, for (NEVER_EXPIRE & ALWAYS_EXPIRE) returns 0
      */
-    long getLastAccess() {
-        return lastAccess;
+    long getLastTouch() {
+        return lastTouch;
     }
 
-    public boolean isIntervalExpired() {
+    long touch(){
+        lastTouch = System.currentTimeMillis();
+        return lastTouch;
+    }
+
+    public boolean checkExpired() {
+        return checkExpired(true);
+    }
+
+    public boolean checkExpired(boolean touch) {
         if (intervalThreshold < 0) {
             return false;
         } else  if (intervalThreshold == ALWAYS_EXPIRE) {
@@ -35,14 +44,15 @@ public class IntervalSensitive {
         } else {
             long checkingTime = System.currentTimeMillis();
             try {
-                if ((checkingTime - lastAccess) >= intervalThreshold) {
+                if ((checkingTime - lastTouch) >= intervalThreshold) {
                     onExpireOccur();
                     return true;
                 } else {
                     return false;
                 }
             } finally {
-                lastAccess = checkingTime;
+                if(touch)
+                    lastTouch = checkingTime;
             }
         }
     }

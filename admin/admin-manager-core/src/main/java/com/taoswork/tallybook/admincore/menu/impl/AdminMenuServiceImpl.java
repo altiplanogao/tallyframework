@@ -4,6 +4,9 @@ import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermission;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermissionEntry;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminRole;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
@@ -64,9 +67,9 @@ public class AdminMenuServiceImpl implements AdminMenuService {
                     )
                     .add(new MenuEntryGroupImpl(MG_SECURITY_ICON, MG_SECURITY_KEY)
                                     .addEntry(new MenuEntryImpl(ME_RES_CRITERIA_ICON, ME_RES_CRITERIA_KEY, getFriendlyName(SecuredResourceFilter.class), SecuredResourceFilter.class))
-                                    .addEntry(new MenuEntryImpl(ME_PERM_ENTRY_ICON, ME_PERM_ENTRY_KEY, getFriendlyName(PermissionEntry.class), PermissionEntry.class))
-                                    .addEntry(new MenuEntryImpl(ME_PERM_ICON, ME_PERM_KEY, getFriendlyName(Permission.class), Permission.class))
-                                    .addEntry(new MenuEntryImpl(ME_ROLE_ICON, ME_ROLE_KEY, getFriendlyName(Role.class), Role.class))
+                                    .addEntry(new MenuEntryImpl(ME_PERM_ENTRY_ICON, ME_PERM_ENTRY_KEY, getFriendlyName(AdminPermissionEntry.class), AdminPermissionEntry.class))
+                                    .addEntry(new MenuEntryImpl(ME_PERM_ICON, ME_PERM_KEY, getFriendlyName(AdminPermission.class), AdminPermission.class))
+                                    .addEntry(new MenuEntryImpl(ME_ROLE_ICON, ME_ROLE_KEY, getFriendlyName(AdminRole.class), AdminRole.class))
                     )
                     .instance();
         }

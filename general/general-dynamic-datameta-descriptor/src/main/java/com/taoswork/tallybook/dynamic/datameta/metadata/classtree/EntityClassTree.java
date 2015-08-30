@@ -13,4 +13,9 @@ public class EntityClassTree extends AutoTree<EntityClass> {
     public EntityClassTree(EntityClass data) {
         super(data);
     }
+
+    @Override
+    public String toString() {
+        return this.data.toString() + " children:"+this.children.size();
+    }
 }

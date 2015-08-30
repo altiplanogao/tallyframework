@@ -36,7 +36,6 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
         Map<String, TabMetadata> tabMetadataMap = classMetadata.getRWTabMetadataMap();
         Class<?> entityClz = classMetadata.getEntityClz();
         PresentationClass.Tab[] tabs = presentationClass.tabs();
-        tabMetadataMap.clear();
         for (PresentationClass.Tab tab : tabs) {
             TabMetadata tabMetadata = new TabMetadata();
             tabMetadata.setName(tab.name())
@@ -53,7 +52,6 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
         Map<String, GroupMetadata> groupMetadataMap = classMetadata.getRWGroupMetadataMap();
         Class<?> entityClz = classMetadata.getEntityClz();
         PresentationClass.Group[] groups = presentationClass.groups();
-        groupMetadataMap.clear();
         for (PresentationClass.Group group : groups) {
             GroupMetadata groupMetadata = new GroupMetadata();
             groupMetadata.setName(group.name())

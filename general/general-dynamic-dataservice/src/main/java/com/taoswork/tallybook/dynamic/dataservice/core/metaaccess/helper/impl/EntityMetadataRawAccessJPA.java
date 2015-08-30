@@ -58,7 +58,7 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     @Override
     public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable) {
         return getAllEntitiesFromCeiling(ceilingClz,
-            includeNotInstanceable, !cacheDecider.isIntervalExpired());
+            includeNotInstanceable, !cacheDecider.checkExpired());
     }
 
     private Class<?>[] getAllEntitiesFromCeiling(
