@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission;
+package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission;
 
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
 

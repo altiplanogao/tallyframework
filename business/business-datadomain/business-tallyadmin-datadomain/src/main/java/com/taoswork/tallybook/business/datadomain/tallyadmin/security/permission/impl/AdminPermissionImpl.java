@@ -1,7 +1,7 @@
-package com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.impl;
+package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl;
 
-import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermission;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.security.permission.AdminPermissionEntry;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionBaseImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;

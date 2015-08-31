@@ -2,9 +2,18 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.TallyAdminDataDomain;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionImpl;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminRoleImpl;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/5/10.
@@ -34,6 +43,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
     protected Long personId;
 
     @Column(name = "TITLE")
+    @PresentationField(group = "General", order =3, fieldType = FieldType.STRING, visibility = Visibility.VISIBLE_ALL)
     protected String title;
 
     @Embedded
