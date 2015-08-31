@@ -20,11 +20,6 @@ import java.util.Set;
 @PresentationClass(instanceable=false)
 public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
 
-    public static final String TABLE_NAME = "AUTH_ROLE";
-    public static final String TABLE_NAME_JOIN_ROLE_PERM = "AUTH_ROLE_PERM_XREF";
-    public static final String TABLE_NAME_JOIN_ROLE_PERM_ROLE_COL = "ROLE_ID";
-    public static final String TABLE_NAME_JOIN_ROLE_PERM_PERM_COL = "PERMISSION_ID";
-
     @Id
     @Column(name = "ID")
     @PresentationField(order = 1)
