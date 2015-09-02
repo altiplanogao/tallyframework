@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.ArrayFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.ArrayFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class ArrayFieldHandler extends CollectionFieldHandler {
             if(!genericType.equals(type)){
                 LOGGER.error("The List field should specify its parameter type.");
             }
-            ArrayFieldFacet facet = new ArrayFieldFacet(genericType);
+            ArrayFieldMetaFacet facet = new ArrayFieldMetaFacet(genericType);
 
             fieldMetadata.addFacet(facet);
             return ProcessResult.HANDLED;

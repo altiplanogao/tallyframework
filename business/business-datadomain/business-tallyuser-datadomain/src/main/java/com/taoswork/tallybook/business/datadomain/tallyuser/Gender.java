@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
@@ -8,10 +10,11 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/25.
  */
+@PresentationEnum(unknownEnum = "unknown")
 public enum Gender implements IFriendlyEnum<Character> {
-    Male('M', "male"),
-    Female('F', "female"),
-    Unknown('U', "unknown");
+    male('M', "male"),
+    female('F', "female"),
+    unknown('U', "unknown");
 
     public static final char UNKNOWN_CHAR = 'U';
 

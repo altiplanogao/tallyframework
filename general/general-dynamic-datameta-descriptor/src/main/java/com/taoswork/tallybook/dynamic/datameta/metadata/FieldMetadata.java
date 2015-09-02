@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetaFacet;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
@@ -25,7 +24,7 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
 
     private final int originalOrder;
 
-    public final Map<FieldFacetType, IFieldFacet> facets = new HashMap<FieldFacetType, IFieldFacet>();
+    public final Map<FieldFacetType, IFieldMetaFacet> facets = new HashMap<FieldFacetType, IFieldMetaFacet>();
 
     public FieldMetadata(int originalOrder, Field field){
         setField(field);
@@ -97,8 +96,8 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
         return facets.containsKey(FieldFacetType.Collection);
     }
 
-    public void addFacet(IFieldFacet facet){
-        IFieldFacet existingFacet = facets.getOrDefault(facet.getType(), null);
+    public void addFacet(IFieldMetaFacet facet){
+        IFieldMetaFacet existingFacet = facets.getOrDefault(facet.getType(), null);
         if(existingFacet == null){
             facets.put(facet.getType(), facet);
         }else {

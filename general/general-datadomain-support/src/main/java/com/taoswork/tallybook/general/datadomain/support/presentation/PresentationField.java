@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.datadomain.support.presentation;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -51,4 +52,6 @@ public @interface PresentationField {
      * @return the field type
      */
     FieldType fieldType() default FieldType.UNKNOWN;
+
+    Class enumeration() default Object.class;
 }

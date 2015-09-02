@@ -19,4 +19,13 @@ public class FriendlyNameHelper {
         Class<?> clz = field.getDeclaringClass();
         return clz.getSimpleName() + "_Field_" + field.getName();
     }
+    public static String makeFriendlyName4EnumClass(Class<?> enumClz){
+        String simpleName = enumClz.getSimpleName();
+        return "Enum_" + simpleName;
+    }
+    public static String makeFriendlyName4EnumValue(Class<?> enumClz, Object value){
+        String simpleName = enumClz.getSimpleName();
+        return "Enum_" + simpleName + "_Val_" + value.toString();
+    }
+
 }

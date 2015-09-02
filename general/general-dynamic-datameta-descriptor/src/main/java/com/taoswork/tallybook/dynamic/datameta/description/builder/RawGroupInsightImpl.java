@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.impl;
+package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
 
@@ -10,10 +10,13 @@ import java.util.Set;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public class GroupInsightImpl
+final class RawGroupInsightImpl
         extends NamedOrderedInfoImpl
-        implements GroupInsightRW {
+        implements RawGroupInsightRW {
 
+    /**
+     * fields are not ordered
+     */
     private final Set<String> fields = new HashSet<String>();
 
     @Override

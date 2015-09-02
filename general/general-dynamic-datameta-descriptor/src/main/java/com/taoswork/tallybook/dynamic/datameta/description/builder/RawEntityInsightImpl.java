@@ -1,27 +1,25 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.impl;
+package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInsight;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.impl.TabInsightRW;
 
 import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public class EntityInsightImpl
+class RawEntityInsightImpl
         extends NamedInfoImpl
-        implements EntityInsightRW {
+        implements RawEntityInsightRW {
 
     private String idField;
     private String nameField;
     private String primarySearchField;
 
     private final Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
-    private final Map<String, TabInsightRW> tabs = new HashMap<String, TabInsightRW>();
+    private final Map<String, RawTabInsightRW> tabs = new HashMap<String, RawTabInsightRW>();
     private final Set<String> gridFields = new HashSet<String>();
 
     private transient boolean dirty = false;
@@ -33,7 +31,7 @@ public class EntityInsightImpl
     }
 
     @Override
-    public void addTab(TabInsightRW tabInfo) {
+    public void addTab(RawTabInsightRW tabInfo) {
         tabs.put(tabInfo.getName(), tabInfo);
         dirty = true;
     }
@@ -49,12 +47,12 @@ public class EntityInsightImpl
     }
 
     @Override
-    public TabInsight getTab(String tabName) {
+    public RawTabInsight getTab(String tabName) {
         return tabs.getOrDefault(tabName, null);
     }
 
     @Override
-    public Collection<? extends TabInsight> getTabs() {
+    public Collection<? extends RawTabInsight> getTabs() {
         return Collections.unmodifiableCollection(tabs.values());
     }
 
@@ -66,8 +64,8 @@ public class EntityInsightImpl
     }
 
     @Override
-    public TabInsightRW getTabRW(String tabName) {
-        TabInsightRW tabInfoRW =  tabs.getOrDefault(tabName, null);
+    public RawTabInsightRW getTabRW(String tabName) {
+        RawTabInsightRW tabInfoRW =  tabs.getOrDefault(tabName, null);
         dirty = true;
         return tabInfoRW;
     }
@@ -89,7 +87,7 @@ public class EntityInsightImpl
     }
 
     @Override
-    public EntityInsightImpl setIdField(String idField) {
+    public RawEntityInsightImpl setIdField(String idField) {
         this.idField = idField;
         return this;
     }
@@ -100,7 +98,7 @@ public class EntityInsightImpl
     }
 
     @Override
-    public EntityInsightRW setNameField(String nameField) {
+    public RawEntityInsightRW setNameField(String nameField) {
         this.nameField = nameField;
         return this;
     }

@@ -1,14 +1,13 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.impl;
+package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.GroupInsight;
 
 import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public interface GroupInsightRW extends NamedOrderedInfoRW, GroupInsight {
+interface RawGroupInsightRW extends NamedOrderedInfoRW, RawGroupInsight {
     void clearFields();
 
     void addField(String field);

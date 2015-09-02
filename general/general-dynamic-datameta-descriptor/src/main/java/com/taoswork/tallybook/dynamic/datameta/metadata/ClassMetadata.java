@@ -74,6 +74,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
 
     public void absorbSuper(ClassMetadata superMeta){
         if(superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())){
+            containsSuper = true;
             absorb(superMeta);
         }else {
             throw new IllegalArgumentException();

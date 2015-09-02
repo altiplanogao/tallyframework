@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.CollectionFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.CollectionFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 
 import java.lang.reflect.Field;
@@ -14,7 +14,7 @@ abstract class CollectionFieldHandler implements IFieldHandler{
     public final ProcessResult process(Field a, FieldMetadata aMeta) {
         ProcessResult pr = processCollectionField(a, aMeta);
         if(pr.equals(ProcessResult.HANDLED)){
-            aMeta.addFacet(new CollectionFieldFacet());
+            aMeta.addFacet(new CollectionFieldMetaFacet());
         }
         return pr;
     }

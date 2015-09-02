@@ -1,7 +1,9 @@
 package com.taoswork.tallybook.dynamic.datameta.testdata.clazzes;
 
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.enumtype.CompanyType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.Column;
@@ -83,6 +85,10 @@ public class CompanyImpl {
             visibility = Visibility.GRID_HIDE
     )
     protected Date creationDate;
+
+    @Column(name = "TYPE")
+    @PresentationField(visibility = Visibility.VISIBLE_ALL, fieldType = FieldType.ENUMERATION, enumeration = CompanyType.class)
+    private String companyType;
 
     @Column(name = "TAX_CODE")
     @PresentationField(

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.MapFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.MapFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.general.solution.reflect.GenericTypeUtility;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class MapFieldHandler extends CollectionFieldHandler {
                         field.getDeclaringClass().getSimpleName(), field.getName(), clazz);
             }
 
-            MapFieldFacet facet = new MapFieldFacet(genericType);
+            MapFieldMetaFacet facet = new MapFieldMetaFacet(genericType);
             fieldMetadata.addFacet(facet);
             return ProcessResult.HANDLED;
         }

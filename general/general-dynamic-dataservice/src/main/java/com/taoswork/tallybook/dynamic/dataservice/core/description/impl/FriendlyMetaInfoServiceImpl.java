@@ -1,11 +1,14 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.description.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
@@ -30,39 +33,22 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     public EntityInfo makeFriendly(EntityInfo rawEntityInfo, Locale locale) {
         EntityInfo freshEntityInfo = CloneUtility.makeClone(rawEntityInfo);
         if (freshEntityInfo instanceof NamedInfoRW){
-            String oldFriendly = freshEntityInfo.getFriendlyName();
-            String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
-
-            NamedInfoRW namedInfo = (NamedInfoRW)freshEntityInfo;
-            namedInfo.setFriendlyName(newFriendly);
+            makeNamedInfoFriendly(freshEntityInfo, (NamedInfoRW) freshEntityInfo, locale);
         }else {
             LOGGER.error("new EntityInfo by Clone has un-writeable IEntityInfo {}", freshEntityInfo);
         }
         for (FieldInfo fieldInfo : freshEntityInfo.getFields().values()) {
-            String oldFriendly = fieldInfo.getFriendlyName();
-            String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
-            if (fieldInfo instanceof FieldInfoRW) {
-                FieldInfoRW fieldInfoRW = (FieldInfoRW) fieldInfo;
-                fieldInfoRW.setFriendlyName(newFriendly);
-            } else {
-                LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", fieldInfo);
-            }
+            makeFieldInfoFriendly(fieldInfo, locale);
         }
         for(ITabInfo tabInfo : freshEntityInfo.getTabs()){
             if (tabInfo instanceof NamedInfoRW) {
-                String oldFriendly = tabInfo.getFriendlyName();
-                String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
-                NamedInfoRW tabInfoRW = (NamedInfoRW) tabInfo;
-                tabInfoRW.setFriendlyName(newFriendly);
+                makeNamedInfoFriendly(tabInfo, (NamedInfoRW)tabInfo, locale);
             } else {
                 LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", tabInfo);
             }
             for(IGroupInfo groupInfo : tabInfo.getGroups()){
                 if (groupInfo instanceof NamedInfoRW) {
-                    String oldFriendly = groupInfo.getFriendlyName();
-                    String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
-                    NamedInfoRW groupInfoRW = (NamedInfoRW) groupInfo;
-                    groupInfoRW.setFriendlyName(newFriendly);
+                    makeNamedInfoFriendly(groupInfo, (NamedInfoRW)groupInfo, locale);
                 } else {
                     LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", tabInfo);
                 }
@@ -70,5 +56,30 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
         }
 
         return freshEntityInfo;
+    }
+
+    private void makeNamedInfoFriendly(NamedInfo source, NamedInfoRW target, Locale locale){
+        String oldFriendly = source.getFriendlyName();
+        String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
+        target.setFriendlyName(newFriendly);
+    }
+
+    private void makeFieldInfoFriendly(FieldInfo fieldInfo, Locale locale){
+        if (fieldInfo instanceof FieldInfoRW) {
+            makeNamedInfoFriendly(fieldInfo, (NamedInfoRW)fieldInfo, locale);
+
+            EnumFacetInfo enumFacetInfo = (EnumFacetInfo)fieldInfo.getFacet(FieldFacetType.Enum);
+            if(enumFacetInfo != null){
+                EnumFacetInfo freshEnumFacetInfo = CloneUtility.makeClone(enumFacetInfo);
+                for(String key : freshEnumFacetInfo.getOptions()){
+                    String val = enumFacetInfo.getFriendlyName(key);
+                    String newVal = friendlyMessageSource.getMessage(val, null, val, locale);
+                    freshEnumFacetInfo.setFriendlyName(key, newVal);
+                }
+                ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacetInfo);
+            }
+        } else {
+            LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", fieldInfo);
+        }
     }
 }

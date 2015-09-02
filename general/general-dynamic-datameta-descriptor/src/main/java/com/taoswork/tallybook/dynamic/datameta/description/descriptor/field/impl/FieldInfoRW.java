@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.imp
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 /**
@@ -19,4 +20,6 @@ public interface FieldInfoRW extends NamedOrderedInfoRW, FieldInfo {
     FieldInfo setSupportSort(boolean supportSort);
 
     FieldInfo setSupportFilter(boolean supportFilter);
+
+    void addFacet(IFieldFacet enumFacetInfo);
 }

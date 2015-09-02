@@ -41,6 +41,7 @@ public class MetadataServiceTest_CompanyImpl {
         callCounter = assertFieldTabGroup(fieldMetadataMap, "description", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "description2", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "creationDate", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.Advanced, callCounter);
+        callCounter = assertFieldTabGroup(fieldMetadataMap, "companyType", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "taxCode", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.Private, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "adminId", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.Private, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "publicProducts", CompanyImpl.Presentation.Tab.Marketing, CompanyImpl.Presentation.Group.Public, callCounter);

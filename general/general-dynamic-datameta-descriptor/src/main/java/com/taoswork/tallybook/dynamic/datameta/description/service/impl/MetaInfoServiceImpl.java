@@ -1,8 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.builder.EntityInfoBuilder;
-import com.taoswork.tallybook.dynamic.datameta.description.builder.EntityInsightBuilder;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.clazz.EntityInsight;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
@@ -30,8 +28,7 @@ public class MetaInfoServiceImpl implements
 
     @Override
     public EntityInfo generateEntityMainInfo(ClassMetadata classMetadata) {
-        EntityInsight entityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
-        EntityInfo entityInfo = EntityInfoBuilder.build(entityInsight);
+        EntityInfo entityInfo = EntityInfoBuilder.build(classMetadata);
         return entityInfo;
     }
 
