@@ -28,7 +28,7 @@ public class StringLikeFilterValueConverter implements FilterValueConverter<Stri
     }
 
     @Override
-    public String convert(String stringValue) {
+    public String convert(Class type, String stringValue) {
         return getOnlyStartsWith() ? stringValue.toLowerCase() + "%" : "%" + stringValue.toLowerCase() + "%";
     }
 

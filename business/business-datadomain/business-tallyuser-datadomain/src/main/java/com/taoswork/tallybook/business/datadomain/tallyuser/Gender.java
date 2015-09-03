@@ -11,34 +11,34 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/25.
  */
 @PresentationEnum(unknownEnum = "unknown")
-public enum Gender implements IFriendlyEnum<Character> {
-    male('M', "male"),
-    female('F', "female"),
-    unknown('U', "unknown");
+public enum Gender implements IFriendlyEnum<String> {
+    male("M", "male"),
+    female("F", "female"),
+    unknown("U", "unknown");
 
-    public static final char UNKNOWN_CHAR = 'U';
+    public static final String UNKNOWN_CHAR = "U";
 
-    private final Character type;
+    private final String type;
     private final String friendlyType;
 
-    private static final Map<Character, Gender> typeToEnum = new HashMap<Character, Gender>();
+    private static final Map<String, Gender> typeToEnum = new HashMap<String, Gender>();
     static {
         for(Gender _enum : values()){
             typeToEnum.put(_enum.type, _enum);
         }
     }
 
-    Gender(Character type, String friendlyType) {
+    Gender(String type, String friendlyType) {
         this.type = type;
         this.friendlyType = friendlyType;
     }
 
-    public static Gender fromType(Character character){
+    public static Gender fromType(String character){
         return typeToEnum.get(character);
     }
 
     @Override
-    public Character getType() {
+    public String getType() {
         return type;
     }
 

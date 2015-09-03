@@ -19,14 +19,27 @@
  */
 package com.taoswork.tallybook.dynamic.dataservice.core.query.criteria.converter;
 
-import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EnumFilterValueConverter implements FilterValueConverter<String> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnumFilterValueConverter.class);
+
     @Override
-    public String convert(String stringValue) {
-        //return stringValue.split(",");
-        return stringValue;
+    public String convert(Class type, String stringValue) {
+        if(IFriendlyEnum.class.isAssignableFrom(type)){
+            IFriendlyEnum enumVal = null;
+            try{
+                enumVal = (IFriendlyEnum)type.getField(stringValue).get(null);
+                return enumVal.getType().toString();
+            }catch (Exception e){
+                return null;
+            }
+        }else {
+            return null;
+        }
     }
 
 }

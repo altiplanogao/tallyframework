@@ -24,6 +24,6 @@ package com.taoswork.tallybook.dynamic.dataservice.core.query.criteria.converter
  */
 public interface FilterValueConverter<T> {
 
-    T convert(String stringValue);
+    T convert(Class type, String stringValue);
 
 }

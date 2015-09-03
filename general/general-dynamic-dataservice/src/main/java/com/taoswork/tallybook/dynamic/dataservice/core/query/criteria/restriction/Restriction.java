@@ -36,11 +36,13 @@ public class Restriction {
         return this;
     }
 
-    public List<Object> convertValues(List<String> valueStrings) {
+    public List<Object> convertValues(Class type, List<String> valueStrings) {
         List<Object> vals = new ArrayList<Object>();
         for(String valString : valueStrings){
-            Object val = filterValueConverter.convert(valString);
-            vals.add(val);
+            Object val = filterValueConverter.convert(type, valString);
+            if(val != null){
+                vals.add(val);
+            }
         }
         return vals;
     }

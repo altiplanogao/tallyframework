@@ -21,6 +21,7 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     private int visibility;
 
     private FieldType fieldType;
+    private Class fieldClass;
 
     private final int originalOrder;
 
@@ -90,6 +91,14 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
 
     public void setFieldType(FieldType fieldType) {
         this.fieldType = fieldType;
+    }
+
+    public Class getFieldClass() {
+        return fieldClass;
+    }
+
+    public void setFieldClass(Class fieldClass) {
+        this.fieldClass = fieldClass;
     }
 
     public boolean isCollectionField(){

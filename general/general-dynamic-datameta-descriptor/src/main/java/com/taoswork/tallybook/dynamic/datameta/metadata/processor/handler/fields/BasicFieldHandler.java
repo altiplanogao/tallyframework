@@ -25,6 +25,7 @@ public class BasicFieldHandler implements IFieldHandler {
         fieldMetadata.setOrder(PresentationField.DEFAULT_ORDER_BIAS + fieldMetadata.getOriginalOrder());
         fieldMetadata.setVisibility(Visibility.DEFAULT);
         fieldMetadata.setNameField(false);
+        fieldMetadata.setFieldClass(field.getType());
 
         if(presentationField != null){
             fieldMetadata.setTabName(presentationField.tab());
@@ -35,6 +36,9 @@ public class BasicFieldHandler implements IFieldHandler {
             fieldMetadata.setVisibility(presentationField.visibility());
             fieldMetadata.setFieldType(presentationField.fieldType());
             fieldMetadata.setNameField(presentationField.nameField());
+            if(!presentationField.enumeration().equals(Object.class)){
+                fieldMetadata.setFieldClass(presentationField.enumeration());
+            }
         }
         return ProcessResult.HANDLED;
     }

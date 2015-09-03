@@ -76,6 +76,7 @@ public class MetadataServiceImpl implements MetadataService {
                 classesWithSuper.add(spClz);
             }
         }
+        classesWithSuper.remove(Object.class);
 
         for(Class clz : classesWithSuper){
             ClassMetadata classMetadata = generateMetadata(clz);
