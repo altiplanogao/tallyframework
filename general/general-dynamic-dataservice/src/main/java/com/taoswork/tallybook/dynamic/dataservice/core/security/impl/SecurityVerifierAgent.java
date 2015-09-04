@@ -31,6 +31,11 @@ public class SecurityVerifierAgent implements ISecurityVerifier {
     }
 
     @Override
+    public Access getAllPossibleAccess(String resourceEntity, Access mask) {
+        return verifier.getAllPossibleAccess(resourceEntity, mask);
+    }
+
+    @Override
     public boolean canAccess(String resourceEntity, Access access) {
         return verifier.canAccess(resourceEntity, access);
     }

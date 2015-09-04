@@ -10,9 +10,11 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndDynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndDynamicEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
@@ -82,13 +84,17 @@ public class AdminBasicEntityController extends BaseController {
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null
 
-//        FrontEndDynamicEntityService dynamicServerEntityService = dataServiceManager.getFrontEndDynamicEntityService(entityType);
-//        EntityRequest entityRequest =
-//            Parameter2RequestTranslator.makeInfoRequest(entityResName, entityType, request.getRequestURI(), requestParams);
-//        EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest);
-//        EntityInfoResponse entityInfoFriendlyResponse = dynamicServerEntityService.getFriendlyInfoResponse(entityRequest, request.getLocale());
-//        EntityInfoRequest entityInfoRequest =
-        return "";
+        EntityRequest entityRequest =
+            Parameter2RequestTranslator.makeInfoRequest(entityResName, entityType,
+                request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
+        entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
+
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
+
+        EntityResponse entityResponse = dynamicServerEntityService.getInfoResponse(entityRequest, request.getLocale());
+        model.addAttribute("data", entityResponse);
+        return TallyBookDataViewResolver.JSON_VIEW_NAME;
     }
 
     /**
@@ -125,7 +131,7 @@ public class AdminBasicEntityController extends BaseController {
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", entityQueryResponse);
-            return TallyBookDataViewResolver.JASON_VIEW_NAME;
+            return TallyBookDataViewResolver.JSON_VIEW_NAME;
         }
 
         Person person = adminCommonModelService.getPersistentPerson();
@@ -176,7 +182,7 @@ public class AdminBasicEntityController extends BaseController {
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", readResponse);
-            return TallyBookDataViewResolver.JASON_VIEW_NAME;
+            return TallyBookDataViewResolver.JSON_VIEW_NAME;
         }
 
         Person person = adminCommonModelService.getPersistentPerson();

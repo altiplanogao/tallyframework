@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryRe
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -35,4 +36,5 @@ public interface DynamicEntityService {
 
     <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 
+    <T> Collection<String> getAuthorizeActions(Class<T> entityType);
 }

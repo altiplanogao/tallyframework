@@ -12,6 +12,11 @@ public class PassAllSecurityVerifier implements ISecurityVerifier {
     private static final Logger LOGGER = LoggerFactory.getLogger(PassAllSecurityVerifier.class);
 
     @Override
+    public Access getAllPossibleAccess(String resourceEntity, Access mask) {
+        return new Access(mask);
+    }
+
+    @Override
     public boolean canAccess(String resourceEntity, Access access) {
         LOGGER.trace("hardcoded to pass: {0} {1}", resourceEntity, access);
         return true;

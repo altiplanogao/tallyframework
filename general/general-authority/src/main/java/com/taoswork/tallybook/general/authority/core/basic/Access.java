@@ -34,6 +34,10 @@ public final class Access {
         this.extended = extended;
     }
 
+    public Access(Access that) {
+        this(that.general, that.extended);
+    }
+
     public static Access makeGeneralAccess(int... accesses) {
         int accAll = NONE;
         for (int acc : accesses) {

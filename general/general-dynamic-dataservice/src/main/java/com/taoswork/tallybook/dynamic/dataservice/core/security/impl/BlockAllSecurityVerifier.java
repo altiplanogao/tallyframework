@@ -12,6 +12,11 @@ public class BlockAllSecurityVerifier implements ISecurityVerifier {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockAllSecurityVerifier.class);
 
     @Override
+    public Access getAllPossibleAccess(String resourceEntity, Access mask) {
+        return Access.None;
+    }
+
+    @Override
     public boolean canAccess(String resourceEntity, Access access) {
         LOGGER.trace("hardcoded to block: {0} {1}", resourceEntity, access);
         return false;

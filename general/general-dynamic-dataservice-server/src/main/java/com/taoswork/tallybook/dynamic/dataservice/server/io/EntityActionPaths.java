@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io;
 
 /**
- * Created by Gao Yuan on 2015/8/18.
+ * {@link com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames}
  */
 public class EntityActionPaths {
     private EntityActionPaths()throws IllegalAccessException{throw new IllegalAccessException("Not instanceable object");}

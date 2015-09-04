@@ -105,6 +105,20 @@ public class Parameter2RequestTranslator {
         }
     }
 
+    public static EntityRequest makeInfoRequest(
+        String entityResName,
+        String entityType,
+        String entityUri,
+        String fullUrl,
+        MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
+
+        EntityRequest request = new EntityRequest();
+        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        _fillInfoCriterias(request, requestParams, infoFilter);
+
+        return request;
+    }
+
     public static EntityQueryRequest makeQueryRequest(
         String entityResName,
         String entityType,

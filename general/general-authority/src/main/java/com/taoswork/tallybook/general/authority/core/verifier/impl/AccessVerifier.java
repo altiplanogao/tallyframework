@@ -33,6 +33,19 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
+    public Access getAllPossibleAccess(IPermissionAuthority auth, String resourceEntity) {
+        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
+        IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
+        if (entityPermission == null) {
+            return Access.None;
+        }
+
+        //We don't know the exact purpose, so just use the merged access;
+        Access mergedAccess = entityPermission.getQuickCheckAccess();
+        return mergedAccess;
+    }
+
+    @Override
     public boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity) {
         resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
         IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);

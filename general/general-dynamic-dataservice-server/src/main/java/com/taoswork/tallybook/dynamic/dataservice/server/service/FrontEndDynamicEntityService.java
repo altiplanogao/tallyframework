@@ -19,6 +19,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +43,10 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
 //
 //    @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
 //    private DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+    private void appendAuthorizedActions(EntityRequest request, EntityResponse response){
+        Collection<String> actions = dynamicEntityService.getAuthorizeActions(request.getEntityType());
+        response.setActions(actions);
+    }
 
     private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale){
         Class<?> entityType = request.getEntityType();
@@ -75,14 +80,18 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
 
         EntityQueryResponse response = ResponseTranslator.translateQueryResponse(request, data);
         this.appendInfoFields(request, response, locale);
+        this.appendAuthorizedActions(request, response);
         LinkBuilder.buildLinkForQueryResults(request.getFullUrl(), response);
         return response;
     }
 
     @Override
-    public EntityResponse getInfoResponse(EntityQueryRequest request, Locale locale){
+    public EntityResponse getInfoResponse(EntityRequest request, Locale locale){
         EntityResponse response = new EntityResponse();
+        ResponseTranslator.translate(request, response);
         this.appendInfoFields(request, response, locale);
+        this.appendAuthorizedActions(request, response);
+        LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);
         return response;
     }
 
@@ -93,6 +102,7 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
 
         EntityReadResponse response = ResponseTranslator.translateReadResponse(request, data);
         this.appendInfoFields(request, response, locale);
+        this.appendAuthorizedActions(request, response);
         LinkBuilder.buildLinkForReadResults(request.getFullUrl(), response);
         return response;
     }

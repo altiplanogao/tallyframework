@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
@@ -18,5 +19,5 @@ public interface IFrontEndDynamicEntityService {
 
     EntityReadResponse readRecord(EntityReadRequest readRequest, Locale locale) throws ServiceException;
 
-    EntityResponse getInfoResponse(EntityQueryRequest request, Locale locale);
+    EntityResponse getInfoResponse(EntityRequest request, Locale locale);
 }

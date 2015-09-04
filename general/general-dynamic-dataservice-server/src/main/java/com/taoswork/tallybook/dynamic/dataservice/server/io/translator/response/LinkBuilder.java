@@ -16,6 +16,11 @@ import org.springframework.hateoas.Link;
  */
 public class LinkBuilder {
 
+    public static void buildLinkForInfoResults(String fullUrl, EntityResponse response) {
+        response.add(new Link(fullUrl));
+
+    }
+
     public static void buildLinkForQueryResults(String fullRequestUrl, EntityQueryResponse response){
         QueryResultRange currentRange = response.getEntities().makeRange();
         QueryResultRange next = currentRange.next();
@@ -84,4 +89,5 @@ public class LinkBuilder {
             response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.DELETE));
         }
     }
+
 }
