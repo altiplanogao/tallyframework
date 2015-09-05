@@ -5,8 +5,8 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryR
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInstanceResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityReadResult;
 
 /**
  * Created by Gao Yuan on 2015/8/5.
@@ -30,8 +30,8 @@ public class ResultTranslator {
         return result;
     }
 
-    public static EntityReadResult convertReadResult(EntityReadRequest request, Object data) {
-        EntityReadResult result = new EntityReadResult();
+    public static EntityInstanceResult convertReadResult(EntityReadRequest request, Object data) {
+        EntityInstanceResult result = new EntityInstanceResult();
         result.setData(data);
         return result;
     }

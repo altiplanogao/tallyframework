@@ -47,6 +47,10 @@ import java.util.Set;
 @RequestMapping("/{entityResName:^[\\w|-]+$}")
 public class AdminBasicEntityController extends BaseController {
     public static final String CONTROLLER_NAME = "AdminBasicEntityController";
+    private static class VIEWS{
+        static final String DataView = TallyBookDataViewResolver.JSON_VIEW_NAME;
+        static final String AssembledView = "entity/content/assembledView";
+    }
 
     @Resource(name = AdminMenuService.SERVICE_NAME)
     protected AdminMenuService adminMenuService;
@@ -110,11 +114,10 @@ public class AdminBasicEntityController extends BaseController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String searchEntityList(
-        HttpServletRequest request, HttpServletResponse response, Model model,
-        @PathVariable(value = "entityResName") String entityResName,
-        @PathVariable Map<String, String> pathVars,
-        @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
+    public String searchEntityList(HttpServletRequest request, HttpServletResponse response, Model model,
+                                   @PathVariable(value = "entityResName") String entityResName,
+                                   @PathVariable Map<String, String> pathVars,
+                                   @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null
@@ -149,8 +152,8 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(entityQueryResponse);
         model.addAttribute("queryResult", entityResultInJson);
 
-        model.addAttribute("viewType", "mainGrid");
-        return "entity/mainframe";
+        model.addAttribute("viewType", "entityGrid");
+        return VIEWS.AssembledView;
     }
 
     /**
@@ -165,11 +168,10 @@ public class AdminBasicEntityController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String viewEntityForm(
-        HttpServletRequest request, HttpServletResponse response, Model model,
-        @PathVariable(value = "entityResName") String entityResName,
-        @PathVariable("id") String id,
-        @PathVariable Map<String, String> pathVars) throws Exception {
+    public String viewEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
+                                 @PathVariable(value = "entityResName") String entityResName,
+                                 @PathVariable("id") String id,
+                                 @PathVariable Map<String, String> pathVars) throws Exception {
 
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityResName, entityType,
@@ -182,7 +184,7 @@ public class AdminBasicEntityController extends BaseController {
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", readResponse);
-            return TallyBookDataViewResolver.JSON_VIEW_NAME;
+            return VIEWS.DataView;
         }
 
         Person person = adminCommonModelService.getPersistentPerson();
@@ -201,30 +203,32 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(readResponse);
         model.addAttribute("readResult", entityResultInJson);
 
-        model.addAttribute("viewType", "mainForm");
-        return "entity/mainframe";
+        model.addAttribute("viewType", "entityView");
+        return VIEWS.AssembledView;
     }
 
-//    /**
-//     * Renders the modal form that is used to add a new parent level entity. Note that this form cannot render any
-//     * subcollections as operations on those collections require the parent level entity to first be saved and have
-//     * and id. Once the entity is initially saved, we will redirect the user to the normal manage entity screen where
-//     * they can then perform operations on sub collections.
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param entityType
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/add", method = RequestMethod.GET)
-//    public String viewAddEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                    @PathVariable Map<String, String> pathVars,
-//                                    @RequestParam(defaultValue = "") String entityType) throws Exception {
-//        return "";
-//    }
+    /**
+     * Renders the modal form that is used to add a new parent level entity. Note that this form cannot render any
+     * subcollections as operations on those collections require the parent level entity to first be saved and have
+     * and id. Once the entity is initially saved, we will redirect the user to the normal manage entity screen where
+     * they can then perform operations on sub collections.
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param pathVars
+     * @param entityType
+     * @return the return view path
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String viewAddEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
+                                    @PathVariable Map<String, String> pathVars,
+                                    @RequestParam(defaultValue = "") String entityType,
+                                    @RequestParam(defaultValue = "") String modal) throws Exception {
+
+        return "";
+    }
 //
 //    /**
 //     * Processes the request to add a new entity. If successful, returns a redirect to the newly created entity.
