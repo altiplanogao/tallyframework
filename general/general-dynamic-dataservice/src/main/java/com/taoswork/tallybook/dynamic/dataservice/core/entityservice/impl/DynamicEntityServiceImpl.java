@@ -5,7 +5,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.IPersistentMethod;
@@ -18,6 +17,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVer
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -92,6 +93,24 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
+    public <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+        Class rootable = dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
+        try {
+            Constructor constructor = rootable.getConstructor(new Class[]{});
+            Object obj = constructor.newInstance(new Object[]{});
+            return (T)obj;
+        } catch (InstantiationException e) {
+            throw new ServiceException(e);
+        } catch (IllegalAccessException e) {
+            throw new ServiceException(e);
+        } catch (InvocationTargetException e) {
+            throw new ServiceException(e);
+        } catch (NoSuchMethodException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Class<?> getRootInstanceableEntityClass(Class<?> entityClz){
         Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         return entityRootClz;
@@ -108,14 +127,9 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> Collection<String> getAuthorizeActions(Class<T> entityType){
-        List<String> actions = new ArrayList<String>();
-        Access access = securityVerifier.getAllPossibleAccess(entityType.getName(), Access.Crudq);
-        if(access.hasGeneral(Access.CREATE))actions.add(EntityActionNames.ADD);
-        if(access.hasGeneral(Access.READ))actions.add(EntityActionNames.READ);
-        if(access.hasGeneral(Access.UPDATE))actions.add(EntityActionNames.UPDATE);
-        if(access.hasGeneral(Access.DELETE))actions.add(EntityActionNames.DELETE);
-        if(access.hasGeneral(Access.QUERY))actions.add(EntityActionNames.SEARCH);
-        return actions;
+    public Access getAuthorizeAccess(Class entityType, Access mask){
+        if(mask == null)mask = Access.Crudq;
+        Access access = securityVerifier.getAllPossibleAccess(entityType.getName(), mask);
+        return access;
     }
 }

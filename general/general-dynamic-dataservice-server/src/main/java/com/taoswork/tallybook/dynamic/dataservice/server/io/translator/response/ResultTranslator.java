@@ -30,7 +30,7 @@ public class ResultTranslator {
         return result;
     }
 
-    public static EntityInstanceResult convertReadResult(EntityReadRequest request, Object data) {
+    public static EntityInstanceResult convertInstanceResult(Object data) {
         EntityInstanceResult result = new EntityInstanceResult();
         result.setData(data);
         return result;

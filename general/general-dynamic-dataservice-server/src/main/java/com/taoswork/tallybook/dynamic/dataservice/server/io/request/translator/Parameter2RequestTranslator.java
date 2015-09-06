@@ -4,10 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.SortDirection;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,13 +102,9 @@ public class Parameter2RequestTranslator {
         }
     }
 
-    public static EntityRequest makeInfoRequest(
-        String entityResName,
-        String entityType,
-        String entityUri,
-        String fullUrl,
-        MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
-
+    public static EntityRequest makeInfoRequest(String entityResName, String entityType,
+                                                String entityUri, String fullUrl,
+                                                MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
         EntityRequest request = new EntityRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         _fillInfoCriterias(request, requestParams, infoFilter);
@@ -119,13 +112,9 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityQueryRequest makeQueryRequest(
-        String entityResName,
-        String entityType,
-        String entityUri,
-        String fullUrl,
-        MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
-
+    public static EntityQueryRequest makeQueryRequest(String entityResName, String entityType,
+                                                      String entityUri, String fullUrl,
+                                                      MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
         EntityQueryRequest request = new EntityQueryRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         _queryRequestSetPropertyCriterias(request, requestParams);
@@ -134,12 +123,15 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityReadRequest makeReadRequest(
-        String entityResName,
-        String entityType,
-        String entityUri,
-        String fullUrl,
-        String id) {
+    public static EntityAddGetRequest makeAddRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
+        EntityAddGetRequest request = new EntityAddGetRequest();
+        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        request.addEntityInfoType(EntityInfoType.Form);
+        return request;
+    }
+
+    public static EntityReadRequest makeReadRequest(String entityResName, String entityType,
+                                                    String entityUri, String fullUrl, String id) {
         EntityReadRequest request = new EntityReadRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         request.setId(id);
@@ -161,5 +153,4 @@ public class Parameter2RequestTranslator {
             }
         }
     }
-
 }

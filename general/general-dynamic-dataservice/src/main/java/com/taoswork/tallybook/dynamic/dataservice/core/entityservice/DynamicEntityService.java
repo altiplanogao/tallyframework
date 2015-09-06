@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.general.authority.core.basic.Access;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -28,6 +29,8 @@ public interface DynamicEntityService {
     @Transactional
     <T> void delete(T entity) throws ServiceException;
 
+    <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException;
+
     <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
 
     Class<?> getRootInstanceableEntityClass(Class<?> entityType);
@@ -36,5 +39,5 @@ public interface DynamicEntityService {
 
     <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 
-    <T> Collection<String> getAuthorizeActions(Class<T> entityType);
+    Access getAuthorizeAccess(Class entityType, Access mask);
 }

@@ -1,9 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityAddGetResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
@@ -15,9 +17,11 @@ import java.util.Locale;
  */
 public interface IFrontEndDynamicEntityService {
 
+    EntityResponse getInfoResponse(EntityRequest request, Locale locale);
+
     EntityQueryResponse queryRecords(EntityQueryRequest request, Locale locale) throws ServiceException;
 
     EntityReadResponse readRecord(EntityReadRequest readRequest, Locale locale) throws ServiceException;
 
-    EntityResponse getInfoResponse(EntityRequest request, Locale locale);
+    EntityAddGetResponse addRecord(EntityAddGetRequest request, Locale locale) throws ServiceException;
 }

@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityAddGetResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
@@ -55,6 +56,9 @@ public class LinkBuilder {
         appendEntityInstanceLinks(fullUrl, response);
     }
 
+    public static void buildLinkForAddGetResults(String fullUrl, EntityAddGetResponse response) {
+        response.add(new Link(fullUrl));
+    }
     /**
      *
      * @param entityUrl, url with entitytype path, example: http://localhost:2222/xxx

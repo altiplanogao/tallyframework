@@ -8,10 +8,12 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityAddGetResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
@@ -50,6 +52,7 @@ public class AdminBasicEntityController extends BaseController {
     private static class VIEWS{
         static final String DataView = TallyBookDataViewResolver.JSON_VIEW_NAME;
         static final String AssembledView = "entity/content/assembledView";
+        static final String ModalView = "entity/content/modalView";
     }
 
     @Resource(name = AdminMenuService.SERVICE_NAME)
@@ -98,7 +101,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityResponse entityResponse = dynamicServerEntityService.getInfoResponse(entityRequest, request.getLocale());
         model.addAttribute("data", entityResponse);
-        return TallyBookDataViewResolver.JSON_VIEW_NAME;
+        return VIEWS.DataView;
     }
 
     /**
@@ -134,7 +137,7 @@ public class AdminBasicEntityController extends BaseController {
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", entityQueryResponse);
-            return TallyBookDataViewResolver.JSON_VIEW_NAME;
+            return VIEWS.DataView;
         }
 
         Person person = adminCommonModelService.getPersistentPerson();
@@ -223,11 +226,41 @@ public class AdminBasicEntityController extends BaseController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String viewAddEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
+                                    @PathVariable(value = "entityResName") String entityResName,
                                     @PathVariable Map<String, String> pathVars,
-                                    @RequestParam(defaultValue = "") String entityType,
                                     @RequestParam(defaultValue = "") String modal) throws Exception {
+        String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
+        EntityAddGetRequest addRequest = Parameter2RequestTranslator.makeAddRequest(entityResName, entityType,
+            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
 
-        return "";
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
+
+        EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, request.getLocale());
+
+        if (isAjaxRequest(request)) {
+            model.addAttribute("data", addResponse);
+            return VIEWS.ModalView;
+        }
+
+        Person person = adminCommonModelService.getPersistentPerson();
+        AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
+        Menu menu = adminMenuService.buildMenu(employee);
+        CurrentPath currentPath = helper.buildCurrentPath(entityResName, request);
+
+        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
+//        model.addAttribute("currentUrl", request.getRequestURL().toString());
+        model.addAttribute("production", production);
+        model.addAttribute("menu", menu);
+        model.addAttribute("current", currentPath);
+        model.addAttribute("person", person);
+
+        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
+        String entityResultInJson = getObjectInJson(addResponse);
+        model.addAttribute("addData", entityResultInJson);
+
+        model.addAttribute("viewType", "entityAdd");
+        return VIEWS.AssembledView;
     }
 //
 //    /**
