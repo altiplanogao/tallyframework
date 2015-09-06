@@ -32,17 +32,6 @@ import java.util.Locale;
  * Created by Gao Yuan on 2015/5/29.
  */
 public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityService {
-    /**
-     * Actions:
-     * Grid:
-     *      CRUD
-     * Read:
-     *      Edit, Delete
-     * Edit:
-     *      Save, Delete
-     * Add:
-     *      Save
-     */
 
     public FrontEndDynamicEntityService(DynamicEntityService dynamicEntityService){
         this.dynamicEntityService = dynamicEntityService;

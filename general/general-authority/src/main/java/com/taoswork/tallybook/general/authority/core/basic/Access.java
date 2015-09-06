@@ -98,6 +98,10 @@ public final class Access {
             this.extended & access.extended);
     }
 
+    public Access exclude(Access access){
+        return and(access.not());
+    }
+
     public Access xor(Access access) {
         return new Access(
             this.general ^ access.general,
