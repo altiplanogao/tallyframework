@@ -6,7 +6,8 @@ import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.MysqlDbSetting;
 import com.taoswork.tallybook.general.extension.collections.PropertiesUtility;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
-import com.taoswork.tallybook.general.solution.i18n.i18nMessageFileArranger;
+import com.taoswork.tallybook.general.solution.message.MessageUtility;
+import com.taoswork.tallybook.general.solution.message.i18nMessageFileArranger;
 import com.taoswork.tallybook.general.solution.jpa.JPAPropertiesPersistenceUnitPostProcessor;
 import com.taoswork.tallybook.general.solution.property.PropertiesSubCollectionProvider;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
@@ -141,41 +142,17 @@ public class DataServiceBeanCreationHelper {
     public MessageSource createFriendlyMessageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        List<String> basenameList = new ArrayList<String>();
-        i18nMessageFileArranger arranger = new i18nMessageFileArranger();
 
         final String[] messageDirs = dataServiceDefinition.getEntityMessageDirectory().split(
-                IDataServiceDefinition.ENTITY_MESSAGES_FILE_DELIMTER);
+                IDataServiceDefinition.FILE_DELIMTER);
 
-        for(String messageDir : messageDirs) {
-            final String matchPattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + messageDir + "*.properties";
-
-            try {
-                Resource[] resources = resolver.getResources(
-                        //ResourceUtils.CLASSPATH_URL_PREFIX +
-                        matchPattern);
-
-                for (Resource res : resources) {
-                    try {
-                        String respath = res.getFilename();
-                        respath = messageDir + respath;
-                        arranger.add(respath);
-                    } catch (Exception e) {
-                        LOGGER.error("Resource '{}' failed to return path.", res.getURI());
-                    }
-                }
-                for (String simplefilename : arranger.fileNamesWithoutLocalization()) {
-                    basenameList.add(ResourceUtils.CLASSPATH_URL_PREFIX + simplefilename);
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        List<String> basenameList = MessageUtility.getMessageBasenames(resolver, messageDirs, null);
         ms.setBasenames(basenameList.toArray(new String[basenameList.size()]));
 
         return ms;
     }
+
+
 
     // **************************************************** //
     //                                                      //

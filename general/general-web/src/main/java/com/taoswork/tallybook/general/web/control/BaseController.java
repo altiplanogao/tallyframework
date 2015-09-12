@@ -1,5 +1,8 @@
 package com.taoswork.tallybook.general.web.control;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -37,5 +40,14 @@ public abstract class BaseController {
         boolean result = isAjaxByUrl || "XMLHttpRequest".equals(requestedWithHeader);
 
         return result;
+    }
+
+    private ThreadLocal<ObjectMapper> objectMapper = ThreadLocalHelper.createThreadLocal(ObjectMapper.class);
+    protected String getObjectInJson(Object data) {
+        try {
+            return objectMapper.get().writeValueAsString(data);
+        } catch (JsonProcessingException exp) {
+            throw new RuntimeException(exp);
+        }
     }
 }

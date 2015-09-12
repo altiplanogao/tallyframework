@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.admincore.conf;
 
 import com.taoswork.tallybook.admincore.TallyBookAdminCoreRoot;
+import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.AdminEmployeeDetailsService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.impl.AdminEmployeeDetailsServiceImpl;
@@ -12,16 +13,14 @@ import com.taoswork.tallybook.general.dataservice.management.manager.impl.DataSe
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Created by Gao Yuan on 2015/4/24.
  */
 @Configuration
+@Import({ApplicationCommonConfig.class})
 @ComponentScan(
         basePackageClasses = TallyBookAdminCoreRoot.class,
      //   useDefaultFilters = false,

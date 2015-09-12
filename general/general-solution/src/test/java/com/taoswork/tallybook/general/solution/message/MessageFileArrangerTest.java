@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.solution.i18n;
+package com.taoswork.tallybook.general.solution.message;
 
 import org.junit.Assert;
 import org.junit.Test;

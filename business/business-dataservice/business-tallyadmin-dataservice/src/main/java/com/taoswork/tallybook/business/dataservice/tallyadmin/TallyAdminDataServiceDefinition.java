@@ -27,7 +27,7 @@ public class TallyAdminDataServiceDefinition implements IDataServiceDefinition {
     public static final String TADMIN_TRANSACTION_MANAGER_NAME = "tallyadminTransactionManager";
 
     public static final String TADMIN_ENTITY_MESSAGES =
-            ENTITY_MESSAGES_FILE_PREFIX + "tallyadmin/" + ENTITY_MESSAGES_FILE_DELIMTER +
+            ENTITY_MESSAGES_FILE_PREFIX + "tallyadmin/" + FILE_DELIMTER +
             ENTITY_MESSAGES_FILE_PREFIX + "permission/";
 
     public static final String TADMIN_RUNTIME_PROPERTIES =

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
+import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
@@ -23,10 +24,12 @@ import com.taoswork.tallybook.general.dataservice.management.manager.DataService
 import com.taoswork.tallybook.general.solution.menu.Menu;
 import com.taoswork.tallybook.general.solution.menu.MenuEntry;
 import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
+import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
 import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import com.taoswork.tallybook.general.web.control.BaseController;
 import com.taoswork.tallybook.general.web.view.thymeleaf.TallyBookDataViewResolver;
+import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +42,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,15 +69,21 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    private ThreadLocal<ObjectMapper> objectMapper = ThreadLocalHelper.createThreadLocal(ObjectMapper.class);
-    private Helper helper = new Helper();
+    @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE_SOURCE)
+    protected MessageSource commonMessageSource;
 
-    private String getObjectInJson(Object data) {
-        try {
-            return objectMapper.get().writeValueAsString(data);
-        } catch (JsonProcessingException exp) {
-            throw new RuntimeException(exp);
+    private Helper helper = new Helper();
+    private volatile CachedMessageLocalizedDictionary commonMessage = null;
+    private Map<String, String> getCommonMessage(Locale locale){
+        if(commonMessage == null){
+            Map<String , String> raw = new HashMap<String, String>();
+            raw.put("loading", "loading");
+            raw.put("error", "error");
+            raw.put("errorOccurred", "errorOccurred");
+            commonMessage = new CachedMessageLocalizedDictionary(raw, commonMessageSource);
         }
+
+        return commonMessage.getTranslated(locale);
     }
 
     private Set<String> getParamInfoFilter(){
@@ -122,6 +133,7 @@ public class AdminBasicEntityController extends BaseController {
                                    @PathVariable Map<String, String> pathVars,
                                    @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
 
+        Locale locale = request.getLocale();
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         //TODO: what if entityType == null
 
@@ -133,7 +145,7 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
         IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
-        EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest, request.getLocale());
+        EntityQueryResponse entityQueryResponse = dynamicServerEntityService.queryRecords(entityRequest, locale);
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", entityQueryResponse);
@@ -145,9 +157,6 @@ public class AdminBasicEntityController extends BaseController {
         Menu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityResName, request);
 
-        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
-        model.addAttribute("production", production);
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
@@ -156,7 +165,18 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("queryResult", entityResultInJson);
 
         model.addAttribute("viewType", "entityGrid");
+        setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
+    }
+
+    private void setCommonModelAttributes(Model model, Locale locale) {
+        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
+        Map<String, String> messageMap = getCommonMessage(locale);
+        String messageDict = getObjectInJson(messageMap);
+
+        model.addAttribute("messageDict", messageDict);
+//        model.addAttribute("currentUrl", request.getRequestURL().toString());
+        model.addAttribute("production", production);
     }
 
     /**
@@ -176,6 +196,7 @@ public class AdminBasicEntityController extends BaseController {
                                  @PathVariable("id") String id,
                                  @PathVariable Map<String, String> pathVars) throws Exception {
 
+        Locale locale = request.getLocale();
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
@@ -183,7 +204,7 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
         IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
-        EntityReadResponse readResponse = dynamicServerEntityService.readRecord(readRequest, request.getLocale());
+        EntityReadResponse readResponse = dynamicServerEntityService.readRecord(readRequest, locale);
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", readResponse);
@@ -195,9 +216,6 @@ public class AdminBasicEntityController extends BaseController {
         Menu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityResName, request);
 
-        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
-        model.addAttribute("production", production);
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
@@ -207,6 +225,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("readResult", entityResultInJson);
 
         model.addAttribute("viewType", "entityView");
+        setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
     }
 
@@ -220,7 +239,6 @@ public class AdminBasicEntityController extends BaseController {
      * @param response
      * @param model
      * @param pathVars
-     * @param entityType
      * @return the return view path
      * @throws Exception
      */
@@ -229,6 +247,7 @@ public class AdminBasicEntityController extends BaseController {
                                     @PathVariable(value = "entityResName") String entityResName,
                                     @PathVariable Map<String, String> pathVars,
                                     @RequestParam(defaultValue = "") String modal) throws Exception {
+        Locale locale = request.getLocale();
         String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
         EntityAddGetRequest addRequest = Parameter2RequestTranslator.makeAddRequest(entityResName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
@@ -236,7 +255,7 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
         IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
 
-        EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, request.getLocale());
+        EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, locale);
 
         if (isAjaxRequest(request)) {
             model.addAttribute("data", addResponse);
@@ -248,9 +267,6 @@ public class AdminBasicEntityController extends BaseController {
         Menu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityResName, request);
 
-        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
-        model.addAttribute("production", production);
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
@@ -260,6 +276,7 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("addData", entityResultInJson);
 
         model.addAttribute("viewType", "entityAdd");
+        setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
     }
 //

@@ -118,6 +118,7 @@
     <module>business</module>
     <module>module</module>
     <module>test</module>
+    <module>application</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -189,6 +190,16 @@
         <version>${tallybook.framework.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>com.taoswork.tallybook</groupId>
+        <artifactId>application</artifactId>
+        <version>${tallybook.framework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.taoswork.tallybook</groupId>
+        <artifactId>application-core</artifactId>
+        <version>${tallybook.framework.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.taoswork.tallybook</groupId>
