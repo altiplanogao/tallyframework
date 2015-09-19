@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.web.view.thymeleaf;
 
 import com.taoswork.tallybook.general.extension.utils.UrlUtility;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.View;
 import org.thymeleaf.spring4.view.AbstractThymeleafView;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -58,12 +59,16 @@ public class TallyBookThymeleafViewResolver extends ThymeleafViewResolver {
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
         String originalViewName = viewName;
-        viewName = UrlUtility.findLongestPrefixMatchingValue(originalViewName, layoutMap,
+        String layoutViewName = UrlUtility.findLongestPrefixMatchingValue(originalViewName, layoutMap,
                 ESCAPE_MAPPING_VIEW_VALUE, defaultLayout);
 
-        AbstractThymeleafView view = (AbstractThymeleafView) super.loadView(viewName, locale);
-        view.addStaticVariable(TEMPLATE_VIEW_SLOT_NAME, originalViewName);
-        return view;
+        if(!StringUtils.isEmpty(layoutViewName)) {
+            AbstractThymeleafView layoutView = (AbstractThymeleafView) super.loadView(layoutViewName, locale);
+            layoutView.addStaticVariable(TEMPLATE_VIEW_SLOT_NAME, originalViewName);
+            return layoutView;
+        }else {
+            return super.loadView(viewName, locale);
+        }
     }
 
     @Override

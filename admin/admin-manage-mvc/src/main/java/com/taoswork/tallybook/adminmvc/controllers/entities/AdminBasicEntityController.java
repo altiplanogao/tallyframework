@@ -257,9 +257,16 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, locale);
 
+        if(isModalRequest(request)){
+            String entityResultInJson = getObjectInJson(addResponse);
+            model.addAttribute("addData", entityResultInJson);
+            model.addAttribute("viewType", "entityAdd");
+
+            return VIEWS.ModalView;
+        }
         if (isAjaxRequest(request)) {
             model.addAttribute("data", addResponse);
-            return VIEWS.ModalView;
+            return VIEWS.DataView;
         }
 
         Person person = adminCommonModelService.getPersistentPerson();

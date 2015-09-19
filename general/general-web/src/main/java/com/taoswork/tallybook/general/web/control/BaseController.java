@@ -17,6 +17,7 @@ public abstract class BaseController {
 
     public static final String AJAX_VIEW_NAME_PREFIX = "ajax:";
     public static final String AJAX_REQUEST_KEY = "ajax";
+    public static final String MODAL_REQUEST_KEY = "modal";
     public static String ajaxViewName(String viewName){
         return AJAX_VIEW_NAME_PREFIX + viewName;
     }
@@ -24,6 +25,24 @@ public abstract class BaseController {
     public BaseController(){
         LOGGER.info("[CONTROLLER: " +
                 this.getClass().getSimpleName() + "] Constructor" );
+    }
+
+    public static boolean isModalRequest(HttpServletRequest request) {
+        return isModalRequest(request, MODAL_REQUEST_KEY);
+    }
+
+    public static boolean isModalRequest(HttpServletRequest request, String modalKey) {
+        boolean isModalByUrl = false;
+        if(!StringUtils.isEmpty(modalKey)){
+            String isModalString = request.getParameter(modalKey);
+            isModalByUrl = ("".equals(isModalString) || "true".equals(isModalString));
+            if(isModalByUrl)
+                return true;
+        }
+        String requestedWithHeader = request.getHeader("RequestInModal");
+        boolean result = "true".equals(requestedWithHeader);
+
+        return result;
     }
 
     public static boolean isAjaxRequest(HttpServletRequest request){
@@ -35,9 +54,11 @@ public abstract class BaseController {
         if(!StringUtils.isEmpty(ajaxKey)){
             String isAjaxString = request.getParameter(ajaxKey);
             isAjaxByUrl = "true".equals(isAjaxString);
+            if(isAjaxByUrl)
+                return true;
         }
         String requestedWithHeader = request.getHeader("X-Requested-With");
-        boolean result = isAjaxByUrl || "XMLHttpRequest".equals(requestedWithHeader);
+        boolean result = "XMLHttpRequest".equals(requestedWithHeader);
 
         return result;
     }
