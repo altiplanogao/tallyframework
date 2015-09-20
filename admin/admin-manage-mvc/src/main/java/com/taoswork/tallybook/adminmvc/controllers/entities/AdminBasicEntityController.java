@@ -9,6 +9,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
@@ -164,7 +165,8 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(entityQueryResponse);
         model.addAttribute("queryResult", entityResultInJson);
 
-        model.addAttribute("viewType", "entityGrid");
+        model.addAttribute("scope", "main");
+        model.addAttribute("viewType", "entityMainGrid");
         setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
     }
@@ -206,6 +208,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityReadResponse readResponse = dynamicServerEntityService.readRecord(readRequest, locale);
 
+        model.addAttribute("currentAction", EntityActionNames.READ);
         if (isAjaxRequest(request)) {
             model.addAttribute("data", readResponse);
             return VIEWS.DataView;
@@ -224,6 +227,7 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(readResponse);
         model.addAttribute("readResult", entityResultInJson);
 
+        model.addAttribute("scope", "main");
         model.addAttribute("viewType", "entityView");
         setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
@@ -257,6 +261,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, locale);
 
+        model.addAttribute("currentAction", EntityActionNames.ADD);
         if(isModalRequest(request)){
             String entityResultInJson = getObjectInJson(addResponse);
             model.addAttribute("addData", entityResultInJson);
