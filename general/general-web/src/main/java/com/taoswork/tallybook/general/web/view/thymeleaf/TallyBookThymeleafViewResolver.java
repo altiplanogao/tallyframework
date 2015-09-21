@@ -58,6 +58,10 @@ public class TallyBookThymeleafViewResolver extends ThymeleafViewResolver {
 
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
+        if (viewName.startsWith(REDIRECT_URL_PREFIX) || viewName.startsWith(FORWARD_URL_PREFIX)) {
+            return super.loadView(viewName, locale);
+        }
+
         String originalViewName = viewName;
         String layoutViewName = UrlUtility.findLongestPrefixMatchingValue(originalViewName, layoutMap,
                 ESCAPE_MAPPING_VIEW_VALUE, defaultLayout);

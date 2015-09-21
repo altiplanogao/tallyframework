@@ -35,10 +35,8 @@ import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -227,7 +225,7 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(readResponse);
         model.addAttribute("readResult", entityResultInJson);
 
-        model.addAttribute("scope", "main");
+        model.addAttribute("formScope", "main");
         model.addAttribute("viewType", "entityView");
         setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
@@ -262,6 +260,7 @@ public class AdminBasicEntityController extends BaseController {
         EntityAddGetResponse addResponse = dynamicServerEntityService.addRecord(addRequest, locale);
 
         model.addAttribute("currentAction", EntityActionNames.ADD);
+        model.addAttribute("formAction", request.getRequestURL().toString());
         if(isModalRequest(request)){
             String entityResultInJson = getObjectInJson(addResponse);
             model.addAttribute("addData", entityResultInJson);
@@ -288,28 +287,29 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("addData", entityResultInJson);
 
         model.addAttribute("viewType", "entityAdd");
+        model.addAttribute("formScope", "main");
         setCommonModelAttributes(model, locale);
         return VIEWS.AssembledView;
     }
-//
-//    /**
-//     * Processes the request to add a new entity. If successful, returns a redirect to the newly created entity.
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param entityForm
-//     * @param result
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/add", method = RequestMethod.POST)
-//    public String addEntity(HttpServletRequest request, HttpServletResponse response, Model model,
-//                            @PathVariable Map<String, String> pathVars,
-//                            @ModelAttribute(value = "entityForm") EntityForm entityObject, BindingResult result) throws Exception {
-//        return "";
-//    }
+
+    /**
+     * Processes the request to add a new entity. If successful, returns a redirect to the newly created entity.
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param pathVars
+     * @param entityForm
+     * @param result
+     * @return the return view path
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String addEntity(HttpServletRequest request, HttpServletResponse response, Model model,
+                            @PathVariable Map<String, String> pathVars,
+                            @ModelAttribute(value = "entityForm") Object entityObject, BindingResult result) throws Exception {
+        return "";
+    }
 //
 //    /**
 //     * Attempts to save the given entity. If validation is unsuccessful, it will re-render the entity form with
