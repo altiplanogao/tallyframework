@@ -69,6 +69,12 @@ public class SetBuilder<E> implements Set<E>{
         return innerSet.addAll(c);
     }
 
+    public void addAll(E... cs) {
+        for(E e : cs){
+            innerSet.add(e);
+        }
+    }
+
     @Override
     public boolean retainAll(Collection<?> c) {
         return innerSet.retainAll(c);

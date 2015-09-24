@@ -17,6 +17,8 @@ public class RestrictionFactory {
 
     public Restriction getRestriction(FieldType fieldType){
         switch (fieldType){
+            case NAME:
+                return Restrictions.StringLikeRestriction;
             case BOOLEAN:
                 break;
             case INTEGER:

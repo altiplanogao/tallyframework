@@ -7,6 +7,10 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.Named
  */
 public interface IEntityInfo extends NamedInfo {
     String getType();
+
+    boolean isContainsHierarchy();
+
+    String getEntityType();
 }
 /*
 public enum EntityInfoType {

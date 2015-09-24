@@ -30,6 +30,7 @@ public class EntityInfoType {
 
     public final static Set<String> PageSupportedType;
     public final static Set<String> ApiSupportedType;
+    private final static Set<String> DefaultHierarchyIncludedType;
     public final static Map<String, Class<? extends IEntityInfo>> EntityTypeMapping;
 
     static {
@@ -49,6 +50,13 @@ public class EntityInfoType {
             ApiSupportedType = Collections.unmodifiableSet(apiSupportedType);
         }
         {
+            Set<String> defaultHierarchyIncludedType = new HashSet<String>();
+            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_FULL);
+            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_GRID);
+            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_PAGE_GRID);
+            DefaultHierarchyIncludedType = Collections.unmodifiableSet(defaultHierarchyIncludedType);
+        }
+        {
             Map<String, Class<? extends IEntityInfo>> entityTypeMapping = new HashMap<String, Class<? extends IEntityInfo>>();
             entityTypeMapping.put(NAME_OF_MAIN, EntityInfoImpl.class);
             entityTypeMapping.put(NAME_OF_FULL, EntityFullInfo.class);
@@ -59,9 +67,14 @@ public class EntityInfoType {
         }
     }
 
-    private String name;
+    private final String name;
 
-    public EntityInfoType(String name) {
+
+    public static boolean isIncludeHierarchyByDefault(EntityInfoType infoType){
+        return DefaultHierarchyIncludedType.contains(infoType.getName());
+    }
+
+    private EntityInfoType(String name) {
         this.name = name;
     }
 

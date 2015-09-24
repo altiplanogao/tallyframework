@@ -9,10 +9,8 @@ import com.taoswork.tallybook.general.solution.time.IntervalSensitive;
 import org.apache.commons.collections.map.LRUMap;
 
 import javax.persistence.EntityManager;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
-import javax.persistence.metamodel.Type;
+import javax.persistence.metamodel.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -116,22 +114,24 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     }
 
     @Override
-    public Map<String, String> getIdMetadata(Class<?> entityClz) {
-        Map<String, String> response = new HashMap<String, String>();
+    public Field getIdField(Class<?> entityClass) {
         Metamodel mm = entityManager.getMetamodel();
-        EntityType<?> entityType = mm.entity(entityClz);
+        EntityType<?> entityType = mm.entity(entityClass);
         if (entityType == null) {
             return null;
         }
 
-        Type<?> idType = entityType.getIdType();
-//        idType.
-//        String idProperty = metadata.getIdentifierPropertyName();
-//        response.put("name", idProperty);
-//        Type idType = metadata.getIdentifierType();
-//        response.put("type", idType.getName());
-
-        return response;
+        Class idType = entityType.getIdType().getJavaType();
+        SingularAttribute idAttri = entityType.getId(idType);
+        try {
+            String idFieldName = idAttri.getName();
+            Class declaringType = idAttri.getDeclaringType().getJavaType(); //NOTE, may not equal to @param entityClass
+            Field idField = declaringType.getDeclaredField(idFieldName);
+            return idField;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

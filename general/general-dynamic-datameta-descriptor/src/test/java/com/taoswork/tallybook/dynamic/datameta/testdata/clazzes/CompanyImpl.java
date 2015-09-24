@@ -28,7 +28,7 @@ import java.util.List;
                 @PresentationClass.Group(name = CompanyImpl.Presentation.Group.Private)
         }
 )
-public class CompanyImpl {
+public class CompanyImpl implements ICompany{
     /**
      *  ************** General Tab ******************
      *  --- General Group ---

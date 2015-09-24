@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.persistence;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 
@@ -9,14 +11,20 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransfe
 public interface PersistenceManager {
     public static final String COMPONENT_NAME = "PersistenceManager";
 
+    <T> EntityResult<T> create(Class<T> ceilingType, T entity);
 
-    <T> T persist(T entity);
+    <T> EntityResult<T> create(Entity entity);
 
-    <T> T find(Class<T> entityClz, Object key);
+    <T> EntityResult<T> read(Class<T> entityClz, Object key);
 
-    <T> T update(T entity);
+    <T> EntityResult<T> update(Class<T> ceilingType, T entity);
 
-    <T> void delete(T entity);
+    <T> EntityResult<T> update(Entity entity);
+
+    <T> void delete(Class<T> ceilingType, T entity);
+
+    <T> void delete(Entity entity);
 
     <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query);
+
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/9.
  */
-public class EntityFormInfo extends NamedInfoImpl implements IEntityInfo {
+public class EntityFormInfo extends _BaseEntityHandyInfo implements IEntityInfo {
     @Override
     public String getType() {
         return EntityInfoType.Form.getName();
@@ -22,16 +22,14 @@ public class EntityFormInfo extends NamedInfoImpl implements IEntityInfo {
 
     public final String idField;
     public final String nameField;
-//    public final String primarySearchField;
 
     public final Map<String, FieldInfo> fields;
     public final List<ITabInfo> tabs;
 
     public EntityFormInfo(EntityInfo entityInfo){
-        this.copyNamedInfo(entityInfo);
+        super(entityInfo);
         this.idField = entityInfo.getIdField();
         this.nameField = entityInfo.getNameField();
-//        this.primarySearchField = entityInfo.getPrimarySearchField();
         this.fields = CloneUtility.makeClone(entityInfo.getFields());
         this.tabs = CloneUtility.makeClone(entityInfo.getTabs());
     }

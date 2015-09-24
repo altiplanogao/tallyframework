@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 
@@ -17,14 +18,14 @@ public interface DynamicEntityDao {
 
     void clear();
 
-    <T> T persist(T entity);
+    <T> EntityResult<T> create(T entity);
 
-    <T> T find(Class<T> entityClz, Object key);
+    <T> EntityResult<T> read(Class<T> entityType, Object key);
 
-    <T> T update(T entity);
+    <T> EntityResult<T> update(T entity);
 
-    <T> void remove(T entity);
+    <T> void delete(T entity);
 
-    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query);
+    <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query);
 
 }

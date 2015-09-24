@@ -116,6 +116,11 @@ public class EntityRequest {
         return this;
     }
 
+    public EntityRequest clearEntityInfoType() {
+        entityInfoTypes.clear();
+        return this;
+    }
+
     public boolean hasEntityInfoType(EntityInfoType entityInfoType){
         return entityInfoTypes.contains(entityInfoType);
     }

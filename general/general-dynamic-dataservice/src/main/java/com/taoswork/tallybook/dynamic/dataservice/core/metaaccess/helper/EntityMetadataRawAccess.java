@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public interface EntityMetadataRawAccess {
 
     Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable);
 
-    Map<String, String> getIdMetadata(Class<?> entityClass);
+    Field getIdField(Class<?> entityClass);
 
     List<String> getPropertyNames(Class<?> entityClass);
 

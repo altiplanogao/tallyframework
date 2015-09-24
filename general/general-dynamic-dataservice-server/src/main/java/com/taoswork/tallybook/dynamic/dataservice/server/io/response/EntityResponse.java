@@ -11,6 +11,7 @@ import java.util.Collection;
  */
 public class EntityResponse extends ResourceSupport {
     private String resourceName;
+    private Class<?> entityCeilingType;
     private Class<?> entityType;
     private String baseUrl;
 
@@ -26,6 +27,15 @@ public class EntityResponse extends ResourceSupport {
 
     public EntityResponse setResourceName(String resourceName) {
         this.resourceName = resourceName;
+        return this;
+    }
+
+    public Class<?> getEntityCeilingType() {
+        return entityCeilingType;
+    }
+
+    public EntityResponse setEntityCeilingType(Class<?> entityCeilingType) {
+        this.entityCeilingType = entityCeilingType;
         return this;
     }
 

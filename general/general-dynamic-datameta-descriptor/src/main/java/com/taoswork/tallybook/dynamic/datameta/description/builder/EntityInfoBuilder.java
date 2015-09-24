@@ -9,6 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.TabIn
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,16 @@ public final class EntityInfoBuilder {
 
     public static EntityInfo build(ClassMetadata classMetadata) {
         RawEntityInsight rawEntityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
-        return build(rawEntityInsight);
+
+        Class entityType = classMetadata.getEntityClz();
+        boolean withHierarchy = false;
+        if(classMetadata instanceof ClassTreeMetadata){
+            withHierarchy = true;
+        }
+        return build(entityType, rawEntityInsight, withHierarchy);
     }
 
-    private static EntityInfo build(RawEntityInsight rawEntityInsight) {
+    private static EntityInfo build(Class entityType, RawEntityInsight rawEntityInsight, boolean withHierarchy) {
         Map<String, FieldInfo> fields = rawEntityInsight.getFields();
         EntityInfoImpl entityInfo = null;
         {//make tabs
@@ -44,7 +51,7 @@ public final class EntityInfoBuilder {
                 tabTemp.add(tabInfo);
             }
             List<ITabInfo> tabs = NamedOrderedInfo.NameSorter.makeObjectOrdered(tabTemp);
-            entityInfo = new EntityInfoImpl(tabs, rawEntityInsight.getFields());
+            entityInfo = new EntityInfoImpl(entityType, withHierarchy, tabs, rawEntityInsight.getFields());
         }
 
         {// make grid field list

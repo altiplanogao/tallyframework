@@ -34,7 +34,7 @@ public class MetadataServiceImpl implements MetadataService {
     protected final ClassProcessor classProcessor;
     protected final FieldProcessor fieldProcessor;
 
-    //Just cache for Class, not for EntityClassTree
+    //Just cache for Class (without super metadata) , not for EntityClassTree
     @GuardedBy("lock")
     private ICacheMap<String, ClassMetadata> classMetadataCache =
             CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
@@ -68,17 +68,17 @@ public class MetadataServiceImpl implements MetadataService {
             }
         }, false);
 
-        final Set<Class> classesWithSuper = new HashSet<Class>();
+        final Set<Class> classesIncludingSuper = new HashSet<Class>();
         for(Class clz : classesInTree){
             Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
-            classesWithSuper.add(clz);
+            classesIncludingSuper.add(clz);
             for (Class spClz : superClasses){
-                classesWithSuper.add(spClz);
+                classesIncludingSuper.add(spClz);
             }
         }
-        classesWithSuper.remove(Object.class);
+        classesIncludingSuper.remove(Object.class);
 
-        for(Class clz : classesWithSuper){
+        for(Class clz : classesIncludingSuper){
             ClassMetadata classMetadata = generateMetadata(clz);
             classTreeMetadata.absorb(classMetadata);
         }
@@ -123,9 +123,4 @@ public class MetadataServiceImpl implements MetadataService {
 
         return mergedMetadata;
     }
-
-    //    private void doGenerateClassMetadata(Class<?> clz, ClassMetadata classMetadata){
-//        classProcessor.process(clz, classMetadata);
-//    }
-
 }

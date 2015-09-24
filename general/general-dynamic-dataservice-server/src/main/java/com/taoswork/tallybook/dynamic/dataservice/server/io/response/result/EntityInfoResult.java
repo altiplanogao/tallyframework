@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class EntityInfoResult {
     private String resourceName;
+    private Class<?> entityCeilingType;
     private Class<?> entityType;
     private String baseUrl;
 
@@ -24,6 +25,15 @@ public class EntityInfoResult {
 
     public EntityInfoResult setResourceName(String resourceName) {
         this.resourceName = resourceName;
+        return this;
+    }
+
+    public Class<?> getEntityCeilingType() {
+        return entityCeilingType;
+    }
+
+    public EntityInfoResult setEntityCeilingType(Class<?> entityCeilingType) {
+        this.entityCeilingType = entityCeilingType;
         return this;
     }
 

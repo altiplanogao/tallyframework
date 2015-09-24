@@ -1,14 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityAddGetResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 
 import java.util.Locale;
 
@@ -23,5 +17,16 @@ public interface IFrontEndDynamicEntityService {
 
     EntityReadResponse readRecord(EntityReadRequest readRequest, Locale locale) throws ServiceException;
 
-    EntityAddGetResponse addRecord(EntityAddGetRequest request, Locale locale) throws ServiceException;
+    /**
+     * Used in the 'get' method, returns an entity instance inside of EntityAddGetResponse
+     * @param request
+     * @param locale
+     * @return
+     * @throws ServiceException
+     */
+    EntityAddGetResponse addGetRecord(EntityAddGetRequest request, Locale locale) throws ServiceException;
+
+    EntityAddPostResponse addPostRecord(EntityAddPostRequest request, Locale locale) throws ServiceException;
+
+    EntityUpdatePostResponse updateRecord(EntityUpdatePostRequest request, Locale locale) throws ServiceException;
 }

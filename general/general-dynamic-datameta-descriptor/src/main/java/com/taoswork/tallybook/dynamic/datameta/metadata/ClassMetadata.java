@@ -1,21 +1,25 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Gao Yuan on 2015/5/22.
+ * Represents a class with its self containing metadata, super information not included by default.
+ *
  */
 public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMetadata.class);
 
     public Class<?> entityClz;
+    private Field idField;
     public boolean containsSuper = false;
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
@@ -26,6 +30,23 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
     private ClassMetadata(Class<?> entityClz){
         setEntityClz(entityClz);
+    }
+
+    public Field getIdField(){
+        return idField;
+    }
+
+    public void setIdField(Field idField) {
+        if(idField != null) {
+            this.idField = idField;
+            this.idField.setAccessible(true);
+        }
+    }
+
+    public void setIdFieldIfNone(Field idField) {
+        if(null == this.idField){
+            this.setIdField(idField);
+        }
     }
 
     public Class<?> getEntityClz() {
@@ -82,14 +103,19 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public void absorb(ClassMetadata thatMeta) {
-        getRWTabMetadataMap().putAll(thatMeta.getReadonlyTabMetadataMap());
-        getRWGroupMetadataMap().putAll(thatMeta.getReadonlyGroupMetadataMap());
-        getRWFieldMetadataMap().putAll(thatMeta.getReadonlyFieldMetadataMap());
+        this.setIdFieldIfNone(thatMeta.getIdField());
+        MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
+        MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
+        MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
+    }
+
+    public boolean hasField(String fieldName){
+        return fieldMetadataMap.containsKey(fieldName);
     }
 
     @Override
     public ClassMetadata clone() {
-        return CloneUtility.makeClone(this);
+        return CloneUtility.makeCloneForSerializable(this);
     }
 
     @Override

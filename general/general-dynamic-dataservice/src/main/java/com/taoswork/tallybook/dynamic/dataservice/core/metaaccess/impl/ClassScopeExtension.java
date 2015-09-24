@@ -24,6 +24,10 @@ class ClassScopeExtension<T> extends ClassScope {
         this.note = note;
     }
 
+    public T getNote(){
+        return note;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

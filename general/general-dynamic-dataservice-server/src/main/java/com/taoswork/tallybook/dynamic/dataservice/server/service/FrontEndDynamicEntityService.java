@@ -2,19 +2,13 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityAddGetResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.request.Request2CtoTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ActionsBuilder;
@@ -55,7 +49,8 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
     }
 
     private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale){
-        Class<?> entityType = request.getEntityType();
+        Class<?> entityCeilingType = request.getEntityType();
+        Class<?> entityType = response.getEntityType();
 
         List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
         for (EntityInfoType infoType : request.getEntityInfoTypes()){
@@ -67,7 +62,7 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
         EntityInfoResult infoResult = null;
         for(IEntityInfo entityInfo : entityInfos){
             if(infoResult == null){
-                infoResult = ResultTranslator.convertEntityInfoResult(request);
+                infoResult = ResultTranslator.convertEntityInfoResult(request, response);
             }
             if(entityInfo != null){
                 infoResult.addDetail(entityInfo.getType(), entityInfo);
@@ -104,7 +99,7 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
     @Override
     public EntityReadResponse readRecord(EntityReadRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
-        Object data = dynamicEntityService.find(entityType, request.getId());
+        EntityResult data = dynamicEntityService.read(entityType, request.getId());
 
         EntityReadResponse response = ResponseTranslator.translateReadResponse(request, data);
         this.appendInfoFields(request, response, locale);
@@ -114,13 +109,37 @@ public class FrontEndDynamicEntityService implements IFrontEndDynamicEntityServi
     }
 
     @Override
-    public EntityAddGetResponse addRecord(EntityAddGetRequest request, Locale locale) throws ServiceException {
+    public EntityUpdatePostResponse updateRecord(EntityUpdatePostRequest request, Locale locale) throws ServiceException {
+        Class<?> entityType = request.getEntityType();
+        EntityResult data = dynamicEntityService.update(request.getEntity());
+        EntityUpdatePostResponse response = ResponseTranslator.translateUpdatePostResponse(request, data);
+        return response;
+    }
+
+    @Override
+    public EntityAddGetResponse addGetRecord(EntityAddGetRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
         Object data = dynamicEntityService.makeDissociatedObject(entityType);
-        EntityAddGetResponse response = ResponseTranslator.translateAddGetResponse(request, data);
+        EntityResult er = new EntityResult();
+        er.setEntity(data);
+
+        EntityAddGetResponse response = ResponseTranslator.translateAddGetResponse(request, er);
         this.appendInfoFields(request, response, locale);
         this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
         LinkBuilder.buildLinkForAddGetResults(request.getFullUrl(), response);
         return response;
     }
+
+    @Override
+    public EntityAddPostResponse addPostRecord(EntityAddPostRequest request, Locale locale) throws ServiceException {
+        Class<?> entityType = request.getEntityType();
+        try {
+            EntityResult data = dynamicEntityService.create(request.getEntity());
+            EntityAddPostResponse response = ResponseTranslator.translateAddPostResponse(request, data);
+            return response;
+
+        }catch (Exception e) {
+            throw new ServiceException(e);
+        }
+   }
 }

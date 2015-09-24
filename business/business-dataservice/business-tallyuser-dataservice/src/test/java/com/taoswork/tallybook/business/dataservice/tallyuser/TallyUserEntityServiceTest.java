@@ -97,8 +97,8 @@ public class TallyUserEntityServiceTest {
         Assert.assertNotNull(dynamicEntityService);
 
         {
-            Person personImp = dynamicEntityService.find(PersonImpl.class, Long.valueOf(-1L));
-            Person person = dynamicEntityService.find(Person.class, Long.valueOf(-1L));
+            Person personImp = dynamicEntityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
+            Person person = dynamicEntityService.straightRead(Person.class, Long.valueOf(-1L));
             Assert.assertEquals(person.getUuid(), personImp.getUuid());
             Assert.assertEquals(person.getId(), personImp.getId());
 
@@ -117,10 +117,10 @@ public class TallyUserEntityServiceTest {
                 int expected = i + 1;
                 Person admin = new PersonImpl();
                 admin.setName("admin").setUuid(UUID.randomUUID().toString());
-                dynamicEntityService.save(admin);
+                dynamicEntityService.create(Person.class, admin);
 
                 Long id = admin.getId();
-                Person adminFromDb = dynamicEntityService.find(Person.class, Long.valueOf(id));
+                Person adminFromDb = dynamicEntityService.straightRead(Person.class, Long.valueOf(id));
 
                 Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
                 Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));

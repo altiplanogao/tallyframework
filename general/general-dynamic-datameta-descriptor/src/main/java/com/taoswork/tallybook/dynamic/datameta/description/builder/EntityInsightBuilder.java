@@ -70,6 +70,13 @@ final class EntityInsightBuilder {
         }
     }
 
+    /**
+     * Convert ClassMetadata object to RawEntityInsight object,
+     * It is the first step of entity information sorting.
+     *
+     * @param classMetadata
+     * @return
+     */
     public static RawEntityInsight buildEntityInsight(ClassMetadata classMetadata) {
         final RawEntityInsightRW entityInsight = InfoCreator.createEntityInsight(classMetadata);
         entityInsightAppendMetadata(entityInsight, classMetadata);

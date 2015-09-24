@@ -1,10 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityAddGetRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInstanceResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
@@ -17,6 +15,7 @@ public class ResponseTranslator {
         EntityRequest request,
         EntityResponse response){
         response.setResourceName(request.getResourceName())
+            .setEntityCeilingType(request.getEntityType())
             .setEntityType(request.getEntityType())
             .setBaseUrl(request.getResourceURI());
     }
@@ -26,28 +25,48 @@ public class ResponseTranslator {
         EntityQueryResponse response = new EntityQueryResponse();
         translate(request, response);
         EntityQueryResult queryResult = ResultTranslator.convertQueryResult(request, criteriaResult);
+        response.setEntityType(criteriaResult.getEntityType());
         response.setEntities(queryResult);
         return response;
     }
 
     public static EntityReadResponse translateReadResponse(EntityReadRequest request,
-                                                           Object data){
+                                                           EntityResult result){
         EntityReadResponse response = new EntityReadResponse();
-        translateInstanceResponse(request, data, response);
+        translateInstanceResponse(request, result, response);
+        return response;
+    }
+
+    public static EntityUpdatePostResponse translateUpdatePostResponse(EntityUpdatePostRequest request,
+                                                                       EntityResult result) {
+        EntityUpdatePostResponse response = new EntityUpdatePostResponse();
+        translateInstanceResponse(request, result, response);
+        return response;
+    }
+
+    public static EntityAddPostResponse translateAddPostResponse(EntityAddPostRequest request,
+                                                                 EntityResult result) {
+        EntityAddPostResponse response = new EntityAddPostResponse();
+        translateInstanceResponse(request, result, response);
         return response;
     }
 
     public static EntityAddGetResponse translateAddGetResponse(EntityAddGetRequest request,
-                                                           Object data){
+                                                               EntityResult result){
         EntityAddGetResponse response = new EntityAddGetResponse();
-        translateInstanceResponse(request, data, response);
+        translateInstanceResponse(request, result, response);
         return response;
     }
 
     private static void translateInstanceResponse(EntityRequest request,
-                                                               Object data, EntityInstanceResponse response){
+                                                  EntityResult result, EntityInstanceResponse response){
         translate(request, response);
-        EntityInstanceResult readResult = ResultTranslator.convertInstanceResult(data);
-        response.setEntity(readResult);
+        if(result == null){
+            throw new IllegalArgumentException();
+        }
+        Object resultEntity = result.getEntity();
+        response.setEntityType(resultEntity.getClass());
+        EntityInstanceResult instanceResult = ResultTranslator.convertInstanceResult(result);
+        response.setEntity(instanceResult);
     }
 }

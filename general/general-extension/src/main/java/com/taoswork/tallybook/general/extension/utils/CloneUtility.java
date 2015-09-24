@@ -9,10 +9,23 @@ import java.lang.reflect.Method;
 public class CloneUtility {
     public static <T> T makeClone(T source) {
         try {
-            if (source instanceof Cloneable) {
+            if(source == null){
+                return null;
+            } else if (source instanceof Cloneable) {
                 Method cloneMethod = source.getClass().getDeclaredMethod("clone");
                 return (T) cloneMethod.invoke(source);
             } else if(source instanceof Serializable){
+                return (T)makeCloneForSerializable((Serializable)source);
+            }
+        } catch (Exception exp) {
+            throw new RuntimeException(exp);
+        }
+
+        throw new RuntimeException("Clone not supported: " + source.getClass() + ". (extends Cloneable or Serializable) required.");
+    }
+    public static <T extends Serializable> T makeCloneForSerializable(T source) {
+        try {
+            if(source instanceof Serializable){
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(baos);
                 oos.writeObject(source);
@@ -30,4 +43,5 @@ public class CloneUtility {
 
         throw new RuntimeException("Clone not supported: " + source.getClass() + ". (extends Cloneable or Serializable) required.");
     }
+
 }

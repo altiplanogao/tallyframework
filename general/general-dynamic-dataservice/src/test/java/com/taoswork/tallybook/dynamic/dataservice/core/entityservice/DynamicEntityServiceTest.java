@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.*;
@@ -23,46 +24,6 @@ import java.util.UUID;
  * Created by Gao Yuan on 2015/6/26.
  */
 public class DynamicEntityServiceTest {
-    static class EntityCreateHelper {
-        static int createPeopleEntityWith(DynamicEntityService dynamicEntityService,
-                                          String namePrefix, int postfixStartingIndex, int createAttempt) {
-            int created = 0;
-            try {
-                for (int i = 0; i < createAttempt; ++i) {
-                    String name = namePrefix + (int) (postfixStartingIndex + i);
-
-//                    int expected = i + 1;
-                    TPerson admin = new TPersonImpl();
-                    admin.setName(name).setUuid(UUID.randomUUID().toString());
-                    dynamicEntityService.save(admin);
-
-                    Long id = admin.getId();
-                    TPerson adminFromDb = dynamicEntityService.find(TPerson.class, Long.valueOf(id));
-                    TPerson admin2FromDb = dynamicEntityService.find(TPersonImpl.class, Long.valueOf(id));
-
-                    Assert.assertEquals("Created and Read should be same: " + admin.getId() + " : " + adminFromDb.getId(),
-                        admin.getId(), adminFromDb.getId());
-//                    Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
-
-                    Assert.assertEquals(admin.getUuid(), adminFromDb.getUuid());
-                    Assert.assertEquals(adminFromDb.getUuid(), admin2FromDb.getUuid());
-
-                    Assert.assertEquals(admin.getId(), adminFromDb.getId());
-                    Assert.assertEquals(adminFromDb.getId(), admin2FromDb.getId());
-
-                    Assert.assertNotNull(adminFromDb);
-                    Assert.assertTrue(adminFromDb.getName().equals(name));
-
-                    created++;
-                }
-            } catch (ServiceException exp) {
-                Assert.fail();
-            } finally {
-                Assert.assertEquals(createAttempt, created);
-            }
-            return created;
-        }
-    }
 
     private IDataService dataService = null;
 
@@ -77,23 +38,7 @@ public class DynamicEntityServiceTest {
     }
 
     @Test
-    public void testEntityMetadataAccess() {
-        DynamicEntityMetadataAccess dynamicEntityMetadataAccess = dataService.getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
-        Assert.assertNotNull(dynamicEntityMetadataAccess);
-
-        Collection<Class> entityInterfaces = dynamicEntityMetadataAccess.getAllEntityInterfaces();
-        Assert.assertNotNull(entityInterfaces);
-        Assert.assertEquals(entityInterfaces.size(), 1);
-
-        EntityClassTree entityClassTree = dynamicEntityMetadataAccess.getEntityClassTree(TPerson.class);
-        Assert.assertEquals(TPerson.class.getName(), entityClassTree.getData().clz.getName());
-
-        ClassTreeMetadata entityClassTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(TPerson.class);
-        Assert.assertEquals(TPerson.class.getName(), entityClassTreeMetadata.getName());
-    }
-
-    @Test
-    public void testDynamicEntityService1() throws ServiceException{
+    public void testDynamicEntityService() throws ServiceException{
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
@@ -137,7 +82,7 @@ public class DynamicEntityServiceTest {
         }
     }
     @Test
-    public void testDynamicEntityService()  throws ServiceException{
+    public void testDynamicEntityService_1()  throws ServiceException{
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
@@ -269,7 +214,7 @@ public class DynamicEntityServiceTest {
             }
         }
 
-        //remove all BBB
+        //delete all BBB
         {
             int startIndex = 0;
             int eachQuerySize = 12;
@@ -299,7 +244,9 @@ public class DynamicEntityServiceTest {
             Assert.assertTrue(returned == createAttemptB);
 
             for(TPerson p : cache){
-                dynamicEntityService.delete(p);
+                Entity entity = new Entity().setEntityCeilingType(TPerson.class).setEntityType(p.getClass());
+                entity.setProperty("id", p.getId().toString());
+                dynamicEntityService.delete(entity);
             }
 
             {

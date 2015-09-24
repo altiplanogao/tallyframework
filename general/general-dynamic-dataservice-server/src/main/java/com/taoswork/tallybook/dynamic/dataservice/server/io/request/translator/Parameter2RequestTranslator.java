@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.SortDirection;
@@ -123,10 +124,18 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityAddGetRequest makeAddRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
+    public static EntityAddGetRequest makeAddGetRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
         EntityAddGetRequest request = new EntityAddGetRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         request.addEntityInfoType(EntityInfoType.Form);
+        return request;
+    }
+
+    public static EntityAddPostRequest makeAddPostRequest(String entityTypeName, String entityType,
+                                                                String entityUri, String fullUrl, Entity entity) {
+        EntityAddPostRequest request = new EntityAddPostRequest(entity);
+        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.clearEntityInfoType();
         return request;
     }
 
@@ -138,6 +147,14 @@ public class Parameter2RequestTranslator {
 //        _fillInfoCriterias(request, requestParams);
         request.addEntityInfoType(EntityInfoType.Form);
 
+        return request;
+    }
+
+    public static EntityUpdatePostRequest makeUpdatePostRequest(String entityTypeName, String entityType,
+                                                                String entityUri, String fullUrl, Entity entity) {
+        EntityUpdatePostRequest request = new EntityUpdatePostRequest(entity);
+        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.clearEntityInfoType();
         return request;
     }
 
@@ -153,4 +170,5 @@ public class Parameter2RequestTranslator {
             }
         }
     }
+
 }

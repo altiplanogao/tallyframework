@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/9.
  */
-public class EntityFullInfo extends NamedInfoImpl implements IEntityInfo {
+public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo {
     @Override
     public String getType() {
         return EntityInfoType.Full.getName();
@@ -29,7 +29,7 @@ public class EntityFullInfo extends NamedInfoImpl implements IEntityInfo {
     public final List<String> gridFields;
 
     public EntityFullInfo(EntityInfo entityInfo){
-        this.copyNamedInfo(entityInfo);
+        super(entityInfo);
         this.idField = entityInfo.getIdField();
         this.nameField = entityInfo.getNameField();
         this.primarySearchField = entityInfo.getPrimarySearchField();

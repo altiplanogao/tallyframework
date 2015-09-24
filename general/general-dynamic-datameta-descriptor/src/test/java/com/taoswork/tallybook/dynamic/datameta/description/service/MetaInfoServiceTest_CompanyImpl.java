@@ -13,6 +13,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.CompanyImpl;
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.ICompany;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,6 +43,8 @@ public class MetaInfoServiceTest_CompanyImpl {
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
+            Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
+
             Assert.assertNotNull(entityInfo);
             ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
             Assert.assertEquals(tabInsights.length, 3);

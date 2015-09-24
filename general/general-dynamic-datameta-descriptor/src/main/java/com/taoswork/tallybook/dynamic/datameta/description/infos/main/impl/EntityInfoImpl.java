@@ -18,6 +18,9 @@ public class EntityInfoImpl
     extends NamedInfoImpl
     implements EntityInfo, EntityInfoRW {
 
+    private boolean containsHierarchy = true;
+    private Class entityType = null;
+
     private String idField;
     private String nameField;
     private String primarySearchField;
@@ -27,7 +30,9 @@ public class EntityInfoImpl
 
     private List<String> gridFields = new ArrayList<String>();
 
-    public EntityInfoImpl(List<ITabInfo> tabs, Map<String, FieldInfo> fields) {
+    public EntityInfoImpl(Class entityType, boolean containsHierarchy, List<ITabInfo> tabs, Map<String, FieldInfo> fields) {
+        this.containsHierarchy = containsHierarchy;
+        this.entityType = entityType;
         this.tabs = tabs;
         this.fields = new HashMap<String, FieldInfo>();
         for(Map.Entry<String, FieldInfo> field : fields.entrySet()){
@@ -103,5 +108,17 @@ public class EntityInfoImpl
     @Override
     public String getType() {
         return EntityInfoType.Main.getName();
+    }
+
+    @Override
+    public boolean isContainsHierarchy() {
+        return containsHierarchy;
+    }
+
+    @Override
+    public String getEntityType() {
+        if(entityType != null)
+            return entityType.getName();
+        return null;
     }
 }

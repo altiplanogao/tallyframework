@@ -2,8 +2,10 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
@@ -17,15 +19,12 @@ import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVer
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
 public final class DynamicEntityServiceImpl implements DynamicEntityService {
-
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
@@ -42,37 +41,75 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> T save(final T entity) throws ServiceException {
-        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+    public <T> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
+        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
             @Override
-            public T execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.persist(entity);
+            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.create(ceilingType, entity);
             }
         });
     }
 
     @Override
-    public <T> T find(final Class<T> entityClz, final Object key) throws ServiceException{
-        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+    public <T> EntityResult<T> create(final Entity entity) throws ServiceException {
+        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
             @Override
-            public T execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.find(entityClz, key);
+            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.create(entity);
             }
         });
     }
 
     @Override
-    public <T> T update(final T entity)throws ServiceException{
-        return persistenceManagerInvoker.operation(new IPersistentMethod<T, ServiceException>() {
+    public <T> EntityResult<T> read(final Class<T> entityClz, final Object key) throws ServiceException{
+        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
             @Override
-            public T execute(PersistenceManager persistenceManager) throws ServiceException {
+            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.read(entityClz, key);
+            }
+        });
+    }
+
+    @Override
+    public <T> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
+        EntityResult<T> result = read(entityClz, key);
+        return result.getEntity();
+    }
+
+    @Override
+    public <T> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
+        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
+            @Override
+            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.update(ceilingType, entity);
+            }
+        });
+    }
+
+    @Override
+    public <T> EntityResult<T> update(final Entity entity)throws ServiceException{
+        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
+            @Override
+            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
                 return persistenceManager.update(entity);
             }
         });
     }
 
     @Override
-    public <T> void delete(final T entity)throws ServiceException{
+    public <T> void delete(final Class<T> ceilingType, final T entity) throws ServiceException {
+        persistenceManagerInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
+            @Override
+            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
+                persistenceManager.delete(ceilingType, entity);
+                return null;
+            }
+        });
+
+    }
+
+    @Override
+    public <T> void delete(final Entity entity)throws ServiceException{
         persistenceManagerInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
             @Override
             public Void execute(PersistenceManager persistenceManager) throws ServiceException {
@@ -96,16 +133,11 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     public <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         try {
-            Constructor constructor = rootable.getConstructor(new Class[]{});
-            Object obj = constructor.newInstance(new Object[]{});
+            Object obj = rootable.newInstance();
             return (T)obj;
         } catch (InstantiationException e) {
             throw new ServiceException(e);
         } catch (IllegalAccessException e) {
-            throw new ServiceException(e);
-        } catch (InvocationTargetException e) {
-            throw new ServiceException(e);
-        } catch (NoSuchMethodException e) {
             throw new ServiceException(e);
         }
     }
@@ -117,13 +149,19 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> ClassTreeMetadata inspect(Class<T> entityClz){
-        return dynamicEntityMetadataAccess.getClassTreeMetadata(entityClz);
+    public <T> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy){
+        return dynamicEntityMetadataAccess.getClassMetadata(entityType, withHierarchy);
     }
 
     @Override
     public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
-        return dynamicEntityMetadataAccess.getEntityInfo(entityType, locale, infoType);
+        boolean withHierarchy = EntityInfoType.isIncludeHierarchyByDefault(infoType);
+        return this.describe(entityType, withHierarchy, infoType, locale);
+    }
+
+    @Override
+    public <T> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale) {
+        return dynamicEntityMetadataAccess.getEntityInfo(entityType, withHierarchy, locale, infoType);
     }
 
     @Override

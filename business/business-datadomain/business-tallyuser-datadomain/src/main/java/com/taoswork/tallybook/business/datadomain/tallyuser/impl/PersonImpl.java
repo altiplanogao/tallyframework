@@ -4,12 +4,15 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
+import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * Created by Gao Yuan on 2015/4/15.
@@ -36,7 +39,7 @@ import javax.persistence.*;
 @PresentationClass(
 )
 public class PersonImpl
-        implements Person {
+        implements Person, HasHidingField {
 
     protected static final String ID_GENERATOR_NAME = "PersonImpl_IdGen";
 
@@ -60,7 +63,7 @@ public class PersonImpl
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION, enumeration = Gender.class)
     protected String gender = Gender.UNKNOWN_CHAR;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", length = 120)
     @PresentationField(group = "General", order = 4, fieldType = FieldType.EMAIL)
     protected String email;
 
@@ -71,6 +74,9 @@ public class PersonImpl
     @Column(name = "UUID", unique = true)
     @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.HIDDEN_ALL)
     protected String uuid;
+
+    public PersonImpl() {
+    }
 
     @Override
     public Long getId() {
@@ -143,5 +149,12 @@ public class PersonImpl
                 " '" + name + '\'' +
                 " {" + uuid + '}' +
                 ']';
+    }
+
+    @Override
+    public void initHidingForCreate() {
+        if(StringUtils.isEmpty(uuid)){
+            setUuid(UUID.randomUUID().toString());
+        }
     }
 }
