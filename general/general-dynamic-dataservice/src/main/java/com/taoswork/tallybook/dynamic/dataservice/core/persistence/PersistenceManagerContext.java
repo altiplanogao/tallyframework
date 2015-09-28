@@ -9,36 +9,36 @@ import java.util.Stack;
  */
 public class PersistenceManagerContext {
 
-    private static final ThreadLocal<PersistenceManagerContext> sPersistenceManagerContext = ThreadLocalHelper.createThreadLocal(PersistenceManagerContext.class, false);
+    private static final ThreadLocal<PersistenceManagerContext> threadPersistenceManagerContext = ThreadLocalHelper.createThreadLocal(PersistenceManagerContext.class, false);
 
-    public static PersistenceManagerContext getPersistenceManagerContext() {
-        return sPersistenceManagerContext.get();
+    private final Stack<PersistenceManager> persistenceManagerStack = new Stack<PersistenceManager>();
+
+    public static PersistenceManagerContext getContext() {
+        return threadPersistenceManagerContext.get();
     }
 
-    public static void addPersistenceManagerContext(PersistenceManagerContext persistenceManagerContext) {
-        sPersistenceManagerContext.set(persistenceManagerContext);
+    public static void addContext(PersistenceManagerContext persistenceManagerContext) {
+        threadPersistenceManagerContext.set(persistenceManagerContext);
     }
 
-    private static void clear() {
-        sPersistenceManagerContext.remove();
+    private static void clearContext() {
+        threadPersistenceManagerContext.remove();
     }
-
-    private final Stack<PersistenceManager> persistenceManager = new Stack<PersistenceManager>();
 
     public void addPersistenceManager(PersistenceManager persistenceManager) {
-        this.persistenceManager.add(persistenceManager);
+        this.persistenceManagerStack.push(persistenceManager);
     }
 
     public PersistenceManager getPersistenceManager() {
-        return !persistenceManager.empty()?persistenceManager.peek():null;
+        return !persistenceManagerStack.empty() ? persistenceManagerStack.peek() : null;
     }
 
-    public void remove() {
-        if (!persistenceManager.empty()) {
-            persistenceManager.pop();
+    public void removePersistenceManager() {
+        if (!persistenceManagerStack.empty()) {
+            persistenceManagerStack.pop();
         }
-        if (persistenceManager.empty()) {
-            PersistenceManagerContext.clear();
+        if (persistenceManagerStack.empty()) {
+            PersistenceManagerContext.clearContext();
         }
     }
 }

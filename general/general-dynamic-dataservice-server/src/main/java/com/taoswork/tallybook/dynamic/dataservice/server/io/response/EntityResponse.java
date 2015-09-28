@@ -2,7 +2,10 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.validation.Errors;
 
 import java.util.Collection;
 
@@ -10,6 +13,8 @@ import java.util.Collection;
  * Created by Gao Yuan on 2015/8/5.
  */
 public class EntityResponse extends ResourceSupport {
+    private static Logger LOGGER = LoggerFactory.getLogger(EntityResponse.class);
+    Errors errors;
     private String resourceName;
     private Class<?> entityCeilingType;
     private Class<?> entityType;
@@ -72,5 +77,18 @@ public class EntityResponse extends ResourceSupport {
 
     public void setActions(Collection<String> actions) {
         this.actions = actions;
+    }
+
+    public Errors getErrors() {
+        return errors;
+    }
+
+    public void setErrors(Errors errors) {
+        this.errors = errors;
+    }
+
+    public boolean hasError() {
+        LOGGER.warn("class {} should handle error.", this.getClass().getName() ); //TODO
+        return false;
     }
 }

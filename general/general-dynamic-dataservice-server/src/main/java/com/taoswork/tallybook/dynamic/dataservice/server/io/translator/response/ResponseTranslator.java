@@ -69,4 +69,11 @@ public class ResponseTranslator {
         EntityInstanceResult instanceResult = ResultTranslator.convertInstanceResult(result);
         response.setEntity(instanceResult);
     }
+
+    public static EntityDeletePostResponse translateDeletePostResponse(EntityDeletePostRequest request, boolean deleted) {
+        EntityDeletePostResponse response = new EntityDeletePostResponse();
+        translate(request, response);
+        response.setSuccess(deleted);
+        return response;
+    }
 }

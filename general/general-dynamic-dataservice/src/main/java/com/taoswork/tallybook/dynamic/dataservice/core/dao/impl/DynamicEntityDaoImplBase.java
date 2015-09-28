@@ -10,6 +10,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryRe
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.Cto2QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.impl.Cto2QueryTranslatorImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -21,6 +23,7 @@ import java.util.List;
  * Created by Gao Yuan on 2015/5/21.
  */
 public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
+    private final static Logger LOGGER = LoggerFactory.getLogger(DynamicEntityDaoImplBase.class);
 
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
@@ -116,7 +119,7 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
                 .setIdValue(idField.get(entity).toString())
                 .setEntity(entity);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
 
         return entityResult;

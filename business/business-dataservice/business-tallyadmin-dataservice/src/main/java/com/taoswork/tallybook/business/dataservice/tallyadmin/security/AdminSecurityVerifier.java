@@ -1,12 +1,16 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.security;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import com.taoswork.tallybook.general.authority.core.verifier.IAccessVerifier;
 
 /**
  * Created by Gao Yuan on 2015/8/23.
  */
 public class AdminSecurityVerifier implements ISecurityVerifier {
+    private IAccessVerifier accessVerifier = null;
+
     @Override
     public Access getAllPossibleAccess(String resourceEntity, Access mask) {
         return mask;
@@ -23,12 +27,12 @@ public class AdminSecurityVerifier implements ISecurityVerifier {
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access) throws SecurityException {
-
+    public void checkAccess(String resourceEntity, Access access) throws NoPermissionException {
+//        accessVerifier.canAccess()
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access, Object... instances) throws SecurityException {
+    public void checkAccess(String resourceEntity, Access access, Object... instances) throws NoPermissionException {
 
     }
 

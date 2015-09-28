@@ -23,5 +23,5 @@ public interface DataServiceManager {
 
     DynamicEntityService getDynamicEntityService(String entityClz);
 
-//    FrontEndDynamicEntityService getFrontEndDynamicEntityService(String entityClz);
+//    FrontEndEntityService getFrontEndDynamicEntityService(String entityClz);
 }

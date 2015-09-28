@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.security.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,12 @@ public class PassAllSecurityVerifier implements ISecurityVerifier {
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access) throws SecurityException {
+    public void checkAccess(String resourceEntity, Access access) throws NoPermissionException {
         LOGGER.trace("hardcoded to pass: {0} {1}", resourceEntity, access);
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access, Object... instances) throws SecurityException {
+    public void checkAccess(String resourceEntity, Access access, Object... instances) throws NoPermissionException {
         if (instances.length > 0) {
             LOGGER.trace("hardcoded to pass '{0}' instance: {1} ... {2}", instances.length, instances[0], access);
         } else {

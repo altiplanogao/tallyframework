@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -132,7 +133,7 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityAddPostRequest makeAddPostRequest(String entityTypeName, String entityType,
-                                                                String entityUri, String fullUrl, Entity entity) {
+                                                          String entityUri, String fullUrl, Entity entity) {
         EntityAddPostRequest request = new EntityAddPostRequest(entity);
         request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
         request.clearEntityInfoType();
@@ -144,7 +145,6 @@ public class Parameter2RequestTranslator {
         EntityReadRequest request = new EntityReadRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         request.setId(id);
-//        _fillInfoCriterias(request, requestParams);
         request.addEntityInfoType(EntityInfoType.Form);
 
         return request;
@@ -154,6 +154,21 @@ public class Parameter2RequestTranslator {
                                                                 String entityUri, String fullUrl, Entity entity) {
         EntityUpdatePostRequest request = new EntityUpdatePostRequest(entity);
         request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.clearEntityInfoType();
+        return request;
+    }
+
+    public static EntityDeletePostRequest makeDeletePostRequest(String entityTypeName, String entityType,
+                                                                String entityUri, String fullUrl, String id, Entity entity) {
+        EntityDeletePostRequest request = new EntityDeletePostRequest(entity);
+        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.setId(id);
+        if(StringUtils.isEmpty(entity.getEntityType())){
+            entity.setEntityType(entityType);
+        }
+        if(StringUtils.isEmpty(entity.getEntityCeilingType())){
+            entity.setEntityCeilingType(entityType);
+        }
         request.clearEntityInfoType();
         return request;
     }
@@ -170,5 +185,4 @@ public class Parameter2RequestTranslator {
             }
         }
     }
-
 }

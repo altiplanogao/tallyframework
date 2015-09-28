@@ -18,7 +18,7 @@ public class PersistenceManagerFactory implements ApplicationContextAware {
     }
 
     public PersistenceManager getPersistenceManager(){
-        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        PersistenceManagerContext context = PersistenceManagerContext.getContext();
         if (context != null) {
             return context.getPersistenceManager();
         }
@@ -31,18 +31,18 @@ public class PersistenceManagerFactory implements ApplicationContextAware {
     }
 
     public void startPersistenceManager() {
-        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        PersistenceManagerContext context = PersistenceManagerContext.getContext();
         if (context == null) {
             context = new PersistenceManagerContext();
-            PersistenceManagerContext.addPersistenceManagerContext(context);
+            PersistenceManagerContext.addContext(context);
         }
         context.addPersistenceManager(makePersistenceManager());
     }
 
     public void endPersistenceManager() {
-        PersistenceManagerContext context = PersistenceManagerContext.getPersistenceManagerContext();
+        PersistenceManagerContext context = PersistenceManagerContext.getContext();
         if (context != null) {
-            context.remove();
+            context.removePersistenceManager();
         }
     }
 }

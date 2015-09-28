@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
@@ -29,7 +30,7 @@ public abstract class EntityInstanceTranslator {
 
     protected abstract DynamicEntityMetadataAccess getDynamicEntityMetadataAccess();
 
-    public Serializable convert(Entity source) {
+    public Serializable convert(Entity source, String id) {
         Serializable instance = null;
         DynamicEntityMetadataAccess entityMetadataAccess = this.getDynamicEntityMetadataAccess();
         try {
@@ -47,6 +48,11 @@ public abstract class EntityInstanceTranslator {
                 }else {
                     LOGGER.error("Field with name '{}' not handled, please check", fieldKey);
                 }
+            }
+
+            if(StringUtils.isNotEmpty(id)){
+                String idFieldName = classMetadata.getIdField().getName();
+                instanceBean.setPropertyValue(idFieldName, id);
             }
 
             instance = tempInstance;

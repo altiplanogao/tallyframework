@@ -11,7 +11,9 @@ import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.helper.DataServiceBeanCreationHelper;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerFactory;
@@ -130,6 +132,12 @@ public abstract class ADataServiceBeanConfiguration
     @Bean(name = DynamicEntityService.COMPONENT_NAME)
     public DynamicEntityService dynamicEntityService(){
         return new DynamicEntityServiceImpl();
+    }
+
+    @Override
+    @Bean(name = DynamicEntityPersistenceService.COMPONENT_NAME)
+    public DynamicEntityPersistenceService dynamicEntityPersistenceService(){
+        return new DynamicEntityPersistenceServiceImpl();
     }
 
 //    @Override

@@ -7,8 +7,8 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRe
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndDynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndDynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -53,9 +53,9 @@ public class TallyApiController  {
             requestParams, getParamInfoFilter());
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
+        IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService);
 
-        EntityQueryResponse response = dynamicServerEntityService.queryRecords(queryRequest, request.getLocale());
+        EntityQueryResponse response = dynamicServerEntityService.query(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
 
@@ -72,9 +72,9 @@ public class TallyApiController  {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndDynamicEntityService dynamicServerEntityService = FrontEndDynamicEntityService.newInstance(entityService);
+        IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService);
 
-        EntityReadResponse response = dynamicServerEntityService.readRecord(readRequest, request.getLocale());
+        EntityReadResponse response = dynamicServerEntityService.read(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
  /*   @RequestMapping("/greeting")

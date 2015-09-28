@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.security.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 /**
@@ -46,13 +47,15 @@ public class SecurityVerifierAgent implements ISecurityVerifier {
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access) throws SecurityException {
+    public void checkAccess(String resourceEntity, Access access) throws NoPermissionException {
         verifier.checkAccess(resourceEntity, access);
     }
 
     @Override
-    public void checkAccess(String resourceEntity, Access access, Object... instances) throws SecurityException {
-        verifier.canAccess(resourceEntity, access, instances);
+    public void checkAccess(String resourceEntity, Access access, Object... instances) throws NoPermissionException {
+        if(!verifier.canAccess(resourceEntity, access, instances)){
+            throw new NoPermissionException();
+        }
     }
 
     @Override

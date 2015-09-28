@@ -6,17 +6,17 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.IPersistentMethod;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -24,15 +24,20 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/5/22.
  */
+
+//@Secured
+//@Transactional
 public final class DynamicEntityServiceImpl implements DynamicEntityService {
-    @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
-    protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicEntityServiceImpl.class);
 
     @Resource(name = IDataService.DATASERVICE_NAME_S_BEAN_NAME)
     private String dataServiceName;
 
-    @Resource(name = PersistenceManagerInvoker.COMPONENT_NAME)
-    protected PersistenceManagerInvoker persistenceManagerInvoker;
+    @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
+    protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+
+    @Resource(name = DynamicEntityPersistenceService.COMPONENT_NAME)
+    protected DynamicEntityPersistenceService persistenceService;
 
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
     protected ISecurityVerifier securityVerifier;
@@ -40,34 +45,35 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     public DynamicEntityServiceImpl(){
     }
 
+    private void entityAccessExceptionHandler(Exception e) throws ServiceException{
+        if(e instanceof ServiceException)
+            throw (ServiceException)e;
+        throw new ServiceException(e);
+    }
+
     @Override
     public <T> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
-        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
-            @Override
-            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.create(ceilingType, entity);
-            }
-        });
+        try{
+            return persistenceService.create(ceilingType, entity);
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return null;
     }
 
     @Override
     public <T> EntityResult<T> create(final Entity entity) throws ServiceException {
-        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
-            @Override
-            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.create(entity);
-            }
-        });
+        try{
+            return persistenceService.create(entity);
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return null;
     }
 
     @Override
-    public <T> EntityResult<T> read(final Class<T> entityClz, final Object key) throws ServiceException{
-        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
-            @Override
-            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.read(entityClz, key);
-            }
-        });
+    public <T> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
+        return persistenceService.read(entityClz, key);
     }
 
     @Override
@@ -78,55 +84,49 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
-        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
-            @Override
-            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.update(ceilingType, entity);
-            }
-        });
+        try{
+            return persistenceService.update(ceilingType, entity);
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return null;
     }
 
     @Override
     public <T> EntityResult<T> update(final Entity entity)throws ServiceException{
-        return persistenceManagerInvoker.operation(new IPersistentMethod<EntityResult<T>, ServiceException>() {
-            @Override
-            public EntityResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.update(entity);
-            }
-        });
+        try{
+            return persistenceService.update(entity);
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return null;
     }
 
     @Override
-    public <T> void delete(final Class<T> ceilingType, final T entity) throws ServiceException {
-        persistenceManagerInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
-            @Override
-            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
-                persistenceManager.delete(ceilingType, entity);
-                return null;
-            }
-        });
-
+    public <T> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
+        try{
+            persistenceService.delete(ceilingType, entity);
+            return true;
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return false;
     }
 
     @Override
-    public <T> void delete(final Entity entity)throws ServiceException{
-        persistenceManagerInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
-            @Override
-            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
-                persistenceManager.delete(entity);
-                return null;
-            }
-        });
+    public <T> boolean delete(final Entity entity, String id)throws ServiceException{
+        try{
+            persistenceService.delete(entity, id);
+            return true;
+        }catch (Exception e){
+            entityAccessExceptionHandler(e);
+        }
+        return false;
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(final Class<T> entityClz, final CriteriaTransferObject query)throws ServiceException{
-        return persistenceManagerInvoker.operation(new IPersistentMethod<CriteriaQueryResult<T>, ServiceException>() {
-            @Override
-            public CriteriaQueryResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.query(entityClz, query);
-            }
-        });
+    public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException {
+        return persistenceService.query(entityClz, query);
     }
 
     @Override

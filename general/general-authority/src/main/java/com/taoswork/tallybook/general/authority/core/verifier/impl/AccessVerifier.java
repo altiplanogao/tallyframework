@@ -33,9 +33,9 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
-    public Access getAllPossibleAccess(IPermissionAuthority auth, String resourceEntity) {
-        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
-        IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
+    public Access getAllPossibleAccess(IPermissionAuthority auth, String resourceType) {
+        resourceType = securedResourceManager.correctResourceEntity(resourceType);
+        IEntityPermission entityPermission = auth.getEntityPermission(resourceType);
         if (entityPermission == null) {
             return Access.None;
         }
@@ -46,9 +46,9 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
-    public boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity) {
-        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
-        IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
+    public boolean canAccess(IPermissionAuthority auth, Access access, String resourceType) {
+        resourceType = securedResourceManager.correctResourceEntity(resourceType);
+        IEntityPermission entityPermission = auth.getEntityPermission(resourceType);
         if (entityPermission == null) {
             return false;
         }
@@ -59,19 +59,19 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
-    public boolean canAccess(IPermissionAuthority auth, Access access, String resourceEntity, Object... instances) {
+    public boolean canAccess(IPermissionAuthority auth, Access access, String resourceType, Object... instances) {
         if (instances.length == 0) {
             throw new IllegalArgumentException();
         }
 
-        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
-        IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
+        resourceType = securedResourceManager.correctResourceEntity(resourceType);
+        IEntityPermission entityPermission = auth.getEntityPermission(resourceType);
 
         ResourceFitting fitting = null;
         if (instances.length == 1) {
-            fitting = securedResourceManager.getResourceFitting(resourceEntity, instances[0]);
+            fitting = securedResourceManager.getResourceFitting(resourceType, instances[0]);
         } else {
-            fitting = securedResourceManager.getResourceFitting(true, resourceEntity, instances);
+            fitting = securedResourceManager.getResourceFitting(true, resourceType, instances);
         }
         Access mergedAccess = entityPermission.getAccessByFilters(fitting.matchingFilters,
             fitting.isMasterControlled, fitting.protectionMode);
@@ -79,9 +79,9 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
-    public AccessibleFitting calcAccessibleFitting(IPermissionAuthority auth, Access access, String resourceEntity) {
-        resourceEntity = securedResourceManager.correctResourceEntity(resourceEntity);
-        IEntityPermission entityPermission = auth.getEntityPermission(resourceEntity);
+    public AccessibleFitting calcAccessibleFitting(IPermissionAuthority auth, Access access, String resourceType) {
+        resourceType = securedResourceManager.correctResourceEntity(resourceType);
+        IEntityPermission entityPermission = auth.getEntityPermission(resourceType);
         if (entityPermission == null) {
             return null;
         }
@@ -97,8 +97,8 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
      */
     @Override
     public AccessibleFitting calcAccessibleFitting(IEntityPermission entityPermission, Access access) {
-        String resourceEntity = entityPermission.getResourceEntity();
-        IResourceProtection protection = securedResourceManager.getResourceProtection(resourceEntity);
+        String resourceType = entityPermission.getResourceEntity();
+        IResourceProtection protection = securedResourceManager.getResourceProtection(resourceType);
 
         boolean hasMasterAccess = entityPermission.getMasterAccess().hasAccess(access);
         List<String> matchingFilters = new ArrayList<String>();

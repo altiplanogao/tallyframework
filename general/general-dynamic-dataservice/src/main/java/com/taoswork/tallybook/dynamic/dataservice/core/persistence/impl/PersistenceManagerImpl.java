@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceMa
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
+import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
@@ -26,7 +27,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceManagerImpl.class);
 
-    @Resource(name= DynamicEntityDao.COMPONENT_NAME)
+    @Resource(name = DynamicEntityDao.COMPONENT_NAME)
     protected DynamicEntityDao dynamicEntityDao;
 
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
@@ -35,7 +36,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
     protected ISecurityVerifier securityVerifier;
 
-    protected EntityInstanceTranslator converter = new EntityInstanceTranslator(){
+    protected EntityInstanceTranslator converter = new EntityInstanceTranslator() {
         @Override
         protected DynamicEntityMetadataAccess getDynamicEntityMetadataAccess() {
             return dynamicEntityMetadataAccess;
@@ -43,56 +44,36 @@ public class PersistenceManagerImpl implements PersistenceManager {
     };
 
     @Override
-    public <T> EntityResult<T> create(Class<T> ceilingType, T entity) {
+    public <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws NoPermissionException {
         String ceilingTypeName = ceilingType.getName();
         securityVerifier.checkAccess(ceilingTypeName, Access.Create, entity);
-        if(entity instanceof HasHidingField){
+        if (entity instanceof HasHidingField) {
             ((HasHidingField) entity).initHidingForCreate();
         }
         return dynamicEntityDao.create(entity);
     }
 
     @Override
-    public <T> EntityResult<T> create(Entity entity){
-        T instance = (T)converter.convert(entity);
+    public <T> EntityResult<T> create(Entity entity) throws NoPermissionException {
+        T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.create(ceilingType, instance);
     }
 
+    private <T> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
+        return dynamicEntityDao.read(entityRootClz, key);
+    }
+
     @Override
-    public <T> EntityResult<T> read(Class<T> entityType, Object key) {
+    public <T> EntityResult<T> read(Class<T> entityType, Object key) throws NoPermissionException {
         securityVerifier.checkAccess(entityType.getName(), Access.Read);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
         return dynamicEntityDao.read(entityRootClz, key);
     }
 
-    private <T> EntityResult<T> getManagedEntity(Class ceilingType, T entity){
-        try {
-            Class ceilingClz = ceilingType;
-            Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(ceilingClz);
-            ClassMetadata rootClzMeta = this.dynamicEntityMetadataAccess.getClassMetadata(entityRootClz, false);
-            Field idField = rootClzMeta.getIdField();
-
-            Object id = idField.get(entity);
-            EntityResult oldEntity = this.read(ceilingClz, id);
-            return oldEntity;
-        } catch (IllegalAccessException e) {
-            LOGGER.error(e.getMessage());
-        }
-        return null;
-    }
-
-    private <T> Class<T> getCeilingType(Entity entity){
-        try {
-            Class ceilingType = Class.forName(entity.getEntityCeilingType());
-            return ceilingType;
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
     @Override
-    public <T> EntityResult<T> update(Class<T> ceilingType, T entity) {
+    public <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws NoPermissionException {
         String ceilingTypeName = ceilingType.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
         securityVerifier.checkAccess(ceilingTypeName, Access.Update, oldEntity.getEntity());
@@ -102,14 +83,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T> EntityResult<T> update(Entity entity){
-        T instance = (T)converter.convert(entity);
+    public <T> EntityResult<T> update(Entity entity) throws NoPermissionException {
+        T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.update(ceilingType, instance);
     }
 
     @Override
-    public <T> void delete(Class<T> ceilingType, T entity) {
+    public <T> void delete(Class<T> ceilingType, T entity) throws NoPermissionException {
         String ceilingTypeName = ceilingType.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
         entity = oldEntity.getEntity();
@@ -118,17 +99,41 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T> void delete(Entity entity){
+    public <T> void delete(Entity entity, String id) throws NoPermissionException {
         Class ceilingType = getCeilingType(entity);
-        T instance = (T)converter.convert(entity);
+        T instance = (T) converter.convert(entity, id);
         this.delete(ceilingType, instance);
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query){
+    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws NoPermissionException {
         securityVerifier.checkAccess(entityType.getName(), Access.Query);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
         return dynamicEntityDao.query(entityRootClz, query);
     }
 
+    private <T> EntityResult<T> getManagedEntity(Class ceilingType, T entity) {
+        try {
+            Class ceilingClz = ceilingType;
+            Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(ceilingClz);
+            ClassMetadata rootClzMeta = this.dynamicEntityMetadataAccess.getClassMetadata(entityRootClz, false);
+            Field idField = rootClzMeta.getIdField();
+
+            Object id = idField.get(entity);
+            EntityResult oldEntity = this.internalReadNoAccessCheck(ceilingClz, id);
+            return oldEntity;
+        } catch (IllegalAccessException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return null;
+    }
+
+    private <T> Class<T> getCeilingType(Entity entity) {
+        try {
+            Class ceilingType = Class.forName(entity.getEntityCeilingType());
+            return ceilingType;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
 }

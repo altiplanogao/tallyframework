@@ -12,9 +12,9 @@ public interface ISecurityVerifier {
 
     boolean canAccess(String resourceEntity, Access access, Object... instances);
 
-    void checkAccess(String resourceEntity, Access access) throws SecurityException;
+    void checkAccess(String resourceEntity, Access access) throws NoPermissionException;
 
-    void checkAccess(String resourceEntity, Access access, Object... instances) throws SecurityException;
+    void checkAccess(String resourceEntity, Access access, Object... instances) throws NoPermissionException;
 
     boolean canAccessMappedResource(String mappedResource, Access access);
 }

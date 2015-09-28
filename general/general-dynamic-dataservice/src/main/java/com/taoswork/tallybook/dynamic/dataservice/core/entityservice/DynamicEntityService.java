@@ -21,31 +21,25 @@ import java.util.Locale;
 public interface DynamicEntityService {
     public static final String COMPONENT_NAME = "DynamicEntityService";
 
-    @Transactional
     <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
 
-    @Transactional
     <T> EntityResult<T> create(Entity entity) throws ServiceException;
 
     <T> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
 
     <T> T straightRead(Class<T> entityClz, Object key) throws ServiceException;
 
-    @Transactional
     <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
 
-    @Transactional
     <T> EntityResult<T> update(Entity entity) throws ServiceException;
 
-    @Transactional
-    <T> void delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T> boolean delete(Class<T> ceilingType, T entity) throws ServiceException;
 
-    @Transactional
-    <T> void delete(Entity entity) throws ServiceException;
-
-    <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException;
+    <T> boolean delete(Entity entity, String id) throws ServiceException;
 
     <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
+
+    <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException;
 
     Class<?> getRootInstanceableEntityClass(Class<?> entityType);
 

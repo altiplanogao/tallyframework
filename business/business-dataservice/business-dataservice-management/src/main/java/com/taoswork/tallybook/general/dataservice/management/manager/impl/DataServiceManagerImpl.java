@@ -52,8 +52,8 @@ public class DataServiceManagerImpl implements DataServiceManager {
     }
 
     @Override
-    public ManagedEntityEntry getInterfaceEntityEntry(String entityClz){
-        return entityEntryMap.getOrDefault(entityClz, null);
+    public ManagedEntityEntry getInterfaceEntityEntry(String entityType){
+        return entityEntryMap.getOrDefault(entityType, null);
     }
 
     @Override
@@ -62,28 +62,20 @@ public class DataServiceManagerImpl implements DataServiceManager {
     }
 
     @Override
-    public String getEntityResourceName(String entityClz) {
-        EntityEntry managedEntityEntry = getInterfaceEntityEntry(entityClz).getEntityEntry();
+    public String getEntityResourceName(String entityType) {
+        EntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType).getEntityEntry();
         return managedEntityEntry.getResourceName();
     }
 
     @Override
-    public IDataService getDataService(String entityClz) {
-        ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityClz);
+    public IDataService getDataService(String entityType) {
+        ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
         return dataServiceMap.getOrDefault(managedEntityEntry.getDataServiceName(), null);
     }
 
     @Override
-    public DynamicEntityService getDynamicEntityService(String entityClz) {
-        IDataService dataService = getDataService(entityClz);
+    public DynamicEntityService getDynamicEntityService(String entityType) {
+        IDataService dataService = getDataService(entityType);
         return dataService.getService(DynamicEntityService.COMPONENT_NAME);
     }
-
-//    @Override
-//    public FrontEndDynamicEntityService getFrontEndDynamicEntityService(String entityClz) {
-//        IDataService dataService = getDataService(entityClz);
-//        return dataService.getService(FrontEndDynamicEntityService.SERVICE_NAME);
-//    }
-    
-    
 }
