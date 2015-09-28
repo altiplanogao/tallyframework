@@ -245,8 +245,7 @@ public class DynamicEntityServiceTest {
 
             for(TPerson p : cache){
                 Entity entity = new Entity().setEntityCeilingType(TPerson.class).setEntityType(p.getClass());
-                entity.setProperty("id", p.getId().toString());
-                dynamicEntityService.delete(entity);
+                dynamicEntityService.delete(entity, p.getId().toString());
             }
 
             {

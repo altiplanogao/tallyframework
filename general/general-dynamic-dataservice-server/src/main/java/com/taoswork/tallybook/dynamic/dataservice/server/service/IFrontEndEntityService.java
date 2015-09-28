@@ -16,19 +16,19 @@ public interface IFrontEndEntityService {
     EntityQueryResponse query(EntityQueryRequest request, Locale locale) throws ServiceException;
 
     /**
-     * Used in the 'get' method, returns an entity instance inside of EntityAddGetResponse
+     * Used in the 'get' method, returns an entity instance inside of EntityCreateFreshResponse
      * @param request
      * @param locale
      * @return
      * @throws ServiceException
      */
-    EntityAddGetResponse createGet(EntityAddGetRequest request, Locale locale) throws ServiceException;
+    EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) ;
 
-    EntityAddPostResponse createPost(EntityAddPostRequest request, Locale locale) throws ServiceException;
+    EntityCreateResponse create(EntityCreateRequest request, Locale locale);
 
     EntityReadResponse read(EntityReadRequest readRequest, Locale locale) throws ServiceException;
 
-    EntityUpdatePostResponse update(EntityUpdatePostRequest request, Locale locale) throws ServiceException;
+    EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) throws ServiceException;
 
-    EntityDeletePostResponse delete(EntityDeletePostRequest deleteRequest, Locale locale) throws ServiceException;
+    EntityDeleteResponse delete(EntityDeletePostRequest deleteRequest, Locale locale) throws ServiceException;
 }

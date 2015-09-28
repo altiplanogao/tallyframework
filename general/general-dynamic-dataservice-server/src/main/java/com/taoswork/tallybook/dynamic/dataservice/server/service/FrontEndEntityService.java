@@ -2,7 +2,6 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -28,6 +27,8 @@ import java.util.Locale;
  */
 public class FrontEndEntityService implements IFrontEndEntityService {
 
+    private final DynamicEntityService dynamicEntityService;
+
     public FrontEndEntityService(DynamicEntityService dynamicEntityService){
         this.dynamicEntityService = dynamicEntityService;
     }
@@ -35,8 +36,6 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     public static FrontEndEntityService newInstance(DynamicEntityService dynamicEntityService){
         return new FrontEndEntityService(dynamicEntityService);
     }
-
-    private final DynamicEntityService dynamicEntityService;
 
     private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus){
         Access access = dynamicEntityService.getAuthorizeAccess(request.getEntityType(), Access.Crudq);
@@ -69,6 +68,16 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     @Override
+    public EntityResponse getInfoResponse(EntityRequest request, Locale locale){
+        EntityResponse response = new EntityResponse();
+        ResponseTranslator.translate(request, response);
+        this.appendInfoFields(request, response, locale);
+        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
+        LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);
+        return response;
+    }
+
+    @Override
     public EntityQueryResponse query(EntityQueryRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
 
@@ -83,12 +92,29 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     @Override
-    public EntityResponse getInfoResponse(EntityRequest request, Locale locale){
-        EntityResponse response = new EntityResponse();
-        ResponseTranslator.translate(request, response);
+    public EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) {
+        Class<?> entityType = request.getEntityType();
+        Object data = dynamicEntityService.makeDissociatedObject(entityType);
+        EntityResult er = new EntityResult();
+        er.setEntity(data);
+
+        EntityCreateFreshResponse response = ResponseTranslator.translateCreateFreshResponse(request, er);
         this.appendInfoFields(request, response, locale);
-        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
-        LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);
+        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
+        LinkBuilder.buildLinkForNewInstanceResults(request.getFullUrl(), response);
+        return response;
+    }
+
+    @Override
+    public EntityCreateResponse create(EntityCreateRequest request, Locale locale) {
+        Class<?> entityType = request.getEntityType();
+        EntityCreateResponse response = new EntityCreateResponse();
+        try {
+            EntityResult data = dynamicEntityService.create(request.getEntity());
+            ResponseTranslator.translateCreateResponse(request, data, null, response);
+        }catch (ServiceException e) {
+            ResponseTranslator.translateCreateResponse(request, null, e, response);
+        }
         return response;
     }
 
@@ -105,45 +131,18 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     @Override
-    public EntityUpdatePostResponse update(EntityUpdatePostRequest request, Locale locale) throws ServiceException {
+    public EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
         EntityResult data = dynamicEntityService.update(request.getEntity());
-        EntityUpdatePostResponse response = ResponseTranslator.translateUpdatePostResponse(request, data);
+        EntityUpdateResponse response = ResponseTranslator.translateUpdateResponse(request, data);
         return response;
     }
 
     @Override
-    public EntityAddGetResponse createGet(EntityAddGetRequest request, Locale locale) throws ServiceException {
-        Class<?> entityType = request.getEntityType();
-        Object data = dynamicEntityService.makeDissociatedObject(entityType);
-        EntityResult er = new EntityResult();
-        er.setEntity(data);
-
-        EntityAddGetResponse response = ResponseTranslator.translateAddGetResponse(request, er);
-        this.appendInfoFields(request, response, locale);
-        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
-        LinkBuilder.buildLinkForAddGetResults(request.getFullUrl(), response);
-        return response;
-    }
-
-    @Override
-    public EntityAddPostResponse createPost(EntityAddPostRequest request, Locale locale) throws ServiceException {
-        Class<?> entityType = request.getEntityType();
-        try {
-            EntityResult data = dynamicEntityService.create(request.getEntity());
-            EntityAddPostResponse response = ResponseTranslator.translateAddPostResponse(request, data);
-            return response;
-
-        }catch (Exception e) {
-            throw new ServiceException(e);
-        }
-   }
-
-    @Override
-    public EntityDeletePostResponse delete(EntityDeletePostRequest request, Locale locale) throws ServiceException {
+    public EntityDeleteResponse delete(EntityDeletePostRequest request, Locale locale) throws ServiceException {
         Class<?> entityType = request.getEntityType();
         boolean deleted = dynamicEntityService.delete(request.getEntity(), request.getId());
-        EntityDeletePostResponse response = ResponseTranslator.translateDeletePostResponse(request, deleted);
+        EntityDeleteResponse response = ResponseTranslator.translateDeleteResponse(request, deleted);
         return response;
     }
 }

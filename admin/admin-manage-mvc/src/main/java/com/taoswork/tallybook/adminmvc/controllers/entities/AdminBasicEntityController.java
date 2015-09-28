@@ -96,10 +96,10 @@ public class AdminBasicEntityController extends BaseController {
 
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
-    public String readEntityInfo(HttpServletRequest request, HttpServletResponse response, Model model,
-                                 @PathVariable(value = "entityTypeName") String entityTypeName,
-                                 @PathVariable Map<String, String> pathVars,
-                                 @RequestParam MultiValueMap<String, String> requestParams) {
+    public String info(HttpServletRequest request, HttpServletResponse response, Model model,
+                       @PathVariable(value = "entityTypeName") String entityTypeName,
+                       @PathVariable Map<String, String> pathVars,
+                       @RequestParam MultiValueMap<String, String> requestParams) {
 
         String entityType = entityTypeNameToEntityType(entityTypeName);
         if(entityType == null){
@@ -131,10 +131,10 @@ public class AdminBasicEntityController extends BaseController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String searchEntityList(HttpServletRequest request, HttpServletResponse response, Model model,
-                                   @PathVariable(value = "entityTypeName") String entityTypeName,
-                                   @PathVariable Map<String, String> pathVars,
-                                   @RequestParam MultiValueMap<String, String> requestParams) throws ServiceException{
+    public String query(HttpServletRequest request, HttpServletResponse response, Model model,
+                        @PathVariable(value = "entityTypeName") String entityTypeName,
+                        @PathVariable Map<String, String> pathVars,
+                        @RequestParam MultiValueMap<String, String> requestParams) throws ServiceException{
 
         String entityType = entityTypeNameToEntityType(entityTypeName);
         if(entityType == null){
@@ -173,16 +173,119 @@ public class AdminBasicEntityController extends BaseController {
         return VIEWS.FramedView;
     }
 
+    /**
+     * Renders the modal form that is used to add a new parent level entity. Note that this form cannot render any
+     * subcollections as operations on those collections require the parent level entity to first be saved and have
+     * and id. Once the entity is initially saved, we will redirect the user to the normal manage entity screen where
+     * they can then perform operations on sub collections.
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param pathVars
+     * @return the return view path
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String createFresh(HttpServletRequest request, HttpServletResponse response, Model model,
+                              @PathVariable(value = "entityTypeName") String entityTypeName,
+                              @PathVariable Map<String, String> pathVars,
+                              @RequestParam(defaultValue = "") String modal) {
+        Locale locale = request.getLocale();
+        String entityType = entityTypeNameToEntityType(entityTypeName);
+        if(entityType == null){
+            return VIEWS.Redirect2Home;
+        }
 
-    private void setCommonModelAttributes(Model model, Locale locale) {
-        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
-        Map<String, String> messageMap = getCommonMessage(locale);
-        String messageDict = getObjectInJson(messageMap);
+        EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypeName, entityType,
+            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
 
-        model.addAttribute("messageDict", messageDict);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
-        model.addAttribute("production", production);
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+
+        EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
+
+        model.addAttribute("currentAction", EntityActionNames.ADD);
+        model.addAttribute("formAction", request.getRequestURL().toString());
+        if(isModalRequest(request)){
+            String entityResultInJson = getObjectInJson(addResponse);
+            model.addAttribute("addData", entityResultInJson);
+            model.addAttribute("viewType", "entityAdd");
+
+            return VIEWS.ModalView;
+        }
+        if (isAjaxRequest(request)) {
+            return this.makeDataView(model, addResponse);
+        }
+
+        Person person = adminCommonModelService.getPersistentPerson();
+        AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
+        Menu menu = adminMenuService.buildMenu(employee);
+        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+
+        model.addAttribute("menu", menu);
+        model.addAttribute("current", currentPath);
+        model.addAttribute("person", person);
+
+        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
+        String entityResultInJson = getObjectInJson(addResponse);
+        model.addAttribute("addData", entityResultInJson);
+
+        model.addAttribute("viewType", "entityAdd");
+        model.addAttribute("formScope", "main");
+        setCommonModelAttributes(model, locale);
+        return VIEWS.FramedView;
     }
+
+    /**
+     * Processes the request to add a new entity. If successful, returns a redirect to the newly created entity.
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param pathVars
+     * @param entityForm
+     * @param result
+     * @return the return view path
+     * @throws Exception
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String create(HttpServletRequest request, HttpServletResponse response, Model model,
+                         @PathVariable(value = "entityTypeName") String entityTypeName,
+                         @PathVariable Map<String, String> pathVars,
+                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) {
+        String entityCeilingType = entityTypeNameToEntityType(entityTypeName);
+        if(entityCeilingType == null){
+            return VIEWS.Redirect2Home;
+        }
+        String entityType = straightenEntityType(entityTypeName, entityForm);
+        if(StringUtils.isEmpty(entityType)){
+            return VIEWS.Redirect2Failure;
+        }
+
+        if(!(isAjaxRequest(request))){
+            return VIEWS.Redirect2Failure;
+        }
+
+        Locale locale = request.getLocale();
+        EntityCreateRequest updateRequest = Parameter2RequestTranslator.makeAddPostRequest(entityTypeName, entityType,
+            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+
+        EntityCreateResponse updateResponse = frontEndEntityService.create(updateRequest, locale);
+
+        boolean success = !updateResponse.hasError();
+
+        if (success) {
+            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + updateResponse.getEntity().getIdValue();
+            return makeRedirectView(model, resultUrl);
+        }else {
+            LOGGER.error("Error not handled");
+            return "redirect:" + request.getRequestURI();
+        }
+    }
+
 
     /**
      * Renders the main entity form for the specified entity
@@ -196,10 +299,10 @@ public class AdminBasicEntityController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String viewEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
-                                 @PathVariable(value = "entityTypeName") String entityTypeName,
-                                 @PathVariable("id") String id,
-                                 @PathVariable Map<String, String> pathVars) throws Exception {
+    public String read(HttpServletRequest request, HttpServletResponse response, Model model,
+                       @PathVariable(value = "entityTypeName") String entityTypeName,
+                       @PathVariable("id") String id,
+                       @PathVariable Map<String, String> pathVars) throws Exception {
 
         String entityType = entityTypeNameToEntityType(entityTypeName);
         if(entityType == null){
@@ -263,12 +366,12 @@ public class AdminBasicEntityController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String saveEntity(HttpServletRequest request, HttpServletResponse response, Model model,
-                             @PathVariable(value = "entityTypeName") String entityTypeName,
-                             @PathVariable Map<String, String> pathVars,
-                             @PathVariable(value = "id") String id,
-                             @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result,
-                             RedirectAttributes ra) throws Exception {
+    public String update(HttpServletRequest request, HttpServletResponse response, Model model,
+                         @PathVariable(value = "entityTypeName") String entityTypeName,
+                         @PathVariable Map<String, String> pathVars,
+                         @PathVariable(value = "id") String id,
+                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result,
+                         RedirectAttributes ra) throws Exception {
         String entityCeilingType = entityTypeNameToEntityType(entityTypeName);
         if(entityCeilingType == null){
             return VIEWS.Redirect2Home;
@@ -287,132 +390,16 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType);
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
 
-        EntityUpdatePostRequest updateRequest = Parameter2RequestTranslator.makeUpdatePostRequest(entityTypeName, entityType,
+        EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdatePostRequest(entityTypeName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
 
-        EntityUpdatePostResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
+        EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
         //TODO: handle failure and errors
         boolean success = !updateResponse.hasError();
 
         if (success) {
             return makeRedirectView(model, request.getRequestURI());
-        }else {
-            LOGGER.error("Error not handled");
-            return "redirect:" + request.getRequestURI();
-        }
-    }
-
-     /**
-     * Renders the modal form that is used to add a new parent level entity. Note that this form cannot render any
-     * subcollections as operations on those collections require the parent level entity to first be saved and have
-     * and id. Once the entity is initially saved, we will redirect the user to the normal manage entity screen where
-     * they can then perform operations on sub collections.
-     *
-     * @param request
-     * @param response
-     * @param model
-     * @param pathVars
-     * @return the return view path
-     * @throws Exception
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String viewAddEntityForm(HttpServletRequest request, HttpServletResponse response, Model model,
-                                    @PathVariable(value = "entityTypeName") String entityTypeName,
-                                    @PathVariable Map<String, String> pathVars,
-                                    @RequestParam(defaultValue = "") String modal) throws Exception {
-        Thread.sleep(1000);
-        Locale locale = request.getLocale();
-        String entityType = entityTypeNameToEntityType(entityTypeName);
-        if(entityType == null){
-            return VIEWS.Redirect2Home;
-        }
-
-        EntityAddGetRequest addRequest = Parameter2RequestTranslator.makeAddGetRequest(entityTypeName, entityType,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
-
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
-
-        EntityAddGetResponse addResponse = frontEndEntityService.createGet(addRequest, locale);
-
-        model.addAttribute("currentAction", EntityActionNames.ADD);
-        model.addAttribute("formAction", request.getRequestURL().toString());
-        if(isModalRequest(request)){
-            String entityResultInJson = getObjectInJson(addResponse);
-            model.addAttribute("addData", entityResultInJson);
-            model.addAttribute("viewType", "entityAdd");
-
-            return VIEWS.ModalView;
-        }
-        if (isAjaxRequest(request)) {
-            this.makeDataView(model, addResponse);
-        }
-
-        Person person = adminCommonModelService.getPersistentPerson();
-        AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
-        Menu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
-
-        model.addAttribute("menu", menu);
-        model.addAttribute("current", currentPath);
-        model.addAttribute("person", person);
-
-        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
-        String entityResultInJson = getObjectInJson(addResponse);
-        model.addAttribute("addData", entityResultInJson);
-
-        model.addAttribute("viewType", "entityAdd");
-        model.addAttribute("formScope", "main");
-        setCommonModelAttributes(model, locale);
-        return VIEWS.FramedView;
-    }
-
-    /**
-     * Processes the request to add a new entity. If successful, returns a redirect to the newly created entity.
-     *
-     * @param request
-     * @param response
-     * @param model
-     * @param pathVars
-     * @param entityForm
-     * @param result
-     * @return the return view path
-     * @throws Exception
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addEntity(HttpServletRequest request, HttpServletResponse response, Model model,
-                            @PathVariable(value = "entityTypeName") String entityTypeName,
-                            @PathVariable Map<String, String> pathVars,
-                            @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) throws Exception {
-        Locale locale = request.getLocale();
-        String entityType = entityForm.getEntityType();
-        String entityTypeByPath = entityTypeNameToEntityType(entityTypeName);
-        Class entityTypeClz = Class.forName(entityType);
-        if(entityTypeByPath == null){
-            return VIEWS.Redirect2Failure;
-        } else {
-            Class entityTypeClzByPath = Class.forName(entityTypeByPath);
-            if (!entityTypeClzByPath.isAssignableFrom(entityTypeClz)) {
-                return VIEWS.Redirect2Failure;
-            }
-        }
-        if(!(isAjaxRequest(request))){
-            return VIEWS.Redirect2Failure;
-        }
-
-        EntityAddPostRequest updateRequest = Parameter2RequestTranslator.makeAddPostRequest(entityTypeName, entityType,
-                request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityTypeByPath);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
-
-        EntityAddPostResponse updateResponse = frontEndEntityService.createPost(updateRequest, locale);
-
-        boolean success = !updateResponse.hasError();
-
-        if (success) {
-            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + updateResponse.getEntity().getIdValue();
-            return makeRedirectView(model, resultUrl);
         }else {
             LOGGER.error("Error not handled");
             return "redirect:" + request.getRequestURI();
@@ -432,11 +419,11 @@ public class AdminBasicEntityController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String removeEntity(HttpServletRequest request, HttpServletResponse response, Model model,
-                               @PathVariable(value = "entityTypeName") String entityTypeName,
-                               @PathVariable Map<String, String> pathVars,
-                               @PathVariable(value = "id") String id,
-                               @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) throws Exception {
+    public String delete(HttpServletRequest request, HttpServletResponse response, Model model,
+                         @PathVariable(value = "entityTypeName") String entityTypeName,
+                         @PathVariable Map<String, String> pathVars,
+                         @PathVariable(value = "id") String id,
+                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) throws Exception {
         String entityCeilingType = entityTypeNameToEntityType(entityTypeName);
         if(entityCeilingType == null){
             return VIEWS.Redirect2Home;
@@ -457,7 +444,7 @@ public class AdminBasicEntityController extends BaseController {
         EntityDeletePostRequest deleteRequest = Parameter2RequestTranslator.makeDeletePostRequest(entityTypeName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);
 
-        EntityDeletePostResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
+        EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
 
         //TODO: handle failure and errors
         boolean success = deleteResponse.isSuccess();
@@ -743,6 +730,17 @@ public class AdminBasicEntityController extends BaseController {
     //////////////////////////////////////////////////////////////////////////////////////
     ///         Helper                                                              //////
     //////////////////////////////////////////////////////////////////////////////////////
+
+    private void setCommonModelAttributes(Model model, Locale locale) {
+        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
+        Map<String, String> messageMap = getCommonMessage(locale);
+        String messageDict = getObjectInJson(messageMap);
+
+        model.addAttribute("messageDict", messageDict);
+//        model.addAttribute("currentUrl", request.getRequestURL().toString());
+        model.addAttribute("production", production);
+    }
+
     private String entityTypeNameToEntityType(String entityTypeName){
         String entityType = dataServiceManager.getEntityInterfaceName(entityTypeName);
         if(entityType == null){

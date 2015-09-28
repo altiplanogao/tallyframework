@@ -130,15 +130,17 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+    public <T> T makeDissociatedObject(Class<T> entityClz) {
         Class rootable = dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         try {
             Object obj = rootable.newInstance();
             return (T)obj;
         } catch (InstantiationException e) {
-            throw new ServiceException(e);
+            LOGGER.error(e.getMessage());
+            return null;
         } catch (IllegalAccessException e) {
-            throw new ServiceException(e);
+            LOGGER.error(e.getMessage());
+            return null;
         }
     }
 

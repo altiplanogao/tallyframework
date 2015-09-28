@@ -125,16 +125,16 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityAddGetRequest makeAddGetRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
-        EntityAddGetRequest request = new EntityAddGetRequest();
+    public static EntityCreateFreshRequest makeCreateFreshRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
+        EntityCreateFreshRequest request = new EntityCreateFreshRequest();
         request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
-    public static EntityAddPostRequest makeAddPostRequest(String entityTypeName, String entityType,
+    public static EntityCreateRequest makeAddPostRequest(String entityTypeName, String entityType,
                                                           String entityUri, String fullUrl, Entity entity) {
-        EntityAddPostRequest request = new EntityAddPostRequest(entity);
+        EntityCreateRequest request = new EntityCreateRequest(entity);
         request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
         request.clearEntityInfoType();
         return request;
@@ -150,9 +150,9 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityUpdatePostRequest makeUpdatePostRequest(String entityTypeName, String entityType,
+    public static EntityUpdateRequest makeUpdatePostRequest(String entityTypeName, String entityType,
                                                                 String entityUri, String fullUrl, Entity entity) {
-        EntityUpdatePostRequest request = new EntityUpdatePostRequest(entity);
+        EntityUpdateRequest request = new EntityUpdateRequest(entity);
         request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
         request.clearEntityInfoType();
         return request;

@@ -39,7 +39,7 @@ public interface DynamicEntityService {
 
     <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
 
-    <T> T makeDissociatedObject(Class<T> entityClz) throws ServiceException;
+    <T> T makeDissociatedObject(Class<T> entityClz);
 
     Class<?> getRootInstanceableEntityClass(Class<?> entityType);
 

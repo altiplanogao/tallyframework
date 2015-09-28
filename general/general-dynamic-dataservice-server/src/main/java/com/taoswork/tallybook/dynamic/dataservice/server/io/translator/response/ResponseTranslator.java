@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
@@ -30,6 +31,20 @@ public class ResponseTranslator {
         return response;
     }
 
+    public static EntityCreateFreshResponse translateCreateFreshResponse(EntityCreateFreshRequest request,
+                                                                         EntityResult result) {
+        EntityCreateFreshResponse response = new EntityCreateFreshResponse();
+        translateInstanceResponse(request, result, response);
+        return response;
+    }
+
+    public static void translateCreateResponse(EntityCreateRequest request,
+                                                               EntityResult result,
+                                                               ServiceException e,
+                                                               EntityCreateResponse response) {
+        translateInstanceResponse(request, result, response);
+    }
+
     public static EntityReadResponse translateReadResponse(EntityReadRequest request,
                                                            EntityResult result){
         EntityReadResponse response = new EntityReadResponse();
@@ -37,24 +52,18 @@ public class ResponseTranslator {
         return response;
     }
 
-    public static EntityUpdatePostResponse translateUpdatePostResponse(EntityUpdatePostRequest request,
-                                                                       EntityResult result) {
-        EntityUpdatePostResponse response = new EntityUpdatePostResponse();
+    public static EntityUpdateResponse translateUpdateResponse(EntityUpdateRequest request,
+                                                               EntityResult result) {
+        EntityUpdateResponse response = new EntityUpdateResponse();
         translateInstanceResponse(request, result, response);
         return response;
     }
 
-    public static EntityAddPostResponse translateAddPostResponse(EntityAddPostRequest request,
-                                                                 EntityResult result) {
-        EntityAddPostResponse response = new EntityAddPostResponse();
-        translateInstanceResponse(request, result, response);
-        return response;
-    }
-
-    public static EntityAddGetResponse translateAddGetResponse(EntityAddGetRequest request,
-                                                               EntityResult result){
-        EntityAddGetResponse response = new EntityAddGetResponse();
-        translateInstanceResponse(request, result, response);
+    public static EntityDeleteResponse translateDeleteResponse(EntityDeletePostRequest request,
+                                                               boolean deleted) {
+        EntityDeleteResponse response = new EntityDeleteResponse();
+        translate(request, response);
+        response.setSuccess(deleted);
         return response;
     }
 
@@ -68,12 +77,5 @@ public class ResponseTranslator {
         response.setEntityType(resultEntity.getClass());
         EntityInstanceResult instanceResult = ResultTranslator.convertInstanceResult(result);
         response.setEntity(instanceResult);
-    }
-
-    public static EntityDeletePostResponse translateDeletePostResponse(EntityDeletePostRequest request, boolean deleted) {
-        EntityDeletePostResponse response = new EntityDeletePostResponse();
-        translate(request, response);
-        response.setSuccess(deleted);
-        return response;
     }
 }
