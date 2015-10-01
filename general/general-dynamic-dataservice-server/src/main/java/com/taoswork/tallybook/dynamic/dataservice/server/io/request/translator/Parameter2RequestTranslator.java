@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
@@ -71,7 +72,7 @@ public class Parameter2RequestTranslator {
                     }
                     String orderStr = value.get(valueSize - 1);
                     SortDirection sortDirection = GeneralRequestParameter.getSortDirection(orderStr);
-                    if(null != sortDirection) {
+                    if (null != sortDirection) {
                         sortCriteria.setSortDirection(sortDirection);
                         request.appendSortCriteria(sortCriteria);
                     }
@@ -86,7 +87,7 @@ public class Parameter2RequestTranslator {
         int startIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_START_INDEX, 0);
         Integer maxIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_INDEX, null);
         Integer pageSize = integerValues.getOrDefault(GeneralRequestParameter.
-                REQUEST_PAGE_SIZE, null);
+            REQUEST_PAGE_SIZE, null);
 
         request.setStartIndex(startIndex);
         if (pageSize == null && maxIndex == null) {
@@ -104,70 +105,71 @@ public class Parameter2RequestTranslator {
         }
     }
 
-    public static EntityRequest makeInfoRequest(String entityResName, String entityType,
-                                                String entityUri, String fullUrl,
-                                                MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
-        EntityRequest request = new EntityRequest();
-        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+    public static EntityInfoRequest makeInfoRequest(EntityTypeParameter entityTypeParam,
+                                                    String entityUri, String fullUrl,
+                                                    MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
+        EntityInfoRequest request = new EntityInfoRequest();
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         _fillInfoCriterias(request, requestParams, infoFilter);
 
         return request;
     }
 
-    public static EntityQueryRequest makeQueryRequest(String entityResName, String entityType,
+    public static EntityQueryRequest makeQueryRequest(EntityTypeParameter entityTypeParam,
                                                       String entityUri, String fullUrl,
                                                       MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
         EntityQueryRequest request = new EntityQueryRequest();
-        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         _queryRequestSetPropertyCriterias(request, requestParams);
         _fillInfoCriterias(request, requestParams, infoFilter);
 
         return request;
     }
 
-    public static EntityCreateFreshRequest makeCreateFreshRequest(String entityResName, String entityType, String entityUri, String fullUrl) {
+    public static EntityCreateFreshRequest makeCreateFreshRequest(EntityTypeParameter entityTypeParam,
+                                                                  String entityUri, String fullUrl) {
         EntityCreateFreshRequest request = new EntityCreateFreshRequest();
-        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
-    public static EntityCreateRequest makeAddPostRequest(String entityTypeName, String entityType,
-                                                          String entityUri, String fullUrl, Entity entity) {
+    public static EntityCreateRequest makeAddPostRequest(EntityTypeParameter entityTypeParam,
+                                                         String entityUri, String fullUrl, Entity entity) {
         EntityCreateRequest request = new EntityCreateRequest(entity);
-        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.clearEntityInfoType();
         return request;
     }
 
-    public static EntityReadRequest makeReadRequest(String entityResName, String entityType,
+    public static EntityReadRequest makeReadRequest(EntityTypeParameter entityTypeParam,
                                                     String entityUri, String fullUrl, String id) {
         EntityReadRequest request = new EntityReadRequest();
-        request.setEntityRequest(entityResName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.setId(id);
         request.addEntityInfoType(EntityInfoType.Form);
 
         return request;
     }
 
-    public static EntityUpdateRequest makeUpdatePostRequest(String entityTypeName, String entityType,
-                                                                String entityUri, String fullUrl, Entity entity) {
+    public static EntityUpdateRequest makeUpdatePostRequest(EntityTypeParameter entityTypeParam,
+                                                            String entityUri, String fullUrl, Entity entity) {
         EntityUpdateRequest request = new EntityUpdateRequest(entity);
-        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.clearEntityInfoType();
         return request;
     }
 
-    public static EntityDeletePostRequest makeDeletePostRequest(String entityTypeName, String entityType,
+    public static EntityDeletePostRequest makeDeletePostRequest(EntityTypeParameter entityTypeParam,
                                                                 String entityUri, String fullUrl, String id, Entity entity) {
         EntityDeletePostRequest request = new EntityDeletePostRequest(entity);
-        request.setEntityRequest(entityTypeName, entityType, entityUri, fullUrl);
+        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.setId(id);
-        if(StringUtils.isEmpty(entity.getEntityType())){
-            entity.setEntityType(entityType);
+        if (entity.getEntityType() == null) {
+            entity.setEntityType(entityTypeParam.getType());
         }
-        if(StringUtils.isEmpty(entity.getEntityCeilingType())){
-            entity.setEntityCeilingType(entityType);
+        if (entity.getEntityCeilingType() == null) {
+            entity.setEntityCeilingType(entityTypeParam.getCeilingType());
         }
         request.clearEntityInfoType();
         return request;
@@ -177,9 +179,9 @@ public class Parameter2RequestTranslator {
                                              Map<String, List<String>> requestParams,
                                              Set<String> infoFilter) {
         List<String> infoTypes = requestParams.get(GeneralRequestParameter.ENTITY_INFO_TYPE);
-        if(infoTypes != null){
-            for (String infoTypeString : infoTypes){
-                if(infoFilter.contains(infoTypeString)){
+        if (infoTypes != null) {
+            for (String infoTypeString : infoTypes) {
+                if (infoFilter.contains(infoTypeString)) {
                     request.addEntityInfoType(EntityInfoType.instance(infoTypeString));
                 }
             }

@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
@@ -28,63 +29,86 @@ public class ResponseTranslator {
 
     private final MessageSource messageSource;
 
-    public ResponseTranslator(MessageSource messageSource){
+    public ResponseTranslator(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    public void translate(EntityRequest request,
-                                 ServiceException e,
-                                 EntityResponse response,
-                          Locale locale) {
+    public void translateInstanceRequest(EntityInstancePostRequest request,
+                                         EntityResponse response) {
+        Entity entity = request.getEntity();
+        response.setResourceName(request.getResourceName())
+            .setEntityCeilingType(entity.getEntityCeilingType())
+            .setEntityType(entity.getEntityType())
+            .setBaseUrl(request.getResourceURI());
+    }
+
+    public void translateRequest(EntityRequest request,
+                                 EntityResponse response) {
         response.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(request.getEntityType())
             .setBaseUrl(request.getResourceURI());
+    }
+
+    public void translateInfoResponse(EntityInfoRequest request,
+                                      EntityInfoResponse response,
+                                       Locale locale) {
+        translateRequest(request, response);
+
+    }
+
+    public void translateQueryResponse(EntityQueryRequest request,
+                                       CriteriaQueryResult<?> criteriaResult,
+                                       ServiceException e,
+                                       EntityQueryResponse response,
+                                       Locale locale) {
+        translateRequest(request, response);
+
+        EntityQueryResult queryResult = ResultTranslator.convertQueryResult(request, criteriaResult);
+        response.setEntityType(criteriaResult.getEntityType());
+        response.setEntities(queryResult);
 
         handleServiceException(e, response, locale);
     }
 
-    public void translateQueryResponse(EntityQueryRequest request,
-                                              CriteriaQueryResult<?> criteriaResult,
-                                              ServiceException e,
-                                       EntityQueryResponse response,
-                                       Locale locale) {
-        translate(request, e, response, locale);
-        EntityQueryResult queryResult = ResultTranslator.convertQueryResult(request, criteriaResult);
-        response.setEntityType(criteriaResult.getEntityType());
-        response.setEntities(queryResult);
-    }
-
     public void translateCreateFreshResponse(EntityCreateFreshRequest request,
-                                                    EntityResult result,
-                                                    ServiceException e,
-                                                    EntityCreateFreshResponse response,
+                                             EntityResult result,
+                                             ServiceException e,
+                                             EntityCreateFreshResponse response,
                                              Locale locale) {
-        translateInstanceResponse(request, result, e, response, locale);
+        translateRequest(request, response);
+        translateInstanceResponse(request, result, e, response);
+        handleServiceException(e, response, locale);
     }
 
     public void translateCreateResponse(EntityCreateRequest request,
-                                               EntityResult result,
-                                               ServiceException e,
-                                               EntityCreateResponse response,
+                                        EntityResult result,
+                                        ServiceException e,
+                                        EntityCreateResponse response,
                                         Locale locale) {
-        translateInstanceResponse(request, result, e, response, locale);
+        translateInstanceRequest(request, response);
+        translateInstanceResponse(request, result, e, response);
+        handleServiceException(e, response, locale);
     }
 
     public void translateReadResponse(EntityReadRequest request,
-                                             EntityResult result,
-                                             ServiceException e,
-                                             EntityReadResponse response,
+                                      EntityResult result,
+                                      ServiceException e,
+                                      EntityReadResponse response,
                                       Locale locale) {
-        translateInstanceResponse(request, result, e, response, locale);
+        translateRequest(request, response);
+        translateInstanceResponse(request, result, e, response);
+        handleServiceException(e, response, locale);
     }
 
     public void translateUpdateResponse(EntityUpdateRequest request,
-                                               EntityResult result,
-                                               ServiceException e,
-                                               EntityUpdateResponse response,
+                                        EntityResult result,
+                                        ServiceException e,
+                                        EntityUpdateResponse response,
                                         Locale locale) {
-        translateInstanceResponse(request, result, e, response, locale);
+        translateInstanceRequest(request, response);
+        translateInstanceResponse(request, result, e, response);
+        handleServiceException(e, response, locale);
     }
 
     public void translateDeleteResponse(EntityDeletePostRequest request,
@@ -92,17 +116,16 @@ public class ResponseTranslator {
                                         ServiceException e,
                                         EntityDeleteResponse response,
                                         Locale locale) {
-        translate(request, e, response, locale);
+        translateInstanceRequest(request, response);
         response.setSuccess(deleted);
+        handleServiceException(e, response, locale);
     }
 
     private void translateInstanceResponse(EntityRequest request,
-                                                  EntityResult result,
-                                                  ServiceException e,
-                                                  EntityInstanceResponse response,
-                                           Locale locale) {
-        translate(request, e, response, locale);
-        if(result == null && e instanceof EntityValidationException){
+                                           EntityResult result,
+                                           ServiceException e,
+                                           EntityInstanceResponse response) {
+        if (result == null && e instanceof EntityValidationException) {
             result = ((EntityValidationException) e).getEntity();
         }
         if (result == null) {
@@ -122,15 +145,15 @@ public class ResponseTranslator {
             if (e instanceof EntityValidationException) {
                 EntityValidationException ve = (EntityValidationException) e;
                 EntityValidationResult validationResult = ve.getEntityValidationResult();
-                if(!validationResult.isValid()) {
+                if (!validationResult.isValid()) {
                     this.translateValidationError(validationResult, errors, locale);
-                }else {
+                } else {
                     errors.setUnhandledException(e);
                 }
             } else if (e instanceof NoPermissionException) {
                 errors.setAuthorized(false);
                 this.translateNoPermissionError((NoPermissionException) e, errors, locale);
-            }else {
+            } else {
                 errors.setUnhandledException(e);
             }
         }

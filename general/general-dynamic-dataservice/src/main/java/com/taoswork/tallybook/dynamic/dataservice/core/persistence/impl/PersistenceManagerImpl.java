@@ -140,12 +140,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     private <T> Class<T> getCeilingType(Entity entity) {
-        try {
-            Class ceilingType = Class.forName(entity.getEntityCeilingType());
-            return ceilingType;
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
+        return (Class<T>)entity.getEntityCeilingType();
     }
 
     private <T> EntityResult<T> makeEntityResult(T entity) {

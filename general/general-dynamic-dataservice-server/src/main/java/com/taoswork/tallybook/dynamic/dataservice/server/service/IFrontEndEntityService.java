@@ -11,7 +11,7 @@ import java.util.Locale;
  */
 public interface IFrontEndEntityService {
 
-    EntityInfoResponse getInfoResponse(EntityRequest request, Locale locale);
+    EntityInfoResponse getInfoResponse(EntityInfoRequest request, Locale locale);
 
     EntityQueryResponse query(EntityQueryRequest request, Locale locale);
 

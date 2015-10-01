@@ -34,7 +34,7 @@ public abstract class EntityInstanceTranslator {
         Serializable instance = null;
         DynamicEntityMetadataAccess entityMetadataAccess = this.getDynamicEntityMetadataAccess();
         try {
-            Class entityClass = Class.forName(source.getEntityType());
+            Class entityClass = (source.getEntityType());
             Serializable tempInstance = (Serializable)entityClass.newInstance();
             BeanWrapperImpl instanceBean = beanWrapperThreadLocal.get();
             instanceBean.setWrappedInstance(tempInstance);
@@ -56,8 +56,6 @@ public abstract class EntityInstanceTranslator {
             }
 
             instance = tempInstance;
-        } catch (ClassNotFoundException e) {
-            LOGGER.error(e.getMessage());
         } catch (InstantiationException e) {
             LOGGER.error(e.getMessage());
         } catch (IllegalAccessException e) {

@@ -8,35 +8,27 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/6/1.
  */
 public class Entity implements Serializable{
-    private String entityType;
-    private String entityCeilingType;
+    private Class<?> entityType;
+    private Class<?> entityCeilingType;
     private final Map<String, String> entity = new HashMap<String, String>();
     public final static String ENTITY_PROPERTY_NAME = "entity";
 
-    public String getEntityType() {
+    public Class<?> getEntityType() {
         return entityType;
     }
 
-    public Entity setEntityType(String entityType) {
+    public Entity setEntityType(Class<?> entityType) {
         this.entityType = entityType;
         return this;
     }
 
-    public Entity setEntityType(Class entityType) {
-        return this.setEntityType(entityType.getName());
-    }
-
-    public String getEntityCeilingType() {
+    public Class<?> getEntityCeilingType() {
         return entityCeilingType;
     }
 
-    public Entity setEntityCeilingType(String entityCeilingType) {
+    public Entity setEntityCeilingType(Class<?> entityCeilingType) {
         this.entityCeilingType = entityCeilingType;
         return this;
-    }
-
-    public Entity setEntityCeilingType(Class entityCeilingType) {
-        return this.setEntityCeilingType(entityCeilingType.getName());
     }
 
     public Map<String, String> getEntity() {

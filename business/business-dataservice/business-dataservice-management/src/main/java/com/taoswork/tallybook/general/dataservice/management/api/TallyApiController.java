@@ -5,12 +5,14 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
+import com.taoswork.tallybook.general.dataservice.management.parameter.EntityTypeParameterBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/6/13.
  */
 @Controller(TallyApiController.TALLY_API_CONTROLLER_NAME)
-@RequestMapping("/{entityResName:^[\\w|-]+$}")
+@RequestMapping("/{entityTypeName:^[\\w|-]+$}")
 public class TallyApiController  {
     public static final String TALLY_API_CONTROLLER_NAME = "TallyApiController";
 
@@ -46,18 +48,18 @@ public class TallyApiController  {
 
     @RequestMapping("")
     @ResponseBody
-    public HttpEntity<?> getEntityList(
-        HttpServletRequest request,
-        @PathVariable(value="entityResName") String entityResName,
-        @RequestParam MultiValueMap<String, String> requestParams) throws Exception{
-        String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
+    public HttpEntity<?> getEntityList(HttpServletRequest request,
+                                       @PathVariable(value="entityTypeName") String entityTypeName,
+                                       @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
+        EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
+        Class entityType = entityTypes.getCeilingType();
 
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
-            entityResName, entityType,
+            entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request),
             requestParams, getParamInfoFilter());
 
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
         IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityQueryResponse response = dynamicServerEntityService.query(queryRequest, request.getLocale());
@@ -66,17 +68,18 @@ public class TallyApiController  {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public HttpEntity<?> readEntity(
-        HttpServletRequest request, Model model,
-        @PathVariable(value = "entityResName") String entityResName,
-        @PathVariable("id") String id,
+    public HttpEntity<?> readEntity(HttpServletRequest request, Model model,
+                                    @PathVariable(value = "entityTypeName") String entityTypeName,
+                                    @PathVariable("id") String id,
         @PathVariable Map<String, String> pathVars) throws Exception {
 
-        String entityType = dataServiceManager.getEntityInterfaceName(entityResName);
-        EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityResName, entityType,
+        EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
+        Class entityType = entityTypes.getCeilingType();
+
+        EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
+        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
         IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityReadResponse response = dynamicServerEntityService.read(readRequest, request.getLocale());

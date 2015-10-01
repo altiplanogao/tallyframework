@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 
-abstract class EntityInstancePostRequest extends EntityRequest{
+public abstract class EntityInstancePostRequest extends EntityRequest{
 
     private Entity entity;
 

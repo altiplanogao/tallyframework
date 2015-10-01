@@ -16,6 +16,8 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.Locale;
  * Created by Gao Yuan on 2015/5/29.
  */
 public class FrontEndEntityService implements IFrontEndEntityService {
+    private final static Logger LOGGER = LoggerFactory.getLogger(FrontEndEntityService.class);
 
     private final DynamicEntityService dynamicEntityService;
     private final MessageSource errorMessageSource;
@@ -80,9 +83,9 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     @Override
-    public EntityInfoResponse getInfoResponse(EntityRequest request, Locale locale) {
+    public EntityInfoResponse getInfoResponse(EntityInfoRequest request, Locale locale) {
         EntityInfoResponse response = new EntityInfoResponse();
-        responseTranslator().translate(request, null, response, locale);
+        responseTranslator().translateInfoResponse(request, response, locale);
         this.appendInfoFields(request, response, locale);
         this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
         LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);

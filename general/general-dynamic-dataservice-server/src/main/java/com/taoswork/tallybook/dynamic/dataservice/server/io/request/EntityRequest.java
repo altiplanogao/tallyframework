@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by Gao Yuan on 2015/8/4.
  */
-public class EntityRequest {
+public abstract class EntityRequest {
     private String resourceName;
     private Class<?> entityType;
     private String resourceURI;
@@ -19,7 +19,7 @@ public class EntityRequest {
     private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
 
     public EntityRequest(){
-        this("","","");
+        this("", "", "");
     }
 
     public EntityRequest(String resourceName,
@@ -82,19 +82,14 @@ public class EntityRequest {
         return this;
     }
 
-    public EntityRequest setEntityRequest(
-        String resourceName, Class<?> entityType, String resourceURI, String fullUrl){
-        return this.setResourceName(resourceName)
-            .setEntityType(entityType)
-            .setResourceURI(resourceURI)
-            .setFullUrl(fullUrl);
-    }
-    public EntityRequest setEntityRequest(String resourceName,
-                         String entityType,
+
+    public EntityRequest setEntityRequest(EntityTypeParameter entityTypeParam,
                          String resourceURI, String fullUrl){
-        return this.setResourceName(resourceName).withEntityType(entityType)
+        this.setResourceName(entityTypeParam.typeName)
+            .setEntityType(entityTypeParam.getType())
             .setResourceURI(resourceURI)
             .setFullUrl(fullUrl);
+        return this;
     }
 
     ////////////////////////////////////////
