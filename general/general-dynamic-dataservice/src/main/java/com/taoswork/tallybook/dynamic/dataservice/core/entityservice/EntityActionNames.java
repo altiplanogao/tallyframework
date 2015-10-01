@@ -12,13 +12,14 @@ import java.util.List;
 public final class EntityActionNames {
     private EntityActionNames()throws IllegalAccessException{throw new IllegalAccessException("Not instanceable object");}
 
-    public static final String ADD = "add";
-    public static final String SEARCH = "search";
-    public static final String INSPECT = "inspect";
-    public static final String REORDER = "reorder";
-
+    public static final String CREATE = "create";
     public static final String READ = "read";
     public static final String UPDATE = "update";
     public static final String DELETE = "delete";
+    public static final String QUERY = "query";
+
+    public static final String INSPECT = "inspect";
+
     public static final String SAVE = "save";
+    public static final String REORDER = "reorder";
 }

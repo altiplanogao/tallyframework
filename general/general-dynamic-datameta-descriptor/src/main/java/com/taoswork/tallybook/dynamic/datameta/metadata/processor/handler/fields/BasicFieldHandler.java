@@ -1,12 +1,14 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
+import javax.persistence.Column;
 import java.lang.reflect.Field;
 
 /**
@@ -15,31 +17,18 @@ import java.lang.reflect.Field;
 public class BasicFieldHandler implements IFieldHandler {
     @Override
     public ProcessResult process(Field field, FieldMetadata fieldMetadata) {
-        fieldMetadata.setField(field);
-        fieldMetadata.setName(field.getName());
-        fieldMetadata.setFriendlyName(FriendlyNameHelper.makeFriendlyName4Field(field));
-        PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
+        BasicFieldMetaFacet columnFacet = new BasicFieldMetaFacet();
+        Column columnAnnotation = field.getDeclaredAnnotation(Column.class);
+        if (null != columnAnnotation) {
+            boolean nullable = columnAnnotation.nullable();
+            columnFacet.setRequired(!nullable);
 
-        fieldMetadata.setTabName(PresentationClass.Tab.DEFAULT_NAME);
-        fieldMetadata.setGroupName(PresentationClass.Group.DEFAULT_NAME);
-        fieldMetadata.setOrder(PresentationField.DEFAULT_ORDER_BIAS + fieldMetadata.getOriginalOrder());
-        fieldMetadata.setVisibility(Visibility.DEFAULT);
-        fieldMetadata.setNameField(false);
-        fieldMetadata.setFieldClass(field.getType());
+            int length = columnAnnotation.length();
+            columnFacet.setLength(length);
 
-        if(presentationField != null){
-            fieldMetadata.setTabName(presentationField.tab());
-            fieldMetadata.setGroupName(presentationField.group());
-            if(presentationField.order() != PresentationField.ORDER_NOT_DEFINED){
-                fieldMetadata.setOrder(presentationField.order());
-            }
-            fieldMetadata.setVisibility(presentationField.visibility());
-            fieldMetadata.setFieldType(presentationField.fieldType());
-            fieldMetadata.setNameField(presentationField.nameField());
-            if(!presentationField.enumeration().equals(Object.class)){
-                fieldMetadata.setFieldClass(presentationField.enumeration());
-            }
+            fieldMetadata.addFacet(columnFacet);
+            return ProcessResult.HANDLED;
         }
-        return ProcessResult.HANDLED;
+        return ProcessResult.INAPPLICABLE;
     }
 }

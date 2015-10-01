@@ -19,7 +19,6 @@ public class LinkBuilder {
 
     public static void buildLinkForInfoResults(String fullUrl, EntityResponse response) {
         response.add(new Link(fullUrl));
-
     }
 
     public static void buildLinkForQueryResults(String fullRequestUrl, EntityQueryResponse response){
@@ -66,13 +65,13 @@ public class LinkBuilder {
      */
     private static void appendEntityLinks (String entityUrl, EntityResponse response){
         {   //search
-            response.add(new Link(entityUrl).withRel(EntityActionNames.SEARCH));
+            response.add(new Link(entityUrl).withRel(EntityActionNames.QUERY));
         }
         {   //add
             UrlBuilder urlBuilder = UrlBuilder.fromString(entityUrl).withParameters(null);
-            String path = urlBuilder.path + EntityActionPaths.ADD;
+            String path = urlBuilder.path + EntityActionPaths.CREATE;
             urlBuilder.withPath(path).toString();
-            response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.ADD));
+            response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.CREATE));
         }
         {   //inspect
             UrlBuilder urlBuilder = UrlBuilder.fromString(entityUrl).withParameters(null);

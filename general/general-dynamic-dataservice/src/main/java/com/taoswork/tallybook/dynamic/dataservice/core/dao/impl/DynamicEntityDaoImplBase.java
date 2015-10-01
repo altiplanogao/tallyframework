@@ -29,62 +29,62 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
     private final Cto2QueryTranslator cto2QueryTranslator;
-    
-    public DynamicEntityDaoImplBase(){
+
+    public DynamicEntityDaoImplBase() {
         cto2QueryTranslator = new Cto2QueryTranslatorImpl();
     }
 
     public abstract EntityManager getEntityManager();
-    
+
     @Override
-    public void flush(){
+    public void flush() {
         EntityManager em = getEntityManager();
         em.flush();
     }
 
     @Override
-    public void detach(Object entity){
+    public void detach(Object entity) {
         EntityManager em = getEntityManager();
         em.detach(entity);
     }
 
     @Override
-    public void refresh(Object entity){
+    public void refresh(Object entity) {
         EntityManager em = getEntityManager();
         em.refresh(entity);
     }
 
     @Override
-    public void clear(){
+    public void clear() {
         EntityManager em = getEntityManager();
         em.clear();
     }
 
 
     @Override
-    public <T> EntityResult<T> create(T entity) {
+    public <T> T create(T entity) {
         EntityManager em = getEntityManager();
         em.persist(entity);
-        return makeEntityResult(entity);
+        return entity;
     }
 
     @Override
-    public <T> EntityResult<T> read(Class<T> entityType, Object key){
+    public <T> T read(Class<T> entityType, Object key) {
         EntityManager em = getEntityManager();
         T entity = em.find(entityType, key);
-        return makeEntityResult(entity);
+        return entity;
     }
 
     @Override
-    public <T> EntityResult<T> update(T entity){
+    public <T> T update(T entity) {
         EntityManager em = getEntityManager();
         T response = em.merge(entity);
         em.flush();
-        return makeEntityResult(response);
+        return response;
     }
 
     @Override
-    public <T> void delete(T entity){
+    public <T> void delete(T entity) {
         EntityManager em = getEntityManager();
         entity = em.merge(entity);
         em.remove(entity);
@@ -107,21 +107,4 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
         return queryResult;
     }
 
-    private <T> EntityResult<T> makeEntityResult(T entity){
-        if(entity == null)
-            return null;
-        EntityResult<T> entityResult = new EntityResult<T>();
-        Class clz = entity.getClass();
-        ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
-        Field idField = classMetadata.getIdField();
-        try {
-            entityResult.setIdKey(idField.getName())
-                .setIdValue(idField.get(entity).toString())
-                .setEntity(entity);
-        } catch (IllegalAccessException e) {
-            LOGGER.error(e.getMessage());
-        }
-
-        return entityResult;
-    }
-}
+ }

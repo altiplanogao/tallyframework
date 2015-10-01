@@ -15,7 +15,7 @@ public interface IDataServiceSupporterBeanList {
 
     RuntimeEnvironmentPropertyPlaceholderConfigurer runtimeEnvironmentPropertyPlaceholderConfigurer();
 
-    MessageSource entityFriendlyMessageSource();
+    MessageSource entityMessageSource();
 
     FriendlyMetaInfoService friendlyMetaInfoService();
 

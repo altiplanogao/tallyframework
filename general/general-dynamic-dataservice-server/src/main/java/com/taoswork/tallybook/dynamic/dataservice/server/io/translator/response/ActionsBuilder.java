@@ -5,7 +5,6 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/9/6.
@@ -21,11 +20,11 @@ public class ActionsBuilder {
 
     private static void makeOverallActions(Access access, Collection<String> actions){
         //CRUD
-        if(access.hasGeneral(Access.CREATE))actions.add(EntityActionNames.ADD);
+        if(access.hasGeneral(Access.CREATE))actions.add(EntityActionNames.CREATE);
         if(access.hasGeneral(Access.READ))actions.add(EntityActionNames.READ);
         if(access.hasGeneral(Access.UPDATE))actions.add(EntityActionNames.UPDATE);
         if(access.hasGeneral(Access.DELETE))actions.add(EntityActionNames.DELETE);
-        if(access.hasGeneral(Access.QUERY))actions.add(EntityActionNames.SEARCH);
+        if(access.hasGeneral(Access.QUERY))actions.add(EntityActionNames.QUERY);
     }
     private static void makeReadingActions(Access access, Collection<String> actions){
         //Edit, Delete

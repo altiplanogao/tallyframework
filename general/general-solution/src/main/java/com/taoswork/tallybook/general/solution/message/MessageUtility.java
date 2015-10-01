@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by Gao Yuan on 2015/9/12.
- */
 public class MessageUtility {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageUtility.class);
 

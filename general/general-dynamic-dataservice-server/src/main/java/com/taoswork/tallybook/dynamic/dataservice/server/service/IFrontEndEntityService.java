@@ -11,9 +11,9 @@ import java.util.Locale;
  */
 public interface IFrontEndEntityService {
 
-    EntityResponse getInfoResponse(EntityRequest request, Locale locale);
+    EntityInfoResponse getInfoResponse(EntityRequest request, Locale locale);
 
-    EntityQueryResponse query(EntityQueryRequest request, Locale locale) throws ServiceException;
+    EntityQueryResponse query(EntityQueryRequest request, Locale locale);
 
     /**
      * Used in the 'get' method, returns an entity instance inside of EntityCreateFreshResponse
@@ -26,9 +26,9 @@ public interface IFrontEndEntityService {
 
     EntityCreateResponse create(EntityCreateRequest request, Locale locale);
 
-    EntityReadResponse read(EntityReadRequest readRequest, Locale locale) throws ServiceException;
+    EntityReadResponse read(EntityReadRequest readRequest, Locale locale);
 
-    EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) throws ServiceException;
+    EntityUpdateResponse update(EntityUpdateRequest request, Locale locale);
 
-    EntityDeleteResponse delete(EntityDeletePostRequest deleteRequest, Locale locale) throws ServiceException;
+    EntityDeleteResponse delete(EntityDeletePostRequest deleteRequest, Locale locale);
 }

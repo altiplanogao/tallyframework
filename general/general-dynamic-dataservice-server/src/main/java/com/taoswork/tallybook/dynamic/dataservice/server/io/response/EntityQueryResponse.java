@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
 
 /**
@@ -17,5 +18,10 @@ public class EntityQueryResponse extends EntityResponse{
     public EntityQueryResponse setEntities(EntityQueryResult entities) {
         this.entities = entities;
         return this;
+    }
+
+    @Override
+    public String getAction() {
+        return EntityActionNames.QUERY;
     }
 }

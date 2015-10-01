@@ -1,20 +1,19 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.ResourceSupport;
-import org.springframework.validation.Errors;
 
 import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/8/5.
  */
-public class EntityResponse extends ResourceSupport {
+public abstract class EntityResponse extends ResourceSupport {
     private static Logger LOGGER = LoggerFactory.getLogger(EntityResponse.class);
-    Errors errors;
     private String resourceName;
     private Class<?> entityCeilingType;
     private Class<?> entityType;
@@ -25,6 +24,11 @@ public class EntityResponse extends ResourceSupport {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Collection<String> actions;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private EntityErrors errors;
+
+    public abstract String getAction();
 
     public String getResourceName() {
         return resourceName;
@@ -79,16 +83,20 @@ public class EntityResponse extends ResourceSupport {
         this.actions = actions;
     }
 
-    public Errors getErrors() {
+    public EntityErrors getErrors() {
+        if(errors == null){
+            errors = new EntityErrors();
+        }
         return errors;
     }
 
-    public void setErrors(Errors errors) {
+    public void setErrors(EntityErrors errors) {
         this.errors = errors;
     }
 
     public boolean hasError() {
-        LOGGER.warn("class {} should handle error.", this.getClass().getName() ); //TODO
+        if(errors != null && errors.containsError())
+            return true;
         return false;
     }
 }

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -130,17 +131,26 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> T makeDissociatedObject(Class<T> entityClz) {
+    public <T> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
         try {
-            Object obj = rootable.newInstance();
-            return (T)obj;
+            Object entity = rootable.newInstance();
+            EntityResult<T> entityResult = new EntityResult<T>();
+            Class clz = entity.getClass();
+            ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
+            Field idField = classMetadata.getIdField();
+            Object id = idField.get(entity);
+            entityResult.setIdKey(idField.getName())
+                .setIdValue((id == null) ? null : id.toString())
+                .setEntity(entity);
+
+            return entityResult;
         } catch (InstantiationException e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new ServiceException(e);
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new ServiceException(e);
         }
     }
 

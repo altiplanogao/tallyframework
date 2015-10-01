@@ -16,6 +16,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import org.springframework.context.MessageSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,38 +29,45 @@ import java.util.Locale;
 public class FrontEndEntityService implements IFrontEndEntityService {
 
     private final DynamicEntityService dynamicEntityService;
+    private final MessageSource errorMessageSource;
 
-    public FrontEndEntityService(DynamicEntityService dynamicEntityService){
+    public FrontEndEntityService(DynamicEntityService dynamicEntityService,
+                                 MessageSource errorMessageSource) {
         this.dynamicEntityService = dynamicEntityService;
+        this.errorMessageSource = errorMessageSource;
     }
 
-    public static FrontEndEntityService newInstance(DynamicEntityService dynamicEntityService){
-        return new FrontEndEntityService(dynamicEntityService);
+    public static FrontEndEntityService newInstance(DynamicEntityService dynamicEntityService,
+                                                    MessageSource errorMessageSource) {
+        return new FrontEndEntityService(dynamicEntityService, errorMessageSource);
     }
 
-    private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus){
+    private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus) {
         Access access = dynamicEntityService.getAuthorizeAccess(request.getEntityType(), Access.Crudq);
         Collection<String> actions = ActionsBuilder.makeActions(access, currentStatus);
         response.setActions(actions);
     }
 
-    private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale){
+    private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale) {
         Class<?> entityCeilingType = request.getEntityType();
         Class<?> entityType = response.getEntityType();
 
+        if(entityType == null)
+            return;
+
         List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
-        for (EntityInfoType infoType : request.getEntityInfoTypes()){
+        for (EntityInfoType infoType : request.getEntityInfoTypes()) {
             IEntityInfo entityInfo = null;
             entityInfo = dynamicEntityService.describe(entityType, infoType, locale);
             entityInfos.add(entityInfo);
         }
 
         EntityInfoResult infoResult = null;
-        for(IEntityInfo entityInfo : entityInfos){
-            if(infoResult == null){
-                infoResult = ResultTranslator.convertEntityInfoResult(request, response);
+        for (IEntityInfo entityInfo : entityInfos) {
+            if (infoResult == null) {
+                infoResult = ResultTranslator.convertInfoResult(request, response);
             }
-            if(entityInfo != null){
+            if (entityInfo != null) {
                 infoResult.addDetail(entityInfo.getType(), entityInfo);
             }
         }
@@ -67,10 +75,14 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         response.setInfo(infoResult);
     }
 
+    private ResponseTranslator responseTranslator(){
+        return new ResponseTranslator(errorMessageSource);
+    }
+
     @Override
-    public EntityResponse getInfoResponse(EntityRequest request, Locale locale){
-        EntityResponse response = new EntityResponse();
-        ResponseTranslator.translate(request, response);
+    public EntityInfoResponse getInfoResponse(EntityRequest request, Locale locale) {
+        EntityInfoResponse response = new EntityInfoResponse();
+        responseTranslator().translate(request, null, response, locale);
         this.appendInfoFields(request, response, locale);
         this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
         LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);
@@ -78,71 +90,105 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     @Override
-    public EntityQueryResponse query(EntityQueryRequest request, Locale locale) throws ServiceException {
+    public EntityQueryResponse query(EntityQueryRequest request, Locale locale) {
         Class<?> entityType = request.getEntityType();
-
-        CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
-        CriteriaQueryResult<?> data = dynamicEntityService.query(entityType, cto);
-
-        EntityQueryResponse response = ResponseTranslator.translateQueryResponse(request, data);
-        this.appendInfoFields(request, response, locale);
-        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
-        LinkBuilder.buildLinkForQueryResults(request.getFullUrl(), response);
-        return response;
-    }
-
-    @Override
-    public EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) {
-        Class<?> entityType = request.getEntityType();
-        Object data = dynamicEntityService.makeDissociatedObject(entityType);
-        EntityResult er = new EntityResult();
-        er.setEntity(data);
-
-        EntityCreateFreshResponse response = ResponseTranslator.translateCreateFreshResponse(request, er);
-        this.appendInfoFields(request, response, locale);
-        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
-        LinkBuilder.buildLinkForNewInstanceResults(request.getFullUrl(), response);
-        return response;
-    }
-
-    @Override
-    public EntityCreateResponse create(EntityCreateRequest request, Locale locale) {
-        Class<?> entityType = request.getEntityType();
-        EntityCreateResponse response = new EntityCreateResponse();
+        EntityQueryResponse response = new EntityQueryResponse();
+        CriteriaQueryResult<?> result = null;
+        ServiceException se = null;
         try {
-            EntityResult data = dynamicEntityService.create(request.getEntity());
-            ResponseTranslator.translateCreateResponse(request, data, null, response);
-        }catch (ServiceException e) {
-            ResponseTranslator.translateCreateResponse(request, null, e, response);
+            CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
+            result = dynamicEntityService.query(entityType, cto);
+        } catch (ServiceException e) {
+            se = e;
+        } finally {
+            responseTranslator().translateQueryResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
+            LinkBuilder.buildLinkForQueryResults(request.getFullUrl(), response);
         }
         return response;
     }
 
     @Override
-    public EntityReadResponse read(EntityReadRequest request, Locale locale) throws ServiceException {
-        Class<?> entityType = request.getEntityType();
-        EntityResult data = dynamicEntityService.read(entityType, request.getId());
-
-        EntityReadResponse response = ResponseTranslator.translateReadResponse(request, data);
-        this.appendInfoFields(request, response, locale);
-        this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
-        LinkBuilder.buildLinkForReadResults(request.getFullUrl(), response);
+    public EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) {
+        EntityCreateFreshResponse response = new EntityCreateFreshResponse();
+        EntityResult result = null;
+        ServiceException se = null;
+        try {
+            Class<?> entityType = request.getEntityType();
+            result = dynamicEntityService.makeDissociatedObject(entityType);
+        } catch (ServiceException e) {
+            se = e;
+        } finally {
+            responseTranslator().translateCreateFreshResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
+            LinkBuilder.buildLinkForNewInstanceResults(request.getFullUrl(), response);
+        }
         return response;
     }
 
     @Override
-    public EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) throws ServiceException {
-        Class<?> entityType = request.getEntityType();
-        EntityResult data = dynamicEntityService.update(request.getEntity());
-        EntityUpdateResponse response = ResponseTranslator.translateUpdateResponse(request, data);
+    public EntityCreateResponse create(EntityCreateRequest request, Locale locale) {
+        EntityCreateResponse response = new EntityCreateResponse();
+        EntityResult result = null;
+        ServiceException se = null;
+        try {
+            result = dynamicEntityService.create(request.getEntity());
+        } catch (ServiceException e) {
+            se = e;
+        }finally {
+            responseTranslator().translateCreateResponse(request, result, se, response, locale);
+        }
         return response;
     }
 
     @Override
-    public EntityDeleteResponse delete(EntityDeletePostRequest request, Locale locale) throws ServiceException {
+    public EntityReadResponse read(EntityReadRequest request, Locale locale) {
         Class<?> entityType = request.getEntityType();
-        boolean deleted = dynamicEntityService.delete(request.getEntity(), request.getId());
-        EntityDeleteResponse response = ResponseTranslator.translateDeleteResponse(request, deleted);
+        EntityReadResponse response = new EntityReadResponse();
+        EntityResult result = null;
+        ServiceException se = null;
+        try {
+            result = dynamicEntityService.read(entityType, request.getId());
+        } catch (ServiceException e) {
+            se = e;
+        } finally {
+            responseTranslator().translateReadResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
+            LinkBuilder.buildLinkForReadResults(request.getFullUrl(), response);
+        }
+        return response;
+    }
+
+    @Override
+    public EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) {
+        EntityUpdateResponse response = new EntityUpdateResponse();
+        EntityResult result = null;
+        ServiceException se = null;
+        try {
+            result = dynamicEntityService.update(request.getEntity());
+        } catch (ServiceException e) {
+            se = e;
+        }finally {
+            responseTranslator().translateUpdateResponse(request, result, se, response, locale);
+        }
+        return response;
+    }
+
+    @Override
+    public EntityDeleteResponse delete(EntityDeletePostRequest request, Locale locale) {
+        EntityDeleteResponse response = new EntityDeleteResponse();
+        boolean deleted = false;
+        ServiceException se = null;
+        try {
+            deleted = dynamicEntityService.delete(request.getEntity(), request.getId());
+        } catch (ServiceException e) {
+            se = e;
+        }finally {
+            responseTranslator().translateDeleteResponse(request, deleted, se, response, locale);
+        }
         return response;
     }
 }

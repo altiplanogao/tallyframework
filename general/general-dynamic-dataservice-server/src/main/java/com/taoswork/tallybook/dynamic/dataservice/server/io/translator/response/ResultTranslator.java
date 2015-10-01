@@ -14,30 +14,31 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.Enti
  * Created by Gao Yuan on 2015/8/5.
  */
 public class ResultTranslator {
-    public static EntityInfoResult convertEntityInfoResult(EntityRequest request, EntityResponse response){
-        EntityInfoResult infoResult = new EntityInfoResult();
-        infoResult.setResourceName(request.getResourceName())
+    public static EntityInfoResult convertInfoResult(EntityRequest request,
+                                                     EntityResponse response){
+        EntityInfoResult result = new EntityInfoResult();
+        result.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(response.getEntityType())
             .setBaseUrl(request.getResourceURI());
-        return infoResult;
+        return result;
     }
 
     public static EntityQueryResult convertQueryResult(EntityQueryRequest request,
-                                 CriteriaQueryResult<?> criteriaResult){
+                                                       CriteriaQueryResult<?> criteriaResult){
         EntityQueryResult result = new EntityQueryResult();
         result.setStartIndex(request.getStartIndex())
             .setPageSize(request.getPageSize())
-            .setTotalCount(criteriaResult.getTotalCount());
-        result.setRecords(criteriaResult.getEntityCollection());
+            .setTotalCount(criteriaResult.getTotalCount())
+            .setRecords(criteriaResult.getEntityCollection());
         return result;
     }
 
     public static EntityInstanceResult convertInstanceResult(EntityResult er) {
         EntityInstanceResult result = new EntityInstanceResult();
-        result.setData(er.getEntity());
-        result.setIdKey(er.getIdKey());
-        result.setIdValue(er.getIdValue());
+        result.setData(er.getEntity())
+            .setIdKey(er.getIdKey())
+            .setIdValue(er.getIdValue());
         return result;
     }
 }

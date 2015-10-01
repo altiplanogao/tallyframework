@@ -5,13 +5,14 @@ import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator.EntityInstanceTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
-import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
+import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
 import org.slf4j.Logger;
@@ -36,6 +37,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
     protected ISecurityVerifier securityVerifier;
 
+    @Resource(name = EntityValidationService.COMPONENT_NAME)
+    protected EntityValidationService entityValidationService;
+
     protected EntityInstanceTranslator converter = new EntityInstanceTranslator() {
         @Override
         protected DynamicEntityMetadataAccess getDynamicEntityMetadataAccess() {
@@ -44,17 +48,20 @@ public class PersistenceManagerImpl implements PersistenceManager {
     };
 
     @Override
-    public <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws NoPermissionException {
+    public <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
         String ceilingTypeName = ceilingType.getName();
         securityVerifier.checkAccess(ceilingTypeName, Access.Create, entity);
         if (entity instanceof HasHidingField) {
             ((HasHidingField) entity).initHidingForCreate();
         }
-        return dynamicEntityDao.create(entity);
+        EntityResult entityResult = makeEntityResult(entity);
+        entityValidationService.validate(entityResult);
+        T result = dynamicEntityDao.create(entity);
+        return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> create(Entity entity) throws NoPermissionException {
+    public <T> EntityResult<T> create(Entity entity) throws ServiceException {
         T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.create(ceilingType, instance);
@@ -62,35 +69,39 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     private <T> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
-        return dynamicEntityDao.read(entityRootClz, key);
+        T result = dynamicEntityDao.read(entityRootClz, key);
+        return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> read(Class<T> entityType, Object key) throws NoPermissionException {
+    public <T> EntityResult<T> read(Class<T> entityType, Object key) throws ServiceException {
         securityVerifier.checkAccess(entityType.getName(), Access.Read);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
-        return dynamicEntityDao.read(entityRootClz, key);
+        T result = dynamicEntityDao.read(entityRootClz, key);
+        return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws NoPermissionException {
+    public <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
         String ceilingTypeName = ceilingType.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
         securityVerifier.checkAccess(ceilingTypeName, Access.Update, oldEntity.getEntity());
         securityVerifier.checkAccess(ceilingTypeName, Access.Update, entity);
-        EntityResult<T> result = dynamicEntityDao.update(entity);
-        return result;
+        EntityResult entityResult = makeEntityResult(entity);
+        entityValidationService.validate(entityResult);
+        T result = dynamicEntityDao.update(entity);
+        return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> update(Entity entity) throws NoPermissionException {
+    public <T> EntityResult<T> update(Entity entity) throws ServiceException {
         T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.update(ceilingType, instance);
     }
 
     @Override
-    public <T> void delete(Class<T> ceilingType, T entity) throws NoPermissionException {
+    public <T> void delete(Class<T> ceilingType, T entity) throws ServiceException {
         String ceilingTypeName = ceilingType.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
         entity = oldEntity.getEntity();
@@ -99,14 +110,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T> void delete(Entity entity, String id) throws NoPermissionException {
+    public <T> void delete(Entity entity, String id) throws ServiceException {
         Class ceilingType = getCeilingType(entity);
         T instance = (T) converter.convert(entity, id);
         this.delete(ceilingType, instance);
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws NoPermissionException {
+    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
         securityVerifier.checkAccess(entityType.getName(), Access.Query);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
         return dynamicEntityDao.query(entityRootClz, query);
@@ -136,4 +147,24 @@ public class PersistenceManagerImpl implements PersistenceManager {
             return null;
         }
     }
+
+    private <T> EntityResult<T> makeEntityResult(T entity) {
+        if (entity == null)
+            return null;
+        EntityResult<T> entityResult = new EntityResult<T>();
+        Class clz = entity.getClass();
+        ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
+        Field idField = classMetadata.getIdField();
+        try {
+            Object id = idField.get(entity);
+            entityResult.setIdKey(idField.getName())
+                .setIdValue((id == null) ? null : id.toString())
+                .setEntity(entity);
+        } catch (IllegalAccessException e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return entityResult;
+    }
+
 }

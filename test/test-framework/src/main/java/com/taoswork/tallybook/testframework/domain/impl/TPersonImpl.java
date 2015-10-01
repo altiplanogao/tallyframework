@@ -2,6 +2,7 @@ package com.taoswork.tallybook.testframework.domain.impl;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 
@@ -53,6 +54,7 @@ public class TPersonImpl
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
+    @PresentationField(fieldType = FieldType.PHONE)
     protected String mobile;
 
     @Column(name = "UUID", unique = true)

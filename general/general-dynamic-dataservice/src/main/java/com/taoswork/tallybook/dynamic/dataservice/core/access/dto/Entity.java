@@ -11,6 +11,7 @@ public class Entity implements Serializable{
     private String entityType;
     private String entityCeilingType;
     private final Map<String, String> entity = new HashMap<String, String>();
+    public final static String ENTITY_PROPERTY_NAME = "entity";
 
     public String getEntityType() {
         return entityType;

@@ -18,11 +18,11 @@ public interface DynamicEntityDao {
 
     void clear();
 
-    <T> EntityResult<T> create(T entity);
+    <T> T create(T entity);
 
-    <T> EntityResult<T> read(Class<T> entityType, Object key);
+    <T> T read(Class<T> entityType, Object key);
 
-    <T> EntityResult<T> update(T entity);
+    <T> T update(T entity);
 
     <T> void delete(T entity);
 

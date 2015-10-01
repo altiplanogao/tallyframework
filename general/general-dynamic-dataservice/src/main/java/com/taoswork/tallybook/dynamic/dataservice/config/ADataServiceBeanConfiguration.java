@@ -20,6 +20,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceMa
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl.PersistenceManagerImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
+import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.validate.impl.EntityValidationServiceImpl;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
@@ -108,8 +110,8 @@ public abstract class ADataServiceBeanConfiguration
 
     @Override
     @Bean(name = FriendlyMetaInfoService.MESSAGE_SOURCE_BEAN_NAME)
-    public MessageSource entityFriendlyMessageSource(){
-        return helper.createFriendlyMessageSource();
+    public MessageSource entityMessageSource(){
+        return helper.createEntityMessageSource();
     }
 
     @Override
@@ -127,6 +129,12 @@ public abstract class ADataServiceBeanConfiguration
     // **************************************************** //
     //  IEntityBeanList                                     //
     // **************************************************** //
+
+    @Override
+    @Bean(name = EntityValidationService.COMPONENT_NAME)
+    public EntityValidationService entityValidatorService(){
+        return new EntityValidationServiceImpl();
+    }
 
     @Override
     @Bean(name = DynamicEntityService.COMPONENT_NAME)

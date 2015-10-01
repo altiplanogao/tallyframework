@@ -6,9 +6,8 @@ import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.MysqlDbSetting;
 import com.taoswork.tallybook.general.extension.collections.PropertiesUtility;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
-import com.taoswork.tallybook.general.solution.message.MessageUtility;
-import com.taoswork.tallybook.general.solution.message.i18nMessageFileArranger;
 import com.taoswork.tallybook.general.solution.jpa.JPAPropertiesPersistenceUnitPostProcessor;
+import com.taoswork.tallybook.general.solution.message.MessageUtility;
 import com.taoswork.tallybook.general.solution.property.PropertiesSubCollectionProvider;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import net.sf.ehcache.Ehcache;
@@ -20,18 +19,14 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitPostProcessor;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.util.ResourceUtils;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -139,7 +134,7 @@ public class DataServiceBeanCreationHelper {
     //  MessageSource                                       //
     // **************************************************** //
 
-    public MessageSource createFriendlyMessageSource() {
+    public MessageSource createEntityMessageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 

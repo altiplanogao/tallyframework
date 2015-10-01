@@ -9,7 +9,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
@@ -68,6 +67,9 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE_SOURCE)
     protected MessageSource commonMessageSource;
 
+    @Resource(name = ApplicationCommonConfig.ERROR_MESSAGE_SOURCE)
+    protected MessageSource errorMessageSource;
+
     private Helper helper = new Helper();
     private volatile CachedMessageLocalizedDictionary commonMessage = null;
     private Map<String, String> getCommonMessage(Locale locale){
@@ -112,7 +114,7 @@ public class AdminBasicEntityController extends BaseController {
         entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityResponse entityResponse = frontEndEntityService.getInfoResponse(entityRequest, locale);
         return this.makeDataView(model, entityResponse);
@@ -134,7 +136,7 @@ public class AdminBasicEntityController extends BaseController {
     public String query(HttpServletRequest request, HttpServletResponse response, Model model,
                         @PathVariable(value = "entityTypeName") String entityTypeName,
                         @PathVariable Map<String, String> pathVars,
-                        @RequestParam MultiValueMap<String, String> requestParams) throws ServiceException{
+                        @RequestParam MultiValueMap<String, String> requestParams) {
 
         String entityType = entityTypeNameToEntityType(entityTypeName);
         if(entityType == null){
@@ -147,7 +149,7 @@ public class AdminBasicEntityController extends BaseController {
         entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
 
@@ -201,11 +203,11 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
 
-        model.addAttribute("currentAction", EntityActionNames.ADD);
+        model.addAttribute("currentAction", EntityActionNames.CREATE);
         model.addAttribute("formAction", request.getRequestURL().toString());
         if(isModalRequest(request)){
             String entityResultInJson = getObjectInJson(addResponse);
@@ -268,21 +270,22 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        EntityCreateRequest updateRequest = Parameter2RequestTranslator.makeAddPostRequest(entityTypeName, entityType,
+        EntityCreateRequest createRequest = Parameter2RequestTranslator.makeAddPostRequest(entityTypeName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
-        EntityCreateResponse updateResponse = frontEndEntityService.create(updateRequest, locale);
+        EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
-        boolean success = !updateResponse.hasError();
+        boolean success = !createResponse.hasError();
 
         if (success) {
-            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + updateResponse.getEntity().getIdValue();
+            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
             return makeRedirectView(model, resultUrl);
         }else {
-            LOGGER.error("Error not handled");
-            return "redirect:" + request.getRequestURI();
+            return this.makeDataView(model, createResponse);
+//            LOGGER.error("Error not handled");
+//            return "redirect:" + request.getRequestURI();
         }
     }
 
@@ -302,7 +305,7 @@ public class AdminBasicEntityController extends BaseController {
     public String read(HttpServletRequest request, HttpServletResponse response, Model model,
                        @PathVariable(value = "entityTypeName") String entityTypeName,
                        @PathVariable("id") String id,
-                       @PathVariable Map<String, String> pathVars) throws Exception {
+                       @PathVariable Map<String, String> pathVars) {
 
         String entityType = entityTypeNameToEntityType(entityTypeName);
         if(entityType == null){
@@ -314,7 +317,7 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
 
@@ -366,12 +369,14 @@ public class AdminBasicEntityController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String update(HttpServletRequest request, HttpServletResponse response, Model model,
+    public String update(HttpServletRequest request, HttpServletResponse response,
+                         Model model,
                          @PathVariable(value = "entityTypeName") String entityTypeName,
                          @PathVariable Map<String, String> pathVars,
                          @PathVariable(value = "id") String id,
-                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result,
-                         RedirectAttributes ra) throws Exception {
+                         @ModelAttribute(value = "entityForm") Entity entityForm,
+                         BindingResult result,
+                         RedirectAttributes ra) {
         String entityCeilingType = entityTypeNameToEntityType(entityTypeName);
         if(entityCeilingType == null){
             return VIEWS.Redirect2Home;
@@ -381,14 +386,13 @@ public class AdminBasicEntityController extends BaseController {
         if(StringUtils.isEmpty(entityType)){
             return VIEWS.Redirect2Failure;
         }
-        Class entityTypeClz = Class.forName(entityType);
         if(!(isAjaxRequest(request))){
             return VIEWS.Redirect2Failure;
         }
 
         Locale locale = request.getLocale();
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdatePostRequest(entityTypeName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
@@ -423,7 +427,7 @@ public class AdminBasicEntityController extends BaseController {
                          @PathVariable(value = "entityTypeName") String entityTypeName,
                          @PathVariable Map<String, String> pathVars,
                          @PathVariable(value = "id") String id,
-                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) throws Exception {
+                         @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) {
         String entityCeilingType = entityTypeNameToEntityType(entityTypeName);
         if(entityCeilingType == null){
             return VIEWS.Redirect2Home;
@@ -433,13 +437,12 @@ public class AdminBasicEntityController extends BaseController {
         if(StringUtils.isEmpty(entityType)){
             return VIEWS.Redirect2Failure;
         }
-        Class entityTypeClz = Class.forName(entityType);
         if(!(isAjaxRequest(request))){
             return VIEWS.Redirect2Failure;
         }
         Locale locale = request.getLocale();
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType);
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityDeletePostRequest deleteRequest = Parameter2RequestTranslator.makeDeletePostRequest(entityTypeName, entityType,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);

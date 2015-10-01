@@ -19,43 +19,43 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.ADD,
+            EntityActionNames.CREATE,
             EntityActionNames.READ,
             EntityActionNames.UPDATE,
             EntityActionNames.DELETE,
-            EntityActionNames.SEARCH);
+            EntityActionNames.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status),
             EntityActionNames.READ,
             EntityActionNames.UPDATE,
             EntityActionNames.DELETE,
-            EntityActionNames.SEARCH);
+            EntityActionNames.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.ADD,
+            EntityActionNames.CREATE,
             EntityActionNames.UPDATE,
             EntityActionNames.DELETE,
-            EntityActionNames.SEARCH);
+            EntityActionNames.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.ADD,
+            EntityActionNames.CREATE,
             EntityActionNames.READ,
             EntityActionNames.DELETE,
-            EntityActionNames.SEARCH);
+            EntityActionNames.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.ADD,
+            EntityActionNames.CREATE,
             EntityActionNames.READ,
             EntityActionNames.UPDATE,
-            EntityActionNames.SEARCH);
+            EntityActionNames.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.ADD,
+            EntityActionNames.CREATE,
             EntityActionNames.READ,
             EntityActionNames.UPDATE,
             EntityActionNames.DELETE);

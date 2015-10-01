@@ -14,9 +14,10 @@ public class FieldProcessor
         implements IFieldHandler{
 
     public FieldProcessor(){
-        metaHandlers.add(new BasicFieldHandler());
-        metaHandlers.add(new IdFieldHandler());
         metaHandlers.add(new GeneralFieldHandler());
+        metaHandlers.add(new BasicFieldHandler());
+
+        metaHandlers.add(new IdFieldHandler());
         metaHandlers.add(new EnumFieldHandler());
         metaHandlers.add(new EmbeddedFieldHandler());
         metaHandlers.add(new ArrayFieldHandler());

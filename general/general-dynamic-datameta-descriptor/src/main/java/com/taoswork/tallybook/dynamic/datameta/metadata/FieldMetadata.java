@@ -3,18 +3,20 @@ package com.taoswork.tallybook.dynamic.datameta.metadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetaFacet;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Gao Yuan on 2015/5/24.
- */
 public class FieldMetadata extends FriendlyMetadata implements Serializable {
+    private final static Logger LOGGER = LoggerFactory.getLogger(FieldMetadata.class);
 
     private String declaringClassName;
+
+    private transient Field field;
 
     private String tabName;
     private String groupName;
@@ -33,8 +35,27 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     }
 
     public void setField(Field field) {
+        this.field = field;
+        this.field.setAccessible(true);
         name = field.getName();
-        declaringClassName = field.getDeclaringClass().getSimpleName();
+        declaringClassName = field.getDeclaringClass().getName();
+    }
+
+    public Field getField() {
+        if(this.field == null){
+            try {
+                Class ownerClz = Class.forName(declaringClassName);
+                Field field = ownerClz.getDeclaredField(this.name);
+                this.setField(field);
+            } catch (ClassNotFoundException e) {
+                LOGGER.error("Field declaring class not found");
+                throw new RuntimeException(e);
+            } catch (NoSuchFieldException e) {
+                LOGGER.error("Field not found");
+                throw new RuntimeException(e);
+            }
+        }
+        return this.field;
     }
 
     public boolean isId() {
@@ -112,6 +133,11 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
         }else {
             existingFacet.merge(facet);
         }
+    }
+
+    public IFieldMetaFacet getFacet(FieldFacetType facetType){
+        IFieldMetaFacet existingFacet = facets.getOrDefault(facetType, null);
+        return existingFacet;
     }
 
     public boolean showOnGrid() {

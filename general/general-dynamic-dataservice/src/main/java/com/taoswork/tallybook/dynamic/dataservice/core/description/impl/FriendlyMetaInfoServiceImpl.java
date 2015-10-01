@@ -27,7 +27,7 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendlyMetaInfoServiceImpl.class);
 
     @Resource(name = FriendlyMetaInfoService.MESSAGE_SOURCE_BEAN_NAME)
-    private MessageSource friendlyMessageSource;
+    private MessageSource entityMessageSource;
 
     @Override
     public EntityInfo makeFriendly(EntityInfo rawEntityInfo, Locale locale) {
@@ -60,7 +60,7 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
 
     private void makeNamedInfoFriendly(NamedInfo source, NamedInfoRW target, Locale locale){
         String oldFriendly = source.getFriendlyName();
-        String newFriendly = friendlyMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
+        String newFriendly = entityMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
         target.setFriendlyName(newFriendly);
     }
 
@@ -73,7 +73,7 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
                 EnumFacetInfo freshEnumFacetInfo = CloneUtility.makeClone(enumFacetInfo);
                 for(String key : freshEnumFacetInfo.getOptions()){
                     String val = enumFacetInfo.getFriendlyName(key);
-                    String newVal = friendlyMessageSource.getMessage(val, null, val, locale);
+                    String newVal = entityMessageSource.getMessage(val, null, val, locale);
                     freshEnumFacetInfo.setFriendlyName(key, newVal);
                 }
                 ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacetInfo);
