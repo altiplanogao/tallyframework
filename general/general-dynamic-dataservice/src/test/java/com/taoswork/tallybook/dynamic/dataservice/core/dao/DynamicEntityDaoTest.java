@@ -1,25 +1,17 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityCreateHelper;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.*;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
-import com.taoswork.tallybook.testframework.domain.TPerson;
 import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Gao Yuan on 2015/9/23.

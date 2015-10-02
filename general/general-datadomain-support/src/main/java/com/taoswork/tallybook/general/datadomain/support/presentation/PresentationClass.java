@@ -15,7 +15,7 @@ public @interface PresentationClass {
 
     PresentationClass.Group[] groups() default { @PresentationClass.Group(name = Group.DEFAULT_NAME) };
 
-    boolean instanceable() default true;
+    boolean instantiable() default true;
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({})

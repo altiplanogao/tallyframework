@@ -10,6 +10,8 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.AEntityMetadataRawAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.impl.EntityMetadataRawAccessJPA;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
 import com.taoswork.tallybook.general.solution.autotree.AutoTree;
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
@@ -20,12 +22,12 @@ import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.EffectivelyImmutable;
 import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
 import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -47,18 +49,22 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     private Set<Class> entityTypes = null;
     @EffectivelyImmutable
     private Collection<Class> entityInterfaces = null;
+    @EffectivelyImmutable
+    private Set<Class> entityTypesWithInterfaces = null;
 
     @GuardedBy(value = "self", lockOrder = 5)
     private Map<Class, EntityClassTree> ceiling2ClassTreeMap = null;
 
     @GuardedBy("self")
-    private Map<Class, Class> ceiling2RootInstanceable = null;
+    private Map<Class, Class> ceiling2RootInstantiable = null;
 
     @GuardedBy("self")
-    private Map<Class, List<Class>> ceiling2Instanceables = null;
+    private Map<Class, List<Class>> ceiling2Instantiables = null;
 
     @GuardedBy(value = "self", lockOrder = 4)
     private Map<ClassScope, ClassMetadata> classMetadataMap = null;
+
+    private Map<Class, Class> entityType2GuardianType;
 
     public abstract EntityManager getEntityManager();
 
@@ -70,59 +76,82 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
             LOGGER.error("entityMetaRawAccess Not initialized !!!");
             throw new RuntimeException("entityMetaRawAccess Not initialized !!! DynamicEntityMetadataAccessImplBase cannot continue.");
         } else {
-            Class<?>[] entityClasses = entityMetaRawAccess.getAllEntityClasses();
+            Class<?>[] entityClasses = entityMetaRawAccess.getAllEntities();
+
             entityTypes = new HashSet<Class>();
             new SetBuilder<Class>(entityTypes).addAll(entityClasses);
-            entityInterfaces = ClassUtility.getAllImplementedInterfaces(Serializable.class, entityClasses);
+
+            entityInterfaces = ClassUtility.getAllImplementedInterfaces(Persistable.class, entityClasses);
+
+            entityTypesWithInterfaces = new HashSet<Class>();
+            entityTypesWithInterfaces.addAll(entityTypes);
+            entityTypesWithInterfaces.addAll(entityInterfaces);
+
+            entityType2GuardianType = null;
         }
 
         ceiling2ClassTreeMap = new LRUMap();
-        ceiling2RootInstanceable = new LRUMap();
-        ceiling2Instanceables = new LRUMap();
+        ceiling2RootInstantiable = new LRUMap();
+        ceiling2Instantiables = new LRUMap();
         classMetadataMap = new LRUMap();
 
+        calcEntityTypeGuardians();
     }
 
-    protected void clearCacheMaps(){
+    protected void clearCacheMaps() {
         ceiling2ClassTreeMap.clear();
-        ceiling2RootInstanceable.clear();
-        ceiling2Instanceables.clear();
+        ceiling2RootInstantiable.clear();
+        ceiling2Instantiables.clear();
         classMetadataMap.clear();
-
+        if (entityType2GuardianType != null) {
+            entityType2GuardianType.clear();
+            entityType2GuardianType = null;
+        }
     }
 
     @Override
-    public Collection<Class> getAllEntityTypes() {
-        return Collections.unmodifiableCollection(entityTypes);
+    public Collection<Class> getAllEntities(boolean _entity, boolean _interface) {
+        Collection<Class> result = null;
+        if(_entity && _interface){
+            result = this.entityTypesWithInterfaces;
+        } else if(_entity){
+            result = this.entityTypes;
+        } else if(_interface){
+            result = this.entityInterfaces;
+        } else {
+            result = new ArrayList<Class>();
+        }
+        return Collections.unmodifiableCollection(result);
     }
 
     @Override
-    public Collection<Class> getAllEntityInterfaces() {
-        return Collections.unmodifiableCollection(entityInterfaces);
-    }
-
-    @Override
-    public Collection<Class> getInstanceableEntityTypes(Class<?> entityCeilingType) {
-        synchronized (ceiling2Instanceables) {
-            List<Class> root = ceiling2Instanceables.getOrDefault(entityCeilingType, null);
+    public Collection<Class> getInstantiableEntityTypes(Class<?> entityCeilingType) {
+        synchronized (ceiling2Instantiables) {
+            List<Class> root = ceiling2Instantiables.getOrDefault(entityCeilingType, null);
             if (null == root) {
-                root = calcInstanceableEntityTypes(entityCeilingType);
-                ceiling2Instanceables.put(entityCeilingType, root);
+                root = calcInstantiableEntityTypes(entityCeilingType);
+                ceiling2Instantiables.put(entityCeilingType, root);
             }
             return root;
          }
     }
 
     @Override
-    public <T> Class<T> getRootInstanceableEntityClass(Class<T> entityCeilingType) {
-        synchronized (ceiling2RootInstanceable) {
-            Class<T> root = ceiling2RootInstanceable.getOrDefault(entityCeilingType, null);
+    public <T> Class<T> getRootInstantiableEntityType(Class<T> entityCeilingType) {
+        synchronized (ceiling2RootInstantiable) {
+            Class<T> root = ceiling2RootInstantiable.getOrDefault(entityCeilingType, null);
             if (null == root) {
-                root = calcRootInstanceableEntityClass(entityCeilingType);
-                ceiling2RootInstanceable.put(entityCeilingType, root);
+                root = calcRootInstantiableEntityClass(entityCeilingType);
+                ceiling2RootInstantiable.put(entityCeilingType, root);
             }
             return root;
         }
+    }
+
+    @Override
+    public <T> Class<T> getPermissionGuardian(Class<T> entityType) {
+        calcEntityTypeGuardians();
+        return entityType2GuardianType.getOrDefault(entityType, null);
     }
 
     /**
@@ -132,13 +161,13 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
      * @param <T>
      * @return Person
      */
-    private <T> Class<T> calcRootInstanceableEntityClass(Class<T> entityType) {
+    private <T> Class<T> calcRootInstantiableEntityClass(Class<T> entityType) {
         final DataHolder<Class<T>> result = new DataHolder<Class<T>>();
         EntityClassTree subTree = getEntityClassTree(entityType);
         subTree.traverse(true, new ICallback2<Void, EntityClass, AutoTree.TraverseControl, AutoTreeException>() {
             @Override
             public Void callback(EntityClass parameter, AutoTree.TraverseControl control) throws AutoTreeException {
-                if (parameter.isInstanceable()) {
+                if (parameter.isInstantiable()) {
                     result.put((Class<T>) parameter.clz);
                     control.shouldBreak = true;
                 }
@@ -154,13 +183,13 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
      * @param entityCeilingType:
      * @return
      */
-    private List<Class> calcInstanceableEntityTypes(Class<?> entityCeilingType) {
+    private List<Class> calcInstantiableEntityTypes(Class<?> entityCeilingType) {
         final List<Class> results = new ArrayList<Class>();
         EntityClassTree subTree = getEntityClassTree(entityCeilingType);
         subTree.traverse(true, new ICallback<Void, EntityClass, AutoTreeException>() {
             @Override
             public Void callback(EntityClass parameter) throws AutoTreeException {
-                if (parameter.isInstanceable()) {
+                if (parameter.isInstantiable()) {
                     results.add(parameter.clz);
                 }
                 return null;
@@ -211,7 +240,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
      * @return
      */
     private EntityClassTree calcEntityClassTreeFromCeiling(Class<?> ceilingType){
-        Class<?>[] entityClasses = entityMetaRawAccess.getAllEntityClasses();
+        Class<?>[] entityClasses = entityMetaRawAccess.getAllEntities();
 
         EntityClassTreeAccessor entityClassTreeAccessor = new EntityClassTreeAccessor(entityClassGenealogy);
         entityClassTreeAccessor.setAllowBranch(false).setAllowParent(false);
@@ -240,5 +269,38 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
             }
         }
         return classMetadata;
+    }
+
+    private void calcEntityTypeGuardians(){
+        if(entityType2GuardianType == null){
+            Map<Class, Class> temp = new HashMap<Class, Class>();
+            for(Class entityType : entityTypesWithInterfaces){
+                Collection<Class> _interfaces = new ArrayList<Class>();
+                _interfaces.add(entityType);
+                ClassUtility.getAllImplementedInterfaces(Persistable.class, entityType, _interfaces);
+                Class<?> fallback = null;
+                Class<?> guardian = null;
+                for(Class<?> _intf : _interfaces){
+                    PersistFriendly persistFriendly = _intf.getDeclaredAnnotation(PersistFriendly.class);
+                    if(persistFriendly != null){
+                        Class annotationGuardian = persistFriendly.permissionGuardian();
+                        boolean asDefaultGuardian = persistFriendly.asDefaultPermissionGuardian();
+                        if(annotationGuardian != Object.class){
+                            guardian = annotationGuardian;
+                            break;
+                        } else if(asDefaultGuardian){
+                            guardian = _intf;
+                            break;
+                        }
+                    }
+                    fallback = _intf;
+                }
+                if(guardian == null){
+                    guardian = fallback;
+                }
+                temp.put(entityType, guardian);
+            }
+            entityType2GuardianType = temp;
+        }
     }
 }

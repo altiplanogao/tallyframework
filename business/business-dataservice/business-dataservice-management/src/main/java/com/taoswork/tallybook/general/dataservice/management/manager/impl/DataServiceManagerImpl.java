@@ -17,35 +17,37 @@ import java.util.Map;
 public class DataServiceManagerImpl implements DataServiceManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceManager.class);
 
+    // DataService name to DataService
     private final Map<String, IDataService> dataServiceMap = new HashMap<String, IDataService>();
-    private final Map<String, ManagedEntityEntry> entityEntryMap = new HashMap<String, ManagedEntityEntry>();
-    private final Map<String, String> resourceNameToInterface = new HashMap<String, String>();
+    private final Map<String, ManagedEntityEntry> entityTypeNameToEntryMap = new HashMap<String, ManagedEntityEntry>();
+
+    private final Map<String, String> entityResNameToTypeName = new HashMap<String, String>();
 
     @Override
     public DataServiceManager buildingAppendDataService(String dataServiceBeanName, IDataService dataService){
         dataServiceMap.put(dataServiceBeanName, dataService);
         for(Map.Entry<String, EntityEntry> entryEntryElement : dataService.getEntityEntries().entrySet()){
-            String interfaceName = entryEntryElement.getKey();
+            String typeName = entryEntryElement.getKey();
             EntityEntry entityEntry = entryEntryElement.getValue();
-            if(entityEntryMap.containsKey(interfaceName)){
-                LOGGER.error("ManagedEntityEntry with name '{}' already exist, over-writing", interfaceName);
+            if(entityTypeNameToEntryMap.containsKey(typeName)){
+                LOGGER.error("ManagedEntityEntry with name '{}' already exist, over-writing", typeName);
             }
-            entityEntryMap.put(interfaceName, new ManagedEntityEntry(dataServiceBeanName, entityEntry));
+            entityTypeNameToEntryMap.put(typeName, new ManagedEntityEntry(dataServiceBeanName, entityEntry));
         }
         return this;
     }
 
     @Override
     public DataServiceManager buildingAnnounceFinishing(){
-        for(Map.Entry<String, ManagedEntityEntry> entryEntry : entityEntryMap.entrySet()){
+        for(Map.Entry<String, ManagedEntityEntry> entryEntry : entityTypeNameToEntryMap.entrySet()){
             String interfaceName = entryEntry.getKey();
             EntityEntry managedEntityEntry = entryEntry.getValue().getEntityEntry();
 
             String resourceName = managedEntityEntry.getResourceName();
-            if(resourceNameToInterface.containsKey(resourceName)){
+            if(entityResNameToTypeName.containsKey(resourceName)){
                 LOGGER.error("ResourceName '{}' for interface '{}' already used.", resourceName, interfaceName);
             }
-            resourceNameToInterface.put(resourceName, interfaceName);
+            entityResNameToTypeName.put(resourceName, interfaceName);
         }
 
         return this;
@@ -53,12 +55,12 @@ public class DataServiceManagerImpl implements DataServiceManager {
 
     @Override
     public ManagedEntityEntry getInterfaceEntityEntry(String entityType){
-        return entityEntryMap.getOrDefault(entityType, null);
+        return entityTypeNameToEntryMap.getOrDefault(entityType, null);
     }
 
     @Override
     public String getEntityInterfaceName(String resourceName) {
-        return resourceNameToInterface.getOrDefault(resourceName, null);
+        return entityResNameToTypeName.getOrDefault(resourceName, null);
     }
 
     @Override

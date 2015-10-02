@@ -7,6 +7,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
 
 import java.util.List;
@@ -32,12 +33,5 @@ public class TallyAdminDataService extends DataServiceBase {
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        super.setEntityResourceNameOverride(SecuredResourceFilter.class, "admin-resource-criteria");
-        super.setEntityResourceNameOverride(SecuredResource.class, "admin-resource-type");
-
-        super.setEntityResourceNameOverride(AdminPermissionEntry.class, "admin-permission-entry");
-        super.setEntityResourceNameOverride(AdminPermission.class, "admin-permission");
-        super.setEntityResourceNameOverride(AdminRole.class, "admin-role");
-
     }
 }

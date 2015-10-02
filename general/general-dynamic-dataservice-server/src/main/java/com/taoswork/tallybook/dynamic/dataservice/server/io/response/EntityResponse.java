@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.ResourceSupport;
@@ -15,8 +16,8 @@ import java.util.Collection;
 public abstract class EntityResponse extends ResourceSupport {
     private static Logger LOGGER = LoggerFactory.getLogger(EntityResponse.class);
     private String resourceName;
-    private Class<?> entityCeilingType;
-    private Class<?> entityType;
+    private Class<? extends Persistable> entityCeilingType;
+    private Class<? extends Persistable> entityType;
     private String baseUrl;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -39,20 +40,20 @@ public abstract class EntityResponse extends ResourceSupport {
         return this;
     }
 
-    public Class<?> getEntityCeilingType() {
+    public Class<? extends Persistable> getEntityCeilingType() {
         return entityCeilingType;
     }
 
-    public EntityResponse setEntityCeilingType(Class<?> entityCeilingType) {
+    public EntityResponse setEntityCeilingType(Class<? extends Persistable> entityCeilingType) {
         this.entityCeilingType = entityCeilingType;
         return this;
     }
 
-    public Class<?> getEntityType() {
+    public Class<? extends Persistable> getEntityType() {
         return entityType;
     }
 
-    public EntityResponse setEntityType(Class<?> entityType) {
+    public EntityResponse setEntityType(Class<? extends Persistable> entityType) {
         this.entityType = entityType;
         return this;
     }
@@ -94,9 +95,11 @@ public abstract class EntityResponse extends ResourceSupport {
         this.errors = errors;
     }
 
-    public boolean hasError() {
-        if(errors != null && errors.containsError())
+    public boolean success() {
+        if(errors == null)
             return true;
-        return false;
+        if(errors.containsError())
+            return false;
+        return true;
     }
 }

@@ -15,6 +15,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVer
 import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +49,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
     };
 
     @Override
-    public <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
-        String ceilingTypeName = ceilingType.getName();
-        securityVerifier.checkAccess(ceilingTypeName, Access.Create, entity);
+    public <T extends Persistable> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
+        Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
+        String guardianName = guardian.getName();
+        securityVerifier.checkAccess(guardianName, Access.Create, entity);
         if (entity instanceof HasHidingField) {
             ((HasHidingField) entity).initHidingForCreate();
         }
@@ -61,32 +63,35 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T> EntityResult<T> create(Entity entity) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> create(Entity entity) throws ServiceException {
         T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.create(ceilingType, instance);
     }
 
-    private <T> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
+    private <T extends Persistable> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
         T result = dynamicEntityDao.read(entityRootClz, key);
         return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> read(Class<T> entityType, Object key) throws ServiceException {
-        securityVerifier.checkAccess(entityType.getName(), Access.Read);
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
+    public <T extends Persistable> EntityResult<T> read(Class<T> entityType, Object key) throws ServiceException {
+        Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(entityType);
+        String guardianName = guardian.getName();
+        securityVerifier.checkAccess(guardianName, Access.Read);
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
         T result = dynamicEntityDao.read(entityRootClz, key);
         return makeEntityResult(result);
     }
 
     @Override
-    public <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
-        String ceilingTypeName = ceilingType.getName();
+    public <T extends Persistable> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
+        Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
+        String guardianName = guardian.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
-        securityVerifier.checkAccess(ceilingTypeName, Access.Update, oldEntity.getEntity());
-        securityVerifier.checkAccess(ceilingTypeName, Access.Update, entity);
+        securityVerifier.checkAccess(guardianName, Access.Update, oldEntity.getEntity());
+        securityVerifier.checkAccess(guardianName, Access.Update, entity);
         EntityResult entityResult = makeEntityResult(entity);
         entityValidationService.validate(entityResult);
         T result = dynamicEntityDao.update(entity);
@@ -94,39 +99,42 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T> EntityResult<T> update(Entity entity) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> update(Entity entity) throws ServiceException {
         T instance = (T) converter.convert(entity, null);
         Class ceilingType = getCeilingType(entity);
         return this.update(ceilingType, instance);
     }
 
     @Override
-    public <T> void delete(Class<T> ceilingType, T entity) throws ServiceException {
-        String ceilingTypeName = ceilingType.getName();
+    public <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException {
+        Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
+        String guardianName = guardian.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
         entity = oldEntity.getEntity();
-        securityVerifier.checkAccess(ceilingTypeName, Access.Delete, entity);
+        securityVerifier.checkAccess(guardianName, Access.Delete, entity);
         dynamicEntityDao.delete(entity);
     }
 
     @Override
-    public <T> void delete(Entity entity, String id) throws ServiceException {
+    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
         Class ceilingType = getCeilingType(entity);
         T instance = (T) converter.convert(entity, id);
         this.delete(ceilingType, instance);
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
-        securityVerifier.checkAccess(entityType.getName(), Access.Query);
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityType);
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
+        Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(entityType);
+        String guardianName = guardian.getName();
+        securityVerifier.checkAccess(guardianName, Access.Query);
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
         return dynamicEntityDao.query(entityRootClz, query);
     }
 
-    private <T> EntityResult<T> getManagedEntity(Class ceilingType, T entity) {
+    private <T extends Persistable> EntityResult<T> getManagedEntity(Class ceilingType, T entity) {
         try {
             Class ceilingClz = ceilingType;
-            Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(ceilingClz);
+            Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(ceilingClz);
             ClassMetadata rootClzMeta = this.dynamicEntityMetadataAccess.getClassMetadata(entityRootClz, false);
             Field idField = rootClzMeta.getIdField();
 
@@ -143,7 +151,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         return (Class<T>)entity.getEntityCeilingType();
     }
 
-    private <T> EntityResult<T> makeEntityResult(T entity) {
+    private <T extends Persistable> EntityResult<T> makeEntityResult(T entity) {
         if (entity == null)
             return null;
         EntityResult<T> entityResult = new EntityResult<T>();

@@ -10,7 +10,7 @@ import java.util.List;
  * May refer to {@link com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths }
  */
 public final class EntityActionNames {
-    private EntityActionNames()throws IllegalAccessException{throw new IllegalAccessException("Not instanceable object");}
+    private EntityActionNames()throws IllegalAccessException{throw new IllegalAccessException("Not instantiable object");}
 
     public static final String CREATE = "create";
     public static final String READ = "read";

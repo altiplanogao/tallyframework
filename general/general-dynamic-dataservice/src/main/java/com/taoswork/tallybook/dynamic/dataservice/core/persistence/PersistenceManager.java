@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/8/16.
@@ -13,20 +14,20 @@ import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionExce
 public interface PersistenceManager {
     public static final String COMPONENT_NAME = "PersistenceManager";
 
-    <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> EntityResult<T> create(Entity entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> create(Entity entity) throws ServiceException;
 
-    <T> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
+    <T extends Persistable> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
 
-    <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> EntityResult<T> update(Entity entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> update(Entity entity) throws ServiceException;
 
-    <T> void delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> void delete(Entity entity, String id) throws ServiceException;
+    <T extends Persistable> void delete(Entity entity, String id) throws ServiceException;
 
-    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
+    <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
 
 }

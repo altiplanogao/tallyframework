@@ -50,6 +50,7 @@ public class AdminBasicEntityController extends BaseController {
     private static class VIEWS{
         static final String Redirect2Home = "redirect:";
         static final String Redirect2Failure = "redirect:failure";
+        static final String Redirect2Todo = "redirect:todo";
         static final String FramedView = "entity/content/framedView";
         static final String ModalView = "entity/content/modalView";
     }
@@ -63,38 +64,21 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE_SOURCE)
-    protected MessageSource commonMessageSource;
-
     @Resource(name = ApplicationCommonConfig.ERROR_MESSAGE_SOURCE)
     protected MessageSource errorMessageSource;
 
-    private Helper helper = new Helper();
-    private volatile CachedMessageLocalizedDictionary commonMessage = null;
-    private Map<String, String> getCommonMessage(Locale locale){
-        if(commonMessage == null){
-            Map<String , String> raw = new HashMap<String, String>();
-            raw.put("yes", "yes");
-            raw.put("no", "no");
-            raw.put("ok", "ok");
-            raw.put("cancel", "cancel");
-            raw.put("close", "close");
-            raw.put("loading", "loading");
-            raw.put("error", "error");
-            raw.put("errorOccurred", "errorOccurred");
-            raw.put("delete", "delete");
-            raw.put("deleting", "deleting");
-            raw.put("deleteConfirm", "deleteConfirm");
-            commonMessage = new CachedMessageLocalizedDictionary(raw, commonMessageSource);
-        }
+    @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE)
+    private CachedMessageLocalizedDictionary commonMessage;
 
+    private Map<String, String> getCommonMessage(Locale locale){
         return commonMessage.getTranslated(locale);
     }
+
+    private Helper helper = new Helper();
 
     private Set<String> getParamInfoFilter(){
         return EntityInfoType.PageSupportedType;
     }
-
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
     public String info(HttpServletRequest request, HttpServletResponse response, Model model,
@@ -153,6 +137,12 @@ public class AdminBasicEntityController extends BaseController {
         entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
+        boolean success = entityQueryResponse.success();
+
+        if(!success){
+            //TODO:
+            return VIEWS.Redirect2Todo;
+        }
 
         if (isAjaxRequest(request)) {
             return makeDataView(model, entityQueryResponse);
@@ -209,6 +199,11 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
+        boolean success = addResponse.success();
+        if(!success){
+            //TODO:
+            return VIEWS.Redirect2Todo;
+        }
 
         model.addAttribute("currentAction", EntityActionNames.CREATE);
         model.addAttribute("formAction", request.getRequestURL().toString());
@@ -282,16 +277,13 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
-        boolean success = !createResponse.hasError();
-
-        if (success) {
-            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
-            return makeRedirectView(model, resultUrl);
-        }else {
+        boolean success = createResponse.success();
+        if(!success){
             return this.makeDataView(model, createResponse);
-//            LOGGER.error("Error not handled");
-//            return "redirect:" + request.getRequestURI();
         }
+
+        String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
+        return makeRedirectView(model, resultUrl);
     }
 
 
@@ -326,6 +318,11 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
+        boolean success = readResponse.success();
+        if(!success){
+            //TODO:
+            return VIEWS.Redirect2Todo;
+        }
 
         model.addAttribute("currentAction", EntityActionNames.READ);
         model.addAttribute("formAction", request.getRequestURL().toString());
@@ -386,14 +383,14 @@ public class AdminBasicEntityController extends BaseController {
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName, entityForm);
         Class entityType = entityTypes.getType();
         Class entityCeilingType = entityTypes.getCeilingType();
-        if(entityCeilingType == null){
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
-        if(entityType == null){
+        if (entityType == null) {
             return VIEWS.Redirect2Failure;
         }
 
-        if(!(isAjaxRequest(request))){
+        if (!(isAjaxRequest(request))) {
             return VIEWS.Redirect2Failure;
         }
 
@@ -407,14 +404,12 @@ public class AdminBasicEntityController extends BaseController {
         EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
         //TODO: handle failure and errors
-        boolean success = !updateResponse.hasError();
-
-        if (success) {
-            return makeRedirectView(model, request.getRequestURI());
-        }else {
+        boolean success = updateResponse.success();
+        if (!success) {
             LOGGER.error("Error not handled");
             return "redirect:" + request.getRequestURI();
         }
+        return makeRedirectView(model, request.getRequestURI());
     }
 
 
@@ -456,10 +451,15 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);
 
         EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
+        boolean success = deleteResponse.success();
+        if(!success){
+            //TODO:
+            return VIEWS.Redirect2Todo;
+        }
 
         //TODO: handle failure and errors
-        boolean success = deleteResponse.isSuccess();
-        if (success) {
+        boolean delSuccess = deleteResponse.isSuccess();
+        if (delSuccess) {
             String resultUrl = request.getContextPath() + "/" + entityTypeName;
             return makeRedirectView(model, resultUrl);
         }else {

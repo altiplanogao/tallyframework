@@ -54,7 +54,7 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@PresentationClass(instanceable=false)
+@PresentationClass(instantiable =false)
 public abstract class PermissionEntryBaseImpl<P extends Permission>
         implements PermissionEntry<P> {
 

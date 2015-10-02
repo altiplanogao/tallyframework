@@ -4,7 +4,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io;
  * {@link com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames}
  */
 public class EntityActionPaths {
-    private EntityActionPaths()throws IllegalAccessException{throw new IllegalAccessException("Not instanceable object");}
+    private EntityActionPaths()throws IllegalAccessException{throw new IllegalAccessException("Not instantiable object");}
 
     public static final String CREATE = "/add";    //view add page: RequestMethod.GET, do add : RequestMethod.POST
     public static final String READ = "";              //RequestMethod.GET

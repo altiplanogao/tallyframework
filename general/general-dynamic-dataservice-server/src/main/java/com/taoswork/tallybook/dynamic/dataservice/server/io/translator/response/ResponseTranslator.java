@@ -13,6 +13,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInstanceResult;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -132,7 +133,7 @@ public class ResponseTranslator {
             response.setEntityType(null);
             response.setEntity(null);
         } else {
-            Object resultEntity = result.getEntity();
+            Persistable resultEntity = result.getEntity();
             response.setEntityType(resultEntity.getClass());
             EntityInstanceResult instanceResult = ResultTranslator.convertInstanceResult(result);
             response.setEntity(instanceResult);

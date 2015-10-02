@@ -1,15 +1,17 @@
 package com.taoswork.tallybook.general.authority.domain.resource;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/6/5.
  */
 
-public interface SecuredResource extends Serializable{
+@PersistFriendly(nameOverride = "admin-resource-type")
+public interface SecuredResource extends Persistable {
 
     Long getId();
 

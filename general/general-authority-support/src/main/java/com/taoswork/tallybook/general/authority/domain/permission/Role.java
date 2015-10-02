@@ -1,13 +1,14 @@
 package com.taoswork.tallybook.general.authority.domain.permission;
 
-import java.io.Serializable;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+
 import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
 public interface Role<P extends Permission>
-    extends Serializable {
+    extends Persistable {
 
     Long getId();
 

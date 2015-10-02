@@ -8,6 +8,9 @@
         <non-jta-data-source>jdbcTestDs</non-jta-data-source>
 
         <class>com.taoswork.tallybook.testframework.domain.impl.TPersonImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.impl.TDogImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.impl.TFishImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.impl.TCustomizedAnimalImpl</class>
         <!--
         <class>AdminRoleImpl</class>
         <class>AdminPermissionImpl</class>

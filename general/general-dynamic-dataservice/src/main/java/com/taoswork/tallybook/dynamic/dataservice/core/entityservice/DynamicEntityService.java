@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -21,33 +22,33 @@ import java.util.Locale;
 public interface DynamicEntityService {
     public static final String COMPONENT_NAME = "DynamicEntityService";
 
-    <T> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> EntityResult<T> create(Entity entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> create(Entity entity) throws ServiceException;
 
-    <T> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
+    <T extends Persistable> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
 
-    <T> T straightRead(Class<T> entityClz, Object key) throws ServiceException;
+    <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException;
 
-    <T> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> EntityResult<T> update(Entity entity) throws ServiceException;
+    <T extends Persistable> EntityResult<T> update(Entity entity) throws ServiceException;
 
-    <T> boolean delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> boolean delete(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T> boolean delete(Entity entity, String id) throws ServiceException;
+    <T extends Persistable> boolean delete(Entity entity, String id) throws ServiceException;
 
-    <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
+    <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
 
-    <T> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException;
+    <T extends Persistable> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException;
 
-    Class<?> getRootInstanceableEntityClass(Class<?> entityType);
+    Class<?> getRootInstantiableEntityClass(Class<?> entityType);
 
-    <T> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy);
+    <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy);
 
-    <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
+    <T extends Persistable> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 
-    <T> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale);
+    <T extends Persistable> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale);
 
-    Access getAuthorizeAccess(Class entityType, Access mask);
+    <T extends Persistable> Access getAuthorizeAccess(Class<T> entityType, Access mask);
 }

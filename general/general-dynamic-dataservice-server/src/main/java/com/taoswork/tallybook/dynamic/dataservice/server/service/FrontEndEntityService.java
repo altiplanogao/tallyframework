@@ -16,6 +16,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResponseTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -52,8 +53,8 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     }
 
     private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale) {
-        Class<?> entityCeilingType = request.getEntityType();
-        Class<?> entityType = response.getEntityType();
+        Class<? extends Persistable> entityCeilingType = request.getEntityType();
+        Class<? extends Persistable> entityType = response.getEntityType();
 
         if(entityType == null)
             return;
@@ -94,9 +95,9 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
     @Override
     public EntityQueryResponse query(EntityQueryRequest request, Locale locale) {
-        Class<?> entityType = request.getEntityType();
+        Class<? extends Persistable> entityType = request.getEntityType();
         EntityQueryResponse response = new EntityQueryResponse();
-        CriteriaQueryResult<?> result = null;
+        CriteriaQueryResult<? extends Persistable> result = null;
         ServiceException se = null;
         try {
             CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
@@ -118,7 +119,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         EntityResult result = null;
         ServiceException se = null;
         try {
-            Class<?> entityType = request.getEntityType();
+            Class<? extends Persistable> entityType = request.getEntityType();
             result = dynamicEntityService.makeDissociatedObject(entityType);
         } catch (ServiceException e) {
             se = e;
@@ -148,7 +149,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
     @Override
     public EntityReadResponse read(EntityReadRequest request, Locale locale) {
-        Class<?> entityType = request.getEntityType();
+        Class<? extends Persistable> entityType = request.getEntityType();
         EntityReadResponse response = new EntityReadResponse();
         EntityResult result = null;
         ServiceException se = null;

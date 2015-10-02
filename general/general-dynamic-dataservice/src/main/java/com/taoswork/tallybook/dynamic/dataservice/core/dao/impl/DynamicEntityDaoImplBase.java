@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryRe
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.Cto2QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.impl.Cto2QueryTranslatorImpl;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,21 +63,21 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
 
 
     @Override
-    public <T> T create(T entity) {
+    public <T extends Persistable> T create(T entity) {
         EntityManager em = getEntityManager();
         em.persist(entity);
         return entity;
     }
 
     @Override
-    public <T> T read(Class<T> entityType, Object key) {
+    public <T extends Persistable> T read(Class<T> entityType, Object key) {
         EntityManager em = getEntityManager();
         T entity = em.find(entityType, key);
         return entity;
     }
 
     @Override
-    public <T> T update(T entity) {
+    public <T extends Persistable> T update(T entity) {
         EntityManager em = getEntityManager();
         T response = em.merge(entity);
         em.flush();
@@ -84,7 +85,7 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     }
 
     @Override
-    public <T> void delete(T entity) {
+    public <T extends Persistable> void delete(T entity) {
         EntityManager em = getEntityManager();
         entity = em.merge(entity);
         em.remove(entity);
@@ -92,7 +93,7 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) {
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) {
         EntityManager em = getEntityManager();
         ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityType);
         TypedQuery<T> listQuery = cto2QueryTranslator.constructListQuery(em, entityType, classTreeMetadata, query);

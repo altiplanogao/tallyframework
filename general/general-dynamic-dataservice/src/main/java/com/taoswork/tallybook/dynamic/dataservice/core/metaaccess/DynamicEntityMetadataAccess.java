@@ -25,16 +25,13 @@ public interface DynamicEntityMetadataAccess {
     public static final String COMPONENT_NAME = "DynamicEntityMetadataAccess";
 
     /**
-     * Returns all the instance-able entity-types
+     * Returns all the instance-able entity-types, interfaces
+     *
+     * @param _entity, if true, Returns all the instance-able entity-types
+     * @param _interface, if true. Returns all the interfaces that referenced by instance-able entity-types
      * @return
      */
-    Collection<Class> getAllEntityTypes();
-
-    /**
-     * Returns all the interfaces that referenced by instance-able entity-types
-     * @return
-     */
-    Collection<Class> getAllEntityInterfaces();
+    Collection<Class> getAllEntities(boolean _entity, boolean _interface);
 
     /**
      * Get the root instance-able entity-type
@@ -42,14 +39,16 @@ public interface DynamicEntityMetadataAccess {
      * @param <T>
      * @return
      */
-    <T> Class<T> getRootInstanceableEntityClass(Class<T> entityCeilingType);
+    <T> Class<T> getRootInstantiableEntityType(Class<T> entityCeilingType);
 
     /**
      * Get all the instance-able entity-types derived from entityCeilingType
      * @param entityCeilingType, the super entity-type of required instance-able entity-types
      * @return
      */
-    Collection<Class> getInstanceableEntityTypes(Class<?> entityCeilingType);
+    Collection<Class> getInstantiableEntityTypes(Class<?> entityCeilingType);
+
+    <T> Class<T> getPermissionGuardian(Class<T> entityType);
 
     /**
      * Get a class tree with root (root's type is entityCeilingType)
@@ -57,15 +56,6 @@ public interface DynamicEntityMetadataAccess {
      * @return
      */
     EntityClassTree getEntityClassTree(Class<?> entityCeilingType);
-
-//    /**
-//     * Get ClassTreeMetadata of a specified entityCeilingType
-//     * this method, may take advantage of method: getEntityClassTree(...)
-//     *
-//     * @param entityCeilingType, the root entity-type of required ClassTreeMetadata
-//     * @return
-//     */
-//    ClassTreeMetadata getClassTreeMetadata(Class<?> entityCeilingType);
 
     /**
      * Get ClassMetadata of a specified entityType

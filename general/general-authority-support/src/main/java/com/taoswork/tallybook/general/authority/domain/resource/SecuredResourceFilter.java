@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.general.authority.domain.resource;
 
-import java.io.Serializable;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Entity used to describe a kind of resource need to be protected.
@@ -8,7 +9,8 @@ import java.io.Serializable;
  * Created by Gao Yuan on 2015/4/28.
  */
 
-public interface SecuredResourceFilter extends Serializable{
+@PersistFriendly(nameOverride = "admin-resource-criteria")
+public interface SecuredResourceFilter extends Persistable {
 
     Long getId();
 

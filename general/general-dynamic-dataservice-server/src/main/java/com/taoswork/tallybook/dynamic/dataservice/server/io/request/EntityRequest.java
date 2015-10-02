@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.Set;
  */
 public abstract class EntityRequest {
     private String resourceName;
-    private Class<?> entityType;
+    private Class<? extends Persistable> entityType;
     private String resourceURI;
     private String fullUrl;
     private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
@@ -23,7 +24,7 @@ public abstract class EntityRequest {
     }
 
     public EntityRequest(String resourceName,
-                         Class<?> entityType,
+                         Class<? extends Persistable> entityType,
                          String resourceURI, String url){
         this.setResourceName(resourceName).setEntityType(entityType).setResourceURI(resourceURI);
     }
@@ -42,11 +43,11 @@ public abstract class EntityRequest {
         return this;
     }
 
-    public Class<?> getEntityType() {
+    public Class<? extends Persistable> getEntityType() {
         return entityType;
     }
 
-    public EntityRequest setEntityType(Class<?> entityType){
+    public EntityRequest setEntityType(Class<? extends Persistable> entityType){
         this.entityType = entityType;
         return this;
     }
@@ -54,7 +55,12 @@ public abstract class EntityRequest {
     public EntityRequest withEntityType(String entityType){
         try {
             if(!StringUtils.isEmpty(entityType)){
-                this.entityType = Class.forName(entityType);
+                Class etype = Class.forName(entityType);
+                if(Persistable.class.isAssignableFrom(etype)){
+                    this.entityType = (Class<? extends Persistable>)etype;
+                } else {
+                    this.entityType = null;
+                }
             }else {
                 this.entityType = null;
             }

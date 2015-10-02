@@ -9,13 +9,13 @@ import java.util.Map;
  */
 public interface EntityMetadataRawAccess {
 
+    Class<?>[] getAllEntities();
+
     Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz);
 
-    Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable);
+    Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstantiable);
 
     Field getIdField(Class<?> entityClass);
 
     List<String> getPropertyNames(Class<?> entityClass);
-
-    Class<?>[] getAllEntityClasses();
 }

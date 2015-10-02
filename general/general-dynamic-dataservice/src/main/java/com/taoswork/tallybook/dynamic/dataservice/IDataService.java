@@ -19,11 +19,31 @@ public interface IDataService {
 
     IDataServiceDefinition getDataServiceDefinition();
 
+    /**
+     * Type name to EntityEntry
+     * @return
+     */
     Map<String, EntityEntry> getEntityEntries();
 
-    String getEntityResourceName(String interfaceName);
+    /**
+     * Convert typeName to resourceName
+     * com.tallybook.data.Person -> person
+     * com.tallybook.data.Tool -> tool
+     *
+     * @param typeName, the result of type.getName()
+     * @return the resource name
+     */
+    String getEntityResourceName(String typeName);
 
-    String getEntityInterfaceName(String resourceName);
+    /**
+     * Convert resourceName to typeName
+     * person -> com.tallybook.data.Person
+     * tool -> com.tallybook.data.Tool
+     *
+     * @param resourceName, the resource name
+     * @return the type name
+     */
+    String getEntityTypeName(String resourceName);
 
     void setSecurityVerifier(ISecurityVerifier securityVerifier);
 }

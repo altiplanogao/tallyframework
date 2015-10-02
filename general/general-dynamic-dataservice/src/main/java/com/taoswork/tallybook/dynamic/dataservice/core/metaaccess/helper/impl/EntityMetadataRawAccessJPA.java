@@ -33,7 +33,7 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     @GuardedBy("lock")
     public static final Map<Class<?>, Class<?>[]> ENTITY_CACHE = new LRUMap(100, 1000);
     @GuardedBy("lock")
-    public static final Map<Class<?>, Class<?>[]> ENTITY_CACHE_FOR_INSTANCEABLE = new LRUMap(100, 1000);
+    public static final Map<Class<?>, Class<?>[]> ENTITY_CACHE_FOR_INSTANTIABLE = new LRUMap(100, 1000);
     protected final IntervalSensitive cacheDecider;
 
     private EntityManager entityManager;
@@ -49,29 +49,43 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     }
 
     @Override
+    public Class<?>[] getAllEntities() {
+        Metamodel mm = entityManager.getMetamodel();
+        Set<EntityType<?>> entityTypes = mm.getEntities();
+
+        List<Class<?>> entityClasses = new ArrayList<Class<?>>();
+        for (EntityType<?> entityType : entityTypes) {
+            Class<?> mappedClz = entityType.getJavaType();
+            if (mappedClz != null) {
+                entityClasses.add(mappedClz);
+            }
+        }
+        return entityClasses.toArray(new Class[]{});
+    }
+
+    @Override
     public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz) {
         return getAllEntitiesFromCeiling(ceilingClz, true);
     }
 
     @Override
-    public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstanceable) {
+    public Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz, boolean includeNotInstantiable) {
         return getAllEntitiesFromCeiling(ceilingClz,
-            includeNotInstanceable, !cacheDecider.checkExpired());
+            includeNotInstantiable, !cacheDecider.checkExpired());
     }
 
-    private Class<?>[] getAllEntitiesFromCeiling(
-        Class<?> ceilingClz,
-        boolean includeNotInstanceable,
-        boolean useCache) {
+    private Class<?>[] getAllEntitiesFromCeiling(Class<?> ceilingClz,
+                                                 boolean includeNotInstantiable,
+                                                 boolean useCache) {
         Metamodel mm = entityManager.getMetamodel();
         Set<EntityType<?>> entityTypes = mm.getEntities();
         Class<?>[] cache = null;
         synchronized (lock) {
             if (useCache) {
-                if (includeNotInstanceable) {
+                if (includeNotInstantiable) {
                     cache = ENTITY_CACHE.get(ceilingClz);
                 } else {
-                    cache = ENTITY_CACHE_FOR_INSTANCEABLE.get(ceilingClz);
+                    cache = ENTITY_CACHE_FOR_INSTANTIABLE.get(ceilingClz);
                 }
             }
             if (cache == null) {
@@ -88,10 +102,10 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
 
                 for (int i = 0; i < sortedEntities.length; i++) {
                     Class<?> item = sortedEntities[i];
-                    if (includeNotInstanceable) {
+                    if (includeNotInstantiable) {
                         filteredSortedEntities.add(sortedEntities[i]);
                     } else {
-                        if (NativeClassHelper.isInstanceable(item)) {
+                        if (NativeClassHelper.isInstantiable(item)) {
                             filteredSortedEntities.add(sortedEntities[i]);
                         } else {
                             continue;
@@ -102,10 +116,10 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
                 Class<?>[] filteredEntities = new Class<?>[filteredSortedEntities.size()];
                 filteredEntities = filteredSortedEntities.toArray(filteredEntities);
                 cache = filteredEntities;
-                if (includeNotInstanceable) {
+                if (includeNotInstantiable) {
                     ENTITY_CACHE.put(ceilingClz, filteredEntities);
                 } else {
-                    ENTITY_CACHE_FOR_INSTANCEABLE.put(ceilingClz, filteredEntities);
+                    ENTITY_CACHE_FOR_INSTANTIABLE.put(ceilingClz, filteredEntities);
                 }
             }
         }
@@ -156,22 +170,7 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
     private void clearCache() {
         synchronized (lock) {
             ENTITY_CACHE.clear();
-            ENTITY_CACHE_FOR_INSTANCEABLE.clear();
+            ENTITY_CACHE_FOR_INSTANTIABLE.clear();
         }
-    }
-
-    @Override
-    public Class<?>[] getAllEntityClasses() {
-        Metamodel mm = entityManager.getMetamodel();
-        Set<EntityType<?>> entityTypes = mm.getEntities();
-
-        List<Class<?>> entityClasses = new ArrayList<Class<?>>();
-        for (EntityType<?> entityType : entityTypes) {
-            Class<?> mappedClz = entityType.getJavaType();
-            if (mappedClz != null) {
-                entityClasses.add(mappedClz);
-            }
-        }
-        return entityClasses.toArray(new Class[]{});
     }
 }

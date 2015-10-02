@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -30,12 +29,11 @@ public abstract class DataServiceBase implements IDataService {
     private static final Map<String, Integer> loadCounter = new HashMap<String, Integer>();
 
     private final IDataServiceDefinition dataServiceDefinition;
+    private ApplicationContext applicationContext;
 
-    private final Map<String, String> entityResourceNameOverride = new HashMap<String, String>();
-    private final Map<String, String> resourceNameToEntityInterface = new HashMap<String, String>();
-    protected ApplicationContext applicationContext;
-    //key is interface name
-    private Map<String, EntityEntry> entityEntryMap;
+    private final Map<String, String> entityResNameToTypeName = new HashMap<String, String>();
+    //key is type name
+    private Map<String, EntityEntry> entityTypeNameToEntries;
 
     public DataServiceBase(
             IDataServiceDefinition dataServiceDefinition,
@@ -106,6 +104,18 @@ public abstract class DataServiceBase implements IDataService {
     }
 
     protected void postConstruct() {
+    }
+
+    private void postLoadCheck() {
+        DynamicEntityDao dynamicEntityDao = getService(DynamicEntityDao.COMPONENT_NAME);
+        if (dynamicEntityDao == null) {
+            LOGGER.error("Bean '{}' not defined, dynamic entity service may not work.", DynamicEntityDao.COMPONENT_NAME);
+        }
+
+        DynamicEntityMetadataAccess dynamicEntityMetadataAccess = getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
+        if (dynamicEntityMetadataAccess == null) {
+            LOGGER.error("Bean '{}' not defined, dynamic entity service may not work.", DynamicEntityMetadataAccess.COMPONENT_NAME);
+        }
     }
 
     protected void onServiceStart() {
@@ -181,51 +191,32 @@ public abstract class DataServiceBase implements IDataService {
         return getService(IDataServiceDefinition.DATA_SERVICE_DEFINITION_BEAN_NAME);
     }
 
-    private void postLoadCheck() {
-        DynamicEntityDao dynamicEntityDao = getService(DynamicEntityDao.COMPONENT_NAME);
-        if (dynamicEntityDao == null) {
-            LOGGER.error("Bean '{}' not defined, dynamic entity service may not work.", DynamicEntityDao.COMPONENT_NAME);
-        }
-
-        DynamicEntityMetadataAccess dynamicEntityMetadataAccess = getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
-        if (dynamicEntityMetadataAccess == null) {
-            LOGGER.error("Bean '{}' not defined, dynamic entity service may not work.", DynamicEntityMetadataAccess.COMPONENT_NAME);
-        }
-    }
-
     @Override
     public Map<String, EntityEntry> getEntityEntries() {
-        if (entityEntryMap == null) {
-            entityEntryMap = new HashMap<String, EntityEntry>();
+        if (entityTypeNameToEntries == null) {
+            entityTypeNameToEntries = new HashMap<String, EntityEntry>();
 
             DynamicEntityMetadataAccess dynamicEntityMetadataAccess = getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
 
-            for (Class entityInterface : dynamicEntityMetadataAccess.getAllEntityInterfaces()) {
-                String interfaceName = entityInterface.getName();
-                if (entityEntryMap.containsKey(interfaceName)) {
-                    LOGGER.error("EntityEntry with name '{}' already exist, over-writing", interfaceName);
+            for (Class entityType : dynamicEntityMetadataAccess.getAllEntities(true, true)) {
+                String typeName = entityType.getName();
+                if (entityTypeNameToEntries.containsKey(typeName)) {
+                    LOGGER.error("EntityEntry with name '{}' already exist, over-writing", typeName);
                 }
-                Class interfaceClz = null;
-                try {
-                    interfaceClz = Class.forName(interfaceName);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                EntityEntry entityEntry = new EntityEntry(interfaceClz);
-                String newResourceName = entityResourceNameOverride.getOrDefault(interfaceName, entityEntry.getResourceName());
-                entityEntry.setResourceName(newResourceName);
+                EntityEntry entityEntry = new EntityEntry(entityType);
+                String newResourceName = entityEntry.getResourceName();
 
-                entityEntryMap.put(interfaceName, entityEntry);
-                resourceNameToEntityInterface.put(newResourceName, interfaceName);
+                entityTypeNameToEntries.put(typeName, entityEntry);
+                entityResNameToTypeName.put(newResourceName, typeName);
             }
         }
-        return Collections.unmodifiableMap(entityEntryMap);
+        return Collections.unmodifiableMap(entityTypeNameToEntries);
     }
 
     @Override
-    public String getEntityResourceName(String interfaceName) {
+    public String getEntityResourceName(String typeName) {
         Map<String, EntityEntry> entityEntries = getEntityEntries();
-        EntityEntry entityEntry = entityEntries.getOrDefault(interfaceName, null);
+        EntityEntry entityEntry = entityEntries.getOrDefault(typeName, null);
         if (entityEntry == null) {
             return null;
         }
@@ -233,8 +224,8 @@ public abstract class DataServiceBase implements IDataService {
     }
 
     @Override
-    public String getEntityInterfaceName(String resourceName) {
-        return resourceNameToEntityInterface.getOrDefault(resourceName, null);
+    public String getEntityTypeName(String resourceName) {
+        return entityResNameToTypeName.getOrDefault(resourceName, null);
     }
 
     @Override
@@ -242,17 +233,5 @@ public abstract class DataServiceBase implements IDataService {
         SecurityVerifierAgent securityVerifierAgent =
             getService(SecurityVerifierAgent.COMPONENT_NAME);
         securityVerifierAgent.setVerifier(securityVerifier);
-    }
-
-    protected final void setEntityResourceNameOverride(Class interfaceClz, String resourceName) {
-        setEntityResourceNameOverride(interfaceClz.getName(), resourceName);
-    }
-
-    protected final void setEntityResourceNameOverride(String interfaceName, String resourceName) {
-        if (StringUtils.isEmpty(resourceName)) {
-            entityResourceNameOverride.remove(interfaceName);
-        } else {
-            entityResourceNameOverride.put(interfaceName, resourceName);
-        }
     }
 }

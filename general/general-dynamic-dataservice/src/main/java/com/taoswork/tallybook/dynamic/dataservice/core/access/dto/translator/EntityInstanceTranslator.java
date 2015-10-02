@@ -3,14 +3,13 @@ package com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValue;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -30,12 +29,12 @@ public abstract class EntityInstanceTranslator {
 
     protected abstract DynamicEntityMetadataAccess getDynamicEntityMetadataAccess();
 
-    public Serializable convert(Entity source, String id) {
-        Serializable instance = null;
+    public Persistable convert(Entity source, String id) {
+        Persistable instance = null;
         DynamicEntityMetadataAccess entityMetadataAccess = this.getDynamicEntityMetadataAccess();
         try {
             Class entityClass = (source.getEntityType());
-            Serializable tempInstance = (Serializable)entityClass.newInstance();
+            Persistable tempInstance = (Persistable)entityClass.newInstance();
             BeanWrapperImpl instanceBean = beanWrapperThreadLocal.get();
             instanceBean.setWrappedInstance(tempInstance);
             ClassMetadata classMetadata = entityMetadataAccess.getClassMetadata(entityClass, false);

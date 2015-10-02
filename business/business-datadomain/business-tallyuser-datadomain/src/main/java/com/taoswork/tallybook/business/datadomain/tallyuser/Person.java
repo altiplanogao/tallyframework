@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
-import java.io.Serializable;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/5/8.
  */
-public interface Person extends Serializable {
+public interface Person extends Persistable {
     Long getId();
 
     Person setId(Long id);

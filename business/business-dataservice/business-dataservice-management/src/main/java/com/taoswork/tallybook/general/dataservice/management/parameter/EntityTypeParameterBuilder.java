@@ -2,13 +2,9 @@ package com.taoswork.tallybook.general.dataservice.management.parameter;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityTypeParameter;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 
-import java.io.Serializable;
-
-/**
- * Created by Gao Yuan on 2015/10/2.
- */
 public class EntityTypeParameterBuilder {
 
     public static EntityTypeParameter getBy(DataServiceManager dataServiceManager, String entityTypeName) {
@@ -26,7 +22,7 @@ public class EntityTypeParameterBuilder {
             entityInterfaceType = entityTypeName;
         try {
             Class directType = Class.forName(entityInterfaceType);
-            boolean candidate = Serializable.class.isAssignableFrom(directType);
+            boolean candidate = Persistable.class.isAssignableFrom(directType);
             if (candidate)
                 return directType;
         } catch (ClassNotFoundException e) {

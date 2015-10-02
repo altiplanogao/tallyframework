@@ -20,12 +20,6 @@ public class ManagedEntityEntry {
         this.entityEntry = entityEntry;
     }
 
-    public ManagedEntityEntry(String dataServiceName,
-                              String entityInterfaceName,
-                              String friendlyName) {
-        this(dataServiceName, new EntityEntry(entityInterfaceName, friendlyName));
-    }
-
     public String getDataServiceName() {
         return dataServiceName;
     }

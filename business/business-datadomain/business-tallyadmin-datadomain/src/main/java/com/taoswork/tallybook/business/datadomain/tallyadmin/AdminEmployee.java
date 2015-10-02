@@ -3,14 +3,14 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/5/10.
  */
-public interface AdminEmployee extends Serializable {
+public interface AdminEmployee extends Persistable {
     Long getId();
 
     void setId(Long id);

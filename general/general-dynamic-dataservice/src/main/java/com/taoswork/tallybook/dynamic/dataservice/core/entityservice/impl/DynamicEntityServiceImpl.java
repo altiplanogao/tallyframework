@@ -15,6 +15,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransfe
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
         try{
             return persistenceService.create(ceilingType, entity);
         }catch (Exception e){
@@ -63,7 +64,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> EntityResult<T> create(final Entity entity) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> create(final Entity entity) throws ServiceException {
         try{
             return persistenceService.create(entity);
         }catch (Exception e){
@@ -73,18 +74,18 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
         return persistenceService.read(entityClz, key);
     }
 
     @Override
-    public <T> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
+    public <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
         EntityResult<T> result = read(entityClz, key);
         return result.getEntity();
     }
 
     @Override
-    public <T> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
         try{
             return persistenceService.update(ceilingType, entity);
         }catch (Exception e){
@@ -94,7 +95,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> EntityResult<T> update(final Entity entity)throws ServiceException{
+    public <T extends Persistable> EntityResult<T> update(final Entity entity)throws ServiceException{
         try{
             return persistenceService.update(entity);
         }catch (Exception e){
@@ -104,7 +105,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
         try{
             persistenceService.delete(ceilingType, entity);
             return true;
@@ -115,7 +116,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> boolean delete(final Entity entity, String id)throws ServiceException{
+    public <T extends Persistable> boolean delete(final Entity entity, String id)throws ServiceException{
         try{
             persistenceService.delete(entity, id);
             return true;
@@ -126,15 +127,15 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException {
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException {
         return persistenceService.query(entityClz, query);
     }
 
     @Override
-    public <T> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
-        Class rootable = dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
+    public <T extends Persistable> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+        Class rootable = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         try {
-            Object entity = rootable.newInstance();
+            Persistable entity = (Persistable)rootable.newInstance();
             EntityResult<T> entityResult = new EntityResult<T>();
             Class clz = entity.getClass();
             ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
@@ -155,29 +156,29 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public Class<?> getRootInstanceableEntityClass(Class<?> entityClz){
-        Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstanceableEntityClass(entityClz);
+    public Class<?> getRootInstantiableEntityClass(Class<?> entityClz){
+        Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         return entityRootClz;
     }
 
     @Override
-    public <T> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy){
+    public <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy){
         return dynamicEntityMetadataAccess.getClassMetadata(entityType, withHierarchy);
     }
 
     @Override
-    public <T> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
+    public <T extends Persistable> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
         boolean withHierarchy = EntityInfoType.isIncludeHierarchyByDefault(infoType);
         return this.describe(entityType, withHierarchy, infoType, locale);
     }
 
     @Override
-    public <T> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale) {
+    public <T extends Persistable> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale) {
         return dynamicEntityMetadataAccess.getEntityInfo(entityType, withHierarchy, locale, infoType);
     }
 
     @Override
-    public Access getAuthorizeAccess(Class entityType, Access mask){
+    public <T extends Persistable> Access getAuthorizeAccess(Class<T> entityType, Access mask){
         if(mask == null)mask = Access.Crudq;
         Access access = securityVerifier.getAllPossibleAccess(entityType.getName(), mask);
         return access;

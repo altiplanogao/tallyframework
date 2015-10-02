@@ -2,12 +2,14 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permissio
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 
 import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/8/27.
  */
+@PersistFriendly(nameOverride = "admin-role")
 public interface AdminRole
     extends Role<AdminPermission> {
 

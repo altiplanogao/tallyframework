@@ -2,14 +2,13 @@ package com.taoswork.tallybook.general.authority.domain.permission;
 
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
-
-import java.io.Serializable;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
 public interface PermissionEntry<P extends Permission>
-         extends Serializable {
+         extends Persistable {
     Long getId();
 
     void setId(Long id);

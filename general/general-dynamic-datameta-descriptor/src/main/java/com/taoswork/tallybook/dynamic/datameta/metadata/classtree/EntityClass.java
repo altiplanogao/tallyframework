@@ -13,13 +13,13 @@ import java.io.Serializable;
 @ThreadSafe
 public class EntityClass implements Serializable {
     public final Class<?> clz;
-    protected final boolean instanceable;
+    protected final boolean instantiable;
 
-    public boolean isInstanceable(){return instanceable;}
+    public boolean isInstantiable(){return instantiable;}
 
     public EntityClass(Class<?> clz) {
         this.clz = clz;
-        instanceable = NativeClassHelper.isInstanceable(clz);
+        instantiable = NativeClassHelper.isInstantiable(clz);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class EntityClass implements Serializable {
         EntityClass that = (EntityClass) o;
 
         return new EqualsBuilder()
-                .append(instanceable, that.instanceable)
+                .append(instantiable, that.instantiable)
                 .append(clz, that.clz)
                 .isEquals();
     }
@@ -40,12 +40,12 @@ public class EntityClass implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(clz)
-                .append(instanceable)
+                .append(instantiable)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
-        return clz.getSimpleName() + " instanceable:" + instanceable;
+        return clz.getSimpleName() + " instantiable:" + instantiable;
     }
 }

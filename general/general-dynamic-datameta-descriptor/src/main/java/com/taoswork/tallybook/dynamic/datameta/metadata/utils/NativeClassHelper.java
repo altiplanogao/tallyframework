@@ -32,7 +32,7 @@ public class NativeClassHelper {
         }
         return classes.toArray(new Class[classes.size()]);
     }
-    public static boolean isInstanceable(Class<?> clazz) {
+    public static boolean isInstantiable(Class<?> clazz) {
         //We filter out abstract classes because they can't be instantiated.
         if (Modifier.isAbstract(clazz.getModifiers())) {
             return false;
@@ -43,7 +43,7 @@ public class NativeClassHelper {
         if (presentationClass == null) {
             return true;
         } else {
-            return presentationClass.instanceable();
+            return presentationClass.instantiable();
         }
     }
 

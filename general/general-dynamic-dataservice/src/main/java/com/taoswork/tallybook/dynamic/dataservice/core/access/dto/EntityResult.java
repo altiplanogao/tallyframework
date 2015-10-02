@@ -1,9 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.access.dto;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+
 /**
  * Created by Gao Yuan on 2015/9/24.
  */
-public class EntityResult<T> {
+public class EntityResult<T extends Persistable> {
     String idKey;
     String idValue;
     T entity;

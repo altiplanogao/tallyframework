@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.query.dto;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/6/17.
  */
-public class CriteriaQueryResult<T> {
+public class CriteriaQueryResult<T extends Persistable> {
     private final Class<T> entityType;
     private List<T> entityCollection;
     private Long totalCount;

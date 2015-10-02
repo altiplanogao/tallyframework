@@ -5,19 +5,15 @@ import com.taoswork.tallybook.general.authority.domain.permission.Role;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@PresentationClass(instanceable=false)
+@PresentationClass(instantiable =false)
 public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
 
     @Id
