@@ -7,7 +7,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
@@ -72,9 +72,6 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    @Resource(name = ApplicationCommonConfig.ERROR_MESSAGE_SOURCE)
-    protected MessageSource errorMessageSource;
-
     @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE)
     private CachedMessageLocalizedDictionary commonMessage;
 
@@ -101,8 +98,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
@@ -137,8 +134,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
@@ -207,8 +204,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
@@ -286,8 +283,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
@@ -327,8 +324,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
@@ -420,8 +417,8 @@ public class AdminBasicEntityController extends BaseController {
         }
 
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
@@ -467,8 +464,8 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Failure;
         }
         Locale locale = request.getLocale();
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
         EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);

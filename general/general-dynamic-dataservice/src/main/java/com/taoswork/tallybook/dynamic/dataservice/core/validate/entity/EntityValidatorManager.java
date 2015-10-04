@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class EntityValidatorManager {
     private static class FakeValidator implements IEntityValidator{
         @Override
-        public boolean validate(Persistable entity, ValidationErrors validationErrors) {
+        public boolean validate(Persistable entity, EntityValidationErrors validationErrors) {
             return true;
         }
     }
@@ -46,17 +46,10 @@ public class EntityValidatorManager {
 
     public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityValidationErrors) {
         Collection<String> validatorNames = classMetadata.getValidators();
-        ValidationErrors validationErrors = new ValidationErrors();
-
         for (String validatorName : validatorNames){
             IEntityValidator validator = getValidator(validatorName);
             if(validator!=null){
-                validator.validate(entity, validationErrors);
-            }
-        }
-        if(!validationErrors.isValid()){
-            for (ValidationError ve : validationErrors.getErrors()){
-                entityValidationErrors.appendError(ve);
+                validator.validate(entity, entityValidationErrors);
             }
         }
     }

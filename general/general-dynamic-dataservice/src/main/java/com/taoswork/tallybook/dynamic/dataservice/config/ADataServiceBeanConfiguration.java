@@ -76,9 +76,10 @@ public abstract class ADataServiceBeanConfiguration
         }
     }
 
-    // **************************************************** //
-    //  IGeneralBeanList                                    //
-    // **************************************************** //
+    /************************************************************
+     * IGeneralBeanList                                         *
+     * ({@link com.taoswork.tallybook.dynamic.dataservice.config.beanlist.IGeneralBeanList})
+     ************************************************************/
 
     @Override
     @Bean
@@ -91,10 +92,12 @@ public abstract class ADataServiceBeanConfiguration
     public String dataServiceName() {
         return dataServiceDefinition.getDataServiceName();
     }
+    /* IGeneralBeanList                                        **/
 
-    // **************************************************** //
-    //  IDataServiceSupporterBeanList                       //
-    // **************************************************** //
+    /************************************************************
+     * IDataServiceSupporterBeanList                            *
+     * ({@link com.taoswork.tallybook.dynamic.dataservice.config.beanlist.IDataServiceSupporterBeanList})
+     ************************************************************/
 
     @Override
     @Bean(name = IDataServiceDefinition.DATA_SERVICE_DEFINITION_BEAN_NAME)
@@ -115,6 +118,12 @@ public abstract class ADataServiceBeanConfiguration
     }
 
     @Override
+    @Bean(name = IDataService.ERROR_MESSAGE_SOURCE_BEAN_NAME)
+    public MessageSource errorMessageSource() {
+        return helper.createErrorMessageSource();
+    }
+
+    @Override
     @Bean(name = FriendlyMetaInfoService.SERVICE_NAME)
     public FriendlyMetaInfoService friendlyMetaInfoService(){
         return new FriendlyMetaInfoServiceImpl();
@@ -125,10 +134,12 @@ public abstract class ADataServiceBeanConfiguration
     public SecurityVerifierAgent securityVerifierAgent() {
         return new SecurityVerifierAgent();
     }
+    /* IDataServiceSupporterBeanList                            */
 
-    // **************************************************** //
-    //  IEntityBeanList                                     //
-    // **************************************************** //
+    /************************************************************
+     * IEntityBeanList                                          *
+     * ({@link com.taoswork.tallybook.dynamic.dataservice.config.beanlist.IEntityBeanList})
+     ************************************************************/
 
     @Override
     @Bean(name = EntityValidationService.COMPONENT_NAME)
@@ -147,19 +158,21 @@ public abstract class ADataServiceBeanConfiguration
     public DynamicEntityPersistenceService dynamicEntityPersistenceService(){
         return new DynamicEntityPersistenceServiceImpl();
     }
+    /* IEntityBeanList                                          */
 
-//    @Override
-//    @Bean(name = FrontEndDynamicEntityService.SERVICE_NAME)
-//    public FrontEndDynamicEntityService dynamicServerEntityService(){
-//        return new FrontEndDynamicEntityServiceImpl();
-//    }
+    /************************************************************
+     * IPersistenceBeanList                                     *
+     * ({@link com.taoswork.tallybook.dynamic.dataservice.config.beanlist.IPersistenceBeanList})
+     ************************************************************/
 
     @Override
+    //NOT A BEAN, need to be override and annotated with @Bean
     public DataSource serviceDataSource() {
         return helper.createDefaultDataSource();
     }
 
     @Override
+    //NOT A BEAN, need to be override and annotated with @Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         return helper.createAnEntityManagerFactory(serviceDataSource(),
                 helper.createAPersistenceUnitPostProcessor(
@@ -167,6 +180,7 @@ public abstract class ADataServiceBeanConfiguration
     }
 
     @Override
+    //NOT A BEAN, need to be override and annotated with @Bean
     public JpaTransactionManager jpaTransactionManager() {
         return helper.createJpaTransactionManager(entityManagerFactory().getObject());
     }
@@ -189,6 +203,7 @@ public abstract class ADataServiceBeanConfiguration
     public PersistenceManagerInvoker persistenceManagerInvoker() {
         return new PersistenceManagerInvoker();
     }
+    /* IPersistenceBeanList                                     */
 
     // **************************************************** //
     //                                                      //

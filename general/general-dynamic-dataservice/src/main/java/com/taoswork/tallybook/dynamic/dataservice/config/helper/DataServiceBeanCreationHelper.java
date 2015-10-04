@@ -147,7 +147,20 @@ public class DataServiceBeanCreationHelper {
         return ms;
     }
 
+    public MessageSource createErrorMessageSource() {
+        ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
+        final String[] messageDirs = dataServiceDefinition.getErrorMessageDirectory().split(
+            IDataServiceDefinition.FILE_DELIMTER);
+
+        List<String> basenameList = MessageUtility.getMessageBasenames(resolver, messageDirs, null);
+        basenameList.add("classpath:/error-messages/ValidationMessages");
+        basenameList.add("classpath:/error-messages/ServiceExceptionMessages");
+        ms.setBasenames(basenameList.toArray(new String[basenameList.size()]));
+
+        return ms;
+    }
 
     // **************************************************** //
     //                                                      //
@@ -167,5 +180,4 @@ public class DataServiceBeanCreationHelper {
         postProcessor.setPersistenceProps(propertiesProperties);
         return postProcessor;
     }
-
 }

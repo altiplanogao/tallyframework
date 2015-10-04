@@ -50,29 +50,17 @@ public class EntityValidationServiceImpl implements EntityValidationService {
 
         try {
             EntityValidationErrors entityErrors = new EntityValidationErrors();
-            List<String> fieldFriendlyNames = new ArrayList<String>();
-            for (Map.Entry<String, FieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()){
-                String fieldName = fieldMetadataEntry.getKey();
-                FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
-                Field field = fieldMetadata.getField();
-                Object fieldValue = field.get(entity);
-                FieldValidationErrors fieldError = fieldValidatorManager.validate(fieldMetadata, fieldValue);
-                if(!fieldError.isValid()){
-                    fieldFriendlyNames.add(fieldMetadata.getFriendlyName());
-                    entityErrors.addFieldErrors(fieldError);
-                }
-            }
-            entityErrors.appendErrorFieldsNames(fieldFriendlyNames);
 
+            fieldValidatorManager.validate(entity, classMetadata, entityErrors);
             entityValidatorManager.validate(entity, classMetadata, entityErrors);
 
             if(!entityErrors.isValid()){
                 throw new EntityValidationException(entityResult, entityErrors);
             }
-
         } catch (IllegalAccessException e) {
             throw new ServiceException(e);
         }
 
     }
+
 }

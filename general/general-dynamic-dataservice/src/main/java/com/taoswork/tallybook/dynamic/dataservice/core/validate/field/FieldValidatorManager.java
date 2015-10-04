@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.validate.field;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.FieldValidationErrors;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -9,6 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -124,6 +128,22 @@ public class FieldValidatorManager {
             cachedFieldValidators.put(typeType, cache);
         }
         return cache;
+    }
+
+    public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityErrors) throws IllegalAccessException {
+        List<String> fieldFriendlyNames = new ArrayList<String>();
+        for (Map.Entry<String, FieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()){
+            String fieldName = fieldMetadataEntry.getKey();
+            FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+            Field field = fieldMetadata.getField();
+            Object fieldValue = field.get(entity);
+            FieldValidationErrors fieldError = this.validate(fieldMetadata, fieldValue);
+            if(!fieldError.isValid()){
+                fieldFriendlyNames.add(fieldMetadata.getFriendlyName());
+                entityErrors.addFieldErrors(fieldError);
+            }
+        }
+        entityErrors.appendErrorFieldsNames(fieldFriendlyNames);
     }
 
     public FieldValidationErrors validate(FieldMetadata fieldMetadata, Object fieldValue) {

@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -32,18 +33,18 @@ import java.util.Locale;
 public class FrontEndEntityService implements IFrontEndEntityService {
     private final static Logger LOGGER = LoggerFactory.getLogger(FrontEndEntityService.class);
 
+    private final IDataService dataService;
     private final DynamicEntityService dynamicEntityService;
     private final MessageSource errorMessageSource;
 
-    public FrontEndEntityService(DynamicEntityService dynamicEntityService,
-                                 MessageSource errorMessageSource) {
-        this.dynamicEntityService = dynamicEntityService;
-        this.errorMessageSource = errorMessageSource;
+    public FrontEndEntityService(IDataService dataService) {
+        this.dataService = dataService;
+        this.dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);;
+        this.errorMessageSource = dataService.getService(IDataService.ERROR_MESSAGE_SOURCE_BEAN_NAME);
     }
 
-    public static FrontEndEntityService newInstance(DynamicEntityService dynamicEntityService,
-                                                    MessageSource errorMessageSource) {
-        return new FrontEndEntityService(dynamicEntityService, errorMessageSource);
+    public static FrontEndEntityService newInstance(IDataService dataService) {
+        return new FrontEndEntityService(dataService);
     }
 
     private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus) {
@@ -55,7 +56,6 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale) {
         Class<? extends Persistable> entityCeilingType = request.getEntityType();
         Class<? extends Persistable> entityType = response.getEntityType();
-
         if(entityType == null)
             return;
 

@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.dataservice.management.api;
 
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
@@ -39,9 +40,6 @@ public class TallyApiController  {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    @Resource(name = ApplicationCommonConfig.ERROR_MESSAGE_SOURCE)
-    protected MessageSource errorMessageSource;
-
     private Set<String> getParamInfoFilter(){
         return EntityInfoType.ApiSupportedType;
     }
@@ -59,10 +57,10 @@ public class TallyApiController  {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request),
             requestParams, getParamInfoFilter());
 
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
-        EntityQueryResponse response = dynamicServerEntityService.query(queryRequest, request.getLocale());
+        EntityQueryResponse response = frontEndEntityService.query(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
 
@@ -79,10 +77,10 @@ public class TallyApiController  {
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
-        DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityType.getName());
-        IFrontEndEntityService dynamicServerEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
+        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
 
-        EntityReadResponse response = dynamicServerEntityService.read(readRequest, request.getLocale());
+        EntityReadResponse response = frontEndEntityService.read(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
  /*   @RequestMapping("/greeting")

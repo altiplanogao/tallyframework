@@ -17,6 +17,8 @@ public interface IDataServiceSupporterBeanList {
 
     MessageSource entityMessageSource();
 
+    MessageSource errorMessageSource();
+
     FriendlyMetaInfoService friendlyMetaInfoService();
 
     SecurityVerifierAgent securityVerifierAgent();

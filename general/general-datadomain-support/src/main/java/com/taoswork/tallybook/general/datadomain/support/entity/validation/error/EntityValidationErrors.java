@@ -18,6 +18,19 @@ public class EntityValidationErrors extends ValidationErrors {
             existing.absorb(fieldErrors);
         }
     }
+    public void appendFieldError(String fieldName, String errorCode) {
+        appendFieldError(fieldName, errorCode, null);
+    }
+
+    public void appendFieldError(String fieldName, String errorCode, Object[] args) {
+        FieldValidationErrors fieldErrors = new FieldValidationErrors(fieldName);
+        fieldErrors.appendError(errorCode, args);
+        this.addFieldErrors(fieldErrors);
+    }
+
+    public Collection<FieldValidationErrors> getFieldErrors(){
+        return Collections.unmodifiableCollection(fieldErrorsMap.values());
+    }
 
     @Override
     public boolean isValid() {
@@ -35,9 +48,5 @@ public class EntityValidationErrors extends ValidationErrors {
         sc.setFixes("", ", ", "");
         sc.addAll(fieldFriendlyNames);
         this.appendError(new ValidationError("validation.error.global.error.fields", new Object[]{}));
-    }
-
-    public Collection<FieldValidationErrors> getFieldErrors(){
-        return Collections.unmodifiableCollection(fieldErrorsMap.values());
     }
 }

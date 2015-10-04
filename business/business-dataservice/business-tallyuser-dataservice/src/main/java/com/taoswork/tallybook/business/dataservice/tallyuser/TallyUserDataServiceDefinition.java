@@ -27,13 +27,13 @@ public final class TallyUserDataServiceDefinition implements IDataServiceDefinit
     public static final String TUSER_TRANSACTION_MANAGER_NAME = "tallyuserTransactionManager";
 
     public static final String TUSER_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
-            "tallyuser/";
+        "tallyuser/";
 
     public static final String TUSER_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
         "tallyuser/";
 
     public static final String TUSER_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
-            "tallyuser/";
+        "tallyuser/";
 
     @Override
     public String getDataServiceName() {

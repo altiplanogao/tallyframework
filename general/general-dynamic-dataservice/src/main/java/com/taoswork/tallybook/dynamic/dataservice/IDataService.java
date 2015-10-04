@@ -6,10 +6,19 @@ import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 import java.util.Map;
 
 /**
- * Created by Gao Yuan on 2015/5/11.
+ * See Definition in :
+ * IDataServiceDefinition
+ * ({@link com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition})
+ *
+ * Beans loaded to IDataService by DataServiceBase( ... annotatedConfigurationClasses)
+ *
+ * Configuration classes:
+ * ADataServiceBeanConfiguration
+ * ({@link com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration})
  */
 public interface IDataService {
     public static final String DATASERVICE_NAME_S_BEAN_NAME = "DataServiceBeanName";
+    public static final String ERROR_MESSAGE_SOURCE_BEAN_NAME = "ErrorMessageSource";
 
     <T> T getService(String serviceName);
 
