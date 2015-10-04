@@ -769,7 +769,6 @@ public class AdminBasicEntityController extends BaseController {
         if(errors != null && errors.containsError()){
             model.addAttribute("errors", errors.getGlobal());
         }
-
     }
 
     protected String makeDataView(Model model, EntityResponse data) {

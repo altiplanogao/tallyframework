@@ -27,8 +27,6 @@ public abstract class BaseController {
     }
 
     public BaseController(){
-        LOGGER.info("[CONTROLLER: " +
-                this.getClass().getSimpleName() + "] Constructor" );
     }
 
     public static boolean isSimpleViewRequest(HttpServletRequest request) {

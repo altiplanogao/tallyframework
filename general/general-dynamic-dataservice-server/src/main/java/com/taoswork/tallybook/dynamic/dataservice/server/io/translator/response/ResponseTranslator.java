@@ -69,7 +69,9 @@ public class ResponseTranslator {
         translateRequest(request, response);
 
         EntityQueryResult queryResult = ResultTranslator.convertQueryResult(request, criteriaResult);
-        response.setEntityType(criteriaResult.getEntityType());
+        if(criteriaResult != null){
+            response.setEntityType(criteriaResult.getEntityType());
+        }
         response.setEntities(queryResult);
 
         handleServiceException(e, response, locale);

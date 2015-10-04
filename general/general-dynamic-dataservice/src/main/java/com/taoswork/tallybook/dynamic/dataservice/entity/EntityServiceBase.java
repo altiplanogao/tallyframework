@@ -11,6 +11,5 @@ public abstract class EntityServiceBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityServiceBase.class);
 
     public EntityServiceBase(){
-        LOGGER.debug("[ENTITY SERVICE] " + this.getClass().getSimpleName());
     }
 }

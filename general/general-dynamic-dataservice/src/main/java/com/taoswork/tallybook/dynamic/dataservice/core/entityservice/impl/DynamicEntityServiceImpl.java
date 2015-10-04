@@ -44,20 +44,20 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
     protected ISecurityVerifier securityVerifier;
 
-    public DynamicEntityServiceImpl(){
+    public DynamicEntityServiceImpl() {
     }
 
-    private void entityAccessExceptionHandler(Exception e) throws ServiceException{
-        if(e instanceof ServiceException)
-            throw (ServiceException)e;
+    private void entityAccessExceptionHandler(Exception e) throws ServiceException {
+        if (e instanceof ServiceException)
+            throw (ServiceException) e;
         throw new ServiceException(e);
     }
 
     @Override
     public <T extends Persistable> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
-        try{
+        try {
             return persistenceService.create(ceilingType, entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
@@ -65,9 +65,9 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> EntityResult<T> create(final Entity entity) throws ServiceException {
-        try{
+        try {
             return persistenceService.create(entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
@@ -75,7 +75,12 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
-        return persistenceService.read(entityClz, key);
+        try {
+            return persistenceService.read(entityClz, key);
+        } catch (Exception e) {
+            entityAccessExceptionHandler(e);
+        }
+        return null;
     }
 
     @Override
@@ -86,19 +91,19 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
-        try{
+        try {
             return persistenceService.update(ceilingType, entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> update(final Entity entity)throws ServiceException{
-        try{
+    public <T extends Persistable> EntityResult<T> update(final Entity entity) throws ServiceException {
+        try {
             return persistenceService.update(entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
@@ -106,21 +111,21 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
-        try{
+        try {
             persistenceService.delete(ceilingType, entity);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return false;
     }
 
     @Override
-    public <T extends Persistable> boolean delete(final Entity entity, String id)throws ServiceException{
-        try{
+    public <T extends Persistable> boolean delete(final Entity entity, String id) throws ServiceException {
+        try {
             persistenceService.delete(entity, id);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             entityAccessExceptionHandler(e);
             return false;
         }
@@ -128,14 +133,19 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException {
-        return persistenceService.query(entityClz, query);
+        try {
+            return persistenceService.query(entityClz, query);
+        } catch (Exception e) {
+            entityAccessExceptionHandler(e);
+            return null;
+        }
     }
 
     @Override
     public <T extends Persistable> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         try {
-            Persistable entity = (Persistable)rootable.newInstance();
+            Persistable entity = (Persistable) rootable.newInstance();
             EntityResult<T> entityResult = new EntityResult<T>();
             Class clz = entity.getClass();
             ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
@@ -156,13 +166,13 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public Class<?> getRootInstantiableEntityClass(Class<?> entityClz){
+    public Class<?> getRootInstantiableEntityClass(Class<?> entityClz) {
         Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         return entityRootClz;
     }
 
     @Override
-    public <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy){
+    public <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy) {
         return dynamicEntityMetadataAccess.getClassMetadata(entityType, withHierarchy);
     }
 
@@ -178,8 +188,8 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> Access getAuthorizeAccess(Class<T> entityType, Access mask){
-        if(mask == null)mask = Access.Crudq;
+    public <T extends Persistable> Access getAuthorizeAccess(Class<T> entityType, Access mask) {
+        if (mask == null) mask = Access.Crudq;
         Access access = securityVerifier.getAllPossibleAccess(entityType.getName(), mask);
         return access;
     }

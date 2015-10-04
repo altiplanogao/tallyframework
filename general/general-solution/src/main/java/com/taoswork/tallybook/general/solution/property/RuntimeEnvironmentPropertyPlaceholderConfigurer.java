@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.general.solution.property;
 
 import com.taoswork.tallybook.general.extension.collections.PropertiesUtility;
-import com.taoswork.tallybook.general.solution.logging.SupportLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -23,6 +22,8 @@ public class RuntimeEnvironmentPropertyPlaceholderConfigurer extends
         PropertyPlaceholderConfigurer
         implements PropertiesSubCollectionProvider,
         InitializingBean {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeEnvironmentPropertyPlaceholderConfigurer.class);
+
     public static final String KEY_NAME_4_RUNTIME_ENVIRONMENT = "runtime.environment";
 
     public static final String ENVIRONMENT_NAME_DEVELOPMENT = "development";
@@ -31,9 +32,6 @@ public class RuntimeEnvironmentPropertyPlaceholderConfigurer extends
 
     protected static Set<Resource> insidePathResource = new LinkedHashSet<Resource>();
     protected static Set<Resource> defaultPathResource = new LinkedHashSet<Resource>();
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeEnvironmentPropertyPlaceholderConfigurer.class);
-    protected SupportLogger logger = new SupportLogger("UserOverride", this.getClass());
 
     static {
         insidePathResource.add(new ClassPathResource("/"));

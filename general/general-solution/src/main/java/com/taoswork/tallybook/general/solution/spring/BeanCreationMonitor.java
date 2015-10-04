@@ -148,7 +148,7 @@ public class BeanCreationMonitor implements
             try {
                 realBeanHash = applicationContext.getBean(beanProInfo.beanName).hashCode();
             } catch (Exception xx) {
-                LOGGER.warn("Bean [" + beanProInfo.beanName + "]@" + name + " failed to load.");
+//                LOGGER.warn("Bean [" + beanProInfo.beanName + "]@" + name + " failed to load.");
                 idx = "*";
             }
             boolean goodbean = (procBeanHash == realBeanHash);

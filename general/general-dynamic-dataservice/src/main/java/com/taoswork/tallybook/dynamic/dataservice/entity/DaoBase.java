@@ -11,6 +11,5 @@ public class DaoBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(DaoBase.class);
 
     public DaoBase(){
-        LOGGER.debug("[DAO] " + this.getClass().getSimpleName());
     }
 }

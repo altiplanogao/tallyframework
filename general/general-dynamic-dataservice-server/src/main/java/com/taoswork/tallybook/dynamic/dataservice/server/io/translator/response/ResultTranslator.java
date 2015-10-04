@@ -28,9 +28,11 @@ public class ResultTranslator {
                                                        CriteriaQueryResult<?> criteriaResult){
         EntityQueryResult result = new EntityQueryResult();
         result.setStartIndex(request.getStartIndex())
-            .setPageSize(request.getPageSize())
-            .setTotalCount(criteriaResult.getTotalCount())
-            .setRecords(criteriaResult.getEntityCollection());
+            .setPageSize(request.getPageSize());
+        if(criteriaResult != null) {
+            result.setTotalCount(criteriaResult.getTotalCount())
+                .setRecords(criteriaResult.getEntityCollection());
+        }
         return result;
     }
 

@@ -22,6 +22,9 @@ public class LinkBuilder {
     }
 
     public static void buildLinkForQueryResults(String fullRequestUrl, EntityQueryResponse response){
+        appendEntityLinks(UrlBuilder.fromString(fullRequestUrl).withParameters(null).toString(), response);
+        if(response.getErrors().containsError())
+            return;;
         QueryResultRange currentRange = response.getEntities().makeRange();
         QueryResultRange next = currentRange.next();
         QueryResultRange pre = currentRange.pre();
@@ -44,7 +47,6 @@ public class LinkBuilder {
             }
             response.add(new Link(urlBuilder.toString()).withRel(Link.REL_NEXT));
         }
-        appendEntityLinks(UrlBuilder.fromString(fullRequestUrl).withParameters(null).toString(), response);
     }
 
     public static void buildLinkForReadResults(String fullUrl, EntityReadResponse response) {
