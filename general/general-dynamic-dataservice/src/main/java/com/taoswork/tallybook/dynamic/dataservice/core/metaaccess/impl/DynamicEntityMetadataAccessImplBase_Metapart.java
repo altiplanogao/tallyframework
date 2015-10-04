@@ -81,7 +81,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
             entityTypes = new HashSet<Class>();
             new SetBuilder<Class>(entityTypes).addAll(entityClasses);
 
-            entityInterfaces = ClassUtility.getAllImplementedInterfaces(Persistable.class, entityClasses);
+            entityInterfaces = ClassUtility.getAllSupers(Persistable.class, entityClasses, true, true);
 
             entityTypesWithInterfaces = new HashSet<Class>();
             entityTypesWithInterfaces.addAll(entityTypes);
@@ -277,7 +277,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
             for(Class entityType : entityTypesWithInterfaces){
                 Collection<Class> _interfaces = new ArrayList<Class>();
                 _interfaces.add(entityType);
-                ClassUtility.getAllImplementedInterfaces(Persistable.class, entityType, _interfaces);
+                ClassUtility.getAllSupers(Persistable.class, entityType, true, false, _interfaces);
                 Class<?> fallback = null;
                 Class<?> guardian = null;
                 for(Class<?> _intf : _interfaces){

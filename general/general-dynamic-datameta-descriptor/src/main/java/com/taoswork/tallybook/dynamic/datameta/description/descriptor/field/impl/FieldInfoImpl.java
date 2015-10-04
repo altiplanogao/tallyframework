@@ -132,12 +132,12 @@ public class FieldInfoImpl
     }
 
     @Override
-    public void addFacet(IFieldFacet enumFacetInfo) {
-        if(enumFacetInfo == null)
+    public void addFacet(IFieldFacet facetInfo) {
+        if(facetInfo == null)
             return;
         if(facets == null){
             facets = new HashMap<FieldFacetType, IFieldFacet>();
         }
-        facets.put(enumFacetInfo.getType(), enumFacetInfo);
+        facets.put(facetInfo.getType(), facetInfo);
     }
 }

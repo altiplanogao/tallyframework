@@ -29,6 +29,9 @@ public class TallyModuleDataServiceDefinition implements IDataServiceDefinition 
     public static final String TMODULE_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
             "tallymodule/";
 
+    public static final String TMODULE_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
+        "tallymodule/";
+
     public static final String TMODULE_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallymodule/";
 
@@ -75,6 +78,11 @@ public class TallyModuleDataServiceDefinition implements IDataServiceDefinition 
     @Override
     public String getEntityMessageDirectory() {
         return TMODULE_ENTITY_MESSAGES;
+    }
+
+    @Override
+    public String getErrorMessageDirectory() {
+        return TMODULE_ERROR_MESSAGES;
     }
 
     @Override

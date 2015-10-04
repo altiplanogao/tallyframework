@@ -29,6 +29,9 @@ public final class TallyUserDataServiceDefinition implements IDataServiceDefinit
     public static final String TUSER_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
             "tallyuser/";
 
+    public static final String TUSER_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
+        "tallyuser/";
+
     public static final String TUSER_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallyuser/";
 
@@ -75,6 +78,11 @@ public final class TallyUserDataServiceDefinition implements IDataServiceDefinit
     @Override
     public String getEntityMessageDirectory() {
         return TUSER_ENTITY_MESSAGES;
+    }
+
+    @Override
+    public String getErrorMessageDirectory() {
+        return TUSER_ERROR_MESSAGES;
     }
 
     @Override

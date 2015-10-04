@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
@@ -11,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -134,11 +132,12 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityCreateRequest makeAddPostRequest(EntityTypeParameter entityTypeParam,
-                                                         String entityUri, String fullUrl, Entity entity) {
+    public static EntityCreateRequest makeCreateRequest(EntityTypeParameter entityTypeParam,
+                                                        String entityUri, String fullUrl, Entity entity) {
         EntityCreateRequest request = new EntityCreateRequest(entity);
         request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.clearEntityInfoType();
+        request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
@@ -152,17 +151,18 @@ public class Parameter2RequestTranslator {
         return request;
     }
 
-    public static EntityUpdateRequest makeUpdatePostRequest(EntityTypeParameter entityTypeParam,
-                                                            String entityUri, String fullUrl, Entity entity) {
+    public static EntityUpdateRequest makeUpdateRequest(EntityTypeParameter entityTypeParam,
+                                                        String entityUri, String fullUrl, Entity entity) {
         EntityUpdateRequest request = new EntityUpdateRequest(entity);
         request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.clearEntityInfoType();
+        request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
-    public static EntityDeletePostRequest makeDeletePostRequest(EntityTypeParameter entityTypeParam,
-                                                                String entityUri, String fullUrl, String id, Entity entity) {
-        EntityDeletePostRequest request = new EntityDeletePostRequest(entity);
+    public static EntityDeleteRequest makeDeleteRequest(EntityTypeParameter entityTypeParam,
+                                                        String entityUri, String fullUrl, String id, Entity entity) {
+        EntityDeleteRequest request = new EntityDeleteRequest(entity);
         request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
         request.setId(id);
         if (entity.getEntityType() == null) {

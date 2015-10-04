@@ -103,7 +103,7 @@ public class PersonDaoImpl
     public Person readPersonByAnyIdentity(String mobile_Email_PersonName){
         if(AccountUtility.isEmail(mobile_Email_PersonName)){
             return readPersonByEmail(mobile_Email_PersonName);
-        }else if(AccountUtility.isMobile(mobile_Email_PersonName)){
+        }else if(AccountUtility.isPhone(mobile_Email_PersonName)){
             return readPersonByMobile(mobile_Email_PersonName);
         }else {
             return readPersonByName(mobile_Email_PersonName);

@@ -2,25 +2,25 @@ package com.taoswork.tallybook.dynamic.dataservice.core.validate;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import org.springframework.validation.Errors;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
 
 /**
  * Created by Gao Yuan on 2015/9/28.
  */
 public class EntityValidationException extends ServiceException {
     private final EntityResult entity;
-    private EntityValidationResult entityValidationResult;
-    public EntityValidationException(EntityResult entity, EntityValidationResult entityValidationResult) {
+    private EntityValidationErrors entityValidationError;
+    public EntityValidationException(EntityResult entity, EntityValidationErrors entityValidationError) {
         this.entity = entity;
-        this.entityValidationResult = entityValidationResult;
+        this.entityValidationError = entityValidationError;
     }
 
-    public EntityValidationResult getEntityValidationResult() {
-        return entityValidationResult;
+    public EntityValidationErrors getEntityValidationError() {
+        return entityValidationError;
     }
 
-    public void setEntityValidationResult(EntityValidationResult entityValidationResult) {
-        this.entityValidationResult = entityValidationResult;
+    public void setEntityValidationError(EntityValidationErrors entityValidationError) {
+        this.entityValidationError = entityValidationError;
     }
 
     public EntityResult getEntity() {

@@ -12,6 +12,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEnti
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,45 +93,61 @@ public class TallyUserEntityServiceTest {
     }
 
     @Test
-    public void testDynamicEntityService() throws ServiceException {
+    public void testDynamicEntityService() {
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
-
-        {
-            Person personImp = dynamicEntityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
-            Person person = dynamicEntityService.straightRead(Person.class, Long.valueOf(-1L));
-            Assert.assertEquals(person.getUuid(), personImp.getUuid());
-            Assert.assertEquals(person.getId(), personImp.getId());
-
-            Assert.assertNotNull(person);
-            Assert.assertTrue(person.getName().equals("admin")); //Loaded from load_person.xml
-        }
-        CriteriaQueryResult<Person> personsExisting = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
-        long existingCount = personsExisting.getTotalCount();
-        Assert.assertTrue(existingCount >= 1);
-
-        int createAttempt = 10;
-        int created = 0;
-        try {
-            for (int i = 0; i < createAttempt; ++i) {
-
-                int expected = i + 1;
-                Person admin = new PersonImpl();
-                admin.setName("admin").setUuid(UUID.randomUUID().toString());
-                dynamicEntityService.create(Person.class, admin);
-
-                Long id = admin.getId();
-                Person adminFromDb = dynamicEntityService.straightRead(Person.class, Long.valueOf(id));
-
-                Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
-                Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
-                created++;
+        try{
+            Person admin = new PersonImpl();
+            admin.setName("admin").setUuid(UUID.randomUUID().toString());
+            dynamicEntityService.create(Person.class, admin);
+            Assert.fail();
+        } catch (ServiceException e) {
+            if(!(e instanceof EntityValidationException)){
+                Assert.fail();
             }
-        } finally {
-            Assert.assertEquals(createAttempt, created);
         }
 
-        CriteriaQueryResult<Person> persons = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
-        Assert.assertEquals(persons.getTotalCount().longValue(), existingCount + createAttempt);
+        try {
+
+            {
+                Person personImp = dynamicEntityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
+                Person person = dynamicEntityService.straightRead(Person.class, Long.valueOf(-1L));
+                Assert.assertEquals(person.getUuid(), personImp.getUuid());
+                Assert.assertEquals(person.getId(), personImp.getId());
+
+                Assert.assertNotNull(person);
+                Assert.assertTrue(person.getName().equals("admin")); //Loaded from load_person.xml
+            }
+            CriteriaQueryResult<Person> personsExisting = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+            long existingCount = personsExisting.getTotalCount();
+            Assert.assertTrue(existingCount >= 1);
+
+            int createAttempt = 10;
+            int created = 0;
+            try {
+                for (int i = 0; i < createAttempt; ++i) {
+
+                    int expected = i + 1;
+                    Person admin = new PersonImpl();
+                    admin.setName("admin").setUuid(UUID.randomUUID().toString());
+                    admin.setMobile("1234567890" + (1000 + i));
+                    dynamicEntityService.create(Person.class, admin);
+
+                    Long id = admin.getId();
+                    Person adminFromDb = dynamicEntityService.straightRead(Person.class, Long.valueOf(id));
+
+                    Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
+                    Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
+                    created++;
+                }
+            } finally {
+                Assert.assertEquals(createAttempt, created);
+            }
+
+            CriteriaQueryResult<Person> persons = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+            Assert.assertEquals(persons.getTotalCount().longValue(), existingCount + createAttempt);
+        }catch (ServiceException e){
+            Assert.fail(e.getMessage());
+        }
     }
 }

@@ -122,8 +122,8 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
             return true;
         }catch (Exception e){
             entityAccessExceptionHandler(e);
+            return false;
         }
-        return false;
     }
 
     @Override

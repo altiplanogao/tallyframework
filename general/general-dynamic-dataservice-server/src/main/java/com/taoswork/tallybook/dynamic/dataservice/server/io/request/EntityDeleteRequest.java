@@ -5,9 +5,9 @@ import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 /**
  * Created by Gao Yuan on 2015/9/23.
  */
-public class EntityDeletePostRequest extends EntityInstancePostRequest {
+public class EntityDeleteRequest extends EntityInstancePostRequest {
     protected String id;
-    public EntityDeletePostRequest(Entity entity) {
+    public EntityDeleteRequest(Entity entity) {
         super(entity);
     }
 
@@ -15,7 +15,7 @@ public class EntityDeletePostRequest extends EntityInstancePostRequest {
         return id;
     }
 
-    public EntityDeletePostRequest setId(String id) {
+    public EntityDeleteRequest setId(String id) {
         this.id = id;
         return this;
     }

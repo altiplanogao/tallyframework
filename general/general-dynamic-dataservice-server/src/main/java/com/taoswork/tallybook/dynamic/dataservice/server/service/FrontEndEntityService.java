@@ -143,6 +143,8 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         }finally {
             responseTranslator().translateCreateResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
         }
         return response;
     }
@@ -177,12 +179,14 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         }finally {
             responseTranslator().translateUpdateResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
         }
         return response;
     }
 
     @Override
-    public EntityDeleteResponse delete(EntityDeletePostRequest request, Locale locale) {
+    public EntityDeleteResponse delete(EntityDeleteRequest request, Locale locale) {
         EntityDeleteResponse response = new EntityDeleteResponse();
         boolean deleted = false;
         ServiceException se = null;

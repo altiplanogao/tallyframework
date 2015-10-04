@@ -7,10 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Gao Yuan on 2015/8/22.
+ * Some arbitrary code added for easy debugging.
  */
 public class PassAllSecurityVerifier implements ISecurityVerifier {
     private static final Logger LOGGER = LoggerFactory.getLogger(PassAllSecurityVerifier.class);
+    private final boolean fixedCanAccess = true;
 
     @Override
     public Access getAllPossibleAccess(String resourceEntity, Access mask) {
@@ -20,7 +21,8 @@ public class PassAllSecurityVerifier implements ISecurityVerifier {
     @Override
     public boolean canAccess(String resourceEntity, Access access) {
         LOGGER.trace("hardcoded to pass: {0} {1}", resourceEntity, access);
-        return true;
+        boolean _canAccess = fixedCanAccess;
+        return _canAccess;
     }
 
     @Override
@@ -30,12 +32,17 @@ public class PassAllSecurityVerifier implements ISecurityVerifier {
         } else {
             LOGGER.trace("hardcoded to pass '{0}' instance: {1}", instances.length, access);
         }
-        return true;
+        boolean _canAccess = fixedCanAccess;
+        return _canAccess;
     }
 
     @Override
     public void checkAccess(String resourceEntity, Access access) throws NoPermissionException {
         LOGGER.trace("hardcoded to pass: {0} {1}", resourceEntity, access);
+        boolean _canAccess = fixedCanAccess;
+        if(!_canAccess){
+            throw new NoPermissionException();
+        }
     }
 
     @Override
@@ -45,11 +52,16 @@ public class PassAllSecurityVerifier implements ISecurityVerifier {
         } else {
             LOGGER.trace("hardcoded to pass '{0}' instance: {1}", instances.length, access);
         }
+        boolean _canAccess = fixedCanAccess;
+        if(!_canAccess){
+            throw new NoPermissionException();
+        }
     }
 
     @Override
     public boolean canAccessMappedResource(String mappedResource, Access access) {
         LOGGER.trace("hardcoded to pass: {0} {1}", mappedResource, access);
-        return true;
+        boolean _canAccess = fixedCanAccess;
+        return _canAccess;
     }
 }

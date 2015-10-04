@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.validate.field;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result.ValueValidationResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +39,17 @@ public abstract class FieldValidatorBase<T> implements IFieldValidator {
     }
 
     @Override
-    public final ValueValidationResult validate(FieldMetadata fieldMetadata, Object fieldValue) {
+    public final ValidationError validate(FieldMetadata fieldMetadata, Object fieldValue) {
         if(canHandle(fieldMetadata)){
             if(null == fieldValue){
                 if(nullValueAsValid())
                     return null;
             }
-            ValueValidationResult result = this.doValidate(fieldMetadata, (T)fieldValue);
+            ValidationError result = this.doValidate(fieldMetadata, (T)fieldValue);
             return result;
         }
         return null;
     }
 
-    protected abstract ValueValidationResult doValidate(FieldMetadata fieldMetadata, T fieldValue);
+    protected abstract ValidationError doValidate(FieldMetadata fieldMetadata, T fieldValue);
 }

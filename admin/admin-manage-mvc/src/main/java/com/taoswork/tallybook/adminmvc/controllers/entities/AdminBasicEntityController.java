@@ -6,12 +6,14 @@ import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.dataservice.management.parameter.EntityTypeParameterBuilder;
@@ -39,7 +41,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Created by Gao Yuan on 2015/4/28.
+ *    Action            Method      Success :                       Error:NoRecord      Error:Validation    Error:Permission
+ * 1. query             get         Grid in SimplePage/FramedPage   N/A                 N/A                 Error In Page
+ * 2. createFresh       get         Edit in SimplePage/FramedPage   N/A                 N/A                 Error In Page
+ * 3. read              get         Edit in SimplePage/FramedPage   Error in Page       N/A                 Error In Page
+ * 4. create            post        Redirect Read Page              N/A                 AJAX: Error         AJAX: Error
+ * 5. update            post        Redirect Read Page              AJAX: Error         AJAX: Error         AJAX: Error
+ * 6. delete            post        Redirect Read Page              AJAX: Error         N/A                 AJAX: Error
  */
 @Controller(AdminBasicEntityController.CONTROLLER_NAME)
 @RequestMapping("/{entityTypeName:^[\\w|-|\\.]+$}")
@@ -48,11 +56,11 @@ public class AdminBasicEntityController extends BaseController {
 
     public static final String CONTROLLER_NAME = "AdminBasicEntityController";
     private static class VIEWS{
-        static final String Redirect2Home = "redirect:";
+        static final String Redirect2Home = "redirect:/";
         static final String Redirect2Failure = "redirect:failure";
         static final String Redirect2Todo = "redirect:todo";
         static final String FramedView = "entity/content/framedView";
-        static final String ModalView = "entity/content/modalView";
+        static final String SimpleView = "entity/content/simpleView";
     }
 
     @Resource(name = AdminMenuService.SERVICE_NAME)
@@ -124,7 +132,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
-        if(entityType == null){
+        if (entityType == null) {
             return VIEWS.Redirect2Home;
         }
 
@@ -133,18 +141,11 @@ public class AdminBasicEntityController extends BaseController {
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
-                request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
+            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
         entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
-        boolean success = entityQueryResponse.success();
-
-        if(!success){
-            //TODO:
-            return VIEWS.Redirect2Todo;
-        }
-
-        if (isAjaxRequest(request)) {
+        if (isAjaxDataRequest(request)) {
             return makeDataView(model, entityQueryResponse);
         }
 
@@ -160,10 +161,24 @@ public class AdminBasicEntityController extends BaseController {
         String entityResultInJson = getObjectInJson(entityQueryResponse);
         model.addAttribute("queryResult", entityResultInJson);
 
-        model.addAttribute("scope", "main");
         model.addAttribute("viewType", "entityMainGrid");
         setCommonModelAttributes(model, locale);
-        return VIEWS.FramedView;
+
+        boolean success = entityQueryResponse.success();
+        if (!success) {
+            if (!entityQueryResponse.getErrors().isAuthorized()) {
+                model.addAttribute("viewType", "noPermission");
+            } else {
+                setErrorModalAttributes(model, entityQueryResponse);
+                model.addAttribute("viewType", "uncheckedError");
+            }
+        }
+        if (isSimpleViewRequest(request)) {
+            return VIEWS.SimpleView;
+        } else {
+            model.addAttribute("scope", "main");
+            return VIEWS.FramedView;
+        }
     }
 
     /**
@@ -187,7 +202,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
-        if(entityType == null){
+        if (entityType == null) {
             return VIEWS.Redirect2Home;
         }
 
@@ -199,24 +214,12 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
-        boolean success = addResponse.success();
-        if(!success){
-            //TODO:
-            return VIEWS.Redirect2Todo;
+        if (isAjaxDataRequest(request)) {
+            return makeDataView(model, addResponse);
         }
 
         model.addAttribute("currentAction", EntityActionNames.CREATE);
         model.addAttribute("formAction", request.getRequestURL().toString());
-        if(isModalRequest(request)){
-            String entityResultInJson = getObjectInJson(addResponse);
-            model.addAttribute("addData", entityResultInJson);
-            model.addAttribute("viewType", "entityAdd");
-
-            return VIEWS.ModalView;
-        }
-        if (isAjaxRequest(request)) {
-            return this.makeDataView(model, addResponse);
-        }
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
@@ -232,9 +235,23 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("addData", entityResultInJson);
 
         model.addAttribute("viewType", "entityAdd");
-        model.addAttribute("formScope", "main");
         setCommonModelAttributes(model, locale);
-        return VIEWS.FramedView;
+
+        boolean success = addResponse.success();
+        if (!success) {
+            if (!addResponse.getErrors().isAuthorized()) {
+                model.addAttribute("viewType", "noPermission");
+            } else {
+                setErrorModalAttributes(model, addResponse);
+                model.addAttribute("viewType", "uncheckedError");
+            }
+        }
+        if (isSimpleViewRequest(request)) {
+            return VIEWS.SimpleView;
+        } else {
+            model.addAttribute("formScope", "main");
+            return VIEWS.FramedView;
+        }
     }
 
     /**
@@ -257,14 +274,14 @@ public class AdminBasicEntityController extends BaseController {
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName, entityForm);
         Class entityType = entityTypes.getType();
         Class entityCeilingType = entityTypes.getCeilingType();
-        if(entityCeilingType == null){
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
-        if(entityType == null){
+        if (entityType == null) {
             return VIEWS.Redirect2Failure;
         }
 
-        if(!(isAjaxRequest(request))){
+        if (!(isAjaxRequest(request))) {
             return VIEWS.Redirect2Failure;
         }
 
@@ -272,18 +289,17 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
-        EntityCreateRequest createRequest = Parameter2RequestTranslator.makeAddPostRequest(entityTypes,
+        EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
-
         EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
         boolean success = createResponse.success();
-        if(!success){
+        if (!success) {
             return this.makeDataView(model, createResponse);
+        } else {
+            String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
+            return makeRedirectView(model, resultUrl);
         }
-
-        String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
-        return makeRedirectView(model, resultUrl);
     }
 
 
@@ -318,24 +334,12 @@ public class AdminBasicEntityController extends BaseController {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
-        boolean success = readResponse.success();
-        if(!success){
-            //TODO:
-            return VIEWS.Redirect2Todo;
+        if (isAjaxDataRequest(request)) {
+            return makeDataView(model, readResponse);
         }
 
         model.addAttribute("currentAction", EntityActionNames.READ);
         model.addAttribute("formAction", request.getRequestURL().toString());
-        if(isModalRequest(request)){
-            String entityResultInJson = getObjectInJson(readResponse);
-            model.addAttribute("readResult", entityResultInJson);
-            model.addAttribute("viewType", "entityView");
-
-            return VIEWS.ModalView;
-        }
-        if (isAjaxRequest(request)) {
-            return this.makeDataView(model, readResponse);
-        }
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
@@ -346,14 +350,35 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
-        model.addAttribute("formInfo", readResponse.getInfo().getDetail(EntityInfoType.Form));
+        IEntityInfo formInfo = null;
+        if(readResponse.getInfo() != null){
+            formInfo = readResponse.getInfo().getDetail(EntityInfoType.Form);
+        }
+        model.addAttribute("formInfo", formInfo);
         String entityResultInJson = getObjectInJson(readResponse);
         model.addAttribute("readResult", entityResultInJson);
 
-        model.addAttribute("formScope", "main");
         model.addAttribute("viewType", "entityView");
         setCommonModelAttributes(model, locale);
-        return VIEWS.FramedView;
+
+        boolean success = readResponse.success();
+        if(!success){
+            if(!readResponse.getErrors().isAuthorized()){
+                model.addAttribute("viewType", "noPermission");
+            }else if(!readResponse.gotRecord()){
+                model.addAttribute("viewType", "noSuchRecord");
+                model.addAttribute("id", id);
+            } else {
+                setErrorModalAttributes(model, readResponse);
+                model.addAttribute("viewType", "uncheckedError");
+            }
+        }
+        if(isSimpleViewRequest(request)){
+            return VIEWS.SimpleView;
+        } else {
+            model.addAttribute("formScope", "main");
+            return VIEWS.FramedView;
+        }
     }
 
 
@@ -398,18 +423,16 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
-        EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdatePostRequest(entityTypes,
+        EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
-
         EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
-        //TODO: handle failure and errors
         boolean success = updateResponse.success();
         if (!success) {
-            LOGGER.error("Error not handled");
-            return "redirect:" + request.getRequestURI();
+            return this.makeDataView(model, updateResponse);
+        } else {
+            return makeRedirectView(model, request.getRequestURI());
         }
-        return makeRedirectView(model, request.getRequestURI());
     }
 
 
@@ -447,24 +470,16 @@ public class AdminBasicEntityController extends BaseController {
         DynamicEntityService entityService = dataServiceManager.getDynamicEntityService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(entityService, errorMessageSource);
 
-        EntityDeletePostRequest deleteRequest = Parameter2RequestTranslator.makeDeletePostRequest(entityTypes,
+        EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);
 
         EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
         boolean success = deleteResponse.success();
         if(!success){
-            //TODO:
-            return VIEWS.Redirect2Todo;
-        }
-
-        //TODO: handle failure and errors
-        boolean delSuccess = deleteResponse.isSuccess();
-        if (delSuccess) {
+            return this.makeDataView(model, deleteResponse);
+        } else {
             String resultUrl = request.getContextPath() + "/" + entityTypeName;
             return makeRedirectView(model, resultUrl);
-        }else {
-            LOGGER.error("Error not handled");
-            return "redirect:" + request.getRequestURI();
         }
     }
 
@@ -750,6 +765,20 @@ public class AdminBasicEntityController extends BaseController {
         model.addAttribute("messageDict", messageDict);
 //        model.addAttribute("currentUrl", request.getRequestURL().toString());
         model.addAttribute("production", production);
+    }
+
+    private void setErrorModalAttributes(Model model, EntityResponse entityResponse){
+        EntityErrors errors = entityResponse.getErrors();
+        if(errors != null && errors.containsError()){
+            model.addAttribute("errors", errors.getGlobal());
+        }
+
+    }
+
+    protected String makeDataView(Model model, EntityResponse data) {
+        model.addAttribute("data", data);
+        model.addAttribute("success", data.success());
+        return DataView;
     }
 
     class Helper {

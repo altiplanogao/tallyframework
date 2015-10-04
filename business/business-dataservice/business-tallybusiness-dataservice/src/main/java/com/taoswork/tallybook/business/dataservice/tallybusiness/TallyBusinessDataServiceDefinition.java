@@ -29,6 +29,9 @@ public class TallyBusinessDataServiceDefinition  implements IDataServiceDefiniti
     public static final String TBUSINESS_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
             "tallybusiness/";
 
+    public static final String TBUSINESS_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
+        "tallybusiness/";
+
     public static final String TBUSINESS_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallybusiness/";
 
@@ -75,6 +78,11 @@ public class TallyBusinessDataServiceDefinition  implements IDataServiceDefiniti
     @Override
     public String getEntityMessageDirectory() {
         return TBUSINESS_ENTITY_MESSAGES;
+    }
+
+    @Override
+    public String getErrorMessageDirectory() {
+        return TBUSINESS_ERROR_MESSAGES;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator.Ent
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
@@ -82,6 +83,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
         securityVerifier.checkAccess(guardianName, Access.Read);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
         T result = dynamicEntityDao.read(entityRootClz, key);
+        if(result == null){
+            throw new NoSuchRecordException(entityType, key);
+        }
         return makeEntityResult(result);
     }
 
@@ -110,6 +114,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
         String guardianName = guardian.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
+        if(oldEntity == null){
+            EntityResult<T> temp = makeEntityResult(entity);
+            throw new NoSuchRecordException(ceilingType, temp.getIdValue());
+        }
         entity = oldEntity.getEntity();
         securityVerifier.checkAccess(guardianName, Access.Delete, entity);
         dynamicEntityDao.delete(entity);
@@ -131,7 +139,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         return dynamicEntityDao.query(entityRootClz, query);
     }
 
-    private <T extends Persistable> EntityResult<T> getManagedEntity(Class ceilingType, T entity) {
+    private <T extends Persistable> EntityResult<T> getManagedEntity(Class ceilingType, T entity) throws ServiceException {
         try {
             Class ceilingClz = ceilingType;
             Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(ceilingClz);
@@ -143,8 +151,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
             return oldEntity;
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());
+            throw new ServiceException(e);
         }
-        return null;
     }
 
     private <T> Class<T> getCeilingType(Entity entity) {

@@ -4,7 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.FieldValidatorBase;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result.ValueValidationResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 /**
@@ -22,15 +22,14 @@ public class FieldLengthValidator extends FieldValidatorBase<String> {
     }
 
     @Override
-    public ValueValidationResult doValidate(FieldMetadata fieldMetadata, String fieldValue) {
+    public ValidationError doValidate(FieldMetadata fieldMetadata, String fieldValue) {
         BasicFieldMetaFacet basicFieldMetaFacet = (BasicFieldMetaFacet) fieldMetadata.getFacet(FieldFacetType.Basic);
         if (basicFieldMetaFacet != null) {
             int maxLength = basicFieldMetaFacet.getLength();
             int length = fieldValue.length();
             if (length > maxLength) {
-                return new ValueValidationResult(false,
-                    "validation.error.field.length",
-                    new String[]{"" + maxLength, "" + length});
+                return new ValidationError("validation.error.field.length",
+                    new Object[]{maxLength, length});
             }
         }
         return null;

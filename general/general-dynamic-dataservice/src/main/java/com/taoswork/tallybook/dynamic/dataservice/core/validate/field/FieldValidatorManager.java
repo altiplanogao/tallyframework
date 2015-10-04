@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.validate.field;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result.FieldValidationResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result.ValueValidationResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.FieldValidationErrors;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -125,16 +125,17 @@ public class FieldValidatorManager {
         }
         return cache;
     }
-    public FieldValidationResult validate(FieldMetadata fieldMetadata, Object fieldValue) {
+
+    public FieldValidationErrors validate(FieldMetadata fieldMetadata, Object fieldValue) {
         String fieldName = fieldMetadata.getName();
-        FieldValidationResult fieldValidationResult = new FieldValidationResult(fieldName);
+        FieldValidationErrors fieldValidationErrors = new FieldValidationErrors(fieldName);
         Collection<IFieldValidator> validators = this.getValidators(fieldMetadata);
         for(IFieldValidator validator : validators){
-            ValueValidationResult validateResult = validator.validate(fieldMetadata, fieldValue);
-            fieldValidationResult.appendValueValidationResult(validateResult);
+            ValidationError validateError = validator.validate(fieldMetadata, fieldValue);
+            fieldValidationErrors.appendError(validateError);
         }
 
-        return fieldValidationResult;
+        return fieldValidationErrors;
     }
 
 }

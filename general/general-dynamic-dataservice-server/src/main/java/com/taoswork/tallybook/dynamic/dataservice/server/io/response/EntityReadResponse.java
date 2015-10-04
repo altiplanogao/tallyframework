@@ -10,4 +10,13 @@ public class EntityReadResponse extends EntityInstanceResponse {
     public String getAction() {
         return EntityActionNames.READ;
     }
+
+    @Override
+    public boolean success() {
+        return super.success();
+    }
+
+    public boolean gotRecord(){
+        return (getEntity() != null && getEntity().getData() != null);
+    }
 }

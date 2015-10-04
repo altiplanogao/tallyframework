@@ -2,11 +2,13 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BasicFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.*;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.EnumFieldMetaFacet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,11 @@ final class EntityInsightBuilder {
             if(enumFieldFacet != null){
                 IFieldFacet enumFacetInfo = new EnumFacetInfo(enumFieldFacet.getEnumerationType());
                 fieldInfo.addFacet(enumFacetInfo);
+            }
+            BasicFieldMetaFacet basicFieldFacet = (BasicFieldMetaFacet)fieldMetadata.facets.getOrDefault(FieldFacetType.Basic, null);
+            if(basicFieldFacet != null){
+                BasicFacetInfo basicFacetInfo = new BasicFacetInfo(basicFieldFacet.isRequired(), basicFieldFacet.getLength());
+                fieldInfo.addFacet(basicFacetInfo);
             }
 
             return fieldInfo;

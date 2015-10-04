@@ -12,30 +12,36 @@ import java.util.Collection;
  */
 public class ClassUtilityTest {
     @Test
-    public void testGetAllImplementedInterfaces(){
+    public void testGetAllSupers(){
         {
-            Collection<Class> serializableInterfaces = ClassUtility.getAllImplementedInterfaces(Serializable.class, Pug.class);
-            int serializableInterfacesCnt = serializableInterfaces.size();
+            Collection<Class> serializableUis = ClassUtility.getAllSupers(Serializable.class, Pug.class, true, true);
+            int serializableInterfacesCnt = serializableUis.size();
             Assert.assertEquals(serializableInterfacesCnt, 3);
-            assertHas(serializableInterfaces, IAnimal.class, IDog.class, IPug.class);
+            assertHas(serializableUis, IAnimal.class, IDog.class, IPug.class);
         }
         {
-            Collection<Class> animalInterfaces = ClassUtility.getAllImplementedInterfaces(IAnimal.class, Pug.class);
-            int animalInterfacesCnt = animalInterfaces.size();
+            Collection<Class> animalUis = ClassUtility.getAllSupers(IAnimal.class, Pug.class, true, true);
+            int animalInterfacesCnt = animalUis.size();
             Assert.assertEquals(animalInterfacesCnt, 2);
-            assertHas(animalInterfaces, IDog.class, IPug.class);
+            assertHas(animalUis, IDog.class, IPug.class);
         }
         {
-            Collection<Class> furInterfaces = ClassUtility.getAllImplementedInterfaces(IHasFur.class, Pug.class);
-            int furInterfacesCnt = furInterfaces.size();
+            Collection<Class> furUis = ClassUtility.getAllSupers(IHasFur.class, Pug.class, true, true);
+            int furInterfacesCnt = furUis.size();
             Assert.assertEquals(furInterfacesCnt, 2);
-            assertHas(furInterfaces, IDog.class, IPug.class);
+            assertHas(furUis, IDog.class, IPug.class);
         }
         {
-            Collection<Class> anyInterfaces = ClassUtility.getAllImplementedInterfaces(null, Pug.class);
-            int anyInterfacesCnt = anyInterfaces.size();
+            Collection<Class> anyUis = ClassUtility.getAllSupers(null, Pug.class, true, true);
+            int anyInterfacesCnt = anyUis.size();
             Assert.assertEquals(anyInterfacesCnt, 5);
-            assertHas(anyInterfaces, Serializable.class, IHasFur.class, IAnimal.class, IDog.class, IPug.class);
+            assertHas(anyUis, Serializable.class, IHasFur.class, IAnimal.class, IDog.class, IPug.class);
+        }
+        {
+            Collection<Class> anyUis = ClassUtility.getAllSupers(null, Monster.class, true, true);
+            int anyInterfacesCnt = anyUis.size();
+            Assert.assertEquals(anyInterfacesCnt, 8);
+            assertHas(anyUis, Serializable.class, IHasFur.class, IAnimal.class, IDog.class, IPug.class, IFish.class, IToy.class, Pug.class);
         }
     }
 

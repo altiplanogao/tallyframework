@@ -34,6 +34,7 @@ public class ApplicationCommonConfig {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         List<String> basenames = new ArrayList<String>();
         basenames.add("classpath:/error-messages/ValidationMessages");
+        basenames.add("classpath:/error-messages/ServiceExceptionMessages");
         ms.setBasenames(basenames.toArray(new String[basenames.size()]));
         return ms;
     }

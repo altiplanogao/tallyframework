@@ -31,6 +31,9 @@ public final class TallyMockupDataServiceDefinition implements IDataServiceDefin
     public static final String TMOCKUP_ENTITY_MESSAGES = ENTITY_MESSAGES_FILE_PREFIX +
             "tallymockup/";
 
+    public static final String TMOCKUP_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
+        "tallymockup/";
+
     public static final String TMOCKUP_RUNTIME_PROPERTIES = RUNTIME_PROPERTIES_FILE_PREFIX +
             "tallymockup/";
 
@@ -77,6 +80,11 @@ public final class TallyMockupDataServiceDefinition implements IDataServiceDefin
     @Override
     public String getEntityMessageDirectory() {
         return TMOCKUP_ENTITY_MESSAGES;
+    }
+
+    @Override
+    public String getErrorMessageDirectory() {
+        return TMOCKUP_ERROR_MESSAGES;
     }
 
     @Override

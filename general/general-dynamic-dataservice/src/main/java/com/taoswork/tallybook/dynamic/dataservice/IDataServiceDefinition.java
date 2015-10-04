@@ -9,6 +9,8 @@ public interface IDataServiceDefinition {
     public static final String PERSISTENCE_XML_PREFIX = "classpath:/META-INF/persistence/";
     public static final String RUNTIME_PROPERTIES_FILE_PREFIX = "/runtime-properties/";
     public static final String ENTITY_MESSAGES_FILE_PREFIX = "/entity-messages/";
+    public static final String ERROR_MESSAGES_FILE_PREFIX = "/error-messages/";
+
     public static final String FILE_DELIMTER = ";";
 
     String getDataServiceName();
@@ -28,6 +30,8 @@ public interface IDataServiceDefinition {
     String getTransactionManagerName();
 
     String getEntityMessageDirectory();
+
+    String getErrorMessageDirectory();
 
     String getPropertiesResourceDirectory();
 

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
  * Created by Gao Yuan on 2015/9/27.
  */
 public class NoPermissionException extends ServiceException {
-    public final static String DEFAULT_ERROR_CODE = "noPermission";
+    public final static String DEFAULT_ERROR_CODE = "service.error.no.permission";
     private String messageCode;
     private Object[] args;
 

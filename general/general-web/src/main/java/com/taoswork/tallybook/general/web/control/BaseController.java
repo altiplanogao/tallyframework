@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
 
-    static final String DataView = TallyBookDataViewResolver.JSON_VIEW_NAME;
+    protected static final String DataView = TallyBookDataViewResolver.JSON_VIEW_NAME;
 
     public static final String AJAX_VIEW_NAME_PREFIX = "ajax:";
     public static final String AJAX_REQUEST_KEY = "ajax";
-    public static final String MODAL_REQUEST_KEY = "modal";
+    public static final String SIMPLE_VIEW_REQUEST_KEY = "simpleView";
     public static String ajaxViewName(String viewName){
         return AJAX_VIEW_NAME_PREFIX + viewName;
     }
@@ -31,11 +31,11 @@ public abstract class BaseController {
                 this.getClass().getSimpleName() + "] Constructor" );
     }
 
-    public static boolean isModalRequest(HttpServletRequest request) {
-        return isModalRequest(request, MODAL_REQUEST_KEY);
+    public static boolean isSimpleViewRequest(HttpServletRequest request) {
+        return isSimpleViewRequest(request, SIMPLE_VIEW_REQUEST_KEY);
     }
 
-    public static boolean isModalRequest(HttpServletRequest request, String modalKey) {
+    public static boolean isSimpleViewRequest(HttpServletRequest request, String modalKey) {
         boolean isModalByUrl = false;
         if(!StringUtils.isEmpty(modalKey)){
             String isModalString = request.getParameter(modalKey);
@@ -43,10 +43,17 @@ public abstract class BaseController {
             if(isModalByUrl)
                 return true;
         }
-        String requestedWithHeader = request.getHeader("RequestInModal");
+        String requestedWithHeader = request.getHeader("RequestInSimpleView");
         boolean result = "true".equals(requestedWithHeader);
 
         return result;
+    }
+
+    public static boolean isAjaxDataRequest(HttpServletRequest request){
+        if(isAjaxRequest(request) && (!isSimpleViewRequest(request))){
+            return true;
+        }
+        return false;
     }
 
     public static boolean isAjaxRequest(HttpServletRequest request){
@@ -74,11 +81,6 @@ public abstract class BaseController {
         } catch (JsonProcessingException exp) {
             throw new RuntimeException(exp);
         }
-    }
-
-    protected String makeDataView(Model model, Object data) {
-        model.addAttribute("data", data);
-        return DataView;
     }
 
     protected String makeRedirectView(Model model, String url) {

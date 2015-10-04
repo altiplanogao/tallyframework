@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.validate.field;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result.ValueValidationResult;
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 /**
@@ -12,5 +12,5 @@ public interface IFieldValidator {
 
     Class supportedFieldClass();
 
-    ValueValidationResult validate(FieldMetadata fieldMetadata, Object fieldValue);
+    ValidationError validate(FieldMetadata fieldMetadata, Object fieldValue);
 }

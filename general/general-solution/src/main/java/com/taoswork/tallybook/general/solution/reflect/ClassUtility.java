@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.general.solution.reflect;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import com.taoswork.tallybook.general.extension.collections.ListBuilder;
+
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/14.
@@ -39,38 +39,64 @@ public class ClassUtility {
         return ancestor.isAssignableFrom(descendant);
     }
 
-    public static Collection<Class> getAllImplementedInterfaces(
-        Class rootInterfaceType, Class clsType){
+    public static Collection<Class> getAllSupers(Class root,
+                                                 Class target,
+                                                 boolean _interface,
+                                                 boolean _class){
         Collection<Class> result = new HashSet<Class>();
-        getAllImplementedInterfaces(rootInterfaceType, clsType, result);
+        getAllSupers(root, target, _interface, _class, result);
         return result;
     }
 
-    public static void getAllImplementedInterfaces(
-        Class rootInterfaceType, Class clsType, Collection<Class> result){
-        if(!nullableIsAncestorOf(rootInterfaceType, clsType)){
+    public static void getAllSupers(Class root,
+                                    Class target,
+                                    boolean _interface,
+                                    boolean _class,
+                                    Collection<Class> result){
+        if(!nullableIsAncestorOf(root, target)){
             return;
-        }else if(clsType.isInterface()){
-            result.add(clsType);
         }
-        boolean notInterface = !clsType.isInterface();
-        Class<?> clzSup = clsType.getSuperclass();
+        if(target.isInterface() && _interface){
+            result.add(target);
+        }
+        boolean notInterface = !target.isInterface();
+        Class<?> clzSup = target.getSuperclass();
 
-        if(notInterface && clzSup!= null && nullableIsAncestorOf(rootInterfaceType, clzSup)){
-            getAllImplementedInterfaces(rootInterfaceType, clzSup, result);
+        if(notInterface && clzSup!= null && nullableIsAncestorOf(root, clzSup)){
+            if(isAncestorOf(Object.class, clzSup) && _class){
+                result.add(clzSup);
+            }
+            getAllSupers(root, clzSup,
+                _interface, _class,
+                result);
         }
 
-        for (Class itfType : clsType.getInterfaces()){
-            getAllImplementedInterfaces(rootInterfaceType, itfType, result);
+        for (Class itfType : target.getInterfaces()){
+            getAllSupers(root, itfType,
+                _interface, _class,
+                result);
         }
     }
 
-    public static Collection<Class> getAllImplementedInterfaces(
-        Class rootInterfaceType, Class ... clsTypes){
+    public static Collection<Class> getAllSupers(Class root,
+                                                 Class[] targets,
+                                                 boolean _interface,
+                                                 boolean _class){
+        List<Class> targetList = new ArrayList<Class>();
+        new ListBuilder<Class>(targetList).append(targets);
+
+        return getAllSupers(root, targetList, _interface, _class);
+    }
+
+    public static Collection<Class> getAllSupers(Class root,
+                                                 Collection<Class> targets,
+                                                 boolean _interface,
+                                                 boolean _class){
         Set<Class> classes = new HashSet<Class>();
-        for(Class cls : clsTypes){
-            getAllImplementedInterfaces(rootInterfaceType, cls, classes);
+        for(Class cls : targets){
+            getAllSupers(root, cls, _interface, _class, classes);
         }
         return classes;
     }
+
 }

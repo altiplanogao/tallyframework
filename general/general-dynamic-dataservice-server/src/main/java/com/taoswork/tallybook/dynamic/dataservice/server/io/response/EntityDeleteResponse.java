@@ -13,14 +13,14 @@ public class EntityDeleteResponse extends EntityResponse {
     }
 
     //TODO: use EntityDeleteResult instead
-    boolean success = false;
+    boolean deleted = false;
 
-    public boolean isSuccess() {
-        return success;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public EntityDeleteResponse setSuccess(boolean success) {
-        this.success = success;
+    public EntityDeleteResponse setDeleted(boolean deleted) {
+        this.deleted = deleted;
         return this;
     }
 }

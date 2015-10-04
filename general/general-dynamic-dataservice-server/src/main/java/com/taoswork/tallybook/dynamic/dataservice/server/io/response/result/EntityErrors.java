@@ -17,9 +17,6 @@ public class EntityErrors {
 
     private MultiValueMap<String, String> fields = new LinkedMultiValueMap();
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private transient Exception unhandledException;
-
     public void addGlobalErrorMessage(String message){
         this.global.add(message);
     }
@@ -44,22 +41,15 @@ public class EntityErrors {
         return fields;
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Exception getUnhandledException() {
-        return unhandledException;
-    }
-
-    public void setUnhandledException(Exception unhandledException) {
-        this.unhandledException = unhandledException;
-    }
-
     public boolean containsError() {
+        if (!authorized)
+            return true;
         if (!global.isEmpty()) {
             return true;
         }
         if (!fields.isEmpty()) {
             return true;
         }
-        return unhandledException != null;
+        return false;
     }
 }

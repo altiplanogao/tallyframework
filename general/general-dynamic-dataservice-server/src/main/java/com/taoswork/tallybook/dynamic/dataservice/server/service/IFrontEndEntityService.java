@@ -30,5 +30,5 @@ public interface IFrontEndEntityService {
 
     EntityUpdateResponse update(EntityUpdateRequest request, Locale locale);
 
-    EntityDeleteResponse delete(EntityDeletePostRequest deleteRequest, Locale locale);
+    EntityDeleteResponse delete(EntityDeleteRequest deleteRequest, Locale locale);
 }

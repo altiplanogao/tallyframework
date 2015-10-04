@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import org.slf4j.Logger;
@@ -7,9 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a class with its self containing metadata, super information not included by default.
@@ -24,6 +23,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, FieldMetadata> fieldMetadataMap = new HashMap<String, FieldMetadata>();
+    private final Set<String> validators = new HashSet();
 
     public ClassMetadata(){
         this(null);
@@ -93,6 +93,15 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         return fieldMetadataMap.getOrDefault(fieldName, null);
     }
 
+    public void addValidator(Class<? extends IEntityValidator> validator){
+        if(validator != null)
+            validators.add(validator.getName());
+    }
+
+    public Collection<String> getValidators(){
+        return Collections.unmodifiableCollection(this.validators);
+    }
+
     public void absorbSuper(ClassMetadata superMeta){
         if(superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())){
             containsSuper = true;
@@ -107,6 +116,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
+        this.validators.addAll(thatMeta.getValidators());
     }
 
     public boolean hasField(String fieldName){
