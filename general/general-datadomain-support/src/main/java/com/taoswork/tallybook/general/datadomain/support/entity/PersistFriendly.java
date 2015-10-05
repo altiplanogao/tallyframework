@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.general.datadomain.support.entity;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,4 +21,6 @@ public @interface PersistFriendly {
     Class permissionGuardian() default Object.class;
 
     Class<? extends IEntityValidator>[] validators() default {};
+
+    Class<? extends IEntityValueGate>[] valueGates() default {};
 }

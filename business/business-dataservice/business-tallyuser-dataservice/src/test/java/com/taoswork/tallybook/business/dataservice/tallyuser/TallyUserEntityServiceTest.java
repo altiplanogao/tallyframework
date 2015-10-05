@@ -12,7 +12,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEnti
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.EntityValidationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

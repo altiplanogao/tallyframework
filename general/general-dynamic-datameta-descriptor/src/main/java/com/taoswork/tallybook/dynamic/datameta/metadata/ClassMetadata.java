@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, FieldMetadata> fieldMetadataMap = new HashMap<String, FieldMetadata>();
     private final Set<String> validators = new HashSet();
+    private final Set<String> valueGates = new HashSet();
 
     public ClassMetadata(){
         this(null);
@@ -98,15 +100,24 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
             validators.add(validator.getName());
     }
 
+    public void addValueGate(Class<? extends IEntityValueGate> valueGate){
+        if(valueGate != null)
+            valueGates.add(valueGate.getName());
+    }
+
     public Collection<String> getValidators(){
         return Collections.unmodifiableCollection(this.validators);
+    }
+
+    public Collection<String> getValueGates() {
+        return Collections.unmodifiableCollection(this.valueGates);
     }
 
     public void absorbSuper(ClassMetadata superMeta){
         if(superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())){
             containsSuper = true;
             absorb(superMeta);
-        }else {
+        } else {
             throw new IllegalArgumentException();
         }
     }
@@ -117,6 +128,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
         this.validators.addAll(thatMeta.getValidators());
+        this.valueGates.addAll(thatMeta.getValueGates());
     }
 
     public boolean hasField(String fieldName){

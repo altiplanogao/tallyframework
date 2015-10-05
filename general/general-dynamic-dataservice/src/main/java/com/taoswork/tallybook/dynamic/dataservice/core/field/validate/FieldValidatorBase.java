@@ -1,6 +1,7 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.validate.field;
+package com.taoswork.tallybook.dynamic.dataservice.core.field.validate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.handler.FieldTypedHandlerBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.slf4j.Logger;
@@ -9,30 +10,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Gao Yuan on 2015/9/29.
  */
-public abstract class FieldValidatorBase<T> implements IFieldValidator {
+public abstract class FieldValidatorBase<T>
+    extends FieldTypedHandlerBase<T>
+    implements IFieldValidator {
+
     private final static Logger LOGGER = LoggerFactory.getLogger(FieldValidatorBase.class);
-
-    protected boolean canHandle(FieldMetadata fieldMetadata) {
-        Class fieldClass = fieldMetadata.getFieldClass();
-        FieldType fieldType = fieldMetadata.getFieldType();
-
-        Class supportedClass = this.supportedFieldClass();
-        FieldType supportedType = this.supportedFieldType();
-
-        if (supportedType != null) {
-            if (!supportedType.equals(fieldType)) {
-                return false;
-            }
-        }
-
-        if (supportedClass != null) {
-            if (!supportedClass.equals(fieldClass)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     protected boolean nullValueAsValid(){
         return true;

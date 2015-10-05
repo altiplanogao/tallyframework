@@ -6,7 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.NoPermissionException;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.EntityValidationException;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
@@ -21,9 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/6/19.

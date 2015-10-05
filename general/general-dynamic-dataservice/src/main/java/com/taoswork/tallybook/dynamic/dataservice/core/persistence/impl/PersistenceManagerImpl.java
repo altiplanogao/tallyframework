@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator.EntityInstanceTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValueGateService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
@@ -13,9 +14,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryRe
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValidationService;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
-import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Resource(name = EntityValidationService.COMPONENT_NAME)
     protected EntityValidationService entityValidationService;
 
+    @Resource(name = EntityValueGateService.COMPONENT_NAME)
+    protected EntityValueGateService entityValueGateService;
+
     protected EntityInstanceTranslator converter = new EntityInstanceTranslator() {
         @Override
         protected DynamicEntityMetadataAccess getDynamicEntityMetadataAccess() {
@@ -54,11 +57,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Create, entity);
-        if (entity instanceof HasHidingField) {
-            ((HasHidingField) entity).initHidingForCreate();
-        }
         EntityResult entityResult = makeEntityResult(entity);
+
+        //deposit before validate, for security reason
+        entityValueGateService.deposit(entityResult.getEntity(), null);
         entityValidationService.validate(entityResult);
+
         T result = dynamicEntityDao.create(entity);
         return makeEntityResult(result);
     }
@@ -86,6 +90,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         if(result == null){
             throw new NoSuchRecordException(entityType, key);
         }
+        entityValueGateService.withdraw(result);
         return makeEntityResult(result);
     }
 
@@ -97,7 +102,11 @@ public class PersistenceManagerImpl implements PersistenceManager {
         securityVerifier.checkAccess(guardianName, Access.Update, oldEntity.getEntity());
         securityVerifier.checkAccess(guardianName, Access.Update, entity);
         EntityResult entityResult = makeEntityResult(entity);
+
+        //deposit before validate, for security reason
+        entityValueGateService.deposit(entityResult.getEntity(), oldEntity.getEntity());
         entityValidationService.validate(entityResult);
+
         T result = dynamicEntityDao.update(entity);
         return makeEntityResult(result);
     }
@@ -136,7 +145,11 @@ public class PersistenceManagerImpl implements PersistenceManager {
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Query);
         Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
-        return dynamicEntityDao.query(entityRootClz, query);
+        CriteriaQueryResult<T> result = dynamicEntityDao.query(entityRootClz, query);
+        for(T one : result.getEntityCollection()){
+            entityValueGateService.withdraw(one);
+        }
+        return result;
     }
 
     private <T extends Persistable> EntityResult<T> getManagedEntity(Class ceilingType, T entity) throws ServiceException {

@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.validate.field.result;
+package com.taoswork.tallybook.dynamic.dataservice.core.entity.validate;
 
 /**
  * Created by Gao Yuan on 2015/9/28.

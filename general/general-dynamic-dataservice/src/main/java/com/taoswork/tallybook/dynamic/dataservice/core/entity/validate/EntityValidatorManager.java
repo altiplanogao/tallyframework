@@ -1,11 +1,9 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.validate.entity;
+package com.taoswork.tallybook.dynamic.dataservice.core.entity.validate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationErrors;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,11 +27,7 @@ public class EntityValidatorManager {
                 try {
                     IEntityValidator validator = (IEntityValidator) Class.forName(s).newInstance();
                     return validator;
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return fakeValidator;

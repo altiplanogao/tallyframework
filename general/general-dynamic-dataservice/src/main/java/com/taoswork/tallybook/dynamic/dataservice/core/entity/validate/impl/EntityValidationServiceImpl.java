@@ -1,27 +1,21 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.validate.impl;
+package com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationException;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.entity.EntityValidatorManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.FieldValidatorManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.validator.EmailFieldValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.validator.FieldLengthValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.validator.FieldRequiredValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.field.validator.PhoneFieldValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.EntityValidatorManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.validate.FieldValidatorManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.validate.validator.EmailFieldValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.validate.validator.FieldLengthValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.validate.validator.FieldRequiredValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.field.validate.validator.PhoneFieldValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.FieldValidationErrors;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/9/28.
@@ -36,10 +30,10 @@ public class EntityValidationServiceImpl implements EntityValidationService {
 
     public EntityValidationServiceImpl(){
         fieldValidatorManager
-            .addValidator(new FieldRequiredValidator())
-            .addValidator(new FieldLengthValidator())
-            .addValidator(new EmailFieldValidator())
-            .addValidator(new PhoneFieldValidator());
+            .addHandler(new FieldRequiredValidator())
+            .addHandler(new FieldLengthValidator())
+            .addHandler(new EmailFieldValidator())
+            .addHandler(new PhoneFieldValidator());
     }
 
     @Override

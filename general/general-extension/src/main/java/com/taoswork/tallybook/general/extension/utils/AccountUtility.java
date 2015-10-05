@@ -21,7 +21,7 @@ public class AccountUtility {
                 "(\\+\\d{1,4})|" +     //  +86
                 "(\\(\\d{1,4}\\))|"+    //(86)
                 "(\\(\\+\\d{1,4}\\))|"+    //(+86)
-                "(00\\d{1,4}(\\s|\\-))|"+    //0086
+                "(00\\d{1,4}(\\s|\\-))|"+    //0086-
                 "(\\(00\\d{1,4}\\))"+    // (0086)
                 ")");
     public static final Pattern VALID_PHONE_IN_COUNTRY_NUMBER_HAVING_DIGITAL_ONLY =

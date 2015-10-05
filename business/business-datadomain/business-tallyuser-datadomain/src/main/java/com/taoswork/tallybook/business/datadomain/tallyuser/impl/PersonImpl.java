@@ -4,19 +4,13 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
-import com.taoswork.tallybook.general.datadomain.support.entity.HasHidingField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
-import java.util.UUID;
 
-/**
- * Created by Gao Yuan on 2015/4/15.
- */
 @Entity
 @Table(name = "TB_PERSON")
 @NamedQueries({
@@ -39,7 +33,7 @@ import java.util.UUID;
 @PresentationClass(
 )
 public class PersonImpl
-        implements Person, HasHidingField {
+        implements Person {
 
     protected static final String ID_GENERATOR_NAME = "PersonImpl_IdGen";
 
@@ -149,12 +143,5 @@ public class PersonImpl
                 " '" + name + '\'' +
                 " {" + uuid + '}' +
                 ']';
-    }
-
-    @Override
-    public void initHidingForCreate() {
-        if(StringUtils.isEmpty(uuid)){
-            setUuid(UUID.randomUUID().toString());
-        }
     }
 }

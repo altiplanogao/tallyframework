@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.validate;
+package com.taoswork.tallybook.dynamic.dataservice.core.entity;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;

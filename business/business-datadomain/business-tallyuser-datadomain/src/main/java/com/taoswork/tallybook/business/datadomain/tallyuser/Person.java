@@ -7,7 +7,8 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  * Created by Gao Yuan on 2015/5/8.
  */
 @PersistFriendly(
-    validators = {PersonValidator.class}
+    validators = {PersonValidator.class},
+    valueGates = {PersonValueGate.class}
 )
 public interface Person extends Persistable {
     Long getId();

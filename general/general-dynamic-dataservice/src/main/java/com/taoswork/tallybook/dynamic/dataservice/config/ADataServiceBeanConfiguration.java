@@ -11,6 +11,8 @@ import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.helper.DataServiceBeanCreationHelper;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValueGateService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.valuegate.impl.EntityValueGateServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
@@ -20,8 +22,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceMa
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl.PersistenceManagerImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.validate.impl.EntityValidationServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.impl.EntityValidationServiceImpl;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
@@ -145,6 +147,12 @@ public abstract class ADataServiceBeanConfiguration
     @Bean(name = EntityValidationService.COMPONENT_NAME)
     public EntityValidationService entityValidatorService(){
         return new EntityValidationServiceImpl();
+    }
+
+    @Override
+    @Bean(name = EntityValueGateService.COMPONENT_NAME)
+    public EntityValueGateService entityValueGateService() {
+        return new EntityValueGateServiceImpl();
     }
 
     @Override
