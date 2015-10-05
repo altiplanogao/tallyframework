@@ -31,8 +31,9 @@ public class BusinessUnitImpl implements BusinessUnit {
     @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
     protected String name;
 
-    @Column(name = "DESCRIP")
-    @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
+    @Column(name = "DESCRIP", length = Integer.MAX_VALUE - 1)
+    @Lob
+    @PresentationField(order = 4, fieldType = FieldType.HTML, visibility = Visibility.GRID_HIDE)
     protected String description;
 
 

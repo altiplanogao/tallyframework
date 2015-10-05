@@ -58,7 +58,6 @@ public class AdminBasicEntityController extends BaseController {
     private static class VIEWS{
         static final String Redirect2Home = "redirect:/";
         static final String Redirect2Failure = "redirect:failure";
-        static final String Redirect2Todo = "redirect:todo";
         static final String FramedView = "entity/content/framedView";
         static final String SimpleView = "entity/content/simpleView";
     }

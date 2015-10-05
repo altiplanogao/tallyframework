@@ -17,7 +17,6 @@ public class SecuredResourceFilterImpl implements SecuredResourceFilter {
 
     @Id
     @Column(name = "ID")
-    @PresentationField(order = 1)
     public Long id;
 
     //IResourceFilter.getCode()
