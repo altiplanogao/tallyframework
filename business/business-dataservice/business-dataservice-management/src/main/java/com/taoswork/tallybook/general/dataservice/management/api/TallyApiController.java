@@ -33,7 +33,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/6/13.
  */
 @Controller(TallyApiController.TALLY_API_CONTROLLER_NAME)
-@RequestMapping("/{entityTypeName:^[\\w|-]+$}")
+@RequestMapping("/{entityTypeName:^[\\w|\\-|\\.]+$}")
 public class TallyApiController  {
     public static final String TALLY_API_CONTROLLER_NAME = "TallyApiController";
 

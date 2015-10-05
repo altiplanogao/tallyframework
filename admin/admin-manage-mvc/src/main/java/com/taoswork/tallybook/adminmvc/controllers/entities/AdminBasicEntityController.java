@@ -50,7 +50,7 @@ import java.util.*;
  * 6. delete            post        Redirect Read Page              AJAX: Error         N/A                 AJAX: Error
  */
 @Controller(AdminBasicEntityController.CONTROLLER_NAME)
-@RequestMapping("/{entityTypeName:^[\\w|-|\\.]+$}")
+@RequestMapping("/{entityTypeName:^[\\w|\\-|\\.]+$}")
 public class AdminBasicEntityController extends BaseController {
     private static Logger LOGGER = LoggerFactory.getLogger(AdminBasicEntityController.class);
 
