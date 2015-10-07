@@ -2,16 +2,12 @@ package com.taoswork.tallybook.general.datadomain.support.presentation;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Created by Gao Yuan on 2015/5/21.
- */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface PresentationField {
@@ -53,5 +49,5 @@ public @interface PresentationField {
      */
     FieldType fieldType() default FieldType.UNKNOWN;
 
-    Class enumeration() default Object.class;
+    Class enumeration() default Void.class;
 }

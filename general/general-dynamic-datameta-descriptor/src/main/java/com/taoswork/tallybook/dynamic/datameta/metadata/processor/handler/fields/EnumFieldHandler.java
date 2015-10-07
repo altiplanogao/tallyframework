@@ -17,7 +17,7 @@ public class EnumFieldHandler implements IFieldHandler {
         PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
         if(presentationField != null &&
             FieldType.ENUMERATION.equals(presentationField.fieldType()) &&
-            !(presentationField.enumeration().equals(Object.class))){
+            !(presentationField.enumeration().equals(Void.class))){
 
             EnumFieldMetaFacet enumFacet = new EnumFieldMetaFacet(presentationField.enumeration());
             fieldMetadata.addFacet(enumFacet);

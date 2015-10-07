@@ -285,7 +285,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
                     if(persistFriendly != null){
                         Class annotationGuardian = persistFriendly.permissionGuardian();
                         boolean asDefaultGuardian = persistFriendly.asDefaultPermissionGuardian();
-                        if(annotationGuardian != Object.class){
+                        if(annotationGuardian != Void.class){
                             guardian = annotationGuardian;
                             break;
                         } else if(asDefaultGuardian){

@@ -11,10 +11,10 @@
 
     <artifactId>general-datadomain-support</artifactId>
 
-<dependencies>
-    <dependency>
-        <groupId>com.taoswork.tallybook</groupId>
-        <artifactId>general-extension</artifactId>
-    </dependency>
-</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>general-extension</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -4,6 +4,7 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
+import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -42,7 +43,7 @@ public class PersonImpl
     @TableGenerator(
             name = ID_GENERATOR_NAME,
             table = TallyUserDataDomain.ID_GENERATOR_TABLE_NAME,
-            initialValue = 1)
+            initialValue = 0)
     @Column(name = "ID")
     @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
@@ -51,7 +52,7 @@ public class PersonImpl
     @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
     protected String name;
 
-    @Column(name = "GENDER", nullable = false
+    @Column(name = "GENDER", nullable = false, length = 1
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.UNKNOWN_CHAR + "'"
     )
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION, enumeration = Gender.class)
@@ -64,6 +65,11 @@ public class PersonImpl
     @Column(name = "MOBILE", length = 20)
     @PresentationField(group = "General", order = 5, fieldType = FieldType.PHONE)
     protected String mobile;
+
+    @Column(name = "ACTIVE", nullable = false, length = 2,
+        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+    @Convert(converter = BooleanToStringConverter.class)
+    protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
     @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.HIDDEN_ALL)
@@ -123,6 +129,17 @@ public class PersonImpl
     @Override
     public PersonImpl setMobile(String mobile) {
         this.mobile = mobile;
+        return this;
+    }
+
+    @Override
+    public Boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public PersonImpl setActive(Boolean active) {
+        this.active = active;
         return this;
     }
 

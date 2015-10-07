@@ -28,7 +28,7 @@ public class BasicFieldHandler implements IFieldHandler {
         PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
         if(presentationField != null &&
             presentationField.fieldType() == FieldType.ENUMERATION &&
-            presentationField.enumeration() != Object.class){
+            presentationField.enumeration() != Void.class){
             return ProcessResult.INAPPLICABLE;
         }
 

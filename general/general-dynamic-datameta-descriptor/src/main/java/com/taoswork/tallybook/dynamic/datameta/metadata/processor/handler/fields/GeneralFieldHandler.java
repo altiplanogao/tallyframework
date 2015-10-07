@@ -38,7 +38,7 @@ public class GeneralFieldHandler implements IFieldHandler {
             fieldMetadata.setVisibility(presentationField.visibility());
             fieldMetadata.setFieldType(presentationField.fieldType());
             fieldMetadata.setNameField(presentationField.nameField());
-            if(!presentationField.enumeration().equals(Object.class)){
+            if(!presentationField.enumeration().equals(Void.class)){
                 fieldMetadata.setFieldClass(presentationField.enumeration());
             }
         }

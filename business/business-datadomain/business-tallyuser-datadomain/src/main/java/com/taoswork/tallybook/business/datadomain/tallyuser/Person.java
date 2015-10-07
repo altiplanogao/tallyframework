@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
+import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
@@ -18,6 +19,10 @@ public interface Person extends Persistable {
     String getName();
 
     Person setName(String name);
+
+    Boolean isActive();
+
+    PersonImpl setActive(Boolean active);
 
     String getUuid();
 

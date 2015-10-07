@@ -61,6 +61,16 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     private void makeNamedInfoFriendly(NamedInfo source, NamedInfoRW target, Locale locale){
         String oldFriendly = source.getFriendlyName();
         String newFriendly = entityMessageSource.getMessage(oldFriendly, null, oldFriendly, locale);
+        if(oldFriendly.equals(newFriendly)){
+            int underscore = oldFriendly.indexOf("_");
+            if(underscore > 1){
+                String fallbackKey = oldFriendly.substring(underscore + 1);
+                String fallbackValue =  entityMessageSource.getMessage(fallbackKey, null, fallbackKey, locale);
+                if(!fallbackKey.equals(fallbackValue)){
+                    newFriendly = fallbackValue;
+                }
+            }
+        }
         target.setFriendlyName(newFriendly);
     }
 
