@@ -46,4 +46,36 @@ public class BusinessUnitImpl implements BusinessUnit {
     protected List<ModuleUsage> modules;
 */
 
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public BusinessUnitImpl setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public BusinessUnitImpl setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public BusinessUnitImpl setDescription(String description) {
+        this.description = description;
+        return this;
+    }
 }

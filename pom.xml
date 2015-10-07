@@ -12,6 +12,11 @@
 
   <repositories>
     <repository>
+      <id>xss-html-filter releases</id>
+      <name>xss-html-filter Releases Repository</name>
+      <url>http://xss-html-filter.sf.net/releases/</url>
+    </repository>
+    <repository>
       <id>maven2.gueck.com-releases</id>
       <url>http://maven2.gueck.com/releases</url>
     </repository>
@@ -734,6 +739,21 @@
         <version>2.4.6</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.owasp.antisamy</groupId>
+        <artifactId>antisamy</artifactId>
+        <version>1.5.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.owasp.antisamy</groupId>
+        <artifactId>antisamy-sample-configs</artifactId>
+        <version>1.5.3</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.xss-html-filter</groupId>
+        <artifactId>xss-html-filter</artifactId> <!-- fallback method of antisamy -->
+        <version>1.5</version>
+      </dependency>
 
       <!-- Others Libraries ] -->
 
