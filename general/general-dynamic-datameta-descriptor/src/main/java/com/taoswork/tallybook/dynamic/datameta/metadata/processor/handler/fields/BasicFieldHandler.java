@@ -2,12 +2,10 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.field
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BooleanFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
-import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -30,6 +28,11 @@ public class BasicFieldHandler implements IFieldHandler {
             presentationField.fieldType() == FieldType.ENUMERATION &&
             presentationField.enumeration() != Void.class){
             return ProcessResult.INAPPLICABLE;
+        }
+
+        if(Boolean.class.equals(field.getType())){
+            BooleanFieldMetaFacet booleanFieldMetaFacet = new BooleanFieldMetaFacet();
+            fieldMetadata.addFacet(booleanFieldMetaFacet);
         }
 
         Column columnAnnotation = field.getDeclaredAnnotation(Column.class);

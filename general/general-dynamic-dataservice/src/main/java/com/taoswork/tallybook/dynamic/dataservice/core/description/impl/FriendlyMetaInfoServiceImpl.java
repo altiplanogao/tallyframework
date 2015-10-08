@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.description.impl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BooleanFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
@@ -87,6 +88,18 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
                     freshEnumFacetInfo.setFriendlyName(key, newVal);
                 }
                 ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacetInfo);
+            }
+
+            BooleanFacetInfo booleanFacetInfo = (BooleanFacetInfo)fieldInfo.getFacet(FieldFacetType.Boolean);
+            if(booleanFacetInfo != null){
+                BooleanFacetInfo freshBooleanFacetInfo = CloneUtility.makeClone(booleanFacetInfo);
+                for(int x = 0 ; x < 2 ; ++x){
+                    boolean v = (x == 0);
+                    String val = booleanFacetInfo.getOption(v);
+                    String newVal = entityMessageSource.getMessage(val, null, val, locale);
+                    freshBooleanFacetInfo.setOptionFor(v, newVal);
+                }
+                ((FieldInfoRW)fieldInfo).addFacet(freshBooleanFacetInfo);
             }
         } else {
             LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", fieldInfo);

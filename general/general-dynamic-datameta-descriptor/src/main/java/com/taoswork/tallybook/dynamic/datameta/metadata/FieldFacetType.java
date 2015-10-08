@@ -7,6 +7,8 @@ public enum FieldFacetType {
     Basic,
 
     Enum,
+    Boolean,
+
     Embedded,
     Collection,
 

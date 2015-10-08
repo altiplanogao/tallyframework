@@ -20,7 +20,7 @@ public class RestrictionFactory {
             case NAME:
                 return Restrictions.StringLikeRestriction;
             case BOOLEAN:
-                break;
+                return Restrictions.BooleanRestriction;
             case INTEGER:
                 break;
             case DATE:

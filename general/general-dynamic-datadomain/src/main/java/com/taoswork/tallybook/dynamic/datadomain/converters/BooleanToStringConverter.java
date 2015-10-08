@@ -5,15 +5,18 @@ import javax.persistence.Converter;
 
 @Converter
 public class BooleanToStringConverter implements AttributeConverter<Boolean, String> {
+    public final static String TRUE = "Y";
+    public final static String FALSE = "N";
+
     @Override
     public String convertToDatabaseColumn(Boolean attribute) {
         if (attribute == null)
             return "";
-        return attribute ? "Y" : "N";
+        return attribute ? TRUE : FALSE;
     }
 
     @Override
     public Boolean convertToEntityAttribute(String dbData) {
-        return "Y".equals(dbData);
+        return TRUE.equals(dbData);
     }
 }

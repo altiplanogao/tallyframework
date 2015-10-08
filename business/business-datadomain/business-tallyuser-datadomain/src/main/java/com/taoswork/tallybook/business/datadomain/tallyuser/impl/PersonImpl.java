@@ -69,6 +69,7 @@ public class PersonImpl
     @Column(name = "ACTIVE", nullable = false, length = 2,
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
