@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;

@@ -48,6 +48,4 @@ public @interface PresentationField {
      * @return the field type
      */
     FieldType fieldType() default FieldType.UNKNOWN;
-
-    Class enumeration() default Void.class;
 }

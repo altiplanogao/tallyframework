@@ -12,6 +12,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BooleanFieldMetaFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.EnumFieldMetaFacet;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,17 @@ final class EntityInsightBuilder {
             }
             BooleanFieldMetaFacet booleanFacet = (BooleanFieldMetaFacet) fieldMetadata.facets.getOrDefault(FieldFacetType.Boolean, null);
             if(booleanFacet != null){
-                IFieldFacet boolFacetInfo = new BooleanFacetInfo();
+                BooleanFacetInfo boolFacetInfo = new BooleanFacetInfo();
+                switch (booleanFacet.model){
+                    case TrueFalse:
+                        boolFacetInfo.setAsTrueFalse();
+                        break;
+                    case YesNo:
+                        boolFacetInfo.setAsYesNo();
+                        break;
+                    default:
+                        throw new IllegalStateException("Un expected Boolean model");
+                }
                 fieldInfo.addFacet(boolFacetInfo);
             }
             BasicFieldMetaFacet basicFieldFacet = (BasicFieldMetaFacet)fieldMetadata.facets.getOrDefault(FieldFacetType.Basic, null);

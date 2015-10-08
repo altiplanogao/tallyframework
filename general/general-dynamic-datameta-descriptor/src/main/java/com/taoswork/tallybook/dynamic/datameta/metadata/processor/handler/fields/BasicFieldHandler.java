@@ -6,6 +6,8 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BooleanFieldMetaFa
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -25,13 +27,18 @@ public class BasicFieldHandler implements IFieldHandler {
 
         PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
         if(presentationField != null &&
-            presentationField.fieldType() == FieldType.ENUMERATION &&
-            presentationField.enumeration() != Void.class){
+            presentationField.fieldType() == FieldType.ENUMERATION){
             return ProcessResult.INAPPLICABLE;
         }
 
         if(Boolean.class.equals(field.getType())){
-            BooleanFieldMetaFacet booleanFieldMetaFacet = new BooleanFieldMetaFacet();
+            BooleanFieldMetaFacet booleanFieldMetaFacet = null;
+            BooleanField booleanField = field.getDeclaredAnnotation(BooleanField.class);
+            if(booleanField != null){
+                booleanFieldMetaFacet = new BooleanFieldMetaFacet(booleanField.model());
+            }else {
+                booleanFieldMetaFacet = new BooleanFieldMetaFacet();
+            }
             fieldMetadata.addFacet(booleanFieldMetaFacet);
         }
 

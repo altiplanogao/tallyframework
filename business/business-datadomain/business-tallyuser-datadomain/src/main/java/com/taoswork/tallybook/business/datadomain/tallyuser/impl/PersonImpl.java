@@ -2,6 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
+import com.taoswork.tallybook.business.datadomain.tallyuser.GenderToStringConverter;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
@@ -9,6 +10,9 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
 
 import javax.persistence.*;
 
@@ -55,8 +59,10 @@ public class PersonImpl
     @Column(name = "GENDER", nullable = false, length = 1
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.UNKNOWN_CHAR + "'"
     )
-    @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION, enumeration = Gender.class)
-    protected String gender = Gender.UNKNOWN_CHAR;
+    @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
+    @EnumField(enumeration = Gender.class)
+    @Convert(converter = GenderToStringConverter.class)
+    protected Gender gender = Gender.unknown;
 
     @Column(name = "EMAIL", length = 120)
     @PresentationField(group = "General", order = 4, fieldType = FieldType.EMAIL)
@@ -70,6 +76,7 @@ public class PersonImpl
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
     @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
+    @BooleanField(model = BooleanModel.YesNo)
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
@@ -103,12 +110,12 @@ public class PersonImpl
 
     @Override
     public Gender getGender() {
-        return Gender.fromType(gender);
+        return gender;
     }
 
     @Override
     public void setGender(Gender gender) {
-        this.gender = gender.getType();
+        this.gender = gender;
     }
 
     @Override

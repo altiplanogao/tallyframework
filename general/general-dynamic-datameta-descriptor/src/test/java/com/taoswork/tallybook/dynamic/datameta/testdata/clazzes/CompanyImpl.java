@@ -5,6 +5,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -87,7 +88,8 @@ public class CompanyImpl implements ICompany{
     protected Date creationDate;
 
     @Column(name = "TYPE")
-    @PresentationField(visibility = Visibility.VISIBLE_ALL, fieldType = FieldType.ENUMERATION, enumeration = CompanyType.class)
+    @PresentationField(visibility = Visibility.VISIBLE_ALL, fieldType = FieldType.ENUMERATION)
+    @EnumField(enumeration = CompanyType.class)
     private String companyType;
 
     @Column(name = "TAX_CODE")

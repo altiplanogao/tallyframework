@@ -14,10 +14,21 @@ import java.util.*;
  */
 public class BooleanFacetInfo implements IFieldFacet {
     private final Map<String, String> options = new HashMap<String, String>();
+    private final static String TRUE = "t";
+    private final static String FALSE = "f";
 
     public BooleanFacetInfo() {
-        options.put("t", "general.boolean.true");
-        options.put("f", "general.boolean.false");
+        setAsTrueFalse();
+    }
+
+    public void setAsTrueFalse(){
+        options.put(TRUE, "general.boolean.true");
+        options.put(FALSE, "general.boolean.false");
+    }
+
+    public void setAsYesNo(){
+        options.put(TRUE, "general.boolean.yes");
+        options.put(FALSE, "general.boolean.no");
     }
 
     @Override
@@ -27,9 +38,9 @@ public class BooleanFacetInfo implements IFieldFacet {
 
     public void setOptionFor(boolean value, String friendlyValue) {
         if (value) {
-            options.put("t", friendlyValue);
+            options.put(TRUE, friendlyValue);
         } else {
-            options.put("f", friendlyValue);
+            options.put(FALSE, friendlyValue);
         }
     }
 
@@ -38,6 +49,6 @@ public class BooleanFacetInfo implements IFieldFacet {
     }
 
     public String getOption(boolean value) {
-        return options.getOrDefault(value ? "t" : "f", value ? "true" : "false");
+        return options.getOrDefault(value ? TRUE : FALSE, value ? "true" : "false");
     }
 }
