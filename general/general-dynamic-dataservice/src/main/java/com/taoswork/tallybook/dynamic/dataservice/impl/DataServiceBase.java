@@ -4,6 +4,9 @@ import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDelegate;
 import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.MysqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
@@ -28,6 +31,7 @@ public abstract class DataServiceBase implements IDataService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceBase.class);
     private static final Map<String, Integer> loadCounter = new HashMap<String, Integer>();
 
+    private IDbSetting dbSetting;
     private final IDataServiceDefinition dataServiceDefinition;
     private ApplicationContext applicationContext;
 
@@ -37,9 +41,11 @@ public abstract class DataServiceBase implements IDataService {
 
     public DataServiceBase(
             IDataServiceDefinition dataServiceDefinition,
+            IDbSetting dbSetting,
             Class<? extends ADataServiceBeanConfiguration> dataServiceConf,
             List<Class> annotatedClasses) {
         this.dataServiceDefinition = dataServiceDefinition;
+        setDbSetting(dbSetting);
 
         List<Class> annotatedClassesList = new ArrayList<Class>();
         annotatedClassesList.add(dataServiceConf);
@@ -54,10 +60,24 @@ public abstract class DataServiceBase implements IDataService {
 
     public DataServiceBase(
             IDataServiceDefinition dataServiceDefinition,
+            IDbSetting dbSetting,
             List<Class> annotatedClasses) {
         this.dataServiceDefinition = dataServiceDefinition;
+        setDbSetting(dbSetting);
 
         load(annotatedClasses);
+    }
+
+    private void setDbSetting(IDbSetting dbSetting){
+        if (dbSetting != null) {
+            this.dbSetting = dbSetting;
+        } else {
+            if (System.getProperty("usehsql", "false").equals("true")) {
+                this.dbSetting = new HsqlDbSetting();
+            } else {
+                this.dbSetting = new MysqlDbSetting();
+            }
+        }
     }
 
 
@@ -85,6 +105,11 @@ public abstract class DataServiceBase implements IDataService {
             @Override
             public IDataServiceDefinition getDataServiceDefinition() {
                 return dataServiceDefinition;
+            }
+
+            @Override
+            public IDbSetting getDbSetting() {
+                return dbSetting;
             }
         }
 

@@ -1,43 +1,17 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
-import com.taoswork.tallybook.general.solution.menu.MenuEntry;
-import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
+import com.taoswork.tallybook.general.solution.menu.IMenuEntry;
+import com.taoswork.tallybook.general.solution.menu.MenuPath;
+
+import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/6/6.
  */
 public class CurrentPath {
-//    private Menu menu;
-    private MenuEntryGroup menuGroup;
-    private MenuEntry menuEntry;
+    private MenuPath path;
+    private Collection<IMenuEntry> menuEntries;
     private String url;
-
-//    public Menu getMenu() {
-//        return menu;
-//    }
-//
-//    public CurrentPath setMenu(Menu menu) {
-//        this.menu = menu;
-//        return this;
-//    }
-
-    public MenuEntryGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public CurrentPath setMenuGroup(MenuEntryGroup menuGroup) {
-        this.menuGroup = menuGroup;
-        return this;
-    }
-
-    public MenuEntry getMenuEntry() {
-        return menuEntry;
-    }
-
-    public CurrentPath setMenuEntry(MenuEntry menuEntry) {
-        this.menuEntry = menuEntry;
-        return this;
-    }
 
     public String getUrl() {
         return url;
@@ -48,23 +22,31 @@ public class CurrentPath {
         return this;
     }
 
-    public boolean isMenuGroupMatch(MenuEntryGroup group) {
-        if (this.menuGroup == null) {
-            return false;
-        } else if (group == null) {
-            return false;
-        } else {
-            return menuGroup.getKey().equals(group.getKey());
-        }
+    public MenuPath getPath() {
+        return path;
     }
 
-    public boolean isMenuEntryMatch(MenuEntry entry) {
-        if (this.menuEntry == null) {
+    public Collection<IMenuEntry> getMenuEntries() {
+        return menuEntries;
+    }
+
+    public CurrentPath setMenuEntries(MenuPath path, Collection<IMenuEntry> menuEntries) {
+        this.path = path;
+        this.menuEntries = menuEntries;
+        return this;
+    }
+
+    public boolean isMatchPath(String... keys){
+        String[] paths = this.getPath().getPath().toArray(new String[]{});
+        if(keys.length > paths.length){
             return false;
-        } else if (entry == null) {
-            return false;
-        } else {
-            return menuEntry.getKey().equals(entry.getKey());
         }
+
+        int len = keys.length;
+        for(int i = 0 ; i < len ; ++i){
+            if(!keys[i].equals(paths[i]))
+                return false;
+        }
+        return true;
     }
 }

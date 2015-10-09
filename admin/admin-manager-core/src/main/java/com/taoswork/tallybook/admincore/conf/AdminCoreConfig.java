@@ -8,6 +8,7 @@ import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetail
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.dataservice.management.manager.impl.DataServiceManagerImpl;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
@@ -36,28 +37,32 @@ import org.springframework.security.core.userdetails.UserDetailsService;
         )}
 )
 public class AdminCoreConfig {
+        protected IDbSetting getDbSetting(){
+                return null;
+        }
+
         @Bean(name = TallyUserDataService.COMPONENT_NAME)
-        TallyUserDataService tallyUserDataService(){
-                return new TallyUserDataService();
+        public TallyUserDataService tallyUserDataService(){
+                return new TallyUserDataService(getDbSetting());
         }
 
         @Bean(name = TallyAdminDataService.COMPONENT_NAME)
-        TallyAdminDataService tallyAdminDataService(){
-                return new TallyAdminDataService();
+        public TallyAdminDataService tallyAdminDataService(){
+                return new TallyAdminDataService(getDbSetting());
         }
 
         @Bean(name = TallyBusinessDataService.COMPONENT_NAME)
-        TallyBusinessDataService tallyBusinessDataService(){
-                return new TallyBusinessDataService();
+        public TallyBusinessDataService tallyBusinessDataService(){
+                return new TallyBusinessDataService(getDbSetting());
         }
 
         @Bean(name = TallyManagementDataService.COMPONENT_NAME)
-        TallyManagementDataService tallyManagementDataService(){
-                return new TallyManagementDataService();
+        public TallyManagementDataService tallyManagementDataService(){
+                return new TallyManagementDataService(getDbSetting());
         }
 
         @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
-        UserDetailsService adminEmployeeDetailsService(){
+        public UserDetailsService adminEmployeeDetailsService(){
                 return new AdminEmployeeDetailsServiceImpl();
         }
 

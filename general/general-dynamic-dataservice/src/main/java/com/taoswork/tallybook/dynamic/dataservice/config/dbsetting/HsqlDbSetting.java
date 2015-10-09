@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.config.dbsetting;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.dialect.HSQLDialect;
 import org.hsqldb.jdbc.JDBCDriver;
 

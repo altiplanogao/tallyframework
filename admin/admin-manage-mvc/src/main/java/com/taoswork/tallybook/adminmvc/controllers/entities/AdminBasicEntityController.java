@@ -18,9 +18,8 @@ import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityS
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.dataservice.management.parameter.EntityTypeParameterBuilder;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
-import com.taoswork.tallybook.general.solution.menu.Menu;
-import com.taoswork.tallybook.general.solution.menu.MenuEntry;
-import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
+import com.taoswork.tallybook.general.solution.menu.IMenu;
+import com.taoswork.tallybook.general.solution.menu.MenuPath;
 import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
 import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
 import com.taoswork.tallybook.general.web.control.BaseController;
@@ -147,7 +146,7 @@ public class AdminBasicEntityController extends BaseController {
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
-        Menu menu = adminMenuService.buildMenu(employee);
+        IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
 
         model.addAttribute("menu", menu);
@@ -219,7 +218,7 @@ public class AdminBasicEntityController extends BaseController {
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
-        Menu menu = adminMenuService.buildMenu(employee);
+        IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
 
         model.addAttribute("menu", menu);
@@ -339,7 +338,7 @@ public class AdminBasicEntityController extends BaseController {
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
-        Menu menu = adminMenuService.buildMenu(employee);
+        IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
 
         model.addAttribute("menu", menu);
@@ -779,15 +778,11 @@ public class AdminBasicEntityController extends BaseController {
     class Helper {
         private CurrentPath buildCurrentPath(String sectionName, HttpServletRequest request) {
             CurrentPath currentPath = new CurrentPath();
-            MenuEntry entry = adminMenuService.findMenuEntryByUrl(sectionName);
-            if(entry != null){
-                MenuEntryGroup group = adminMenuService.findMenuEntryGroupByEntryKey(entry.getKey());
+            MenuPath path = adminMenuService.findMenuPathByUrl(sectionName);
+            if(path != null){
                 String currentUrl = request.getRequestURL().toString();
-
-                currentPath //.setMenu(menu)
-                    .setMenuGroup(group)
-                    .setMenuEntry(entry)
-                    .setUrl(currentUrl);
+                currentPath.setMenuEntries(path, adminMenuService.getEntriesOnPath(path));
+                currentPath.setUrl(currentUrl);
             }
 
             return currentPath;

@@ -36,11 +36,7 @@ import javax.sql.DataSource;
 public class TallyBusinessDataServiceBeanConfiguration  extends ADataServiceBeanConfiguration {
 
     public TallyBusinessDataServiceBeanConfiguration() {
-        this(IDbSetting.DEFAULT_DB_SETTING);
-    }
-
-    public TallyBusinessDataServiceBeanConfiguration(IDbSetting dbSetting) {
-        super(dbSetting);
+        super();
     }
 
     @Override

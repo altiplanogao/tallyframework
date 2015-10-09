@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.testframework.database.derby;
 
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
 

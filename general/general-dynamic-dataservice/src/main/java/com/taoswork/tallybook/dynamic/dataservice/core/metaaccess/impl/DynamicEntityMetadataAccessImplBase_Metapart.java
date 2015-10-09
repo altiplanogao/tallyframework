@@ -21,7 +21,7 @@ import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
 import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.EffectivelyImmutable;
 import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceBeanConfiguration;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
 import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
 
@@ -14,14 +15,14 @@ import java.util.List;
 public class TallyAdminDataService extends DataServiceBase {
     public static final String COMPONENT_NAME = TallyAdminDataServiceDefinition.DATA_SERVICE_NAME;
 
-    public TallyAdminDataService() {
-        this(TallyAdminDataServiceBeanConfiguration.class, null);
+    public TallyAdminDataService(IDbSetting dbSetting) {
+        this(dbSetting, TallyAdminDataServiceBeanConfiguration.class, null);
     }
 
-    public TallyAdminDataService(
+    public TallyAdminDataService(IDbSetting dbSetting,
             Class<? extends TallyAdminDataServiceBeanConfiguration> dataServiceConf,
             List<Class> annotatedClasses) {
-        super(new TallyAdminDataServiceDefinition(), dataServiceConf, annotatedClasses);
+        super(new TallyAdminDataServiceDefinition(), dbSetting, dataServiceConf, annotatedClasses);
     }
 
     @Override

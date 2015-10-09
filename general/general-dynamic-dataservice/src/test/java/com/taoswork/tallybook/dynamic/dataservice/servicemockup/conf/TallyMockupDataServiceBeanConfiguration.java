@@ -38,14 +38,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class TallyMockupDataServiceBeanConfiguration extends ADataServiceBeanConfiguration {
 
-    public TallyMockupDataServiceBeanConfiguration() {
-        this(new HsqlDbSetting());
-    }
-
-    public TallyMockupDataServiceBeanConfiguration(IDbSetting dbSetting) {
-        super(dbSetting);
-    }
-
     @Override
     @Bean(name = TallyMockupDataServiceDefinition.TMOCKUP_DATASOURCE_NAME)
     public DataSource serviceDataSource() {

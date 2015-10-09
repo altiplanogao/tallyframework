@@ -3,11 +3,11 @@ package com.taoswork.tallybook.business.dataservice.tallyuser;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserTestDataServiceBeanConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
@@ -30,8 +30,7 @@ public class TallyUserEntityServiceTest {
     @Before
     public void setupDataSource() {
         counter++;
-        dataService = new TallyUserDataService(
-            TallyUserTestDataServiceBeanConfiguration.class, null);
+        dataService = new TallyUserDataService(new HsqlDbSetting());
     }
 
     @After

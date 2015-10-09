@@ -2,97 +2,91 @@ package com.taoswork.tallybook.admincore.menu.impl;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionEntry;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
-import com.taoswork.tallybook.general.solution.menu.Menu;
-import com.taoswork.tallybook.general.solution.menu.MenuEntry;
-import com.taoswork.tallybook.general.solution.menu.MenuEntryGroup;
-import com.taoswork.tallybook.general.solution.menu.impl.MenuEntryGroupImpl;
-import com.taoswork.tallybook.general.solution.menu.impl.MenuEntryImpl;
-import com.taoswork.tallybook.general.solution.menu.impl.MenuImpl;
-import com.taoswork.tallybook.general.solution.weak.WeakData;
+import com.taoswork.tallybook.general.solution.menu.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/4/28.
  */
 @FrameworkService
 @Service(AdminMenuService.SERVICE_NAME)
-public class AdminMenuServiceImpl implements AdminMenuService {
+public class AdminMenuServiceImpl implements AdminMenuService, ApplicationContextAware {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     private DataServiceManager dataServiceManager;
 
-    public static final String MG_USER_KEY = "TBMG.User";
-    public static final String MG_USER_ICON = "glyphicon-user";
-
-    public static final String ME_PERSON_KEY = "TBME.Person";
-    public static final String ME_PERSON_ICON = "glyphicon-user";
-
-    public static final String ME_ORG_KEY = "TBME.Organization";
-    public static final String ME_ORG_ICON = "glyphicon-user";
-
-    public static final String MG_SECURITY_KEY = "TBMG.Security";
-    public static final String MG_SECURITY_ICON = "glyphicon-user";
-
-    public static final String ME_RES_CRITERIA_KEY = "TBME.ResourceCriteria";
-    public static final String ME_RES_CRITERIA_ICON = "glyphicon-user";
-
-    public static final String ME_PERM_ENTRY_KEY = "TBME.PermEntry";
-    public static final String ME_PERM_ENTRY_ICON = "glyphicon-user";
-
-    public static final String ME_PERM_KEY = "TBME.Perm";
-    public static final String ME_PERM_ICON = "glyphicon-user";
-
-    public static final String ME_ROLE_KEY = "TBME.Role";
-    public static final String ME_ROLE_ICON = "glyphicon-user";
-
-    protected WeakData<Menu> menu = new WeakData<Menu>(){
-        @Override
-        protected Menu createData() {
-            return new MenuImpl()
-                    .add(new MenuEntryGroupImpl(MG_USER_ICON, MG_USER_KEY)
-                                    .addEntry(new MenuEntryImpl(ME_PERSON_ICON, ME_PERSON_KEY, getFriendlyName(Person.class), Person.class))
-                                    .addEntry(new MenuEntryImpl(ME_ORG_ICON, ME_ORG_KEY, getFriendlyName(BusinessUnit.class), BusinessUnit.class))
-                    )
-                    .add(new MenuEntryGroupImpl(MG_SECURITY_ICON, MG_SECURITY_KEY)
-                                    .addEntry(new MenuEntryImpl(ME_RES_CRITERIA_ICON, ME_RES_CRITERIA_KEY, getFriendlyName(SecuredResourceFilter.class), SecuredResourceFilter.class))
-                                    .addEntry(new MenuEntryImpl(ME_PERM_ENTRY_ICON, ME_PERM_ENTRY_KEY, getFriendlyName(AdminPermissionEntry.class), AdminPermissionEntry.class))
-                                    .addEntry(new MenuEntryImpl(ME_PERM_ICON, ME_PERM_KEY, getFriendlyName(AdminPermission.class), AdminPermission.class))
-                                    .addEntry(new MenuEntryImpl(ME_ROLE_ICON, ME_ROLE_KEY, getFriendlyName(AdminRole.class), AdminRole.class))
-                    )
-                    .instance();
-        }
-    };
-
-    private String getFriendlyName(Class entityClz){
-        return dataServiceManager.getEntityResourceName(entityClz.getName());
-    }
+    private Menu fullMenu;
 
     public AdminMenuServiceImpl() {
-
     }
 
     @Override
-    public Menu buildMenu(AdminEmployee adminEmployee) {
-        return menu.get();
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        loadFullMenu();
+    }
+
+    private void loadFullMenu(){
+        if(fullMenu != null)
+            return;
+        try {
+            InputStream fileStream = this.getClass().getClassLoader().getResource("menu/admin-menu.json").openStream();
+            fullMenu = new Menu(fileStream, new IMenuEntryUpdater() {
+                @Override
+                public void update(IMenuEntry entry) {
+                    String entity = entry.getEntity();
+                    if(StringUtils.isNotEmpty(entity)){
+                        if(StringUtils.isEmpty(entry.getUrl())){
+                            String friendly = getFriendlyName(entity);
+                            entry.setUrl("/" + friendly);
+                        }
+                        if(StringUtils.isEmpty(entry.getSecurityGuard())){
+                            entry.setSecurityGuard(entity);
+                        }
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getFriendlyName(String entityName) {
+        return dataServiceManager.getEntityResourceName(entityName);
     }
 
     @Override
-    public MenuEntry findMenuEntryByUrl(String url){
+    public IMenu buildMenu(AdminEmployee adminEmployee) {
+        if(fullMenu == null){
+            loadFullMenu();
+        }
+        return fullMenu;
+    }
+
+    @Override
+    public Collection<IMenuEntry> getEntriesOnPath(MenuPath path){
+        return fullMenu.getEntriesOnPath(path);
+    }
+
+    @Override
+    public MenuPath findMenuPathByUrl(String url) {
         String realUrl = "/" + url;
-        return menu.get().findEntryByUrl(realUrl);
+        MenuPath path = fullMenu.getSinglePathOfUrl(realUrl);
+        return path;
     }
 
     @Override
-    public MenuEntryGroup findMenuEntryGroupByEntryKey(String entryKey){
-        return menu.get().findGroupByEntryKey(entryKey);
+    public MenuPath findMenuPathByEntryKey(String entryKey) {
+        MenuPath path = fullMenu.getSinglePathOfEntry(entryKey);
+        return path;
     }
 }

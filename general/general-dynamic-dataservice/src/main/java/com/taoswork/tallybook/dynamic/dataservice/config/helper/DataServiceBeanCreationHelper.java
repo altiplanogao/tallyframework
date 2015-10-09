@@ -30,9 +30,6 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by Gao Yuan on 2015/5/12.
- */
 public class DataServiceBeanCreationHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceBeanCreationHelper.class);
 
@@ -49,15 +46,7 @@ public class DataServiceBeanCreationHelper {
 
     public DataServiceBeanCreationHelper(IDataServiceDefinition dataServiceDefinition, IDbSetting dbSetting) {
         this.dataServiceDefinition = dataServiceDefinition;
-        if (dbSetting != null) {
-            this.dbSetting = dbSetting;
-        } else {
-            if (System.getProperty("usehsql", "false").equals("true")) {
-                this.dbSetting = new HsqlDbSetting();
-            } else {
-                this.dbSetting = new MysqlDbSetting();
-            }
-        }
+        this.dbSetting = dbSetting;
     }
 
     // **************************************************** //

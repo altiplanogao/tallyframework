@@ -6,9 +6,9 @@ import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertyFilterC
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.util.*;

@@ -55,22 +55,22 @@ public abstract class ADataServiceBeanConfiguration
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ADataServiceBeanConfiguration.class);
 
-    private final IDbSetting dbSetting;
     private IDataServiceDefinition dataServiceDefinition;
     protected DataServiceBeanCreationHelper helper;
 
     // **************************************************** //
     //  Constructor & initialize                            //
     // **************************************************** //
-    protected ADataServiceBeanConfiguration(IDbSetting dbSetting){
-        this.dbSetting = dbSetting;
+    protected ADataServiceBeanConfiguration(){
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if(applicationContext instanceof IDataServiceDelegate){
-            IDataServiceDefinition dataServiceDefinition = ((IDataServiceDelegate)applicationContext).getDataServiceDefinition();
+            IDataServiceDelegate delegate = ((IDataServiceDelegate)applicationContext);
+            IDataServiceDefinition dataServiceDefinition = delegate.getDataServiceDefinition();
             this.dataServiceDefinition = dataServiceDefinition;
+            IDbSetting dbSetting = delegate.getDbSetting();
             helper = new DataServiceBeanCreationHelper(dataServiceDefinition, dbSetting);
         }else {
             LOGGER.error("'{}' expected to be loaded by IDataServiceDefinitionHolder", this.getClass().getName());

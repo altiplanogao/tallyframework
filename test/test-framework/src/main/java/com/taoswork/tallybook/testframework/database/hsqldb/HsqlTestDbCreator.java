@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.testframework.database.hsqldb;
 
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hsqldb.jdbc.JDBCDriver;
 
 import javax.sql.DataSource;

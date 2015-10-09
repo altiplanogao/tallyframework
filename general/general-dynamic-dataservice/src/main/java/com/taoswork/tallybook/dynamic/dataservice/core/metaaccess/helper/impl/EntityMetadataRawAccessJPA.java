@@ -6,7 +6,7 @@ import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublish
 import com.taoswork.tallybook.general.solution.threading.annotations.GuardedBy;
 import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import com.taoswork.tallybook.general.solution.time.IntervalSensitive;
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.*;
