@@ -6,6 +6,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  */
 public class EntityInstanceResult {
     Persistable data;
+    String dataName;
     String idKey;
     String idValue;
 
@@ -33,6 +34,15 @@ public class EntityInstanceResult {
 
     public EntityInstanceResult setIdValue(String idValue) {
         this.idValue = idValue;
+        return this;
+    }
+
+    public String getDataName() {
+        return dataName;
+    }
+
+    public EntityInstanceResult setDataName(String dataName) {
+        this.dataName = dataName;
         return this;
     }
 }

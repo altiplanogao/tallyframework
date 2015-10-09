@@ -1,7 +1,9 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
 import com.taoswork.tallybook.general.solution.menu.IMenuEntry;
+import com.taoswork.tallybook.general.solution.menu.MenuEntry;
 import com.taoswork.tallybook.general.solution.menu.MenuPath;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 
@@ -34,6 +36,14 @@ public class CurrentPath {
         this.path = path;
         this.menuEntries = menuEntries;
         return this;
+    }
+
+    public void pushEntry(String name, String url) {
+        if (StringUtils.isNotEmpty(name)) {
+            IMenuEntry menuEntry = new MenuEntry();
+            menuEntry.setName(name).setUrl(url);
+            this.menuEntries.add(menuEntry);
+        }
     }
 
     public boolean isMatchPath(String... keys){

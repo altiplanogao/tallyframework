@@ -65,6 +65,10 @@ public class ProcessFieldsClassHandler implements IClassHandler {
             nameFieldMetadata.setNameField(true);
         }
 
+        if(nameFieldMetadata != null){
+            classMetadata.setNameField(nameFieldMetadata.getField());
+        }
+
         if (failed > 0) {
             return ProcessResult.FAILED;
         } else if (totalfields <= 0) {

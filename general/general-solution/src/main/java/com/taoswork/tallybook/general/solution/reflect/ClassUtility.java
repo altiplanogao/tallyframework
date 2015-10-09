@@ -4,9 +4,6 @@ import com.taoswork.tallybook.general.extension.collections.ListBuilder;
 
 import java.util.*;
 
-/**
- * Created by Gao Yuan on 2015/6/14.
- */
 public class ClassUtility {
     public static Class getSuperClassWithout(Class clz, String fragment){
         if(!clz.getName().toLowerCase().contains(fragment)){
@@ -98,5 +95,4 @@ public class ClassUtility {
         }
         return classes;
     }
-
 }

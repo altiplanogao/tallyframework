@@ -179,11 +179,16 @@ public class PersistenceManagerImpl implements PersistenceManager {
         Class clz = entity.getClass();
         ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
         Field idField = classMetadata.getIdField();
+        Field nameField = classMetadata.getNameField();
         try {
             Object id = idField.get(entity);
             entityResult.setIdKey(idField.getName())
                 .setIdValue((id == null) ? null : id.toString())
                 .setEntity(entity);
+            if(nameField != null){
+                Object name = nameField.get(entity);
+                entityResult.setEntityName(name.toString());
+            }
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());
         }

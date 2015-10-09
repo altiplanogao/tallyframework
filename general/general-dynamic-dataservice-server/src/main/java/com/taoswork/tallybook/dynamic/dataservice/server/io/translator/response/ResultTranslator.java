@@ -40,7 +40,8 @@ public class ResultTranslator {
         EntityInstanceResult result = new EntityInstanceResult();
         result.setData(er.getEntity())
             .setIdKey(er.getIdKey())
-            .setIdValue(er.getIdValue());
+            .setIdValue(er.getIdValue())
+            .setDataName(er.getEntityName());
         return result;
     }
 }

@@ -8,6 +8,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 public class EntityResult<T extends Persistable> {
     String idKey;
     String idValue;
+    String entityName;
     T entity;
 
     public String getIdKey() {
@@ -25,6 +26,15 @@ public class EntityResult<T extends Persistable> {
 
     public EntityResult setIdValue(String idValue) {
         this.idValue = idValue;
+        return this;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public EntityResult setEntityName(String entityName) {
+        this.entityName = entityName;
         return this;
     }
 

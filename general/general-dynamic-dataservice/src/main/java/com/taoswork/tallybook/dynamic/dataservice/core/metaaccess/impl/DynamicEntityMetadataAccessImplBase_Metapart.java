@@ -253,14 +253,14 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
 
     private ClassMetadata calcClassMetadata(Class<?> entityType, boolean withHierarchy) {
         ClassMetadata classMetadata = null;
-        synchronized (classMetadataMap){
+        synchronized (classMetadataMap) {
             ClassScope classScope = new ClassScope(entityType, true, withHierarchy);
             classMetadata = classMetadataMap.getOrDefault(classScope, null);
             if (null == classMetadata) {
-                if(withHierarchy){
+                if (withHierarchy) {
                     EntityClassTree entityClassTree = getEntityClassTree(entityType);
                     classMetadata = metadataService.generateMetadata(entityClassTree);
-                }else{
+                } else {
                     classMetadata = metadataService.generateMetadata(entityType, true);
                     Field idField = entityMetaRawAccess.getIdField(entityType);
                     classMetadata.setIdField(idField);

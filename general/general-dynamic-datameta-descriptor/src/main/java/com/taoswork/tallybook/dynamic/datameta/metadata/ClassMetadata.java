@@ -1,9 +1,11 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,10 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMetadata.class);
 
     public Class<?> entityClz;
-    private Field idField;
+    private String idFieldName;
+    private String nameFieldName;
+    private transient Field idField;
+    private transient Field nameField;
     public boolean containsSuper = false;
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
@@ -35,19 +40,54 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public Field getIdField(){
-        return idField;
+        if(idField != null)
+            return idField;
+        if(StringUtils.isNotEmpty(this.idFieldName)){
+            idField = NativeClassHelper.getFieldOfName(entityClz, idFieldName, true);
+            idField.setAccessible(true);
+            return idField;
+        } else {
+            return null;
+        }
     }
 
     public void setIdField(Field idField) {
         if(idField != null) {
             this.idField = idField;
             this.idField.setAccessible(true);
+            this.idFieldName = idField.getName();
         }
     }
 
     public void setIdFieldIfNone(Field idField) {
         if(null == this.idField){
             this.setIdField(idField);
+        }
+    }
+
+    public Field getNameField() {
+        if(nameField != null)
+            return nameField;
+        if(StringUtils.isNotEmpty(this.nameFieldName)){
+            nameField = NativeClassHelper.getFieldOfName(entityClz, nameFieldName, true);
+            nameField.setAccessible(true);
+            return nameField;
+        } else {
+            return null;
+        }
+    }
+
+    public void setNameField(Field nameField) {
+        if(nameField != null){
+            this.nameField = nameField;
+            this.nameField.setAccessible(true);
+            this.nameFieldName = nameField.getName();
+        }
+    }
+
+    public void setNameFieldIfNone(Field nameField) {
+        if(null == this.nameField){
+            this.setNameField(nameField);
         }
     }
 
@@ -124,6 +164,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
 
     public void absorb(ClassMetadata thatMeta) {
         this.setIdFieldIfNone(thatMeta.getIdField());
+        this.setNameFieldIfNone(thatMeta.getNameField());
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
@@ -137,7 +178,10 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
 
     @Override
     public ClassMetadata clone() {
-        return CloneUtility.makeCloneForSerializable(this);
+        ClassMetadata copy = CloneUtility.makeCloneForSerializable(this);
+        copy.nameField = this.nameField;
+        copy.idField = this.idField;
+        return copy;
     }
 
     @Override

@@ -340,6 +340,10 @@ public class AdminBasicEntityController extends BaseController {
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+        if(readResponse.getEntity() != null){
+//            currentPath.pushEntry(readResponse.getEntity().getDataName(), request.getRequestURI());
+            model.addAttribute("entityName", readResponse.getEntity().getDataName());
+        }
 
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
