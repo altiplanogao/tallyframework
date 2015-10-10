@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.authority.core.basic;
 
 /**
- * Created by Gao Yuan on 2015/8/18.
+ * Resource access method
  */
 public final class Access {
     public final static int NONE = 0x00;

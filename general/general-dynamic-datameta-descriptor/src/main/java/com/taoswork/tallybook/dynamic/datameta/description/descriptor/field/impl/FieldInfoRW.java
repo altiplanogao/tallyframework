@@ -11,6 +11,8 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 public interface FieldInfoRW extends NamedOrderedInfoRW, FieldInfo {
     void setVisibility(int visibility);
 
+    void setRequired(boolean required);
+
     void setNameField(boolean nameField);
 
     void setFieldType(FieldType fieldType);

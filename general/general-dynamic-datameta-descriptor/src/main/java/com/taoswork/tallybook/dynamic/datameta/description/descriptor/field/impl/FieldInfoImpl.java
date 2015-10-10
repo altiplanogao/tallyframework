@@ -20,6 +20,7 @@ public class FieldInfoImpl
 
     public int visibility = Visibility.DEFAULT;
     public boolean nameField = false;
+    public boolean required = false;
     private boolean isCollection;
     private boolean supportSort = true;
     private boolean supportFilter = true;
@@ -60,6 +61,16 @@ public class FieldInfoImpl
     @Override
     public boolean isNameField() {
         return nameField;
+    }
+
+    @Override
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 
     @Override

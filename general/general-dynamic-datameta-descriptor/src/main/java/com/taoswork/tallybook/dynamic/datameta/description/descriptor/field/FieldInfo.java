@@ -23,6 +23,8 @@ public interface FieldInfo extends NamedOrderedInfo {
 
     boolean isIdField();
 
+    boolean isRequired();
+
     FieldType getFieldType();
 
     boolean isSupportSort();

@@ -1,12 +1,10 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
-import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
+import com.taoswork.tallybook.business.datadomain.tallyuser.gate.PersonValueGate;
+import com.taoswork.tallybook.business.datadomain.tallyuser.validation.PersonValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
-/**
- * Created by Gao Yuan on 2015/5/8.
- */
 @PersistFriendly(
     validators = {PersonValidator.class},
     valueGates = {PersonValueGate.class}
@@ -22,7 +20,7 @@ public interface Person extends Persistable {
 
     Boolean isActive();
 
-    PersonImpl setActive(Boolean active);
+    Person setActive(Boolean active);
 
     String getUuid();
 

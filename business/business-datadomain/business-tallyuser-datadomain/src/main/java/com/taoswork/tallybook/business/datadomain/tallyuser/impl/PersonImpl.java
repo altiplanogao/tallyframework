@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
-import com.taoswork.tallybook.business.datadomain.tallyuser.GenderToStringConverter;
+import com.taoswork.tallybook.business.datadomain.tallyuser.convert.GenderToStringConverter;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
@@ -57,7 +57,7 @@ public class PersonImpl
     protected String name;
 
     @Column(name = "GENDER", nullable = false, length = 1
-        ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.UNKNOWN_CHAR + "'"
+        ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.DEFAULT_CHAR + "'"
     )
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
     @EnumField(enumeration = Gender.class)

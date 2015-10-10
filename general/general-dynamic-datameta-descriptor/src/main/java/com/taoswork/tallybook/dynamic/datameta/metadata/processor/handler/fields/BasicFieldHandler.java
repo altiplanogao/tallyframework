@@ -45,7 +45,7 @@ public class BasicFieldHandler implements IFieldHandler {
         Column columnAnnotation = field.getDeclaredAnnotation(Column.class);
         if (null != columnAnnotation) {
             boolean nullable = columnAnnotation.nullable();
-            columnFacet.setRequired(!nullable);
+            fieldMetadata.setRequired(!nullable);
 
             int length = columnAnnotation.length();
             columnFacet.setLength(length);

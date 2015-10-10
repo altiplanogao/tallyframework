@@ -5,6 +5,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEnti
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,7 +179,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
 
     @Override
     public ClassMetadata clone() {
-        ClassMetadata copy = CloneUtility.makeCloneForSerializable(this);
+        ClassMetadata copy = SerializationUtils.clone(this);
         copy.nameField = this.nameField;
         copy.idField = this.idField;
         return copy;

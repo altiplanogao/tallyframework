@@ -12,7 +12,7 @@ public interface Employee extends
 
     Employee setId(Long id);
 
-    Long getUserId();
+    Long getPersonId();
 
     Employee setUserId(Long userId);
 

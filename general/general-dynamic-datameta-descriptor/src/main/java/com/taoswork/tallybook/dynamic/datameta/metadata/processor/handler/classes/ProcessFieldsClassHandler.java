@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.List;
 
-/**
- * Created by Gao Yuan on 2015/5/27.
- */
 public class ProcessFieldsClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessFieldsClassHandler.class);
 

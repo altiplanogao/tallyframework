@@ -30,11 +30,8 @@ public class FieldRequiredValidator extends FieldValidatorBase<String> {
 
     @Override
     public ValidationError doValidate(FieldMetadata fieldMetadata, String fieldValue){
-        BasicFieldMetaFacet basicFieldMetaFacet = (BasicFieldMetaFacet)fieldMetadata.getFacet(FieldFacetType.Basic);
-        if(basicFieldMetaFacet != null){
-            if(basicFieldMetaFacet.isRequired() && StringUtils.isEmpty(fieldValue)){
-                return new ValidationError("validation.error.field.required");
-            }
+        if(fieldMetadata.isRequired() && StringUtils.isEmpty(fieldValue)){
+            return new ValidationError("validation.error.field.required");
         }
         return null;
     }

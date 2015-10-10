@@ -1,13 +1,13 @@
-package com.taoswork.tallybook.business.datadomain.tallyuser;
+package com.taoswork.tallybook.business.datadomain.tallyuser.convert;
+
+import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 
 import javax.persistence.AttributeConverter;
 
 public class GenderToStringConverter implements AttributeConverter<Gender, String> {
     @Override
     public String convertToDatabaseColumn(Gender attribute) {
-        if(attribute == null)
-            return "";
-        return attribute.getType();
+        return attribute == null ? "" : attribute.getType();
     }
 
     @Override

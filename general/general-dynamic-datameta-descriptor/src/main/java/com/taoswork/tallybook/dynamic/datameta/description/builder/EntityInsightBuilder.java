@@ -52,6 +52,7 @@ final class EntityInsightBuilder {
             copyOrderedFriendlyMetadata(fieldMetadata, fieldInfo);
 
             fieldInfo.setVisibility(fieldMetadata.getVisibility());
+            fieldInfo.setRequired(fieldMetadata.isRequired());
             fieldInfo.setNameField(fieldMetadata.isNameField());
             fieldInfo.setFieldType(fieldMetadata.getFieldType());
 
@@ -77,7 +78,7 @@ final class EntityInsightBuilder {
             }
             BasicFieldMetaFacet basicFieldFacet = (BasicFieldMetaFacet)fieldMetadata.facets.getOrDefault(FieldFacetType.Basic, null);
             if(basicFieldFacet != null){
-                BasicFacetInfo basicFacetInfo = new BasicFacetInfo(basicFieldFacet.isRequired(), basicFieldFacet.getLength());
+                BasicFacetInfo basicFacetInfo = new BasicFacetInfo(basicFieldFacet.getLength());
                 fieldInfo.addFacet(basicFacetInfo);
             }
 

@@ -9,11 +9,7 @@
 
         <class>com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonCertificationImpl</class>
-        <!--
-        <class>AdminRoleImpl</class>
-        <class>AdminPermissionImpl</class>
-        <class>AdminPermissionQualifiedEntityImpl</class>
--->
+        <class>com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonFacetCertificationImpl</class>
 
         <exclude-unlisted-classes/>
 

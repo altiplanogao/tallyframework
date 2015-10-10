@@ -15,7 +15,7 @@ public enum Gender implements IFriendlyEnum<String> {
     female("F", "female"),
     unknown("U", "unknown");
 
-    public static final String UNKNOWN_CHAR = "U";
+    public static final String DEFAULT_CHAR = "U";
 
     private final String type;
     private final String friendlyType;

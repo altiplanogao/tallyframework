@@ -20,6 +20,7 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
 
     private String tabName;
     private String groupName;
+    protected boolean required  =false;
     private int visibility;
 
     private FieldType fieldType;
@@ -84,6 +85,14 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public int getVisibility() {

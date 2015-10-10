@@ -21,6 +21,7 @@ public enum RelationType {
      */
     OneWay_OneToOne,
     TwoWay_OneToOneOwner,
+
     /**
      * Relation Belonging
      * Has: mappedBy
@@ -53,6 +54,7 @@ public enum RelationType {
      */
     OneWay_ManyToOne,
     TwoWay_ManyToOneOwner,
+
     /**
      * Has "mappedBy"
      * @Entity
@@ -95,6 +97,7 @@ public enum RelationType {
      */
     TwoWay_ManyToManyOwner,
     OneWay_ManyToMany,
+
     /**
      *
      * @Entity

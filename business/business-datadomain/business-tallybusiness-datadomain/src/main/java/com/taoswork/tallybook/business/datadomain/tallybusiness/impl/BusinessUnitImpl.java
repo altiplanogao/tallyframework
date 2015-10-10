@@ -8,9 +8,6 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Vis
 
 import javax.persistence.*;
 
-/**
- * Created by Gao Yuan on 2015/4/16.
- */
 @Entity
 @Table(name = "TB_BU")
 public class BusinessUnitImpl implements BusinessUnit {

@@ -6,7 +6,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
  * Created by Gao Yuan on 2015/9/28.
  */
 public class BasicFieldMetaFacet implements IFieldMetaFacet {
-    protected boolean required  =false;
     protected int length = -1;
 
     @Override
@@ -16,16 +15,7 @@ public class BasicFieldMetaFacet implements IFieldMetaFacet {
 
     @Override
     public void merge(IFieldMetaFacet facet) {
-        this.required |= ((BasicFieldMetaFacet)facet).required;
-    }
-
-    public boolean isRequired() {
-        return required;
-    }
-
-    public BasicFieldMetaFacet setRequired(boolean required) {
-        this.required = required;
-        return this;
+        this.length = ((BasicFieldMetaFacet)facet).length;
     }
 
     public int getLength() {

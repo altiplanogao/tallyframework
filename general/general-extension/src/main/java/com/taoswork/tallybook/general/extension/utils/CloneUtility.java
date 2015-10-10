@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.general.extension.utils;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import java.io.*;
 import java.lang.reflect.Method;
 
@@ -15,7 +17,7 @@ public class CloneUtility {
                 Method cloneMethod = source.getClass().getDeclaredMethod("clone");
                 return (T) cloneMethod.invoke(source);
             } else if(source instanceof Serializable){
-                return (T)makeCloneForSerializable((Serializable)source);
+                return (T) SerializationUtils.clone((Serializable) source);
             }
         } catch (Exception exp) {
             throw new RuntimeException(exp);
@@ -23,25 +25,4 @@ public class CloneUtility {
 
         throw new RuntimeException("Clone not supported: " + source.getClass() + ". (extends Cloneable or Serializable) required.");
     }
-    public static <T extends Serializable> T makeCloneForSerializable(T source) {
-        try {
-            if(source instanceof Serializable){
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(baos);
-                oos.writeObject(source);
-
-                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                ObjectInputStream ois = new ObjectInputStream(bais);
-                Object deepCopy = ois.readObject();
-
-                return (T) deepCopy;
-
-            }
-        } catch (Exception exp) {
-            throw new RuntimeException(exp);
-        }
-
-        throw new RuntimeException("Clone not supported: " + source.getClass() + ". (extends Cloneable or Serializable) required.");
-    }
-
 }

@@ -1,5 +1,6 @@
-package com.taoswork.tallybook.business.datadomain.tallyuser;
+package com.taoswork.tallybook.business.datadomain.tallyuser.gate;
 
+import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.EntityValueGateBase;
 import org.apache.commons.lang3.StringUtils;
 

@@ -16,6 +16,10 @@
             <groupId>com.taoswork.tallybook</groupId>
             <artifactId>general-dynamic-datadomain</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>business-tallyuser-datadomain</artifactId>
+        </dependency>
     </dependencies>
 
 

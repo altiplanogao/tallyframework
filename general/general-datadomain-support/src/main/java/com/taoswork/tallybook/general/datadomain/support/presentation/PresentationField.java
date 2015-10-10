@@ -29,6 +29,8 @@ public @interface PresentationField {
 
     boolean nameField() default false;
 
+    boolean required() default false;
+
     /**
      * Optional - only required if you want to restrict the visibility of this field in the admin tool
      *

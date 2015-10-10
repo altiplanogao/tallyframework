@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-/**
- * Created by Gao Yuan on 2015/4/14.
- */
-public interface ModuleUsage {
+import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+
+public interface ModuleUsage extends Persistable {
 
 }
