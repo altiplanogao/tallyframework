@@ -5,18 +5,21 @@ import com.taoswork.tallybook.general.authority.core.resource.IResourceProtectio
 import com.taoswork.tallybook.general.authority.core.resource.IResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.core.resource.ResourceFitting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Gao Yuan on 2015/8/19.
- */
 public final class ResourceProtectionManager implements IResourceProtectionManager {
+
+    /**
+     * All the IResourceProtection managed,
+     * the key is the resource entity type string (IResourceProtection.getResourceEntity())
+     */
     private final Map<String, IResourceProtection> resourceEntityRegistry = new ConcurrentHashMap<String, IResourceProtection>();
+    /**
+     * alias to resource-entity-type mapping
+     */
     private final Map<String, String> resourceEntityAlias = new HashMap<String, String>();
+
     private int version;
 
     public ResourceProtectionManager() {
@@ -55,7 +58,8 @@ public final class ResourceProtectionManager implements IResourceProtectionManag
     }
 
     @Override
-    public ResourceFitting getResourceFitting(String resourceEntity, Object instance) {
+    public ResourceFitting getResourceFitting(String resourceEntity,
+                                              Object instance) {
         IResourceProtection protection = getResourceProtection(resourceEntity);
 
         List<String> matchingFilter = new ArrayList<String>();
@@ -74,14 +78,16 @@ public final class ResourceProtectionManager implements IResourceProtectionManag
     }
 
     @Override
-    public ResourceFitting getResourceFitting(boolean matchingPreferred, String resourceEntity, Object... instances) {
+    public ResourceFitting getResourceFitting(boolean matchingPreferred,
+                                              String resourceEntity,
+                                              Object... instances) {
         if (instances.length == 0) {
             throw new IllegalArgumentException();
         }
         IResourceProtection protection = getResourceProtection(resourceEntity);
 
-        List<String> matchingFilter = new ArrayList<String>();
-        List<String> unmatchedFilter = new ArrayList<String>();
+        Set<String> matchingFilter = new HashSet<String>();
+        Set<String> unmatchedFilter = new HashSet<String>();
         String masterFilter = "";
         for (IResourceFilter filter : protection.getFilters()) {
             boolean matching = false;
@@ -98,11 +104,28 @@ public final class ResourceProtectionManager implements IResourceProtectionManag
             } else {
                 unmatchedFilter.add(filter.getCode());
             }
+//            if(matchingPreferred){
+//                if(matching){
+//                    matchingFilter.add(filter.getCode());
+//                }else{
+//                    unmatchedFilter.add(filter.getCode());
+//                }
+//            }else { // !matchingPreferred
+//                if(unmatched){
+//                    unmatchedFilter.add(filter.getCode());
+//                }else {
+//                    matchingFilter.add(filter.getCode());
+//                }
+//            }
+
+//            Tip:
+//            ((matchingPreferred && matching) || ((!matchingPreferred) && (!unmatched)))
+//                ===
+//            ((matchingPreferred && matching) || (!(matchingPreferred || unmatched)))
         }
         return new ResourceFitting(
             protection.isMasterControlled(),
             protection.getProtectionMode(),
             matchingFilter, unmatchedFilter);
     }
-
 }

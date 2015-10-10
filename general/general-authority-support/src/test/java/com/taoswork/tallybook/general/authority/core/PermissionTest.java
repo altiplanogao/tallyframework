@@ -123,15 +123,15 @@ public class PermissionTest {
         ResourceCriteria secretTFileX = new ResourceCriteria().setType(TFile.RESOURCE_TYPE_NAME).setFilter("ByTag").setFilterParameter("X");
         ResourceCriteria secretTFileY = new ResourceCriteria().setType(TFile.RESOURCE_TYPE_NAME).setFilter("ByTag").setFilterParameter("Y");
 
-        PermissionEntry generalPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial generalPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(generalTFile)
                 .setAccess(new ResourceAccess()
                         .setCrudAll(generalCrud));
-        PermissionEntry secretXPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial secretXPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(secretTFileX)
                 .setAccess(new ResourceAccess()
                         .setCrudAll(xCrud));
-        PermissionEntry secretYPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial secretYPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(secretTFileY)
                 .setAccess(new ResourceAccess()
                         .setCrudAll(yCrud));
@@ -148,15 +148,15 @@ public class PermissionTest {
         ResourceCriteria secretTFileX = new ResourceCriteria().setType(TFile.RESOURCE_TYPE_NAME).setFilter("ByTag").setFilterParameter("X");
         ResourceCriteria secretTFileY = new ResourceCriteria().setType(TFile.RESOURCE_TYPE_NAME).setFilter("ByTag").setFilterParameter("Y");
 
-        PermissionEntry generalPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial generalPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(generalTFile)
                 .setAccess(new ResourceAccess()
                         .setExtendedAccess(TFile.ACCESS_EXECUTE, generalAccess));
-        PermissionEntry secretXPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial secretXPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(secretTFileX)
                 .setAccess(new ResourceAccess()
                         .setExtendedAccess(TFile.ACCESS_EXECUTE, xAccess));
-        PermissionEntry secretYPermEntry = new PermissionEntryImpl()
+        EntityPermissionSpecial secretYPermEntry = new PermissionEntryImpl()
                 .setResourceDescriptor(secretTFileY)
                 .setAccess(new ResourceAccess()
                         .setExtendedAccess(TFile.ACCESS_EXECUTE, yAccess));

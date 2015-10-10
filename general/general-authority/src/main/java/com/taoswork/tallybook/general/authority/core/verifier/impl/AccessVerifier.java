@@ -14,11 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Gao Yuan on 2015/8/19.
- */
 public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
-    private ResourceProtectionManager securedResourceManager;
+    private IResourceProtectionManager securedResourceManager;
     private final Map<_SimulatedResourceAccess, IResourceProtectionMapping> simulatedResourceProtections
         = new ConcurrentHashMap<_SimulatedResourceAccess, IResourceProtectionMapping>();
 
@@ -79,24 +76,17 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     }
 
     @Override
-    public AccessibleFitting calcAccessibleFitting(IPermissionAuthority auth, Access access, String resourceType) {
+    public AccessibleAreas calcAccessibleAreas(IPermissionAuthority auth, Access access, String resourceType) {
         resourceType = securedResourceManager.correctResourceEntity(resourceType);
         IEntityPermission entityPermission = auth.getEntityPermission(resourceType);
         if (entityPermission == null) {
             return null;
         }
-        return calcAccessibleFitting(entityPermission, access);
+        return calcAccessibleAreas(entityPermission, access);
     }
 
-    /**
-     * If returns null, no resource can pass
-     *
-     * @param entityPermission
-     * @param access
-     * @return
-     */
     @Override
-    public AccessibleFitting calcAccessibleFitting(IEntityPermission entityPermission, Access access) {
+    public AccessibleAreas calcAccessibleAreas(IEntityPermission entityPermission, Access access) {
         String resourceType = entityPermission.getResourceEntity();
         IResourceProtection protection = securedResourceManager.getResourceProtection(resourceType);
 
@@ -111,48 +101,66 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
         switch (protection.getProtectionMode()) {
             case FitAll:
                 if (protection.isMasterControlled()) {
+                    // C11
                     if (hasMasterAccess) {
-                        return new AccessibleFitting(null, unmatchedFilters);
+                        //i04, i05, i06
+                        return new AccessibleAreas(null, unmatchedFilters);
                     } else {
+                        //i01, i02, i03
                         return null;
                     }
                 } else {
+                    // C01
                     if (hasMasterAccess) {
-                        return new AccessibleFitting(null, unmatchedFilters);
+                        //i04, i05, i06
+                        return new AccessibleAreas(null, unmatchedFilters);
                     } else if (matchingFilters.isEmpty()) {
+                        //i01
                         return null;
                     } else {
-                        return new AccessibleFitting(matchingFilters, unmatchedFilters);
+                        //i02, i03
+                        return new AccessibleAreas(matchingFilters, unmatchedFilters);
                     }
                 }
 
             case FitAny:
                 if (protection.isMasterControlled()) {
-                    if (!hasMasterAccess) {
-                        return null;
-                    } else {
+                    // C10
+                    if (hasMasterAccess) {
                         if (matchingFilters.isEmpty()) {
-                            return new AccessibleFitting(null, unmatchedFilters);
+                            //i04
+                            return new AccessibleAreas(null, unmatchedFilters);
                         } else if (unmatchedFilters.isEmpty()) {
-                            return new AccessibleFitting(null, null);
+                            //i06
+                            return new AccessibleAreas(null, null);
                         } else {
-                            return new AccessibleFitting(matchingFilters, unmatchedFilters, true);
+                            //i05
+                            return new AccessibleAreas(matchingFilters, unmatchedFilters, true);
                         }
+                    } else {
+                        //i01, i02, i03
+                        return null;
                     }
                 } else {
-                    if (!hasMasterAccess) {
+                    // C00
+                    if (hasMasterAccess) {
                         if (matchingFilters.isEmpty()) {
+                            //i04
+                            return new AccessibleAreas(null, unmatchedFilters); //can also handle i06
+                        } else if (unmatchedFilters.isEmpty()) {
+                            //i06
+                            return new AccessibleAreas(null, null);
+                        } else {
+                            //i05
+                            return new AccessibleAreas(matchingFilters, unmatchedFilters, true);
+                        }
+                    }else{
+                        if (matchingFilters.isEmpty()) {
+                            //i01
                             return null;
                         } else {
-                            return new AccessibleFitting(matchingFilters, null);
-                        }
-                    } else {
-                        if (matchingFilters.isEmpty()) {
-                            return new AccessibleFitting(null, unmatchedFilters);
-                        } else if (unmatchedFilters.isEmpty()) {
-                            return new AccessibleFitting(null, null);
-                        } else {
-                            return new AccessibleFitting(matchingFilters, unmatchedFilters, true);
+                            //i02, i03
+                            return new AccessibleAreas(matchingFilters, null);
                         }
                     }
                 }
@@ -160,7 +168,6 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
                 throw new IllegalStateException();
         }
     }
-
 
     @Override
     public boolean canAccessMappedResource(IPermissionAuthority auth, Access access, String virtualResource) {

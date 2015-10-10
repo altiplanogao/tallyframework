@@ -23,7 +23,7 @@ public final class ResourceProtection implements IResourceProtection {
      * masterControlled, see EntityPermission.masterAccess
      * <p>
      * If user want to access Resource filtered by 'FilterA'
-     * The user must owns a PermissionEntry (with proper access) referring to the filter.
+     * The user must owns a EntityPermissionSpecial (with proper access) referring to the filter.
      * <p>
      * When masterControlled enabled here. The user should also have proper access on the EntityPermission
      */

@@ -54,14 +54,24 @@ public final class Access {
         return new Access(NONE, accAll);
     }
 
+    /**
+     * if value == true, return original + mask
+     * if value == false, return original - mask
+     */
     public static int bitSet(int original, int mask, boolean value) {
         return value ? original | mask : original & (~mask);
     }
 
+    /**
+     * check if any bit in the mask contained
+     */
     public static boolean bitCoversAny(int value, int mask) {
         return (value & mask) != NONE;
     }
 
+    /**
+     * check if all bit in the mask contained
+     */
     public static boolean bitCoversAll(int value, int mask) {
         return (value & mask) == mask;
     }
@@ -82,26 +92,41 @@ public final class Access {
         return extended & mask;
     }
 
+    /**
+     * returns a + b
+     */
     public Access or(Access access) {
         return new Access(
             this.general | access.general,
             this.extended | access.extended);
     }
 
+    /**
+     * returns a + b
+     */
     public Access merge(Access access) {
         return or(access);
     }
 
+    /**
+     * returns a & b
+     */
     public Access and(Access access) {
         return new Access(
             this.general & access.general,
             this.extended & access.extended);
     }
 
+    /**
+     * returns a - b
+     */
     public Access exclude(Access access){
         return and(access.not());
     }
 
+    /**
+     * return a xor b,
+     */
     public Access xor(Access access) {
         return new Access(
             this.general ^ access.general,
@@ -109,10 +134,16 @@ public final class Access {
             this.extended ^ access.extended);
     }
 
+    /**
+     * return -a
+     */
     public Access not() {
         return not(0xFFFFFFFF);
     }
 
+    /**
+     * calc -this using @param extendedMask as mask for extended part
+     */
     public Access not(int extendedMask) {
         return new Access(
             ((~this.general) & CRUDQ_ALL),
@@ -151,24 +182,40 @@ public final class Access {
         return (extended & acc) != EXTENDED_NONE;
     }
 
+    /**
+     * Check if the access fully contained
+     * @param acc
+     * @return
+     */
     public boolean hasAccess(Access acc) {
         boolean general = ((this.general & acc.general) == acc.general);
         boolean extend = ((this.extended & acc.extended) == acc.extended);
         return (extend && general);
     }
 
+    /**
+     * Check if any of the access contained
+     * @param acc
+     * @return
+     */
     public boolean hasAnyAccess(Access acc) {
         return ((this.general & acc.general) != NONE) ||
             ((this.extended & acc.extended) != EXTENDED_NONE);
     }
 
+    /**
+     * Set the general part by mask, using + or -
+     */
     public Access generalSet(int mask, boolean value) {
-        int general = value ? this.general | mask : this.general & (~mask);
+        int general = bitSet(this.general, mask, value);
         return new Access(general, this.extended);
     }
 
+    /**
+     * Set the extended part by mask, using + or -
+     */
     public Access extendedSet(int mask, boolean value) {
-        int extended = value ? this.extended | mask : this.extended & (~mask);
+        int extended = bitSet(this.extended, mask, value);
         return new Access(this.general, extended);
     }
 

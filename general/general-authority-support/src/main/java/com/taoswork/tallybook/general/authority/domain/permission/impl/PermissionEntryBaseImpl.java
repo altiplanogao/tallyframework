@@ -19,7 +19,7 @@ import javax.persistence.*;
  *      |   Permission          |  --------->  | Permission 4 Entity   |   ---------> |   Permission Entry    |
  *      | ( Permission Package) |              |                       |              |                       |
  *      | owned by user or group|              |                       |              |                       |
- *      | SimplePermissionAuthority.java       | EntityPermission.java |              | PermissionEntry.java  |
+ *      | SimplePermissionAuthority.java       | EntityPermission.java |              | EntityPermissionSpecial.java  |
  *      |-----------------------|              |-----------------------|              |-----------------------|
  *      | id                    |              | id                    |              | id                    |
  *      |                       |              | entity name (resourceEntity)         | filter (SecuredResourceFilterImpl.java)
@@ -38,7 +38,7 @@ import javax.persistence.*;
  *      |   Permission          |  --------->  |   Permission Entry    |
  *      | ( Permission Package) |              |                       |
  *      | owned by user or group|              |                       |
- *      | SimplePermissionAuthority.java       | PermissionEntry.java  |
+ *      | SimplePermissionAuthority.java       | EntityPermissionSpecial.java  |
  *      |-----------------------|              |-----------------------|
  *      | id                    |              | id                    |
  *      | name                  |              | entity name (resourceEntity)

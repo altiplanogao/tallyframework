@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.authority.mockup.resource.repo;
 
-import com.taoswork.tallybook.general.authority.core.resource.AccessibleFitting;
+import com.taoswork.tallybook.general.authority.core.resource.AccessibleAreas;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceProtection;
 import com.taoswork.tallybook.general.authority.mockup.resource.GuardedDocInstance;
@@ -18,13 +18,13 @@ public class DocRepo {
         docs.add(doc);
     }
 
-    public List<GuardedDoc> query(AccessibleFitting accessibleFitting, IResourceProtection resourceProtection) {
+    public List<GuardedDoc> query(AccessibleAreas accessibleAreas, IResourceProtection resourceProtection) {
         List<GuardedDoc> result = new ArrayList<GuardedDoc>();
-        if (accessibleFitting == null) {
+        if (accessibleAreas == null) {
             return result;
         }
-        Collection<String> passFiltersCode = accessibleFitting.passFilters;
-        Collection<String> blockFiltersCode = accessibleFitting.blockFilters;
+        Collection<String> passFiltersCode = accessibleAreas.passFilters;
+        Collection<String> blockFiltersCode = accessibleAreas.blockFilters;
 
         Collection<IResourceFilter> filters = resourceProtection.getFilters();
         Set<IResourceFilter> passFilters = (passFiltersCode != null ? new HashSet<IResourceFilter>() : null);
@@ -38,7 +38,7 @@ public class DocRepo {
             }
         }
 
-        if (accessibleFitting.inAnyMode) {
+        if (accessibleAreas.inUnionMode) {
             for (GuardedDoc doc : docs) {
                 GuardedDocInstance docInstance = new GuardedDocInstance(doc);
                 boolean fit = false;

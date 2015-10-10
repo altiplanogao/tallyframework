@@ -3,12 +3,12 @@ package com.taoswork.tallybook.general.authority.mockup;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
+import com.taoswork.tallybook.general.authority.core.permission.IEntityPermissionSpecial;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
-import com.taoswork.tallybook.general.authority.core.permission.IPermissionEntry;
 import com.taoswork.tallybook.general.authority.core.permission.authorities.ISimplePermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.permission.authorities.SimplePermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.permission.impl.EntityPermission;
-import com.taoswork.tallybook.general.authority.core.permission.impl.PermissionEntry;
+import com.taoswork.tallybook.general.authority.core.permission.impl.EntityPermissionSpecial;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceFilter;
 import com.taoswork.tallybook.general.authority.core.resource.IResourceProtection;
 import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
@@ -35,10 +35,10 @@ public class PermissionDataMockuper {
     public final IResourceFilter docFilterB;
     public final IResourceFilter docFilterC;
     public final IResourceFilter docFilterD;
-    public final IPermissionEntry accessA;
-    public final IPermissionEntry accessB;
-    public final IPermissionEntry accessC;
-    public final IPermissionEntry accessD;
+    public final IEntityPermissionSpecial accessA;
+    public final IEntityPermissionSpecial accessB;
+    public final IEntityPermissionSpecial accessC;
+    public final IEntityPermissionSpecial accessD;
     public final GuardedDocInstance docG;
     public final GuardedDocInstance docA;
     public final GuardedDocInstance docC;
@@ -67,10 +67,10 @@ public class PermissionDataMockuper {
         docFilterC = new DocTagFilter(TAGC);
         docFilterD = new DocTagFilter(TAGD);
 
-        accessA = new PermissionEntry(docFilterA.getCode(), normalAccess);
-        accessB = new PermissionEntry(docFilterB.getCode(), normalAccess);
-        accessC = new PermissionEntry(docFilterC.getCode(), normalAccess);
-        accessD = new PermissionEntry(docFilterD.getCode(), normalAccess);
+        accessA = new EntityPermissionSpecial(docFilterA.getCode(), normalAccess);
+        accessB = new EntityPermissionSpecial(docFilterB.getCode(), normalAccess);
+        accessC = new EntityPermissionSpecial(docFilterC.getCode(), normalAccess);
+        accessD = new EntityPermissionSpecial(docFilterD.getCode(), normalAccess);
 
         docG = docWith(false, false, false, false, false);
         docA = docWith(true, false, false, false, false);
@@ -111,7 +111,7 @@ public class PermissionDataMockuper {
 
     public ISimplePermissionAuthority authorityWith(boolean g, boolean a, boolean b, boolean c, boolean d) {
         IEntityPermission entityPermission = new EntityPermission(resourceEntity);
-        entityPermission.addEntries(
+        entityPermission.addSpecials(
             a ? accessA : null,
             b ? accessB : null,
             c ? accessC : null,

@@ -3,7 +3,7 @@ package com.taoswork.tallybook.general.authority.core.permission.impl;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IEntityPermission;
-import com.taoswork.tallybook.general.authority.core.permission.IPermissionEntry;
+import com.taoswork.tallybook.general.authority.core.permission.IEntityPermissionSpecial;
 import com.taoswork.tallybook.general.authority.core.permission.wirte.IEntityPermissionWrite;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,14 +17,16 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Created by Gao Yuan on 2015/8/19.
+ * Defines EntityPermission for a resourceEntity,
+ * for details, see IEntityPermission
+ * ({@link com.taoswork.tallybook.general.authority.core.permission.IEntityPermission})
  */
 public final class EntityPermission implements IEntityPermissionWrite {
     private final String resourceEntity;
     /**
-     * Key is IPermissionEntry.getFilterCode()
+     * Key is IEntityPermissionSpecial.getFilterCode()
      */
-    private final ConcurrentHashMap<String, IPermissionEntry> permissionEntries = new ConcurrentHashMap<String, IPermissionEntry>();
+    private final ConcurrentHashMap<String, IEntityPermissionSpecial> permissionSpecials = new ConcurrentHashMap<String, IEntityPermissionSpecial>();
     private Access masterAccess = Access.None;
 
     private Object lock = new Object();
@@ -65,7 +67,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
         synchronized (lock) {
             if (dirty) {
                 Access a = masterAccess;
-                for (IPermissionEntry permissionEntry : permissionEntries.values()) {
+                for (IEntityPermissionSpecial permissionEntry : permissionSpecials.values()) {
                     a = a.merge(permissionEntry.getAccess());
                 }
                 quickCheckAccess = a;
@@ -90,17 +92,31 @@ public final class EntityPermission implements IEntityPermissionWrite {
 
     @Override
     public Access getAccessByFilter(String filterCode) {
-        IPermissionEntry entry = permissionEntries.get(filterCode);
-        return entry != null ? entry.getAccess() : Access.None;
+        IEntityPermissionSpecial permSp = permissionSpecials.get(filterCode);
+        return permSp != null ? permSp.getAccess() : Access.None;
     }
 
+    /**
+     * called by getAccessByFilters()
+     * if(masterControlled)
+     *      return masterAccess & [ filterAccess1 & filterAccess2 & ...]
+     * if(!masterControlled)
+     *      if (no filter)
+     *          return masterAccess
+     *      else
+     *          return filterAccess1 & [ filterAccess2 & ...]
+     *
+     * @param masterControlled, if the resource is master controlled, see IResourceProtection
+     * @param filterCodes, the filters selected to be checked.
+     * @return the merged Access value
+     */
     private Access fitAllAccessByFilters(boolean masterControlled, Collection<String> filterCodes) {
-        Map<String, IPermissionEntry> map = new HashMap<String, IPermissionEntry>();
+        Map<String, IEntityPermissionSpecial> map = new HashMap<String, IEntityPermissionSpecial>();
         synchronized (lock) {
             for (String code : filterCodes) {
-                IPermissionEntry entry = permissionEntries.get(code);
-                if (entry != null) {
-                    map.put(code, entry);
+                IEntityPermissionSpecial permSp = permissionSpecials.get(code);
+                if (permSp != null) {
+                    map.put(code, permSp);
                 } else {
                     return Access.None;
                 }
@@ -109,7 +125,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
 
         if (masterControlled) {
             Access access = this.masterAccess;
-            for (IPermissionEntry pe : map.values()) {
+            for (IEntityPermissionSpecial pe : map.values()) {
                 access = access.and(pe.getAccess());
             }
             return access;
@@ -118,7 +134,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
                 return this.masterAccess;
             }
             Access access = null;
-            for (IPermissionEntry pe : map.values()) {
+            for (IEntityPermissionSpecial pe : map.values()) {
                 if (access == null) {
                     access = pe.getAccess();
                 } else {
@@ -129,13 +145,28 @@ public final class EntityPermission implements IEntityPermissionWrite {
         }
     }
 
+    /**
+     * called by getAccessByFilters()
+     *
+     * if(masterControlled)
+     *      return masterControlled & [filterAccess1 + filterAccess2 + ...]
+     * else
+     *      if (no filter)
+     *          return masterAccess
+     *      else
+     *          return [filterAccess1 + filterAccess2 + ...]
+     *
+     * @param masterControlled, if the resource is master controlled, see IResourceProtection
+     * @param filterCodes, the filters selected to be checked.
+     * @return
+     */
     private Access fitAnyAccessByFilters(boolean masterControlled, Collection<String> filterCodes) {
-        Map<String, IPermissionEntry> map = new HashMap<String, IPermissionEntry>();
+        Map<String, IEntityPermissionSpecial> map = new HashMap<String, IEntityPermissionSpecial>();
         synchronized (lock) {
             for (String code : filterCodes) {
-                IPermissionEntry entry = permissionEntries.get(code);
-                if (entry != null) {
-                    map.put(code, entry);
+                IEntityPermissionSpecial permSp = permissionSpecials.get(code);
+                if (permSp != null) {
+                    map.put(code, permSp);
                 }
             }
         }
@@ -144,7 +175,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
         if (filterCodes.isEmpty()) {
             access = masterAccess;
         } else {
-            for (IPermissionEntry pe : map.values()) {
+            for (IEntityPermissionSpecial pe : map.values()) {
                 access = access.or(pe.getAccess());
             }
             if (masterControlled) {
@@ -156,11 +187,11 @@ public final class EntityPermission implements IEntityPermissionWrite {
     }
 
     @Override
-    public IEntityPermission addEntries(IPermissionEntry... permEntries) {
+    public IEntityPermission addSpecials(IEntityPermissionSpecial... permSpecials) {
         synchronized (lock) {
-            for (IPermissionEntry entry : permEntries) {
-                if (entry != null) {
-                    permissionEntries.put(entry.getFilterCode(), entry);
+            for (IEntityPermissionSpecial permSp : permSpecials) {
+                if (permSp != null) {
+                    permissionSpecials.put(permSp.getFilterCode(), permSp);
                 }
             }
             dirty = true;
@@ -186,22 +217,22 @@ public final class EntityPermission implements IEntityPermissionWrite {
             quickCheckAccess = Access.None;
 
             //copy that, into this
-            epthat.permissionEntries.forEach(new BiConsumer<String, IPermissionEntry>() {
+            epthat.permissionSpecials.forEach(new BiConsumer<String, IEntityPermissionSpecial>() {
                 @Override
-                public void accept(String s, final IPermissionEntry entryInThat) {
+                public void accept(String s, final IEntityPermissionSpecial permSpInThat) {
 
-                    epthis.permissionEntries.computeIfPresent(s, new BiFunction<String, IPermissionEntry, IPermissionEntry>() {
+                    epthis.permissionSpecials.computeIfPresent(s, new BiFunction<String, IEntityPermissionSpecial, IEntityPermissionSpecial>() {
                         @Override
-                        public IPermissionEntry apply(String s, IPermissionEntry entryInThis) {
-                            PermissionEntry thisEntryClone = new PermissionEntry(entryInThis);
-                            thisEntryClone.merge(entryInThat);
+                        public IEntityPermissionSpecial apply(String s, IEntityPermissionSpecial permSpInThis) {
+                            EntityPermissionSpecial thisEntryClone = new EntityPermissionSpecial(permSpInThis);
+                            thisEntryClone.merge(permSpInThat);
                             return thisEntryClone;
                         }
                     });
-                    epthis.permissionEntries.computeIfAbsent(s, new Function<String, IPermissionEntry>() {
+                    epthis.permissionSpecials.computeIfAbsent(s, new Function<String, IEntityPermissionSpecial>() {
                         @Override
-                        public IPermissionEntry apply(String s) {
-                            final IPermissionEntry thatEntryClone = entryInThat.clone();
+                        public IEntityPermissionSpecial apply(String s) {
+                            final IEntityPermissionSpecial thatEntryClone = permSpInThat.clone();
                             return thatEntryClone;
                         }
                     });
@@ -217,10 +248,10 @@ public final class EntityPermission implements IEntityPermissionWrite {
         synchronized (lock) {
             final EntityPermission copy = new EntityPermission(resourceEntity);
             copy.masterAccess = masterAccess;
-            permissionEntries.forEach(new BiConsumer<String, IPermissionEntry>() {
+            permissionSpecials.forEach(new BiConsumer<String, IEntityPermissionSpecial>() {
                 @Override
-                public void accept(String s, IPermissionEntry permissionEntry) {
-                    copy.permissionEntries.put(s, permissionEntry.clone());
+                public void accept(String s, IEntityPermissionSpecial permissionEntry) {
+                    copy.permissionSpecials.put(s, permissionEntry.clone());
                 }
             });
             copy.dirty = true;
@@ -234,8 +265,8 @@ public final class EntityPermission implements IEntityPermissionWrite {
         sb.append(", master=" + masterAccess)
             .append(", merged=" + getQuickCheckAccess())
             .append(", [");
-        for (IPermissionEntry entry : permissionEntries.values()) {
-            sb.append("\n\t" + entry + "");
+        for (IEntityPermissionSpecial permSp : permissionSpecials.values()) {
+            sb.append("\n\t" + permSp + "");
         }
         sb.append("]}");
         return sb.toString();
@@ -253,7 +284,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
             .append(dirty, that.dirty)
             .append(resourceEntity, that.resourceEntity)
             .append(masterAccess, that.masterAccess)
-            .append(permissionEntries, that.permissionEntries)
+            .append(permissionSpecials, that.permissionSpecials)
             .isEquals();
     }
 
@@ -262,7 +293,7 @@ public final class EntityPermission implements IEntityPermissionWrite {
         return new HashCodeBuilder(17, 37)
             .append(resourceEntity)
             .append(masterAccess)
-            .append(permissionEntries)
+            .append(permissionSpecials)
             .append(dirty)
             .toHashCode();
     }

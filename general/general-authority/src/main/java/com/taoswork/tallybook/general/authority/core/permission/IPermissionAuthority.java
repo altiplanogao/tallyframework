@@ -1,7 +1,8 @@
 package com.taoswork.tallybook.general.authority.core.permission;
 
 /**
- * Created by Gao Yuan on 2015/8/19.
+ * IPermissionAuthority is owner of .IEntityPermission (of different resource entities)
+ * We may treat it as a user, owning permissions
  */
 public interface IPermissionAuthority {
 

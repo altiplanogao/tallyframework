@@ -4,7 +4,7 @@ import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.core.permission.IPermissionAuthority;
 import com.taoswork.tallybook.general.authority.core.permission.authorities.ISimplePermissionAuthority;
-import com.taoswork.tallybook.general.authority.core.resource.AccessibleFitting;
+import com.taoswork.tallybook.general.authority.core.resource.AccessibleAreas;
 import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.core.verifier.impl.AccessVerifier;
 import com.taoswork.tallybook.general.authority.mockup.PermissionDataMockuper;
@@ -577,8 +577,8 @@ public class SecurityVerifierTest {
         IAccessVerifier accessVerifier = new AccessVerifier(masterControlledResourceManager);
 
         for (IPermissionAuthority user : new IPermissionAuthority[]{mocker.authN, mocker.authAB, mocker.authABCD}) {
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, false)
@@ -595,8 +595,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authG;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, false)
@@ -613,8 +613,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -631,8 +631,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -655,8 +655,8 @@ public class SecurityVerifierTest {
         IAccessVerifier accessVerifier = new AccessVerifier(masterControlledResourceManager);
 
         for (IPermissionAuthority user : new IPermissionAuthority[]{mocker.authN, mocker.authAB, mocker.authABCD}) {
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, false)
@@ -673,8 +673,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authG;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, false)
@@ -691,8 +691,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -709,8 +709,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -734,8 +734,8 @@ public class SecurityVerifierTest {
 
         {
             IPermissionAuthority user = mocker.authN;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, false)
@@ -752,8 +752,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, true)
@@ -770,8 +770,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, true)
@@ -788,8 +788,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authG;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, false)
@@ -806,8 +806,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -824,8 +824,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -849,8 +849,8 @@ public class SecurityVerifierTest {
 
         {
             IPermissionAuthority user = mocker.authN;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, false)
@@ -867,8 +867,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, true)
@@ -885,8 +885,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, false)
                 .check(mocker.docA, true)
@@ -903,8 +903,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authG;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, false)
@@ -921,8 +921,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGAB;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)
@@ -939,8 +939,8 @@ public class SecurityVerifierTest {
         }
         {
             IPermissionAuthority user = mocker.authGABCD;
-            AccessibleFitting accessibleFitting = accessVerifier.calcAccessibleFitting(user, mocker.normalAccess, resourceEntry);
-            List<GuardedDoc> results = mocker.docRepo.query(accessibleFitting, masterControlledResourceManager.getResourceProtection(resourceEntry));
+            AccessibleAreas accessibleAreas = accessVerifier.calcAccessibleAreas(user, mocker.normalAccess, resourceEntry);
+            List<GuardedDoc> results = mocker.docRepo.query(accessibleAreas, masterControlledResourceManager.getResourceProtection(resourceEntry));
             queryLikeChecker(results)
                 .check(mocker.docG, true)
                 .check(mocker.docA, true)

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.authority.core.permission;
 
 import com.taoswork.tallybook.general.authority.core.basic.Access;
-import com.taoswork.tallybook.general.authority.core.permission.impl.PermissionEntry;
+import com.taoswork.tallybook.general.authority.core.permission.impl.EntityPermissionSpecial;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,21 +12,21 @@ public class PermissionEntryTest {
 
     @Test
     public void testClone() {
-        IPermissionEntry permissionEntry = new PermissionEntry("xxx", Access.Read);
-        IPermissionEntry clone = permissionEntry.clone();
+        IEntityPermissionSpecial permissionEntry = new EntityPermissionSpecial("xxx", Access.Read);
+        IEntityPermissionSpecial clone = permissionEntry.clone();
         Assert.assertEquals(permissionEntry, clone);
     }
 
 
     @Test
     public void testMerge() {
-        IPermissionEntry entryAR = new PermissionEntry("aaa", Access.Read);
-        IPermissionEntry entryAU = new PermissionEntry("aaa", Access.Update);
-        IPermissionEntry entryARU = new PermissionEntry("aaa", Access.Read.merge(Access.Update));
+        IEntityPermissionSpecial permSpAR = new EntityPermissionSpecial("aaa", Access.Read);
+        IEntityPermissionSpecial permSpAU = new EntityPermissionSpecial("aaa", Access.Update);
+        IEntityPermissionSpecial permSpARU = new EntityPermissionSpecial("aaa", Access.Read.merge(Access.Update));
 
         try {
-            IPermissionEntry entryBU = new PermissionEntry("bbb", Access.Update);
-            IPermissionEntry entryManualARU = new PermissionEntry(entryAR).merge(entryBU);
+            IEntityPermissionSpecial permSpBU = new EntityPermissionSpecial("bbb", Access.Update);
+            IEntityPermissionSpecial permSpManualARU = new EntityPermissionSpecial(permSpAR).merge(permSpBU);
             Assert.fail();
         } catch (IllegalArgumentException e) {
 
@@ -34,8 +34,8 @@ public class PermissionEntryTest {
             Assert.fail();
         }
 
-        IPermissionEntry entryManualARU = new PermissionEntry(entryAR).merge(entryAU);
-        Assert.assertEquals(entryARU, entryManualARU);
+        IEntityPermissionSpecial permSpManualARU = new EntityPermissionSpecial(permSpAR).merge(permSpAU);
+        Assert.assertEquals(permSpARU, permSpManualARU);
     }
 
 }

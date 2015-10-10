@@ -8,9 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * Created by Gao Yuan on 2015/8/21.
- */
 public class DelegatePermissionAuthority implements IPermissionAuthority {
     private Set<IPermissionAuthority> authorities = new HashSet<IPermissionAuthority>();
 

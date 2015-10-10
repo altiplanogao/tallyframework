@@ -5,6 +5,8 @@ import java.util.Map;
 
 /**
  * Describes resource's protection requirements.
+ * If a particular resource requires multiple access permission.
+ * "ProtectionMode" define whether all the permission are required or only one of them could be enough.
  *
  * Assuming a resource requires access permission: A and B
  * When the ProtectionMode is FitAll, the user should holds both A and B permission
