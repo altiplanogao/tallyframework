@@ -9,10 +9,10 @@
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl</class>
 
 
-        <class>com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceImpl</class>
-        <class>com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceFilterImpl</class>
 
-        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionEntryImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionSpecialImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminRoleImpl</class>
 

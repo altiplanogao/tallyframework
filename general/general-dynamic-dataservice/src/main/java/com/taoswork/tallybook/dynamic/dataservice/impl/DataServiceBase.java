@@ -96,6 +96,7 @@ public abstract class DataServiceBase implements IDataService {
         class DataServiceInsideAnnotationConfigApplicationContext
                 extends AnnotationConfigApplicationContext
                 implements IDataServiceDelegate {
+            private IDataService dataService = null;
             @Override
             protected void onClose() {
                 super.onClose();
@@ -111,13 +112,24 @@ public abstract class DataServiceBase implements IDataService {
             public IDbSetting getDbSetting() {
                 return dbSetting;
             }
+
+            @Override
+            public IDataService theDataService() {
+                return dataService;
+            }
+
+            public void setDataService(IDataService dataService) {
+                this.dataService = dataService;
+            }
         }
 
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new DataServiceInsideAnnotationConfigApplicationContext();
+        DataServiceInsideAnnotationConfigApplicationContext annotationConfigApplicationContext = new DataServiceInsideAnnotationConfigApplicationContext();
 
         annotationConfigApplicationContext.setDisplayName(this.getClass().getSimpleName());
         annotationConfigApplicationContext.register(annotatedClasses);
         annotationConfigApplicationContext.refresh();
+
+        annotationConfigApplicationContext.setDataService(this);
 
 //        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(annotatedClasses);
 //        annotationConfigApplicationContext.setDisplayName(this.getClass().getSimpleName());

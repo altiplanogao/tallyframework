@@ -62,6 +62,5 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
             }
             groupMetadataMap.put(groupMetadata.getName(), groupMetadata);
         }
-
     }
 }

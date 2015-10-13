@@ -14,7 +14,6 @@ public interface AdminMenuService {
     public static final String SERVICE_NAME = "AdminMenuService";
     IMenu buildMenu(AdminEmployee adminEmployee);
 
-    //sss
     Collection<IMenuEntry> getEntriesOnPath(MenuPath path);
 
     MenuPath findMenuPathByUrl(String url);

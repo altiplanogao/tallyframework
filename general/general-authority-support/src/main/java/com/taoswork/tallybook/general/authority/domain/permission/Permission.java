@@ -14,31 +14,31 @@ import java.util.List;
  * ResourceCriteria {@link SecuredResourceFilter}
  * defines a kind of resource need to be secured.
  *
- * {@link PermissionEntry} defines the access permission for a specified kind of resource (specified by ResourceCriteria).
+ * {@link PermissionSpecial} defines the access permission for a specified kind of resource (specified by ResourceCriteria).
  * SUMMARY:
- * {@link PermissionEntry} DEFINES ACCESS TO RESOURCE.
+ * {@link PermissionSpecial} DEFINES ACCESS TO RESOURCE.
  *
- * {@link Permission} contains children '{@link PermissionEntry}'.
+ * {@link Permission} contains children '{@link PermissionSpecial}'.
  * Permission is designed as a tree, a permission node could be contained
  * in another permission node, thus the parent node has all the permission defined in the child node.
  * SUMMARY:
- * {@link Permission} DEFINES A BUNCH OF {@link PermissionEntry}
- * {@link PermissionEntry} DEFINES ACCESS TO RESOURCE.
+ * {@link Permission} DEFINES A BUNCH OF {@link PermissionSpecial}
+ * {@link PermissionSpecial} DEFINES ACCESS TO RESOURCE.
  *
  * {@link Role} contains a bunch of {@link Permission}.
  * SUMMARY:
- * {@link Role} DEFINES A BUNCH OF {@link PermissionEntry}
- * {@link PermissionEntry} DEFINES ACCESS TO RESOURCE.
+ * {@link Role} DEFINES A BUNCH OF {@link PermissionSpecial}
+ * {@link PermissionSpecial} DEFINES ACCESS TO RESOURCE.
  *
  * IPermissionUser {@link com.taoswork.tallybook.general.authority.core.authority.user.IPermissionUser}
  * represents for a permission consumer, having values of {@link Permission} and {@link Role} assigned.
  * SUMMARY:
- * {@link com.taoswork.tallybook.general.authority.core.authority.user.IPermissionUser} DEFINES A BUNCH OF {@link PermissionEntry}
- * {@link PermissionEntry} DEFINES ACCESS TO RESOURCE.
+ * {@link com.taoswork.tallybook.general.authority.core.authority.user.IPermissionUser} DEFINES A BUNCH OF {@link PermissionSpecial}
+ * {@link PermissionSpecial} DEFINES ACCESS TO RESOURCE.
  *
  *
  *
- * USER OWNS PERMISSIONS {@link PermissionEntry}
+ * USER OWNS PERMISSIONS {@link PermissionSpecial}
  * If a tallyuser has permission containing access to a type of object,
  * then it's ok for him to access such type of objects.
  *
@@ -48,8 +48,7 @@ import java.util.List;
  *
  * Created by Gao Yuan on 2015/4/15.
  */
-public interface Permission<PE extends PermissionEntry>
-    extends Persistable {
+public interface Permission<PS extends PermissionSpecial> extends Persistable {
 
     Long getId();
 
@@ -59,11 +58,7 @@ public interface Permission<PE extends PermissionEntry>
 
     void setScreenName(String screenName);
 
-    Long getOrganizationId();
+    List<PS> getAllEntries();
 
-    void setOrganizationId(Long organizationId);
-
-    List<PE> getAllEntries();
-
-    void setAllEntries(List<PE> allEntries);
+    void setAllEntries(List<PS> allEntries);
 }

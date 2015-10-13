@@ -9,8 +9,8 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  * Created by Gao Yuan on 2015/4/28.
  */
 
-@PersistFriendly(nameOverride = "admin-resource-criteria")
-public interface SecuredResourceFilter extends Persistable {
+//@PersistFriendly(nameOverride = "admin-resource-criteria")
+public interface SecuredResourceFilter<R extends SecuredResource> extends Persistable {
 
     Long getId();
 
@@ -20,9 +20,9 @@ public interface SecuredResourceFilter extends Persistable {
 
     SecuredResourceFilter setName(String name);
 
-    SecuredResource getSecuredResource();
+    R getSecuredResource();
 
-    SecuredResourceFilter setResourceType(SecuredResource securedResource);
+    SecuredResourceFilter setResourceType(R securedResource);
 
     String getFilter();
 

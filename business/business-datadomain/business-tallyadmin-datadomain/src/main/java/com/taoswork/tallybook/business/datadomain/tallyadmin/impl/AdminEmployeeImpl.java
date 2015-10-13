@@ -6,6 +6,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionImpl;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminRoleImpl;
+import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -42,7 +43,10 @@ public class AdminEmployeeImpl implements AdminEmployee {
     protected Long id;
 
     @Column(name = "PERSON_ID", nullable = false, unique = true)
+    //
     protected Long personId;
+//    @Transient
+//    private transient Person person;
 
     @Column(name = "TITLE")
     @PresentationField(group = "General", order =3, fieldType = FieldType.STRING, visibility = Visibility.VISIBLE_ALL)

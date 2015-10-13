@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -98,6 +99,8 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
         ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityType);
         TypedQuery<T> listQuery = cto2QueryTranslator.constructListQuery(em, entityType, classTreeMetadata, query);
         TypedQuery<Long> countQuery = cto2QueryTranslator.constructCountQuery(em, entityType, classTreeMetadata, query);
+
+        Collection<String> nonCollectionFields = classTreeMetadata.getNonCollectionFields();
 
         List<T> resultList = listQuery.getResultList();
         long count = countQuery.getSingleResult().longValue();

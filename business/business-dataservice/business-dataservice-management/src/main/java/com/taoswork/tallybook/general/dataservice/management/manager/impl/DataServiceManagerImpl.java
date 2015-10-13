@@ -65,14 +65,22 @@ public class DataServiceManagerImpl implements DataServiceManager {
 
     @Override
     public String getEntityResourceName(String entityType) {
-        EntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType).getEntityEntry();
-        return managedEntityEntry.getResourceName();
+        ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
+        if (null != managedEntityEntry) {
+            return managedEntityEntry.getEntityEntry().getResourceName();
+        } else {
+            return "";
+        }
     }
 
     @Override
     public IDataService getDataService(String entityType) {
         ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
-        return dataServiceMap.getOrDefault(managedEntityEntry.getDataServiceName(), null);
+        if (null != managedEntityEntry) {
+            return dataServiceMap.getOrDefault(managedEntityEntry.getDataServiceName(), null);
+        } else {
+            return null;
+        }
     }
 
     @Override

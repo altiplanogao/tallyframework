@@ -170,13 +170,18 @@ public class Menu implements IMenu {
         });
     }
 
-    public void autoFill(final IMenuEntryUpdater updater){
-        this.traverseMenuEntry(this.insideRoot, new MenuPath(), 0, new TravCallback(){
+    public void autoFill(final IMenuEntryUpdater updater) {
+        this.traverseMenuEntry(this.insideRoot, new MenuPath(), 0, new TravCallback() {
             @Override
             public void callback(TravParam param) {
                 IMenuEntry entry = param.entry;
-                if(updater != null)
-                    updater.update(entry);
+                try {
+                    if (updater != null)
+                        updater.update(entry);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
+                }
             }
         });
     }

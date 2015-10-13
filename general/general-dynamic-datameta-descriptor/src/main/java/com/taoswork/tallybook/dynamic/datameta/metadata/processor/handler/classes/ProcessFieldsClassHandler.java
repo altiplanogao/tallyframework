@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.class
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.processor.FieldProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
@@ -16,8 +17,8 @@ public class ProcessFieldsClassHandler implements IClassHandler {
 
     private final IFieldHandler fieldHandler;
 
-    public ProcessFieldsClassHandler(IFieldHandler fieldHandler) {
-        this.fieldHandler = fieldHandler;
+    public ProcessFieldsClassHandler() {
+        this.fieldHandler = new FieldProcessor();
     }
 
     @Override
@@ -29,17 +30,12 @@ public class ProcessFieldsClassHandler implements IClassHandler {
         fsm.setIncludeStatic(false).setIncludeTransient(false).setIncludeId(true)
                 .setScanSuper(false);
         List<Field> fields = NativeClassHelper.getFields(clz, fsm);
-        FieldMetadata rawNameFieldMetadata = null;
-        FieldMetadata nameFieldMetadata = null;
         int fieldOrigIndex = 0;
         for (Field field: fields) {
             totalfields++;
             String fieldName = field.getName();
 
             FieldMetadata fieldMetadata = new FieldMetadata(fieldOrigIndex, field);
-            if(field.getName().toLowerCase().equals("name")){
-                rawNameFieldMetadata = fieldMetadata;
-            }
             ProcessResult pr = fieldHandler.process(field, fieldMetadata);
             if (classMetadata.getRWFieldMetadataMap().containsKey(fieldName)) {
                 LOGGER.error("FieldMetadata with name '{}' already exist.", fieldName);
@@ -51,19 +47,7 @@ public class ProcessFieldsClassHandler implements IClassHandler {
             } else if (ProcessResult.HANDLED.equals(pr)) {
                 handled++;
             }
-            if(fieldMetadata.isNameField()){
-                nameFieldMetadata = fieldMetadata;
-            }
             fieldOrigIndex++;
-        }
-
-        if((nameFieldMetadata == null) && (rawNameFieldMetadata != null)){
-            nameFieldMetadata = rawNameFieldMetadata;
-            nameFieldMetadata.setNameField(true);
-        }
-
-        if(nameFieldMetadata != null){
-            classMetadata.setNameField(nameFieldMetadata.getField());
         }
 
         if (failed > 0) {

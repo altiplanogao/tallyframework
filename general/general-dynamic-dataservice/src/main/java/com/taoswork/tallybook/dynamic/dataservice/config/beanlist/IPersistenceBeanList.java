@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.config.beanlist;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.OpenSessionAop;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerFactory;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
@@ -23,4 +24,6 @@ public interface IPersistenceBeanList {
     PersistenceManager persistenceManager();
 
     PersistenceManagerInvoker persistenceManagerInvoker();
+
+    OpenSessionAop openSessionAop();
 }

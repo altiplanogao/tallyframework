@@ -9,4 +9,6 @@ public interface IDataServiceDelegate {
     IDataServiceDefinition getDataServiceDefinition();
 
     IDbSetting getDbSetting();
+
+    IDataService theDataService();
 }

@@ -1,15 +1,12 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor;
 
-/**
- * Created by Gao Yuan on 2015/5/25.
- */
 public enum ProcessResult {
     /**
      * INAPPLICABLE: the processor doesn't handle the data specified
      */
     INAPPLICABLE(1),
     /**
-     * The processor doesn't handle the data, but may do some other stuffs, such as setting data
+     * The processor doesn't handle the data, but may do some other stuffs, such as setting value
      */
     PASSING_THROUGH(2),
 

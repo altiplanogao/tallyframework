@@ -19,8 +19,9 @@ public class PermissionEngine {
     private static final class ResourceProtectionMaker{
         public static ResourceProtection make(SecuredResource resource){
             ResourceProtection resourceProtection = new ResourceProtection(resource.getResourceEntity(), resource.getVersion());
-            resourceProtection.setFriendlyName(resource.getFriendlyName())
-                .setCategory(resource.getCategory())
+            resourceProtection
+//                .setFriendlyName(resource.getFriendlyName())
+//                .setCategory(resource.getCategory())
                 .setMasterControlled(resource.isMasterControlled())
                 .setProtectionMode(resource.getProtectionMode());
 

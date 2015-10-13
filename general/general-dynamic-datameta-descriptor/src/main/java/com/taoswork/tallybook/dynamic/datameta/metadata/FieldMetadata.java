@@ -108,9 +108,9 @@ public class FieldMetadata extends FriendlyMetadata implements Serializable {
     }
 
     public void setNameField(boolean nameField) {
-        if(nameField){
+        if (nameField) {
             fieldType = FieldType.NAME;
-        } else if(fieldType == FieldType.NAME){
+        } else if (fieldType == FieldType.NAME) {
             fieldType = FieldType.UNKNOWN;
         }
     }

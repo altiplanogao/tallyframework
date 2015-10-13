@@ -12,20 +12,7 @@ import java.util.Collection;
  *      Contains sub-collections, defined by filters
  */
 public interface IResourceProtection {
-
-    String getFriendlyName();
-
-    IResourceProtection setFriendlyName(String friendlyName);
-
     String getResourceEntity();
-
-    String getCategory();
-
-    IResourceProtection setCategory(String category);
-
-    String getFilterNamespace();
-
-    void setFilterNamespace(String filterNamespace);
 
     /**
      * @return if the resource master controlled

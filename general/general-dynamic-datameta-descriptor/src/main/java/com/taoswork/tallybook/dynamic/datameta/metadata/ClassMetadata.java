@@ -30,6 +30,9 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, FieldMetadata> fieldMetadataMap = new HashMap<String, FieldMetadata>();
+
+    private final Set<String> nonCollectionFields = new HashSet<String>();
+
     private final Set<String> validators = new HashSet();
     private final Set<String> valueGates = new HashSet();
 
@@ -169,8 +172,27 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
+
+        this.nonCollectionFields.addAll(thatMeta.nonCollectionFields);
         this.validators.addAll(thatMeta.getValidators());
         this.valueGates.addAll(thatMeta.getValueGates());
+    }
+
+    public void finishBuilding(){
+        if(this.nonCollectionFields.size() == 0){
+            List<String> nonCollection = new ArrayList<String>();
+            List<String> collection = new ArrayList<String>();
+            for(Map.Entry<String, FieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()){
+                String fieldName = fieldMetadataEntry.getKey();
+                FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+                (fieldMetadata.isCollectionField() ? collection : nonCollection).add(fieldName);
+            }
+            this.nonCollectionFields.addAll(nonCollection);
+        }
+    }
+
+    public Collection<String> getNonCollectionFields() {
+        return Collections.unmodifiableCollection(nonCollectionFields);
     }
 
     public boolean hasField(String fieldName){

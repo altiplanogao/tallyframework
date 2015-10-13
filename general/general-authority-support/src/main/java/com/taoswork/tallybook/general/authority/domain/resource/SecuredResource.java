@@ -1,17 +1,14 @@
 package com.taoswork.tallybook.general.authority.domain.resource;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 import java.util.List;
 
 /**
- * Created by Gao Yuan on 2015/6/5.
+ * database layer object of IResourceProtection ({@link com.taoswork.tallybook.general.authority.core.resource.IResourceProtection})
  */
-
-@PersistFriendly(nameOverride = "admin-resource-type")
-public interface SecuredResource extends Persistable {
+public interface SecuredResource<RF extends SecuredResourceFilter> extends Persistable {
 
     Long getId();
 
@@ -41,11 +38,19 @@ public interface SecuredResource extends Persistable {
 
     void setProtectionMode(ProtectionMode protectionMode);
 
-    List<SecuredResourceFilter> getFilters();
+    List<RF> getFilters();
 
-    void setFilters(List<SecuredResourceFilter> criterias);
+    void setFilters(List<RF> criterias);
 
     int getVersion();
 
     boolean isMainLine();
+
+    /*
+
+    String getFilterNamespace();
+
+    void setFilterNamespace(String filterNamespace);
+
+     */
 }

@@ -15,6 +15,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValueGateSer
 import com.taoswork.tallybook.dynamic.dataservice.core.entity.valuegate.impl.EntityValueGateServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.OpenSessionAop;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
@@ -28,6 +29,7 @@ import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentProper
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -94,6 +96,13 @@ public abstract class ADataServiceBeanConfiguration
     public String dataServiceName() {
         return dataServiceDefinition.getDataServiceName();
     }
+
+    @Override
+    @Bean
+    public AnnotationAwareAspectJAutoProxyCreator annotationAwareAspectJAutoProxyCreator() {
+        return new AnnotationAwareAspectJAutoProxyCreator();
+    }
+
     /* IGeneralBeanList                                        **/
 
     /************************************************************
@@ -211,6 +220,14 @@ public abstract class ADataServiceBeanConfiguration
     public PersistenceManagerInvoker persistenceManagerInvoker() {
         return new PersistenceManagerInvoker();
     }
+
+    @Override
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public OpenSessionAop openSessionAop() {
+        return new OpenSessionAop();
+    }
+
     /* IPersistenceBeanList                                     */
 
     // **************************************************** //

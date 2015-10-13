@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permissio
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionEntry;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionSpecial;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionBaseImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
@@ -20,15 +20,15 @@ import java.util.Set;
 @Entity
 @Table(name = "ADMIN_PERM")
 public class AdminPermissionImpl
-    extends PermissionBaseImpl<AdminPermissionEntry>
+    extends PermissionBaseImpl<AdminPermissionSpecial>
     implements AdminPermission {
 
     @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
     @OneToMany(
-            targetEntity = AdminPermissionEntryImpl.class,
-            mappedBy = AdminPermissionEntryImpl.OWN_M2O_PERM,
+            targetEntity = AdminPermissionSpecialImpl.class,
+            mappedBy = AdminPermissionSpecialImpl.OWN_M2O_PERM,
             fetch = FetchType.LAZY)
-    protected List<AdminPermissionEntry> allEntries = new ArrayList<AdminPermissionEntry>();
+    protected List<AdminPermissionSpecial> allEntries = new ArrayList<AdminPermissionSpecial>();
     public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
     /** All employees that have this role */
@@ -41,12 +41,12 @@ public class AdminPermissionImpl
     protected Set<AdminEmployee> allEmployees = new HashSet<AdminEmployee>();
 
     @Override
-    public List<AdminPermissionEntry> getAllEntries() {
+    public List<AdminPermissionSpecial> getAllEntries() {
         return allEntries;
     }
 
     @Override
-    public void setAllEntries(List<AdminPermissionEntry> allEntries) {
+    public void setAllEntries(List<AdminPermissionSpecial> allEntries) {
         this.allEntries = allEntries;
     }
 

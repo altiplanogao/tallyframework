@@ -32,8 +32,8 @@ public class MetadataServiceImpl implements MetadataService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataService.class);
 
     protected final ClassProcessor classProcessor;
-    protected final FieldProcessor fieldProcessor;
 
+    private static boolean useCache = true;
     //Just cache for Class (without super metadata) , not for EntityClassTree
     @GuardedBy("lock")
     private ICacheMap<String, ClassMetadata> classMetadataCache =
@@ -41,8 +41,7 @@ public class MetadataServiceImpl implements MetadataService {
     private Object lock = new Object();
 
     public MetadataServiceImpl(){
-        fieldProcessor = new FieldProcessor();
-        classProcessor = new ClassProcessor(fieldProcessor);
+        classProcessor = new ClassProcessor();
     }
 
     @Override
@@ -89,6 +88,15 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public ClassMetadata generateMetadata(Class clz) {
         String clzName = clz.getName();
+
+        if(!useCache){
+            ClassMetadata classMetadata = new ClassMetadata();
+
+            classProcessor.process(clz, classMetadata);
+            //doGenerateClassMetadata(clz, classMetadata);
+            classMetadataCache.put(clzName, classMetadata);
+            return classMetadata;
+        }
 
         synchronized (lock) {
             ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);

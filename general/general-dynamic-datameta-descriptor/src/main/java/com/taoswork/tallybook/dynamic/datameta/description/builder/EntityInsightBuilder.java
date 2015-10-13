@@ -10,9 +10,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BooleanFieldMetaFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.EnumFieldMetaFacet;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.BooleanFieldMetaFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EnumFieldMetaFacet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,21 +1,18 @@
 package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
-import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
+import com.taoswork.tallybook.general.authority.domain.permission.PermissionSpecial;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import javax.persistence.*;
-
-/**
- * Created by Gao Yuan on 2015/4/19.
- */
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @PresentationClass(instantiable =false)
-public abstract class PermissionBaseImpl<PE extends PermissionEntry>
-        implements Permission<PE> {
+public abstract class PermissionBaseImpl<PS extends PermissionSpecial>
+        implements Permission<PS> {
 
     public static final String TABLE_NAME = "AUTH_PERM";
     public static final String TABLE_NAME_JOIN_PERM_PERM = "AUTH_PERM_PERM_XREF";
@@ -32,19 +29,15 @@ public abstract class PermissionBaseImpl<PE extends PermissionEntry>
     protected Long id;
 
     @Column(name = "SCREEN_NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true)
+    @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
     protected String screenName;
-
-    @Column(name = "ORG_ID", nullable = false)
-    @PresentationField(order = 3)
-    protected Long organizationId;
 
 //    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
 //    @OneToMany(
-//            targetEntity = PermissionEntryBaseImpl.class,
-//            mappedBy = PermissionEntryBaseImpl.OWN_M2O_PERM,
+//            targetEntity = PermissionSpecialBaseImpl.class,
+//            mappedBy = PermissionSpecialBaseImpl.OWN_M2O_PERM,
 //            fetch = FetchType.LAZY)
-//    protected List<PE> allEntries = new ArrayList<PE>();
+//    protected List<PS> allEntries = new ArrayList<PS>();
 //    public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
     @Version
@@ -69,24 +62,14 @@ public abstract class PermissionBaseImpl<PE extends PermissionEntry>
     public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
-
-    @Override
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    @Override
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
-    }
 //
 //    @Override
-//    public List<PE> getAllEntries() {
+//    public List<PS> getAllEntries() {
 //        return allEntries;
 //    }
 //
 //    @Override
-//    public void setAllEntries(List<PE> allEntries) {
+//    public void setAllEntries(List<PS> allEntries) {
 //        this.allEntries = allEntries;
 //    }
 
