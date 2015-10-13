@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**

@@ -1,5 +1,9 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.query.dto;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertySortCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.SortDirection;
 import org.junit.Assert;
 import org.junit.Test;
 

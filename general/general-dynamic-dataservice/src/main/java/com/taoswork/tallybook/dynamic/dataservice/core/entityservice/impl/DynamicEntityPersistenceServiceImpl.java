@@ -8,8 +8,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityM
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.IPersistentMethod;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;

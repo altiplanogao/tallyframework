@@ -5,16 +5,16 @@ import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.translator.EntityInstanceTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValueGateService;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
-import com.taoswork.tallybook.dynamic.dataservice.core.entity.EntityValidationService;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
@@ -52,8 +52,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         }
     };
 
-    @Override
-    public <T extends Persistable> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
+    private <T extends Persistable> T doCreate(Class<T> ceilingType, T entity) throws ServiceException {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Create, entity);
@@ -63,25 +62,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
         entityValueGateService.deposit(entityResult.getEntity(), null);
         entityValidationService.validate(entityResult);
 
-        T result = dynamicEntityDao.create(entity);
-        return makeEntityResult(result);
+        return dynamicEntityDao.create(entity);
     }
 
-    @Override
-    public <T extends Persistable> EntityResult<T> create(Entity entity) throws ServiceException {
-        T instance = (T) converter.convert(entity, null);
-        Class ceilingType = getCeilingType(entity);
-        return this.create(ceilingType, instance);
-    }
-
-    private <T extends Persistable> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
-        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
-        T result = dynamicEntityDao.read(entityRootClz, key);
-        return makeEntityResult(result);
-    }
-
-    @Override
-    public <T extends Persistable> EntityResult<T> read(Class<T> entityType, Object key) throws ServiceException {
+    private <T extends Persistable> T doRead(Class<T> entityType, Object key) throws ServiceException {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(entityType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Read);
@@ -91,11 +75,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
             throw new NoSuchRecordException(entityType, key);
         }
         entityValueGateService.withdraw(result);
-        return makeEntityResult(result);
+        return result;
     }
 
-    @Override
-    public <T extends Persistable> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
+    private <T extends Persistable> T doUpdate(Class<T> ceilingType, T entity) throws ServiceException {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
         String guardianName = guardian.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
@@ -107,19 +90,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
         entityValueGateService.deposit(entityResult.getEntity(), oldEntity.getEntity());
         entityValidationService.validate(entityResult);
 
-        T result = dynamicEntityDao.update(entity);
-        return makeEntityResult(result);
+        return dynamicEntityDao.update(entity);
     }
 
-    @Override
-    public <T extends Persistable> EntityResult<T> update(Entity entity) throws ServiceException {
-        T instance = (T) converter.convert(entity, null);
-        Class ceilingType = getCeilingType(entity);
-        return this.update(ceilingType, instance);
-    }
-
-    @Override
-    public <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException {
+    private <T extends Persistable> void doDelete(Class<T> ceilingType, T entity) throws ServiceException {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
         String guardianName = guardian.getName();
         EntityResult<T> oldEntity = getManagedEntity(ceilingType, entity);
@@ -132,15 +106,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         dynamicEntityDao.delete(entity);
     }
 
-    @Override
-    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
-        Class ceilingType = getCeilingType(entity);
-        T instance = (T) converter.convert(entity, id);
-        this.delete(ceilingType, instance);
-    }
-
-    @Override
-    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
+    private <T extends Persistable> CriteriaQueryResult<T> doQuery(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
         Class<?> guardian = this.dynamicEntityMetadataAccess.getPermissionGuardian(entityType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Query);
@@ -150,6 +116,61 @@ public class PersistenceManagerImpl implements PersistenceManager {
             entityValueGateService.withdraw(one);
         }
         return result;
+    }
+
+    @Override
+    public <T extends Persistable> EntityResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
+        T result = doCreate(ceilingType, entity);
+        return makeEntityResult(result);
+    }
+
+    @Override
+    public <T extends Persistable> EntityResult<T> create(Entity entity) throws ServiceException {
+        T instance = (T) converter.convert(entity, null);
+        Class ceilingType = getCeilingType(entity);
+        return this.create(ceilingType, instance);
+    }
+
+    @Override
+    public <T extends Persistable> EntityResult<T> read(Class<T> entityType, Object key) throws ServiceException {
+        T result = doRead(entityType, key);
+        return makeEntityResult(result);
+    }
+
+    @Override
+    public <T extends Persistable> EntityResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
+        T result = doUpdate(ceilingType, entity);
+        return makeEntityResult(result);
+    }
+
+    @Override
+    public <T extends Persistable> EntityResult<T> update(Entity entity) throws ServiceException {
+        T instance = (T) converter.convert(entity, null);
+        Class ceilingType = getCeilingType(entity);
+        return this.update(ceilingType, instance);
+    }
+
+    @Override
+    public <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException {
+        doDelete(ceilingType, entity);
+    }
+
+    @Override
+    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
+        Class ceilingType = getCeilingType(entity);
+        T instance = (T) converter.convert(entity, id);
+        this.delete(ceilingType, instance);
+    }
+
+    @Override
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
+        return doQuery(entityType, query);
+    }
+
+    private <T extends Persistable> EntityResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
+        Class<T> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
+        T result = dynamicEntityDao.read(entityRootClz, key);
+        return makeEntityResult(result);
     }
 
     private <T extends Persistable> EntityResult<T> getManagedEntity(Class ceilingType, T entity) throws ServiceException {

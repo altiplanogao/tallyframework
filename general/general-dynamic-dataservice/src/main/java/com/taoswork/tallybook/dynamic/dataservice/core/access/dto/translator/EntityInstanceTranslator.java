@@ -29,6 +29,12 @@ public abstract class EntityInstanceTranslator {
 
     protected abstract DynamicEntityMetadataAccess getDynamicEntityMetadataAccess();
 
+    /**
+     *
+     * @param source
+     * @param id, id value of the entity
+     * @return
+     */
     public Persistable convert(Entity source, String id) {
         Persistable instance = null;
         DynamicEntityMetadataAccess entityMetadataAccess = this.getDynamicEntityMetadataAccess();

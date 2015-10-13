@@ -1,15 +1,12 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.Cto2QueryTranslator;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.translator.impl.Cto2QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.Cto2QueryTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.impl.Cto2QueryTranslatorImpl;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 

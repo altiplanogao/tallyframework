@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.SortDirection;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.SortDirection;
 import org.springframework.util.StringUtils;
 
 /**

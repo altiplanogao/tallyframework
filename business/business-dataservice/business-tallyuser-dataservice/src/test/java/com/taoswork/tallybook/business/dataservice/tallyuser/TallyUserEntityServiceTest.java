@@ -10,9 +10,9 @@ import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoServi
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.entity.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

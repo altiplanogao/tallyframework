@@ -2,8 +2,8 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.*;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.query.dto.*;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
 import com.taoswork.tallybook.testframework.domain.TPerson;
 import org.junit.After;
