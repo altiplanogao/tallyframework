@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.exception;
 /**
  * Created by Gao Yuan on 2015/6/3.
  */
-public class MetadataException extends RuntimeException{
+public class MetadataException extends RuntimeException {
     public MetadataException() {
     }
 

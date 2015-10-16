@@ -4,14 +4,14 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Locale;
 
 /**
  * Created by Gao Yuan on 2015/5/22.
@@ -54,7 +54,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
         try {
             return persistenceService.create(ceilingType, entity);
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> create(final Entity entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
         try {
             return persistenceService.create(entity);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
         try {
             return persistenceService.read(entityClz, key);
         } catch (Exception e) {
@@ -85,12 +85,12 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
-        EntityResult<T> result = read(entityClz, key);
+        PersistableResult<T> result = read(entityClz, key);
         return result.getEntity();
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
         try {
             return persistenceService.update(ceilingType, entity);
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> update(final Entity entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
         try {
             return persistenceService.update(entity);
         } catch (Exception e) {
@@ -142,20 +142,20 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> EntityResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         try {
             Persistable entity = (Persistable) rootable.newInstance();
-            EntityResult<T> entityResult = new EntityResult<T>();
+            PersistableResult<T> persistableResult = new PersistableResult<T>();
             Class clz = entity.getClass();
             ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
             Field idField = classMetadata.getIdField();
             Object id = idField.get(entity);
-            entityResult.setIdKey(idField.getName())
+            persistableResult.setIdKey(idField.getName())
                 .setIdValue((id == null) ? null : id.toString())
                 .setEntity(entity);
 
-            return entityResult;
+            return persistableResult;
         } catch (InstantiationException e) {
             LOGGER.error(e.getMessage());
             throw new ServiceException(e);

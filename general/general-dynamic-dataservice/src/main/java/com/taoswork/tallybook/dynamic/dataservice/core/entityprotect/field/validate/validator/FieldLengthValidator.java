@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.StringFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -22,10 +21,9 @@ public class FieldLengthValidator extends FieldValidatorBase<String> {
     }
 
     @Override
-    public ValidationError doValidate(FieldMetadata fieldMetadata, String fieldValue) {
-        BasicFieldMetaFacet basicFieldMetaFacet = (BasicFieldMetaFacet) fieldMetadata.getFacet(FieldFacetType.Basic);
-        if (basicFieldMetaFacet != null) {
-            int maxLength = basicFieldMetaFacet.getLength();
+    public ValidationError doValidate(IFieldMetadata fieldMetadata, String fieldValue) {
+        if (fieldMetadata instanceof StringFieldMetadata) {
+            int maxLength = ((StringFieldMetadata) fieldMetadata).getLength();
             int length = fieldValue.length();
             if (length > maxLength) {
                 return new ValidationError("validation.error.field.length",

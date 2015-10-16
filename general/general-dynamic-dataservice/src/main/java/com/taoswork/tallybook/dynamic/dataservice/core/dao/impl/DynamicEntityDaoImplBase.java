@@ -2,11 +2,11 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dao.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
-import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.Cto2QueryTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.impl.Cto2QueryTranslatorImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
-import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
+import com.taoswork.tallybook.testframework.domain.zoo.impl.ZooKeeperImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class DynamicEntityDaoTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPersonImpl> persons = dynamicEntityDao.query(TPersonImpl.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeperImpl> persons = dynamicEntityDao.query(ZooKeeperImpl.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), 0);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -59,7 +59,7 @@ public class DynamicEntityDaoTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPersonImpl> persons = dynamicEntityDao.query(TPersonImpl.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeperImpl> persons = dynamicEntityDao.query(ZooKeeperImpl.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), createAttemptA);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -67,7 +67,7 @@ public class DynamicEntityDaoTest {
 
             for(int skipLeading = 2 ; skipLeading < createAttemptA ; skipLeading ++) {
                 ctoFetchAll.setFirstResult(skipLeading);
-                persons = dynamicEntityDao.query(TPersonImpl.class, ctoFetchAll);
+                persons = dynamicEntityDao.query(ZooKeeperImpl.class, ctoFetchAll);
 
                 Assert.assertEquals(persons.fetchedCount(), createAttemptA - skipLeading);
                 Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));

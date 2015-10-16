@@ -3,8 +3,8 @@ package com.taoswork.tallybook.dynamic.dataservice;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
-import com.taoswork.tallybook.testframework.domain.TPerson;
-import com.taoswork.tallybook.testframework.domain.impl.TPersonImpl;
+import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
+import com.taoswork.tallybook.testframework.domain.zoo.impl.ZooKeeperImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,7 +35,7 @@ public class DataServiceTest {
         Map<String, EntityEntry> entityEntries = dataService.getEntityEntries();
 
         {
-            Class entityType = TPerson.class;
+            Class entityType = ZooKeeper.class;
             String personResName = dataService.getEntityResourceName(entityType.getName());
             String personTypeName = dataService.getEntityTypeName(personResName);
 
@@ -44,7 +44,7 @@ public class DataServiceTest {
             Assert.assertTrue(entityEntries.containsKey(personTypeName));
         }
         {
-            Class entityType = TPersonImpl.class;
+            Class entityType = ZooKeeperImpl.class;
             String personResName = dataService.getEntityResourceName(entityType.getName());
             String personTypeName = dataService.getEntityTypeName(personResName);
 

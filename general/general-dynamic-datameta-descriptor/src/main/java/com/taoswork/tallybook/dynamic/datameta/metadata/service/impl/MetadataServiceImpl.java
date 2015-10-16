@@ -5,7 +5,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClass;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
-import com.taoswork.tallybook.dynamic.datameta.metadata.processor.FieldProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.solution.autotree.AutoTreeException;
@@ -30,17 +29,15 @@ import java.util.Set;
 public class MetadataServiceImpl implements MetadataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataService.class);
-
-    protected final ClassProcessor classProcessor;
-
     private static boolean useCache = true;
+    protected final ClassProcessor classProcessor;
     //Just cache for Class (without super metadata) , not for EntityClassTree
     @GuardedBy("lock")
     private ICacheMap<String, ClassMetadata> classMetadataCache =
-            CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
+        CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
     private Object lock = new Object();
 
-    public MetadataServiceImpl(){
+    public MetadataServiceImpl() {
         classProcessor = new ClassProcessor();
     }
 
@@ -60,7 +57,7 @@ public class MetadataServiceImpl implements MetadataService {
             @Override
             public Void callback(EntityClass parameter) throws AutoTreeException {
                 Class clz = parameter.clz;
-                if(!clz.isInterface()){
+                if (!clz.isInterface()) {
                     classesInTree.add(clz);
                 }
                 return null;
@@ -68,16 +65,16 @@ public class MetadataServiceImpl implements MetadataService {
         }, false);
 
         final Set<Class> classesIncludingSuper = new HashSet<Class>();
-        for(Class clz : classesInTree){
+        for (Class clz : classesInTree) {
             Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
             classesIncludingSuper.add(clz);
-            for (Class spClz : superClasses){
+            for (Class spClz : superClasses) {
                 classesIncludingSuper.add(spClz);
             }
         }
         classesIncludingSuper.remove(Object.class);
 
-        for(Class clz : classesIncludingSuper){
+        for (Class clz : classesIncludingSuper) {
             ClassMetadata classMetadata = generateMetadata(clz);
             classTreeMetadata.absorb(classMetadata);
         }
@@ -89,7 +86,7 @@ public class MetadataServiceImpl implements MetadataService {
     public ClassMetadata generateMetadata(Class clz) {
         String clzName = clz.getName();
 
-        if(!useCache){
+        if (!useCache) {
             ClassMetadata classMetadata = new ClassMetadata();
 
             classProcessor.process(clz, classMetadata);
@@ -113,7 +110,7 @@ public class MetadataServiceImpl implements MetadataService {
 
     @Override
     public ClassMetadata generateMetadata(Class clz, boolean handleSuper) {
-        if(!handleSuper){
+        if (!handleSuper) {
             return generateMetadata(clz);
         }
         ClassMetadata mergedMetadata = generateMetadata(clz).clone();
@@ -125,7 +122,7 @@ public class MetadataServiceImpl implements MetadataService {
             tobeMerged.add(classMetadata);
         }
 
-        for(ClassMetadata classMetadata : tobeMerged){
+        for (ClassMetadata classMetadata : tobeMerged) {
             mergedMetadata.absorbSuper(classMetadata);
         }
 

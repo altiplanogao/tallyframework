@@ -8,13 +8,11 @@ public enum FieldFacetType {
 
     Enum,
     Boolean,
+    ForeignEntity,
 
     Embedded,
-    Collection,
 
     Array,
-    List,
-    Set,
-    Map,
-    ;
+    Collection,
+    Map,;
 }

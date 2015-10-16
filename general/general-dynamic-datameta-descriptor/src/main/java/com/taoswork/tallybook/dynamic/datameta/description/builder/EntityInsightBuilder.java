@@ -2,16 +2,21 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BasicFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BooleanFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.StringFacetInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.metadata.*;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.BasicFieldMetaFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.BooleanFieldMetaFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EnumFieldMetaFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.GroupMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.EnumFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.StringFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendly;
+import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,76 +28,8 @@ import java.util.Map;
 final class EntityInsightBuilder {
     private static Logger LOGGER = LoggerFactory.getLogger(EntityInsightBuilder.class);
 
-    private EntityInsightBuilder() throws IllegalAccessException{
+    private EntityInsightBuilder() throws IllegalAccessException {
         throw new IllegalAccessException("EntityInsightBuilder: Not instance-able object");
-    }
-
-    private static class InfoCreator {
-        static RawEntityInsightRW createEntityInsight(ClassMetadata classMetadata) {
-            RawEntityInsightRW entityInsight = new RawEntityInsightImpl();
-            copyFriendlyMetadata(classMetadata, entityInsight);
-            return entityInsight;
-        }
-
-        static RawGroupInsightRW createGroupInsight(GroupMetadata groupMetadata) {
-            RawGroupInsightRW groupInsight = new RawGroupInsightImpl();
-            copyOrderedFriendlyMetadata(groupMetadata, groupInsight);
-            return groupInsight;
-        }
-
-        static RawTabInsightRW createTabInsight(TabMetadata tabMetadata) {
-            RawTabInsightRW tabInsight = new RawTabInsightImpl();
-            copyOrderedFriendlyMetadata(tabMetadata, tabInsight);
-            return tabInsight;
-        }
-
-        static FieldInfoRW createFieldInfo(FieldMetadata fieldMetadata) {
-            FieldInfoRW fieldInfo = new FieldInfoImpl();
-            copyOrderedFriendlyMetadata(fieldMetadata, fieldInfo);
-
-            fieldInfo.setVisibility(fieldMetadata.getVisibility());
-            fieldInfo.setRequired(fieldMetadata.isRequired());
-            fieldInfo.setNameField(fieldMetadata.isNameField());
-            fieldInfo.setFieldType(fieldMetadata.getFieldType());
-
-            EnumFieldMetaFacet enumFieldFacet = (EnumFieldMetaFacet)fieldMetadata.facets.getOrDefault(FieldFacetType.Enum, null);
-            if(enumFieldFacet != null){
-                IFieldFacet enumFacetInfo = new EnumFacetInfo(enumFieldFacet.getEnumerationType());
-                fieldInfo.addFacet(enumFacetInfo);
-            }
-            BooleanFieldMetaFacet booleanFacet = (BooleanFieldMetaFacet) fieldMetadata.facets.getOrDefault(FieldFacetType.Boolean, null);
-            if(booleanFacet != null){
-                BooleanFacetInfo boolFacetInfo = new BooleanFacetInfo();
-                switch (booleanFacet.model){
-                    case TrueFalse:
-                        boolFacetInfo.setAsTrueFalse();
-                        break;
-                    case YesNo:
-                        boolFacetInfo.setAsYesNo();
-                        break;
-                    default:
-                        throw new IllegalStateException("Un expected Boolean model");
-                }
-                fieldInfo.addFacet(boolFacetInfo);
-            }
-            BasicFieldMetaFacet basicFieldFacet = (BasicFieldMetaFacet)fieldMetadata.facets.getOrDefault(FieldFacetType.Basic, null);
-            if(basicFieldFacet != null){
-                BasicFacetInfo basicFacetInfo = new BasicFacetInfo(basicFieldFacet.getLength());
-                fieldInfo.addFacet(basicFacetInfo);
-            }
-
-            return fieldInfo;
-        }
-
-        static void copyOrderedFriendlyMetadata(FriendlyMetadata source, NamedOrderedInfoRW target) {
-            copyFriendlyMetadata(source, target);
-            target.setOrder(source.getOrder());
-        }
-
-        static void copyFriendlyMetadata(FriendlyMetadata source, NamedInfoRW target) {
-            target.setFriendlyName(source.getFriendlyName())
-                .setName(source.getName());
-        }
     }
 
     /**
@@ -119,9 +56,9 @@ final class EntityInsightBuilder {
         }
 
         //add fields
-        Map<String, FieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
-        for (Map.Entry<String, FieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()){
-            FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+        Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
+        for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
+            IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
             FieldInfoRW fieldInfo = InfoCreator.createFieldInfo(fieldMetadata);
             entityInsight.addField(fieldInfo);
 
@@ -131,7 +68,7 @@ final class EntityInsightBuilder {
                 entityInsight.addGridField(fieldName);
             }
 
-            if(fieldMetadata.isId()){
+            if (fieldMetadata.isId()) {
                 entityInsight.setIdField(fieldName);
             }
 
@@ -151,5 +88,68 @@ final class EntityInsightBuilder {
         }
 
         entityInsight.finishWriting();
+    }
+
+    private static class InfoCreator {
+        static RawEntityInsightRW createEntityInsight(ClassMetadata classMetadata) {
+            RawEntityInsightRW entityInsight = new RawEntityInsightImpl();
+            copyFriendlyMetadata(classMetadata, entityInsight);
+            return entityInsight;
+        }
+
+        static RawGroupInsightRW createGroupInsight(GroupMetadata groupMetadata) {
+            RawGroupInsightRW groupInsight = new RawGroupInsightImpl();
+            copyOrderedFriendlyMetadata(groupMetadata, groupInsight);
+            return groupInsight;
+        }
+
+        static RawTabInsightRW createTabInsight(TabMetadata tabMetadata) {
+            RawTabInsightRW tabInsight = new RawTabInsightImpl();
+            copyOrderedFriendlyMetadata(tabMetadata, tabInsight);
+            return tabInsight;
+        }
+
+        static FieldInfoRW createFieldInfo(IFieldMetadata fieldMetadata) {
+            FieldInfoRW fieldInfo = new FieldInfoImpl();
+            copyOrderedFriendlyMetadata(fieldMetadata, fieldInfo);
+
+            fieldInfo.setVisibility(fieldMetadata.getVisibility());
+            fieldInfo.setRequired(fieldMetadata.isRequired());
+            fieldInfo.setNameField(fieldMetadata.isNameField());
+            fieldInfo.setFieldType(fieldMetadata.getFieldType());
+
+            if (fieldMetadata instanceof EnumFieldMetadata) {
+                IFieldFacet enumFacetInfo = new EnumFacetInfo(((EnumFieldMetadata) fieldMetadata).getEnumerationType());
+                fieldInfo.addFacet(enumFacetInfo);
+            } else if (fieldMetadata instanceof BooleanFieldMetadata) {
+                BooleanFacetInfo boolFacetInfo = new BooleanFacetInfo();
+                switch (((BooleanFieldMetadata) fieldMetadata).getModel()) {
+                    case TrueFalse:
+                        boolFacetInfo.setAsTrueFalse();
+                        break;
+                    case YesNo:
+                        boolFacetInfo.setAsYesNo();
+                        break;
+                    default:
+                        throw new IllegalStateException("Un expected Boolean model");
+                }
+                fieldInfo.addFacet(boolFacetInfo);
+            } else if (fieldMetadata instanceof StringFieldMetadata) {
+                StringFacetInfo stringFacetInfo = new StringFacetInfo(((StringFieldMetadata) fieldMetadata).getLength());
+                fieldInfo.addFacet(stringFacetInfo);
+            }
+
+            return fieldInfo;
+        }
+
+        static void copyOrderedFriendlyMetadata(IFriendlyOrdered source, NamedOrderedInfoRW target) {
+            copyFriendlyMetadata(source, target);
+            target.setOrder(source.getOrder());
+        }
+
+        static void copyFriendlyMetadata(IFriendly source, NamedInfoRW target) {
+            target.setFriendlyName(source.getFriendlyName())
+                .setName(source.getName());
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -22,7 +22,7 @@ public class PhoneFieldValidator extends FieldValidatorBase<String> {
     }
 
     @Override
-    public ValidationError doValidate(FieldMetadata fieldMetadata, String fieldValue) {
+    public ValidationError doValidate(IFieldMetadata fieldMetadata, String fieldValue) {
         if (StringUtils.isBlank(fieldValue)) {
             return null;
         }

@@ -11,17 +11,15 @@ import java.util.*;
  * Created by Gao Yuan on 2015/6/25.
  */
 class RawEntityInsightImpl
-        extends NamedInfoImpl
-        implements RawEntityInsightRW {
-
-    private String idField;
-    private String nameField;
-    private String primarySearchField;
+    extends NamedInfoImpl
+    implements RawEntityInsightRW {
 
     private final Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
     private final Map<String, RawTabInsightRW> tabs = new HashMap<String, RawTabInsightRW>();
     private final Set<String> gridFields = new HashSet<String>();
-
+    private String idField;
+    private String nameField;
+    private String primarySearchField;
     private transient boolean dirty = false;
 
     @Override
@@ -58,14 +56,14 @@ class RawEntityInsightImpl
 
     @Override
     public FieldInfoRW getFieldRW(String fieldName) {
-        FieldInfoRW fieldInfoRW = (FieldInfoRW)fields.getOrDefault(fieldName, null);
+        FieldInfoRW fieldInfoRW = (FieldInfoRW) fields.getOrDefault(fieldName, null);
         dirty = true;
         return fieldInfoRW;
     }
 
     @Override
     public RawTabInsightRW getTabRW(String tabName) {
-        RawTabInsightRW tabInfoRW =  tabs.getOrDefault(tabName, null);
+        RawTabInsightRW tabInfoRW = tabs.getOrDefault(tabName, null);
         dirty = true;
         return tabInfoRW;
     }
@@ -110,9 +108,9 @@ class RawEntityInsightImpl
 
     @Override
     public void finishWriting() {
-        if(dirty){
+        if (dirty) {
             Map<OrderedName, FieldInfo> fieldsOrdered = new TreeMap<OrderedName, FieldInfo>(new OrderedName.OrderedComparator());
-            for (Map.Entry<String, FieldInfo> entry : fields.entrySet()){
+            for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
                 FieldInfo fieldInfo = entry.getValue();
                 fieldsOrdered.put(new OrderedName(entry.getKey(), fieldInfo.getOrder()), fieldInfo);
             }
@@ -126,22 +124,22 @@ class RawEntityInsightImpl
                     if (firstFieldInfo == null) {
                         firstFieldInfo = fieldInfo;
                     }
-                    if(fieldInfo.isIdField()){
-                        if(this.idField == null){
+                    if (fieldInfo.isIdField()) {
+                        if (this.idField == null) {
                             this.idField = fieldInfo.getName();
                         }
                     }
                     if (fieldInfo.isNameField() || (fieldInfo.getName().toLowerCase().equals("name"))) {
-                        if(this.nameField == null){
+                        if (this.nameField == null) {
                             this.nameField = fieldInfo.getName();
                         }
                     }
                 }
                 if (null != this.nameField) {
                     primarySearchField = this.nameField;
-                }else if(null != firstFieldInfo){
+                } else if (null != firstFieldInfo) {
                     primarySearchField = firstFieldInfo.getName();
-                }else {
+                } else {
                     primarySearchField = null;
                 }
             }

@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/6/25.
  */
 final class RawTabInsightImpl
-        extends NamedOrderedInfoImpl
-        implements RawTabInsightRW {
+    extends NamedOrderedInfoImpl
+    implements RawTabInsightRW {
 
     /**
      * groups are not ordered

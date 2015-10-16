@@ -9,11 +9,11 @@ public class NamedInfoImpl implements NamedInfoRW {
     public String name;
     public String friendlyName;
 
-    public NamedInfoImpl(){
-        this("","");
+    public NamedInfoImpl() {
+        this("", "");
     }
 
-    public NamedInfoImpl(String name, String friendlyName){
+    public NamedInfoImpl(String name, String friendlyName) {
         this.name = name;
         this.friendlyName = friendlyName;
     }
@@ -41,7 +41,7 @@ public class NamedInfoImpl implements NamedInfoRW {
     }
 
     @Override
-    public void copyNamedInfo(NamedInfo source){
+    public void copyNamedInfo(NamedInfo source) {
         this.name = source.getName();
         this.friendlyName = source.getFriendlyName();
     }

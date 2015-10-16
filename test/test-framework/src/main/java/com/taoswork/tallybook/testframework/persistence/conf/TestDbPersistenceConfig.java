@@ -2,8 +2,9 @@ package com.taoswork.tallybook.testframework.persistence.conf;
 
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
-import com.taoswork.tallybook.testframework.database.hsqldb.HsqlTestDbCreator;
+import com.taoswork.tallybook.testframework.database.mysql.MysqlTestDbCreator;
 import com.taoswork.tallybook.testframework.persistence.em.EntityManagerHolder;
+import org.hibernate.dialect.Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
@@ -28,6 +29,12 @@ public class TestDbPersistenceConfig {
     public static final String ENTITY_MANAGER_HOLDER = "EntityManagerHolder";
 
     @Bean
+    public TestDataSourceCreator.ITestDbCreator theDbCreator(){
+        return new MysqlTestDbCreator();
+//        return new HsqlTestDbCreator();
+    }
+
+    @Bean
     BeanCreationMonitor beanCreationMonitor(){
         return new BeanCreationMonitor("TestApplicationContext");
     }
@@ -38,13 +45,8 @@ public class TestDbPersistenceConfig {
     }
 
     @Bean
-    public TestDataSourceCreator.ITestDbCreator theDbCreator(){
-        return new HsqlTestDbCreator();
-    }
-
-    @Bean
     DataSource testDbDataSource(){
-        return theDbCreator().createDb("testDb");
+        return theDbCreator().createDataSource("testDb");
     }
 
     @Bean
@@ -52,9 +54,11 @@ public class TestDbPersistenceConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         entityManagerFactory.setPersistenceXmlLocation(
-                "classpath:/META-INF/persistence/" + "persistence-test.xml");
+            "classpath:/META-INF/persistence/" + "persistence-test.xml");
         entityManagerFactory.setDataSource(testDbDataSource());
-        PersistenceUnitPostProcessor puPostProcessor = createPersistenceUnitPostProcessor();
+
+        Class dialect = theDbCreator().getDialectClass();
+        PersistenceUnitPostProcessor puPostProcessor = createPersistenceUnitPostProcessor(dialect);
         entityManagerFactory.setPersistenceUnitPostProcessors(puPostProcessor);
         //       entityManagerFactory.setPersistenceXmlLocation("classpath*:/persistence/persistence-admin-tallyuser.xml");
 //        entityManagerFactory.setDataSource(hostUserDataSource());
@@ -70,7 +74,7 @@ public class TestDbPersistenceConfig {
         return jtm;
     }
 
-    public static PersistenceUnitPostProcessor createPersistenceUnitPostProcessor (){
+    public static PersistenceUnitPostProcessor createPersistenceUnitPostProcessor (final Class<? extends Dialect> dialect){
         PersistenceUnitPostProcessor postProcessor =
                 new PersistenceUnitPostProcessor(){
                     @Override
@@ -78,7 +82,7 @@ public class TestDbPersistenceConfig {
                         Properties props = new Properties();
                         putProperty(props, "");
                         putProperty(props, "hibernate.hbm2ddl.auto=create-drop");
-                        putProperty(props, "hibernate.dialect="+org.hibernate.dialect.HSQLDialect.class.getName());
+                        putProperty(props, "hibernate.dialect="+dialect.getName());
                         putProperty(props, "hibernate.connection.useUnicode=true");
                         putProperty(props, "hibernate.connection.characterEncoding=UTF-8");
                         putProperty(props, "hibernate.connection.charSet=UTF-8");

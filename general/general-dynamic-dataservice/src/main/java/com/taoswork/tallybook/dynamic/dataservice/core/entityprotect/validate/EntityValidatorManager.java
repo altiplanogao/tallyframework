@@ -11,16 +11,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 public class EntityValidatorManager {
-    private static class FakeValidator implements IEntityValidator{
-        @Override
-        public boolean validate(Persistable entity, EntityValidationErrors validationErrors) {
-            return true;
-        }
-    }
     private final static FakeValidator fakeValidator = new FakeValidator();
-
     private final ConcurrentMap<String, IEntityValidator> validatorCache = new ConcurrentHashMap<String, IEntityValidator>();
-    private IEntityValidator getValidator(String validatorName){
+
+    private IEntityValidator getValidator(String validatorName) {
         IEntityValidator validator = validatorCache.computeIfAbsent(validatorName, new Function<String, IEntityValidator>() {
             @Override
             public IEntityValidator apply(String s) {
@@ -33,18 +27,25 @@ public class EntityValidatorManager {
                 return fakeValidator;
             }
         });
-        if(validator == fakeValidator)
+        if (validator == fakeValidator)
             return null;
         return validator;
     }
 
     public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityValidationErrors) {
         Collection<String> validatorNames = classMetadata.getValidators();
-        for (String validatorName : validatorNames){
+        for (String validatorName : validatorNames) {
             IEntityValidator validator = getValidator(validatorName);
-            if(validator!=null){
+            if (validator != null) {
                 validator.validate(entity, entityValidationErrors);
             }
+        }
+    }
+
+    private static class FakeValidator implements IEntityValidator {
+        @Override
+        public boolean validate(Persistable entity, EntityValidationErrors validationErrors) {
+            return true;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BasicFieldMetadataObject;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
@@ -12,27 +13,29 @@ import java.lang.reflect.Field;
 public class PresentationAnnotationFieldHandler implements IFieldHandler {
 
     @Override
-    public ProcessResult process(Field field, FieldMetadata fieldMetadata) {
+    public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
 
-        fieldMetadata.setTabName(PresentationClass.Tab.DEFAULT_NAME);
-        fieldMetadata.setGroupName(PresentationClass.Group.DEFAULT_NAME);
-        fieldMetadata.setOrder(PresentationField.DEFAULT_ORDER_BIAS + fieldMetadata.getOriginalOrder());
-        fieldMetadata.setVisibility(Visibility.DEFAULT);
-        fieldMetadata.setFieldType(FieldType.UNKNOWN);
-        fieldMetadata.setNameField(false);
+        BasicFieldMetadataObject bfmo = fieldMetadata.getBasicFieldMetadataObject();
 
-        if(presentationField != null){
-            fieldMetadata.setTabName(presentationField.tab());
-            fieldMetadata.setGroupName(presentationField.group());
-            if(presentationField.order() != PresentationField.ORDER_NOT_DEFINED){
-                fieldMetadata.setOrder(presentationField.order());
+        bfmo.setTabName(PresentationClass.Tab.DEFAULT_NAME);
+        bfmo.setGroupName(PresentationClass.Group.DEFAULT_NAME);
+        bfmo.setOrder(PresentationField.DEFAULT_ORDER_BIAS + bfmo.getOriginalOrder());
+        bfmo.setVisibility(Visibility.DEFAULT);
+        bfmo.setFieldType(FieldType.UNKNOWN);
+        bfmo.setNameField(false);
+
+        if (presentationField != null) {
+            bfmo.setTabName(presentationField.tab());
+            bfmo.setGroupName(presentationField.group());
+            if (presentationField.order() != PresentationField.ORDER_NOT_DEFINED) {
+                bfmo.setOrder(presentationField.order());
             }
-            fieldMetadata.setVisibility(presentationField.visibility());
-            fieldMetadata.setFieldType(presentationField.fieldType());
-            fieldMetadata.setNameField(presentationField.nameField());
-            if(presentationField.required()){
-                fieldMetadata.setRequired(true);
+            bfmo.setVisibility(presentationField.visibility());
+            bfmo.setFieldType(presentationField.fieldType());
+            bfmo.setNameField(presentationField.nameField());
+            if (presentationField.required()) {
+                bfmo.setRequired(true);
             }
         }
         return ProcessResult.HANDLED;

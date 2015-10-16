@@ -6,8 +6,9 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.
  * Created by Gao Yuan on 2015/6/25.
  */
 interface RawTabInsightRW
-        extends NamedOrderedInfoRW, RawTabInsight {
+    extends NamedOrderedInfoRW, RawTabInsight {
     void addGroup(RawGroupInsightRW groupInfoByComp);
+
     RawGroupInsightRW getGroupRW(String groupName);
 
 }

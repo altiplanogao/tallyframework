@@ -1,9 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.config.helper;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.MysqlDbSetting;
 import com.taoswork.tallybook.general.extension.collections.PropertiesUtility;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
 import com.taoswork.tallybook.general.solution.jpa.JPAPropertiesPersistenceUnitPostProcessor;
@@ -169,5 +167,9 @@ public class DataServiceBeanCreationHelper {
 
         postProcessor.setPersistenceProps(propertiesProperties);
         return postProcessor;
+    }
+
+    public IDbSetting getDbSetting(){
+        return this.dbSetting;
     }
 }

@@ -10,16 +10,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 public class EntityValueGateManager {
-    private static class FakeValueGate implements IEntityValueGate{
-        @Override
-        public void deposit(Persistable entity, Persistable oldEntity) {}
-
-        @Override
-        public void withdraw(Persistable entity) {}
-    }
     private final static FakeValueGate fakeValueGate = new FakeValueGate();
     private final ConcurrentMap<String, IEntityValueGate> valueGateCache = new ConcurrentHashMap<String, IEntityValueGate>();
-    private IEntityValueGate getValueGate(String gateName){
+
+    private IEntityValueGate getValueGate(String gateName) {
         IEntityValueGate gate = valueGateCache.computeIfAbsent(gateName, new Function<String, IEntityValueGate>() {
             @Override
             public IEntityValueGate apply(String s) {
@@ -32,24 +26,34 @@ public class EntityValueGateManager {
                 return fakeValueGate;
             }
         });
-        if(gate == fakeValueGate)
+        if (gate == fakeValueGate)
             return null;
         return gate;
     }
 
-    public void deposit(ClassMetadata classMetadata, Persistable entity, Persistable oldEntity){
+    public void deposit(ClassMetadata classMetadata, Persistable entity, Persistable oldEntity) {
         Collection<String> gateNames = classMetadata.getValueGates();
-        for(String gateName : gateNames){
+        for (String gateName : gateNames) {
             IEntityValueGate gate = getValueGate(gateName);
             gate.deposit(entity, oldEntity);
         }
     }
 
-    public void withdraw(ClassMetadata classMetadata, Persistable entity){
+    public void withdraw(ClassMetadata classMetadata, Persistable entity) {
         Collection<String> gateNames = classMetadata.getValueGates();
-        for(String gateName : gateNames){
+        for (String gateName : gateNames) {
             IEntityValueGate gate = getValueGate(gateName);
             gate.withdraw(entity);
+        }
+    }
+
+    private static class FakeValueGate implements IEntityValueGate {
+        @Override
+        public void deposit(Persistable entity, Persistable oldEntity) {
+        }
+
+        @Override
+        public void withdraw(Persistable entity) {
         }
     }
 }

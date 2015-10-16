@@ -35,7 +35,7 @@ public class EntityInfoImpl
         this.entityType = entityType;
         this.tabs = tabs;
         this.fields = new HashMap<String, FieldInfo>();
-        for(Map.Entry<String, FieldInfo> field : fields.entrySet()){
+        for (Map.Entry<String, FieldInfo> field : fields.entrySet()) {
             this.fields.put(field.getKey(), field.getValue());
         }
     }
@@ -46,53 +46,13 @@ public class EntityInfoImpl
     }
 
     @Override
-    public List<ITabInfo> getTabs() {
-        return tabs;
-    }
-
-    @Override
-    public String getIdField() {
-        return idField;
-    }
-
-    @Override
-    public String getNameField() {
-        return nameField;
-    }
-
-    @Override
-    public String getPrimarySearchField() {
-        return primarySearchField;
-    }
-
-    @Override
-    public List<String> getGridFields() {
-        return gridFields;
-    }
-
-    @Override
-    public void setIdField(String idField) {
-        this.idField = idField;
-    }
-
-    @Override
-    public void setNameField(String nameField) {
-        this.nameField = nameField;
-    }
-
-    @Override
-    public void setPrimarySearchField(String primarySearchField) {
-        this.primarySearchField = primarySearchField;
-    }
-
-    @Override
-    public FieldInfo getField(String fieldName) {
-        return this.fields.getOrDefault(fieldName, null);
-    }
-
-    @Override
     public void setFields(Map<String, FieldInfo> fields) {
         this.fields = fields;
+    }
+
+    @Override
+    public List<ITabInfo> getTabs() {
+        return tabs;
     }
 
     @Override
@@ -101,8 +61,48 @@ public class EntityInfoImpl
     }
 
     @Override
+    public String getIdField() {
+        return idField;
+    }
+
+    @Override
+    public void setIdField(String idField) {
+        this.idField = idField;
+    }
+
+    @Override
+    public String getNameField() {
+        return nameField;
+    }
+
+    @Override
+    public void setNameField(String nameField) {
+        this.nameField = nameField;
+    }
+
+    @Override
+    public String getPrimarySearchField() {
+        return primarySearchField;
+    }
+
+    @Override
+    public void setPrimarySearchField(String primarySearchField) {
+        this.primarySearchField = primarySearchField;
+    }
+
+    @Override
+    public List<String> getGridFields() {
+        return gridFields;
+    }
+
+    @Override
     public void setGridFields(List<String> gridFields) {
         this.gridFields = gridFields;
+    }
+
+    @Override
+    public FieldInfo getField(String fieldName) {
+        return this.fields.getOrDefault(fieldName, null);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class EntityInfoImpl
 
     @Override
     public String getEntityType() {
-        if(entityType != null)
+        if (entityType != null)
             return entityType.getName();
         return null;
     }

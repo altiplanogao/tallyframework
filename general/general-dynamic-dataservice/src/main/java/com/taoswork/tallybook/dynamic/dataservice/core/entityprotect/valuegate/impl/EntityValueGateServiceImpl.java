@@ -2,11 +2,11 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.EntityValueGateManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.FieldValueGateManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.gates.EmailValueGate;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.gates.HtmlValueGate;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.EntityValueGateManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
@@ -19,7 +19,7 @@ public class EntityValueGateServiceImpl implements EntityValueGateService {
     private FieldValueGateManager fieldValueGateManager = new FieldValueGateManager();
     private EntityValueGateManager entityValueGateManager = new EntityValueGateManager();
 
-    public EntityValueGateServiceImpl(){
+    public EntityValueGateServiceImpl() {
         fieldValueGateManager.addHandler(new EmailValueGate());
         fieldValueGateManager.addHandler(new HtmlValueGate());
     }

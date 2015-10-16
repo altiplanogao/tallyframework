@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.FriendlyMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
-import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,37 +16,34 @@ import java.util.*;
 
 /**
  * Represents a class with its self containing metadata, super information not included by default.
- *
  */
 public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMetadata.class);
-
+    private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
+    private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
+    private final Map<String, IFieldMetadata> fieldMetadataMap = new HashMap<String, IFieldMetadata>();
+    private final Set<String> nonCollectionFields = new HashSet<String>();
+    private final Set<String> validators = new HashSet();
+    private final Set<String> valueGates = new HashSet();
     public Class<?> entityClz;
+    public boolean containsSuper = false;
     private String idFieldName;
     private String nameFieldName;
     private transient Field idField;
     private transient Field nameField;
-    public boolean containsSuper = false;
-    private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
-    private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
-    private final Map<String, FieldMetadata> fieldMetadataMap = new HashMap<String, FieldMetadata>();
 
-    private final Set<String> nonCollectionFields = new HashSet<String>();
-
-    private final Set<String> validators = new HashSet();
-    private final Set<String> valueGates = new HashSet();
-
-    public ClassMetadata(){
+    public ClassMetadata() {
         this(null);
     }
-    private ClassMetadata(Class<?> entityClz){
+
+    private ClassMetadata(Class<?> entityClz) {
         setEntityClz(entityClz);
     }
 
-    public Field getIdField(){
-        if(idField != null)
+    public Field getIdField() {
+        if (idField != null)
             return idField;
-        if(StringUtils.isNotEmpty(this.idFieldName)){
+        if (StringUtils.isNotEmpty(this.idFieldName)) {
             idField = NativeClassHelper.getFieldOfName(entityClz, idFieldName, true);
             idField.setAccessible(true);
             return idField;
@@ -56,7 +53,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public void setIdField(Field idField) {
-        if(idField != null) {
+        if (idField != null) {
             this.idField = idField;
             this.idField.setAccessible(true);
             this.idFieldName = idField.getName();
@@ -64,15 +61,15 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public void setIdFieldIfNone(Field idField) {
-        if(null == this.idField){
+        if (null == this.idField) {
             this.setIdField(idField);
         }
     }
 
     public Field getNameField() {
-        if(nameField != null)
+        if (nameField != null)
             return nameField;
-        if(StringUtils.isNotEmpty(this.nameFieldName)){
+        if (StringUtils.isNotEmpty(this.nameFieldName)) {
             nameField = NativeClassHelper.getFieldOfName(entityClz, nameFieldName, true);
             nameField.setAccessible(true);
             return nameField;
@@ -82,7 +79,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public void setNameField(Field nameField) {
-        if(nameField != null){
+        if (nameField != null) {
             this.nameField = nameField;
             this.nameField.setAccessible(true);
             this.nameFieldName = nameField.getName();
@@ -90,7 +87,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public void setNameFieldIfNone(Field nameField) {
-        if(null == this.nameField){
+        if (null == this.nameField) {
             this.setNameField(nameField);
         }
     }
@@ -111,45 +108,45 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         this.containsSuper = containsSuper;
     }
 
-    public Map<String, TabMetadata> getRWTabMetadataMap(){
+    public Map<String, TabMetadata> getRWTabMetadataMap() {
         return (tabMetadataMap);
     }
 
-    public Map<String, GroupMetadata> getRWGroupMetadataMap(){
+    public Map<String, GroupMetadata> getRWGroupMetadataMap() {
         return (groupMetadataMap);
     }
 
-    public Map<String, FieldMetadata> getRWFieldMetadataMap(){
+    public Map<String, IFieldMetadata> getRWFieldMetadataMap() {
         return (fieldMetadataMap);
     }
 
-    public Map<String, TabMetadata> getReadonlyTabMetadataMap(){
+    public Map<String, TabMetadata> getReadonlyTabMetadataMap() {
         return Collections.unmodifiableMap(tabMetadataMap);
     }
 
-    public Map<String, GroupMetadata> getReadonlyGroupMetadataMap(){
+    public Map<String, GroupMetadata> getReadonlyGroupMetadataMap() {
         return Collections.unmodifiableMap(groupMetadataMap);
     }
 
-    public Map<String, FieldMetadata> getReadonlyFieldMetadataMap(){
+    public Map<String, IFieldMetadata> getReadonlyFieldMetadataMap() {
         return Collections.unmodifiableMap(fieldMetadataMap);
     }
 
-    public FieldMetadata getFieldMetadata(String fieldName){
+    public IFieldMetadata getFieldMetadata(String fieldName) {
         return fieldMetadataMap.getOrDefault(fieldName, null);
     }
 
-    public void addValidator(Class<? extends IEntityValidator> validator){
-        if(validator != null)
+    public void addValidator(Class<? extends IEntityValidator> validator) {
+        if (validator != null)
             validators.add(validator.getName());
     }
 
-    public void addValueGate(Class<? extends IEntityValueGate> valueGate){
-        if(valueGate != null)
+    public void addValueGate(Class<? extends IEntityValueGate> valueGate) {
+        if (valueGate != null)
             valueGates.add(valueGate.getName());
     }
 
-    public Collection<String> getValidators(){
+    public Collection<String> getValidators() {
         return Collections.unmodifiableCollection(this.validators);
     }
 
@@ -157,8 +154,8 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         return Collections.unmodifiableCollection(this.valueGates);
     }
 
-    public void absorbSuper(ClassMetadata superMeta){
-        if(superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())){
+    public void absorbSuper(ClassMetadata superMeta) {
+        if (superMeta.getEntityClz().isAssignableFrom(this.getEntityClz())) {
             containsSuper = true;
             absorb(superMeta);
         } else {
@@ -178,13 +175,13 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         this.valueGates.addAll(thatMeta.getValueGates());
     }
 
-    public void finishBuilding(){
-        if(this.nonCollectionFields.size() == 0){
+    public void finishBuilding() {
+        if (this.nonCollectionFields.size() == 0) {
             List<String> nonCollection = new ArrayList<String>();
             List<String> collection = new ArrayList<String>();
-            for(Map.Entry<String, FieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()){
+            for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
                 String fieldName = fieldMetadataEntry.getKey();
-                FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+                IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
                 (fieldMetadata.isCollectionField() ? collection : nonCollection).add(fieldName);
             }
             this.nonCollectionFields.addAll(nonCollection);
@@ -195,7 +192,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         return Collections.unmodifiableCollection(nonCollectionFields);
     }
 
-    public boolean hasField(String fieldName){
+    public boolean hasField(String fieldName) {
         return fieldMetadataMap.containsKey(fieldName);
     }
 

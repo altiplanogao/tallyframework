@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public final class EntityInfoBuilder {
 
-    private EntityInfoBuilder() throws IllegalAccessException{
+    private EntityInfoBuilder() throws IllegalAccessException {
         throw new IllegalAccessException("EntityInfoBuilder: Not instance-able object");
     }
 
@@ -29,7 +29,7 @@ public final class EntityInfoBuilder {
 
         Class entityType = classMetadata.getEntityClz();
         boolean withHierarchy = false;
-        if(classMetadata instanceof ClassTreeMetadata){
+        if (classMetadata instanceof ClassTreeMetadata) {
             withHierarchy = true;
         }
         return build(entityType, rawEntityInsight, withHierarchy);

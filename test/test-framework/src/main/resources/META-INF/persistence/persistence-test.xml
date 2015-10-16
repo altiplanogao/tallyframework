@@ -7,10 +7,21 @@
     <persistence-unit name="tallyTestPU" transaction-type="RESOURCE_LOCAL">
         <non-jta-data-source>jdbcTestDs</non-jta-data-source>
 
-        <class>com.taoswork.tallybook.testframework.domain.impl.TPersonImpl</class>
-        <class>com.taoswork.tallybook.testframework.domain.impl.TDogImpl</class>
-        <class>com.taoswork.tallybook.testframework.domain.impl.TFishImpl</class>
-        <class>com.taoswork.tallybook.testframework.domain.impl.TCustomizedAnimalImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.ZooImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.ZooKeeperImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.DormitoryImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.CageImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.DogImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.FishImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.zoo.impl.CustomizedAnimalImpl</class>
+
+
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.ProductImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.EmployeeImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.DepartmentImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.ParkingSpaceImpl</class>
+        <class>com.taoswork.tallybook.testframework.domain.business.impl.ProjectImpl</class>
         <!--
         <class>AdminRoleImpl</class>
         <class>AdminPermissionImpl</class>

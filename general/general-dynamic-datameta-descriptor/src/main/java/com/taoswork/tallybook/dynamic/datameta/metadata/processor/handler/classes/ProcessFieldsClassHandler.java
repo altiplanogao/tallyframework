@@ -1,7 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.classes;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataCreator;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
+import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.FieldProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
@@ -17,8 +20,8 @@ public class ProcessFieldsClassHandler implements IClassHandler {
 
     private final IFieldHandler fieldHandler;
 
-    public ProcessFieldsClassHandler() {
-        this.fieldHandler = new FieldProcessor();
+    public ProcessFieldsClassHandler(ClassProcessor classProcessor) {
+        this.fieldHandler = new FieldProcessor(classProcessor);
     }
 
     @Override
@@ -28,18 +31,19 @@ public class ProcessFieldsClassHandler implements IClassHandler {
         int totalfields = 0;
         NativeClassHelper.FieldScanMethod fsm = new NativeClassHelper.FieldScanMethod();
         fsm.setIncludeStatic(false).setIncludeTransient(false).setIncludeId(true)
-                .setScanSuper(false);
+            .setScanSuper(false);
         List<Field> fields = NativeClassHelper.getFields(clz, fsm);
         int fieldOrigIndex = 0;
-        for (Field field: fields) {
+        for (Field field : fields) {
             totalfields++;
             String fieldName = field.getName();
 
-            FieldMetadata fieldMetadata = new FieldMetadata(fieldOrigIndex, field);
-            ProcessResult pr = fieldHandler.process(field, fieldMetadata);
+            FieldMetadataIntermediate fieldMetadataIntermediate = new FieldMetadataIntermediate(fieldOrigIndex, field);
+            ProcessResult pr = fieldHandler.process(field, fieldMetadataIntermediate);
             if (classMetadata.getRWFieldMetadataMap().containsKey(fieldName)) {
                 LOGGER.error("FieldMetadata with name '{}' already exist.", fieldName);
             }
+            IFieldMetadata fieldMetadata = FieldMetadataCreator.create(fieldMetadataIntermediate);
             classMetadata.getRWFieldMetadataMap().put(fieldName, fieldMetadata);
             if (ProcessResult.FAILED.equals(pr)) {
                 failed++;

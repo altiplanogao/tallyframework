@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.Restriction;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.RestrictionFactory;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.util.FieldPathBuilder;
@@ -73,7 +73,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
             List<String> values = pfc.getFilterValues();
             if (!CollectionUtility.isEmpty(values)) {
                 FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
-                FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                IFieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
                 if(fieldMetadata == null){
                     continue;
                 }
@@ -99,7 +99,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
                 if (null == direction) {
                     continue;
                 } else {
-                    FieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                    IFieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
                     FieldPathBuilder fpb = new FieldPathBuilder();
                     Path path = fpb.buildPath(original, propertyName);
 

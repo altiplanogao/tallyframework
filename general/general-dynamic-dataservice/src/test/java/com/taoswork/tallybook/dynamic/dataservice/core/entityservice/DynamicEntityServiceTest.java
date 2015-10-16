@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.*;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
-import com.taoswork.tallybook.testframework.domain.TPerson;
+import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class DynamicEntityServiceTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), 0);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -59,7 +59,7 @@ public class DynamicEntityServiceTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), createAttemptA);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -67,7 +67,7 @@ public class DynamicEntityServiceTest {
 
             for(int skipLeading = 2 ; skipLeading < createAttemptA ; skipLeading ++) {
                 ctoFetchAll.setFirstResult(skipLeading);
-                persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
+                persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
                 Assert.assertEquals(persons.fetchedCount(), createAttemptA - skipLeading);
                 Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -91,7 +91,7 @@ public class DynamicEntityServiceTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), 0);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -107,7 +107,7 @@ public class DynamicEntityServiceTest {
         {
             //Test count all
             CriteriaTransferObject ctoFetchAll = new CriteriaTransferObject();
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchAll);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
             Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
@@ -117,7 +117,7 @@ public class DynamicEntityServiceTest {
             //Test count A
             CriteriaTransferObject ctoFetchA = new CriteriaTransferObject();
             ctoFetchA.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameAAA));
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchA);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchA);
 
             Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(createAttemptA));
@@ -127,7 +127,7 @@ public class DynamicEntityServiceTest {
             //Test count B
             CriteriaTransferObject ctoFetchB = new CriteriaTransferObject();
             ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
-            CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchB);
+            CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchB);
 
             Assert.assertEquals(persons.fetchedCount(), CriteriaTransferObject.SINGLE_QUERY_DEFAULT_PAGE_SIZE);
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(createAttemptB));
@@ -142,11 +142,11 @@ public class DynamicEntityServiceTest {
                         .setPageSize(requestCount)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
-                    CriteriaQueryResult<TPerson> personsAAA = dynamicEntityService.query(TPerson.class, ctoFetchFirst25AAA);
+                    CriteriaQueryResult<ZooKeeper> personsAAA = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25AAA);
 
                     Assert.assertEquals(personsAAA.fetchedCount(), requestCount);
                     Assert.assertEquals(personsAAA.getTotalCount(), Long.valueOf(created));
-                    for (TPerson person : personsAAA.getEntityCollection()) {
+                    for (ZooKeeper person : personsAAA.getEntityCollection()) {
                         Assert.assertTrue(person.getName().startsWith(nameAAA));
                     }
                 }
@@ -160,11 +160,11 @@ public class DynamicEntityServiceTest {
                         .setFirstResult(startIndex)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
-                    CriteriaQueryResult<TPerson> personsAAA = dynamicEntityService.query(TPerson.class, ctoFetchFirst25AfterAAA);
+                    CriteriaQueryResult<ZooKeeper> personsAAA = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25AfterAAA);
 
                     Assert.assertEquals(personsAAA.fetchedCount(), requestCount);
                     Assert.assertEquals(personsAAA.getTotalCount(), Long.valueOf(created));
-                    for (TPerson person : personsAAA.getEntityCollection()) {
+                    for (ZooKeeper person : personsAAA.getEntityCollection()) {
                         Assert.assertTrue(person.getName().startsWith(nameBBB));
                     }
                 }
@@ -179,11 +179,11 @@ public class DynamicEntityServiceTest {
                 CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject().setPageSize(requestCount)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
-                    CriteriaQueryResult<TPerson> personsBBB = dynamicEntityService.query(TPerson.class, ctoFetchFirst25BBB);
+                    CriteriaQueryResult<ZooKeeper> personsBBB = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25BBB);
 
                     Assert.assertEquals(personsBBB.fetchedCount(), requestCount);
                     Assert.assertEquals(personsBBB.getTotalCount(), Long.valueOf(created));
-                    for (TPerson person : personsBBB.getEntityCollection()) {
+                    for (ZooKeeper person : personsBBB.getEntityCollection()) {
                         Assert.assertTrue(person.getName().startsWith(nameBBB));
                     }
                 }
@@ -196,11 +196,11 @@ public class DynamicEntityServiceTest {
                         .setFirstResult(startIndex)
                         .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
-                    CriteriaQueryResult<TPerson> personsBBB = dynamicEntityService.query(TPerson.class, ctoFetchFirst25BBB);
+                    CriteriaQueryResult<ZooKeeper> personsBBB = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25BBB);
 
                     Assert.assertEquals(personsBBB.fetchedCount(), requestCount);
                     Assert.assertEquals(personsBBB.getTotalCount(), Long.valueOf(created));
-                    for (TPerson person : personsBBB.getEntityCollection()) {
+                    for (ZooKeeper person : personsBBB.getEntityCollection()) {
                         Assert.assertTrue(person.getName().startsWith(nameAAA));
                     }
                 }
@@ -214,11 +214,11 @@ public class DynamicEntityServiceTest {
             int eachQuerySize = 12;
             int fullPageCount = 0;
             int returned = 0;
-            List<TPerson> cache = new ArrayList<TPerson>();
+            List<ZooKeeper> cache = new ArrayList<ZooKeeper>();
             do{
                 CriteriaTransferObject ctoFetchB = new CriteriaTransferObject().setFirstResult(startIndex).setPageSize(eachQuerySize);
                 ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
-                CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchB);
+                CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchB);
 
                 if(persons.fetchedCount() == eachQuerySize){
                     fullPageCount ++;
@@ -237,15 +237,15 @@ public class DynamicEntityServiceTest {
             Assert.assertTrue(fullPageCount == (createAttemptB / eachQuerySize));
             Assert.assertTrue(returned == createAttemptB);
 
-            for(TPerson p : cache){
-                Entity entity = new Entity().setEntityCeilingType(TPerson.class).setEntityType(p.getClass());
+            for(ZooKeeper p : cache){
+                Entity entity = new Entity().setEntityCeilingType(ZooKeeper.class).setEntityType(p.getClass());
                 dynamicEntityService.delete(entity, p.getId().toString());
             }
 
             {
                 CriteriaTransferObject ctoFetchB = new CriteriaTransferObject();
                 ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
-                CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchB);
+                CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchB);
 
                 Assert.assertEquals(persons.getTotalCount().intValue(), 0);
             }
@@ -253,7 +253,7 @@ public class DynamicEntityServiceTest {
             {
                 CriteriaTransferObject ctoFetchA = new CriteriaTransferObject();
                 ctoFetchA.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameAAA));
-                CriteriaQueryResult<TPerson> persons = dynamicEntityService.query(TPerson.class, ctoFetchA);
+                CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchA);
 
                 Assert.assertEquals(persons.getTotalCount().intValue(), createAttemptA);
             }

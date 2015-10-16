@@ -2,6 +2,7 @@ package com.taoswork.tallybook.testframework.database.hsqldb;
 
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.hibernate.dialect.Dialect;
 import org.hsqldb.jdbc.JDBCDriver;
 
 import javax.sql.DataSource;
@@ -16,7 +17,7 @@ public class HsqlTestDbCreator implements TestDataSourceCreator.ITestDbCreator {
     }
 
     @Override
-    public DataSource createDb(String dbName) {
+    public DataSource createDataSource(String dbName) {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(JDBCDriver.class.getName());
         //dataSource.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
@@ -25,5 +26,10 @@ public class HsqlTestDbCreator implements TestDataSourceCreator.ITestDbCreator {
         dataSource.setUsername("sa");
         dataSource.setPassword("");
         return dataSource;
+    }
+
+    @Override
+    public Class<? extends Dialect> getDialectClass() {
+        return org.hibernate.dialect.HSQLDialect.class;
     }
 }

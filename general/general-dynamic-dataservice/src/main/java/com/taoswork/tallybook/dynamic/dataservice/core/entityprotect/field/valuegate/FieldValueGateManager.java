@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.FieldTypedHandlerManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -17,9 +17,9 @@ public class FieldValueGateManager extends FieldTypedHandlerManager<IFieldValueG
     public void normalize(Persistable entity, ClassMetadata classMetadata) throws ServiceException {
         List<String> fieldFriendlyNames = new ArrayList<String>();
         try {
-            for (Map.Entry<String, FieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()) {
+            for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()) {
                 String fieldName = fieldMetadataEntry.getKey();
-                FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+                IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
                 Field field = fieldMetadata.getField();
                 Object fieldValue = field.get(entity);
                 fieldValue = this.normalize(fieldMetadata, fieldValue);
@@ -30,7 +30,7 @@ public class FieldValueGateManager extends FieldTypedHandlerManager<IFieldValueG
         }
     }
 
-    public Object normalize(FieldMetadata fieldMetadata, Object fieldValue) {
+    public Object normalize(IFieldMetadata fieldMetadata, Object fieldValue) {
         String fieldName = fieldMetadata.getName();
         Collection<IFieldValueGate> fieldValueGates = this.getHandlers(fieldMetadata);
         for (IFieldValueGate valueGate : fieldValueGates) {

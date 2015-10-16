@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.FieldTypedHandlerManager;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
@@ -21,13 +21,13 @@ public class FieldValidatorManager extends FieldTypedHandlerManager<IFieldValida
 
     public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityErrors) throws IllegalAccessException {
         List<String> fieldFriendlyNames = new ArrayList<String>();
-        for (Map.Entry<String, FieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()){
+        for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()) {
             String fieldName = fieldMetadataEntry.getKey();
-            FieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+            IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
             Field field = fieldMetadata.getField();
             Object fieldValue = field.get(entity);
             FieldValidationErrors fieldError = this.validate(fieldMetadata, fieldValue);
-            if(!fieldError.isValid()){
+            if (!fieldError.isValid()) {
                 fieldFriendlyNames.add(fieldMetadata.getFriendlyName());
                 entityErrors.addFieldErrors(fieldError);
             }
@@ -35,11 +35,11 @@ public class FieldValidatorManager extends FieldTypedHandlerManager<IFieldValida
         entityErrors.appendErrorFieldsNames(fieldFriendlyNames);
     }
 
-    public FieldValidationErrors validate(FieldMetadata fieldMetadata, Object fieldValue) {
+    public FieldValidationErrors validate(IFieldMetadata fieldMetadata, Object fieldValue) {
         String fieldName = fieldMetadata.getName();
         FieldValidationErrors fieldValidationErrors = new FieldValidationErrors(fieldName);
         Collection<IFieldValidator> validators = this.getHandlers(fieldMetadata);
-        for(IFieldValidator validator : validators){
+        for (IFieldValidator validator : validators) {
             ValidationError validateError = validator.validate(fieldMetadata, fieldValue);
             fieldValidationErrors.appendError(validateError);
         }

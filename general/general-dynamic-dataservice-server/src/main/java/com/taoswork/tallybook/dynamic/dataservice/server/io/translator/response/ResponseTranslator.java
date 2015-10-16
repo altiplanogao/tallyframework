@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
@@ -76,7 +76,7 @@ public class ResponseTranslator {
     }
 
     public void translateCreateFreshResponse(EntityCreateFreshRequest request,
-                                             EntityResult result,
+                                             PersistableResult result,
                                              ServiceException e,
                                              EntityCreateFreshResponse response,
                                              Locale locale) {
@@ -86,7 +86,7 @@ public class ResponseTranslator {
     }
 
     public void translateCreateResponse(EntityCreateRequest request,
-                                        EntityResult result,
+                                        PersistableResult result,
                                         ServiceException e,
                                         EntityCreateResponse response,
                                         Locale locale) {
@@ -96,7 +96,7 @@ public class ResponseTranslator {
     }
 
     public void translateReadResponse(EntityReadRequest request,
-                                      EntityResult result,
+                                      PersistableResult result,
                                       ServiceException e,
                                       EntityReadResponse response,
                                       Locale locale) {
@@ -106,7 +106,7 @@ public class ResponseTranslator {
     }
 
     public void translateUpdateResponse(EntityUpdateRequest request,
-                                        EntityResult result,
+                                        PersistableResult result,
                                         ServiceException e,
                                         EntityUpdateResponse response,
                                         Locale locale) {
@@ -126,7 +126,7 @@ public class ResponseTranslator {
     }
 
     private void translateInstanceResponse(EntityRequest request,
-                                           EntityResult result,
+                                           PersistableResult result,
                                            ServiceException e,
                                            EntityInstanceResponse response) {
         if (result == null && e instanceof EntityValidationException) {

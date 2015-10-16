@@ -16,7 +16,7 @@ public class EntityClassTreeAccessor extends AutoTreeAccessor<EntityClass, Entit
     }
 
     public EntityClassTree add(EntityClassTree existingNode, Class<?> newNodeData) {
-        return (EntityClassTree)super.add(existingNode, new EntityClass(newNodeData));
+        return (EntityClassTree) super.add(existingNode, new EntityClass(newNodeData));
     }
 
     @Override

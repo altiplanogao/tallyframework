@@ -1,11 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
-import com.taoswork.tallybook.general.authority.core.basic.Access;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * May refer to {@link com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths }
  */

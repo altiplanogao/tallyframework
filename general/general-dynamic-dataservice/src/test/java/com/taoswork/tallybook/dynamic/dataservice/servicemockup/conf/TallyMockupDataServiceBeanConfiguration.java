@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataS
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
+import org.hibernate.dialect.Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -48,8 +49,9 @@ public class TallyMockupDataServiceBeanConfiguration extends ADataServiceBeanCon
     @Bean(name = TallyMockupDataServiceDefinition.TMOCKUP_ENTITY_MANAGER_FACTORY_NAME)
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         AbstractEntityManagerFactoryBean entityManagerFactory = super.entityManagerFactory();
+        Class dialect = helper.getDbSetting().hibernateDialect();
         ((LocalContainerEntityManagerFactoryBean)entityManagerFactory).setPersistenceUnitPostProcessors(
-            TestDbPersistenceConfig.createPersistenceUnitPostProcessor()
+            TestDbPersistenceConfig.createPersistenceUnitPostProcessor(dialect)
         );
         return entityManagerFactory;
     }

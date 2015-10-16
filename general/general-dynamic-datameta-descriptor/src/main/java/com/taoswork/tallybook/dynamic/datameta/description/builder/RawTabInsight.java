@@ -9,5 +9,6 @@ import java.util.Collection;
  */
 interface RawTabInsight extends NamedOrderedInfo {
     RawGroupInsight getGroup(String groupName);
+
     Collection<? extends RawGroupInsight> getGroups();
 }

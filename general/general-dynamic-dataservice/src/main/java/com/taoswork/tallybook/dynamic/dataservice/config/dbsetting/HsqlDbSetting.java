@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.config.dbsetting;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.HSQLDialect;
 import org.hsqldb.jdbc.JDBCDriver;
 
@@ -12,8 +13,8 @@ import javax.sql.DataSource;
  */
 public class HsqlDbSetting implements IDbSetting {
     @Override
-    public String hibernateDialect() {
-        return HSQLDialect.class.getName();
+    public Class<? extends Dialect> hibernateDialect() {
+        return HSQLDialect.class;
     }
 
     @Override

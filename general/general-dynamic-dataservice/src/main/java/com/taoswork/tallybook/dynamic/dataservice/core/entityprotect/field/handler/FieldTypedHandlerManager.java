@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.FieldTypeType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,8 +15,8 @@ public class FieldTypedHandlerManager<H extends IFieldTypedHandler> {
     //Cache
     private Map<FieldTypeType, Set<H>> cachedFieldHandlers = new HashMap<FieldTypeType, Set<H>>();
 
-    public FieldTypedHandlerManager addHandlers(H... fieldHandlers){
-        for (H handler : fieldHandlers){
+    public FieldTypedHandlerManager addHandlers(H... fieldHandlers) {
+        for (H handler : fieldHandlers) {
             this.addHandler(handler);
         }
         return this;
@@ -31,14 +31,14 @@ public class FieldTypedHandlerManager<H extends IFieldTypedHandler> {
         return this;
     }
 
-    public Collection<H> getHandlers(FieldMetadata fieldMetadata) {
+    public Collection<H> getHandlers(IFieldMetadata fieldMetadata) {
         return this.getHandlers(fieldMetadata.getFieldType(), fieldMetadata.getFieldClass());
     }
 
-    public Collection<H> getHandlers(FieldType type, Class clz){
+    public Collection<H> getHandlers(FieldType type, Class clz) {
         FieldTypeType typeType = new FieldTypeType(type, clz);
         Set<H> cache = cachedFieldHandlers.getOrDefault(typeType, null);
-        if(cache == null){
+        if (cache == null) {
             cache = new HashSet<H>();
             FieldTypeType typeOnlyType = new FieldTypeType(type);
             FieldTypeType typeOnlyClz = new FieldTypeType(clz);
@@ -47,11 +47,11 @@ public class FieldTypedHandlerManager<H extends IFieldTypedHandler> {
             List<H> typedT = typedFieldHandlers.getOrDefault(typeOnlyType, null);
             List<H> typedC = typedFieldHandlers.getOrDefault(typeOnlyClz, null);
 
-            if(typed != null)
+            if (typed != null)
                 cache.addAll(typed);
-            if(typedT != null)
+            if (typedT != null)
                 cache.addAll(typedT);
-            if(typedC != null)
+            if (typedC != null)
                 cache.addAll(typedC);
 
             cachedFieldHandlers.put(typeType, cache);

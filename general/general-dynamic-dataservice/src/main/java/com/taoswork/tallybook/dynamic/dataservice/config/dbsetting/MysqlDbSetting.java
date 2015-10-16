@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.config.dbsetting;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
+import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.MySQL5InnoDBDialect;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
@@ -11,8 +12,8 @@ import javax.sql.DataSource;
  */
 public class MysqlDbSetting implements IDbSetting {
     @Override
-    public String hibernateDialect() {
-        return MySQL5InnoDBDialect.class.getName();
+    public Class<?extends Dialect> hibernateDialect() {
+        return MySQL5InnoDBDialect.class;
     }
 
     @Override

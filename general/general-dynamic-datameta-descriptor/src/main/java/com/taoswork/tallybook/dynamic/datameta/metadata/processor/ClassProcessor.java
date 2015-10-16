@@ -10,7 +10,7 @@ public class ClassProcessor extends MultiMetadataHandler<Class<?>, ClassMetadata
         metaHandlers.add(new BeginClassMetadataClassHandler());
         metaHandlers.add(new PersistableAnnotationClassHandler());
         metaHandlers.add(new PresentationAnnotationClassHandler());
-        metaHandlers.add(new ProcessFieldsClassHandler());
+        metaHandlers.add(new ProcessFieldsClassHandler(this));
         metaHandlers.add(new EndClassMetadataClassHandler());
     }
 }

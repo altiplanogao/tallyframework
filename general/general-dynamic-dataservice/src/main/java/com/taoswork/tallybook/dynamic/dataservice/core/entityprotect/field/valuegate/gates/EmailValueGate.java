@@ -19,7 +19,7 @@ public class EmailValueGate extends FieldValueGateBase<String> {
 
     @Override
     protected String doDeposit(String val) {
-        if(val == null)
+        if (val == null)
             return val;
         return val.replaceAll(" ", "");
     }

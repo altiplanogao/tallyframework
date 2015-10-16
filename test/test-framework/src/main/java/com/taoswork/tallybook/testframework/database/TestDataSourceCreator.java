@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.testframework.database;
 
 import com.taoswork.tallybook.testframework.database.hsqldb.HsqlTestDbCreator;
+import org.hibernate.dialect.Dialect;
 
 import javax.sql.DataSource;
 
@@ -9,13 +10,17 @@ import javax.sql.DataSource;
  */
 public class TestDataSourceCreator {
     public static interface ITestDbCreator{
-        DataSource createDb(String dbName);
+        DataSource createDataSource(String dbName);
+
         String hibernateSettingFile();
+
+        Class<? extends Dialect> getDialectClass();
     }
+
     private static ITestDbCreator dbCreator = new HsqlTestDbCreator();
 
     public static DataSource createDataSource(String dbName){
-        return dbCreator.createDb(dbName);
+        return dbCreator.createDataSource(dbName);
     }
 
     public static String getHibernateSettingFile(){

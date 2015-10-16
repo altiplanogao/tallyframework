@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.persistence;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BasicFieldMetadataObject;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
@@ -11,18 +12,19 @@ import java.lang.reflect.Field;
 
 class _IdAnnotationHandler implements IFieldHandler {
     @Override
-    public ProcessResult process(Field field, FieldMetadata fieldMetadata) {
+    public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
+        BasicFieldMetadataObject bfmo = fieldMetadata.getBasicFieldMetadataObject();
         Id idAnnotation = field.getDeclaredAnnotation(Id.class);
         if (null != idAnnotation) {
-            fieldMetadata.setId(true);
+            bfmo.setId(true);
             PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
             if (presentationField == null) {
-                fieldMetadata.setOrder(0);
-                fieldMetadata.setVisibility(Visibility.HIDDEN_ALL);
+                bfmo.setOrder(0);
+                bfmo.setVisibility(Visibility.HIDDEN_ALL);
             }
             return ProcessResult.HANDLED;
         } else {
-            fieldMetadata.setId(false);
+            bfmo.setId(false);
             return ProcessResult.INAPPLICABLE;
         }
     }

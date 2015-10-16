@@ -9,17 +9,6 @@ import java.util.Comparator;
  */
 public class OrderedName {
 
-    public static class OrderedComparator implements Comparator<OrderedName> {
-        @Override
-        public int compare(OrderedName o1, OrderedName o2) {
-            return new CompareToBuilder()
-                    .append(o1.getOrder(), o2.getOrder())
-                    .append(o1.getName(), o2.getName())
-                    .toComparison();
-        }
-
-    }
-
     public String name;
     public int order;
 
@@ -44,5 +33,16 @@ public class OrderedName {
     public OrderedName setOrder(int order) {
         this.order = order;
         return this;
+    }
+
+    public static class OrderedComparator implements Comparator<OrderedName> {
+        @Override
+        public int compare(OrderedName o1, OrderedName o2) {
+            return new CompareToBuilder()
+                .append(o1.getOrder(), o2.getOrder())
+                .append(o1.getName(), o2.getName())
+                .toComparison();
+        }
+
     }
 }

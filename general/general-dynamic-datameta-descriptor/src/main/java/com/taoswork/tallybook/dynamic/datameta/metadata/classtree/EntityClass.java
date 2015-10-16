@@ -15,11 +15,13 @@ public class EntityClass implements Serializable {
     public final Class<?> clz;
     protected final boolean instantiable;
 
-    public boolean isInstantiable(){return instantiable;}
-
     public EntityClass(Class<?> clz) {
         this.clz = clz;
         instantiable = NativeClassHelper.isInstantiable(clz);
+    }
+
+    public boolean isInstantiable() {
+        return instantiable;
     }
 
     @Override
@@ -31,17 +33,17 @@ public class EntityClass implements Serializable {
         EntityClass that = (EntityClass) o;
 
         return new EqualsBuilder()
-                .append(instantiable, that.instantiable)
-                .append(clz, that.clz)
-                .isEquals();
+            .append(instantiable, that.instantiable)
+            .append(clz, that.clz)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(clz)
-                .append(instantiable)
-                .toHashCode();
+            .append(clz)
+            .append(instantiable)
+            .toHashCode();
     }
 
     @Override

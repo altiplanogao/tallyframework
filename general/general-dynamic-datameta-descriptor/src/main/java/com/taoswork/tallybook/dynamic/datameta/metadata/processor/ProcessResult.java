@@ -18,13 +18,12 @@ public enum ProcessResult {
     /**
      * The processor failed to handle the data
      */
-    FAILED(4),
-    ;
+    FAILED(4),;
 
 
     private final int code;
 
-    ProcessResult(int code){
+    ProcessResult(int code) {
         this.code = code;
     }
 

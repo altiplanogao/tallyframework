@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class MultiMetadataHandler<NativeType, MetaType> implements IMetadataHandler<NativeType, MetaType> {
     protected final List<IMetadataHandler<NativeType, MetaType>> metaHandlers;
 
-    public MultiMetadataHandler(){
+    public MultiMetadataHandler() {
         metaHandlers = new ArrayList<IMetadataHandler<NativeType, MetaType>>();
     }
 
@@ -19,9 +19,9 @@ public abstract class MultiMetadataHandler<NativeType, MetaType> implements IMet
     public final ProcessResult process(NativeType a, MetaType aMetadata) {
         int handled = 0;
         int failed = 0;
-        for(IMetadataHandler<NativeType, MetaType> handler : metaHandlers){
+        for (IMetadataHandler<NativeType, MetaType> handler : metaHandlers) {
             ProcessResult result = handler.process(a, aMetadata);
-            switch (result){
+            switch (result) {
                 case FAILED:
                     failed++;
                     break;
@@ -30,10 +30,10 @@ public abstract class MultiMetadataHandler<NativeType, MetaType> implements IMet
                     break;
             }
         }
-        if(failed > 0){
+        if (failed > 0) {
             return ProcessResult.FAILED;
         }
-        if(handled > 0){
+        if (handled > 0) {
             return ProcessResult.HANDLED;
         }
         return ProcessResult.INAPPLICABLE;

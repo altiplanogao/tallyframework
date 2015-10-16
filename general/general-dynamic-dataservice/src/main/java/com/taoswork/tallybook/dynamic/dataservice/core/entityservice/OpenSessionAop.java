@@ -4,12 +4,10 @@ import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDelegate;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.general.extension.collections.StringChain;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -18,7 +16,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.hibernate4.support.OpenSessionInterceptor;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.EntityManagerHolder;
-import org.springframework.orm.jpa.support.AsyncRequestInterceptor;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.persistence.EntityManager;
@@ -40,6 +37,9 @@ public class OpenSessionAop implements ApplicationContextAware {
         interceptor = new OpenSessionInterceptor();
     }
 
+    @Pointcut("execution(* com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService.*(..))")
+    public void persistenceMethod() {}
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if(applicationContext instanceof IDataServiceDelegate){
@@ -57,9 +57,6 @@ public class OpenSessionAop implements ApplicationContextAware {
     protected EntityManager createEntityManager(EntityManagerFactory emf) {
         return emf.createEntityManager();
     }
-
-    @Pointcut("execution(* com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService.*(..))")
-    public void persistenceMethod() {}
 
     @Around("persistenceMethod()")
     public Object wrapWithSession(ProceedingJoinPoint joinPoint) throws ServiceException {

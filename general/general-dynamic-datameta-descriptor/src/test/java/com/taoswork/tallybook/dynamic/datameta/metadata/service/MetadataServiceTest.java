@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.FieldsZoo;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AAA;
@@ -62,7 +62,7 @@ public class MetadataServiceTest {
             }
 
             ////////////
-            FieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().getOrDefault(field.getName(), null);
+            IFieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().getOrDefault(field.getName(), null);
             Assert.assertNotNull(fieldMetadata);
         }
     }

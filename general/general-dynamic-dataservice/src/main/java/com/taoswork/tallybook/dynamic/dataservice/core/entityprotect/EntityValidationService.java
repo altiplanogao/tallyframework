@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 
 /**
@@ -9,5 +9,5 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 public interface EntityValidationService {
     public final static String COMPONENT_NAME = "EntityValidationService";
 
-    void validate(EntityResult entity) throws ServiceException;
+    void validate(PersistableResult entity) throws ServiceException;
 }

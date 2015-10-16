@@ -11,15 +11,15 @@ public class NamedOrderedInfoImpl
     implements NamedOrderedInfo, NamedOrderedInfoRW {
     public int order;
 
-    public NamedOrderedInfoImpl(){
-        this("","");
+    public NamedOrderedInfoImpl() {
+        this("", "");
     }
 
-    public NamedOrderedInfoImpl(String name, String friendlyName){
+    public NamedOrderedInfoImpl(String name, String friendlyName) {
         super(name, friendlyName);
     }
 
-    public NamedOrderedInfoImpl(String name, String friendlyName, int order){
+    public NamedOrderedInfoImpl(String name, String friendlyName, int order) {
         super(name, friendlyName);
         setOrder(order);
     }
@@ -35,10 +35,10 @@ public class NamedOrderedInfoImpl
     }
 
     @Override
-    public void copyNamedInfo(NamedInfo source){
+    public void copyNamedInfo(NamedInfo source) {
         super.copyNamedInfo(source);
-        if(source instanceof NamedOrderedInfo){
-            this.order = ((NamedOrderedInfo)source).getOrder();
+        if (source instanceof NamedOrderedInfo) {
+            this.order = ((NamedOrderedInfo) source).getOrder();
         }
     }
 }

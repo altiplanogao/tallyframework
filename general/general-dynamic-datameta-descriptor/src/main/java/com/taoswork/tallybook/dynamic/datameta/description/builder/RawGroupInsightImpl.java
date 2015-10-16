@@ -11,8 +11,8 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/6/25.
  */
 final class RawGroupInsightImpl
-        extends NamedOrderedInfoImpl
-        implements RawGroupInsightRW {
+    extends NamedOrderedInfoImpl
+    implements RawGroupInsightRW {
 
     /**
      * fields are not ordered
@@ -30,16 +30,16 @@ final class RawGroupInsightImpl
     }
 
     @Override
-    public void setFields(Collection<String> fields) {
-        this.fields.clear();
-        for(String field : fields){
-            this.fields.add(field);
-        }
+    public Collection<String> getFields() {
+        return Collections.unmodifiableCollection(fields);
     }
 
     @Override
-    public Collection<String> getFields() {
-        return Collections.unmodifiableCollection(fields);
+    public void setFields(Collection<String> fields) {
+        this.fields.clear();
+        for (String field : fields) {
+            this.fields.add(field);
+        }
     }
 
 }

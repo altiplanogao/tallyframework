@@ -18,7 +18,7 @@ public @interface PersistFriendly {
 
     boolean asDefaultPermissionGuardian () default false;
 
-    Class permissionGuardian() default Void.class;
+    Class permissionGuardian() default void.class;
 
     Class<? extends IEntityValidator>[] validators() default {};
 

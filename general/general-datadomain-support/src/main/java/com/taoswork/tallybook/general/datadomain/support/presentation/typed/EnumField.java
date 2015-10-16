@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface EnumField {
 
-    Class enumeration() default Void.class;
+    Class enumeration() default void.class;
 }

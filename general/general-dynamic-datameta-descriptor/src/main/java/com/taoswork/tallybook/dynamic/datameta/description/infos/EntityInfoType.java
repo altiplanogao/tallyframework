@@ -30,8 +30,8 @@ public class EntityInfoType {
 
     public final static Set<String> PageSupportedType;
     public final static Set<String> ApiSupportedType;
-    private final static Set<String> DefaultHierarchyIncludedType;
     public final static Map<String, Class<? extends IEntityInfo>> EntityTypeMapping;
+    private final static Set<String> DefaultHierarchyIncludedType;
 
     static {
         {
@@ -70,15 +70,15 @@ public class EntityInfoType {
     private final String name;
 
 
-    public static boolean isIncludeHierarchyByDefault(EntityInfoType infoType){
-        return DefaultHierarchyIncludedType.contains(infoType.getName());
-    }
-
     private EntityInfoType(String name) {
         this.name = name;
     }
 
-    public static EntityInfoType instance(String name){
+    public static boolean isIncludeHierarchyByDefault(EntityInfoType infoType) {
+        return DefaultHierarchyIncludedType.contains(infoType.getName());
+    }
+
+    public static EntityInfoType instance(String name) {
         return new EntityInfoType(name);
     }
 
@@ -86,7 +86,7 @@ public class EntityInfoType {
         return name;
     }
 
-    public Class<? extends IEntityInfo> infoClass(){
+    public Class<? extends IEntityInfo> infoClass() {
         return EntityTypeMapping.getOrDefault(name, null);
     }
 

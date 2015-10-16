@@ -11,7 +11,7 @@ public class FieldTypeType {
     public final FieldType type;
     public final String clz;
 
-    public FieldTypeType(FieldType type){
+    public FieldTypeType(FieldType type) {
         this.type = type;
         this.clz = null;
     }

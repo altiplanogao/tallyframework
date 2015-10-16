@@ -12,8 +12,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
-import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.CompanyImpl;
-import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.ICompany;
+import com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -44,6 +43,7 @@ public class MetaInfoServiceTest_CompanyImpl {
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
             Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
+            Assert.assertEquals(entityInfo.getFields().size(), 15);
 
             Assert.assertNotNull(entityInfo);
             ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
@@ -61,14 +61,13 @@ public class MetaInfoServiceTest_CompanyImpl {
             Assert.assertEquals(contactTab.getName(), "Contact");
             Assert.assertEquals(contactTab.getGroups().size(), 1);
 
-            Assert.assertEquals(entityInfo.getGridFields().size(), 9);
-            Assert.assertEquals(entityInfo.getFields().size(), 14);
+            Assert.assertEquals(entityInfo.getGridFields().size(), 11);
         }
 
         IEntityInfo entityGridInfo = metaInfoService.generateEntityInfo(classMetadata, EntityInfoType.Grid);
         Assert.assertNotNull(entityGridInfo);
         if (entityGridInfo != null) {
-            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 9);
+            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 11);
         }
     }
 

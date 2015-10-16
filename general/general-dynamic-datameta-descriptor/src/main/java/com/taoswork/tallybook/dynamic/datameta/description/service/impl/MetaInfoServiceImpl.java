@@ -17,7 +17,7 @@ import java.lang.reflect.Constructor;
  */
 @ThreadSafe
 public class MetaInfoServiceImpl implements
-        MetaInfoService {
+    MetaInfoService {
     private static Logger LOGGER = LoggerFactory.getLogger(MetaInfoServiceImpl.class);
 
     @Override
@@ -35,12 +35,12 @@ public class MetaInfoServiceImpl implements
     @Override
     public IEntityInfo convert(EntityInfo entityInfo, EntityInfoType type) {
         Class<? extends IEntityInfo> cls = type.infoClass();
-        if(cls != null){
+        if (cls != null) {
             try {
                 Constructor cons = cls.getConstructor(new Class[]{EntityInfo.class});
-                IEntityInfo cinfo = (IEntityInfo)cons.newInstance(entityInfo);
+                IEntityInfo cinfo = (IEntityInfo) cons.newInstance(entityInfo);
                 return cinfo;
-            }catch (Exception e){
+            } catch (Exception e) {
                 LOGGER.error(e.getMessage());
             }
         }

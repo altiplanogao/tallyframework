@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
@@ -116,7 +116,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     @Override
     public EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) {
         EntityCreateFreshResponse response = new EntityCreateFreshResponse();
-        EntityResult result = null;
+        PersistableResult result = null;
         ServiceException se = null;
         try {
             Class<? extends Persistable> entityType = request.getEntityType();
@@ -135,7 +135,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     @Override
     public EntityCreateResponse create(EntityCreateRequest request, Locale locale) {
         EntityCreateResponse response = new EntityCreateResponse();
-        EntityResult result = null;
+        PersistableResult result = null;
         ServiceException se = null;
         try {
             result = dynamicEntityService.create(request.getEntity());
@@ -153,7 +153,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     public EntityReadResponse read(EntityReadRequest request, Locale locale) {
         Class<? extends Persistable> entityType = request.getEntityType();
         EntityReadResponse response = new EntityReadResponse();
-        EntityResult result = null;
+        PersistableResult result = null;
         ServiceException se = null;
         try {
             result = dynamicEntityService.read(entityType, request.getId());
@@ -171,7 +171,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     @Override
     public EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) {
         EntityUpdateResponse response = new EntityUpdateResponse();
-        EntityResult result = null;
+        PersistableResult result = null;
         ServiceException se = null;
         try {
             result = dynamicEntityService.update(request.getEntity());

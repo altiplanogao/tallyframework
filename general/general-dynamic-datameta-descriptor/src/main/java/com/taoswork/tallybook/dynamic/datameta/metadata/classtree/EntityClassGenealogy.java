@@ -14,21 +14,21 @@ public class EntityClassGenealogy extends AutoTreeGenealogy<EntityClass> {
     public EntityClass calcDirectSuper(EntityClass a, EntityClass referenceSuper) {
         Class<?> clzA = a.clz;
         Class<?> clzRefAncestor = referenceSuper.clz;
-        if(!ClassUtility.isAncestorOf(clzRefAncestor, clzA)){
+        if (!ClassUtility.isAncestorOf(clzRefAncestor, clzA)) {
             return null;
         }
 
         boolean isClass = !clzA.isInterface();
-        if(isClass){
+        if (isClass) {
             Class<?> clzASup = clzA.getSuperclass();
-            if(clzRefAncestor.equals(clzASup) || ClassUtility.isAncestorOf(clzRefAncestor, clzASup)){
+            if (clzRefAncestor.equals(clzASup) || ClassUtility.isAncestorOf(clzRefAncestor, clzASup)) {
                 return new EntityClass(clzASup);
             }
         }
 
-        Class<?> [] interfaces = clzA.getInterfaces();
-        for (Class<?> inf : interfaces){
-            if(inf.equals(clzRefAncestor) || ClassUtility.isAncestorOf(clzRefAncestor, inf)){
+        Class<?>[] interfaces = clzA.getInterfaces();
+        for (Class<?> inf : interfaces) {
+            if (inf.equals(clzRefAncestor) || ClassUtility.isAncestorOf(clzRefAncestor, inf)) {
                 return new EntityClass(inf);
             }
         }

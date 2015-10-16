@@ -1,17 +1,17 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.access.dto.EntityResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.EmailFieldValidator;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.FieldLengthValidator;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.FieldRequiredValidator;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.PhoneFieldValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
 
@@ -28,7 +28,7 @@ public class EntityValidationServiceImpl implements EntityValidationService {
 
     private EntityValidatorManager entityValidatorManager = new EntityValidatorManager();
 
-    public EntityValidationServiceImpl(){
+    public EntityValidationServiceImpl() {
         fieldValidatorManager
             .addHandler(new FieldRequiredValidator())
             .addHandler(new FieldLengthValidator())
@@ -37,8 +37,8 @@ public class EntityValidationServiceImpl implements EntityValidationService {
     }
 
     @Override
-    public void validate(EntityResult entityResult) throws ServiceException {
-        Persistable entity = entityResult.getEntity();
+    public void validate(PersistableResult persistableResult) throws ServiceException {
+        Persistable entity = persistableResult.getEntity();
         Class entityType = entity.getClass();
         ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
 
@@ -48,8 +48,8 @@ public class EntityValidationServiceImpl implements EntityValidationService {
             fieldValidatorManager.validate(entity, classMetadata, entityErrors);
             entityValidatorManager.validate(entity, classMetadata, entityErrors);
 
-            if(!entityErrors.isValid()){
-                throw new EntityValidationException(entityResult, entityErrors);
+            if (!entityErrors.isValid()) {
+                throw new EntityValidationException(persistableResult, entityErrors);
             }
         } catch (IllegalAccessException e) {
             throw new ServiceException(e);

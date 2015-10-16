@@ -20,18 +20,12 @@ public class HtmlValueGate extends FieldValueGateBase<String> {
     //File from antisamy-sample-configs.jar
     private final static String ANTISAMY_POLICY_FILE = "antisamy-myspace.xml";
     private static Policy policy;
-    private ThreadLocal<HTMLFilter> filterThreadLocal = new ThreadLocal<HTMLFilter>(){
-        @Override
-        protected HTMLFilter initialValue() {
-            return new HTMLFilter();
-        }
-    };
 
     static {
         URL policyResource = HtmlValueGate.class.getClassLoader().getResource(ANTISAMY_POLICY_FILE);
         try {
             policy = Policy.getInstance(policyResource.openStream());
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } catch (PolicyException e) {
@@ -40,7 +34,14 @@ public class HtmlValueGate extends FieldValueGateBase<String> {
         }
     }
 
-    public HtmlValueGate(){
+    private ThreadLocal<HTMLFilter> filterThreadLocal = new ThreadLocal<HTMLFilter>() {
+        @Override
+        protected HTMLFilter initialValue() {
+            return new HTMLFilter();
+        }
+    };
+
+    public HtmlValueGate() {
     }
 
     @Override
@@ -55,7 +56,7 @@ public class HtmlValueGate extends FieldValueGateBase<String> {
 
     @Override
     protected String doDeposit(String val) {
-        if(StringUtils.isEmpty(val))
+        if (StringUtils.isEmpty(val))
             return val;
         AntiSamy antiSamy = new AntiSamy();
         try {

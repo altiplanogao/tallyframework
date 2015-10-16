@@ -15,8 +15,8 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/6/25.
  */
 public class FieldInfoImpl
-        extends NamedOrderedInfoImpl
-        implements FieldInfoRW {
+    extends NamedOrderedInfoImpl
+    implements FieldInfoRW {
 
     public int visibility = Visibility.DEFAULT;
     public boolean nameField = false;
@@ -29,7 +29,7 @@ public class FieldInfoImpl
 
     private Map<FieldFacetType, IFieldFacet> facets;
 
-    public FieldInfoImpl(){
+    public FieldInfoImpl() {
 
     }
 
@@ -64,8 +64,8 @@ public class FieldInfoImpl
     }
 
     @Override
-    public void setRequired(boolean required) {
-        this.required = required;
+    public void setNameField(boolean nameField) {
+        this.nameField = nameField;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class FieldInfoImpl
     }
 
     @Override
-    public void setNameField(boolean nameField) {
-        this.nameField = nameField;
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     @Override
@@ -87,13 +87,13 @@ public class FieldInfoImpl
     }
 
     @Override
-    public boolean isIdField() {
-        return getFieldType().equals(FieldType.ID);
+    public void setFieldType(FieldType fieldType) {
+        this.fieldType = fieldType;
     }
 
     @Override
-    public void setFieldType(FieldType fieldType) {
-        this.fieldType = fieldType;
+    public boolean isIdField() {
+        return getFieldType().equals(FieldType.ID);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class FieldInfoImpl
 
     @Override
     public Map<FieldFacetType, IFieldFacet> getFacets() {
-        if(facets != null){
+        if (facets != null) {
             return Collections.unmodifiableMap(facets);
         }
         return null;
@@ -136,7 +136,7 @@ public class FieldInfoImpl
 
     @Override
     public IFieldFacet getFacet(FieldFacetType facetType) {
-        if(facets != null){
+        if (facets != null) {
             return facets.getOrDefault(facetType, null);
         }
         return null;
@@ -144,9 +144,9 @@ public class FieldInfoImpl
 
     @Override
     public void addFacet(IFieldFacet facetInfo) {
-        if(facetInfo == null)
+        if (facetInfo == null)
             return;
-        if(facets == null){
+        if (facets == null) {
             facets = new HashMap<FieldFacetType, IFieldFacet>();
         }
         facets.put(facetInfo.getType(), facetInfo);

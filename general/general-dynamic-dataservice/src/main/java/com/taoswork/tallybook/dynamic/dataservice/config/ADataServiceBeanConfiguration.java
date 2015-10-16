@@ -11,20 +11,20 @@ import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.helper.DataServiceBeanCreationHelper;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.impl.EntityValidationServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.impl.EntityValueGateServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.OpenSessionAop;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerFactory;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManagerInvoker;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl.PersistenceManagerImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.impl.EntityValidationServiceImpl;
 import com.taoswork.tallybook.general.solution.property.RuntimeEnvironmentPropertyPlaceholderConfigurer;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import org.slf4j.Logger;
@@ -192,8 +192,8 @@ public abstract class ADataServiceBeanConfiguration
     //NOT A BEAN, need to be override and annotated with @Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         return helper.createAnEntityManagerFactory(serviceDataSource(),
-                helper.createAPersistenceUnitPostProcessor(
-                        runtimeEnvironmentPropertyPlaceholderConfigurer()));
+            helper.createAPersistenceUnitPostProcessor(
+                runtimeEnvironmentPropertyPlaceholderConfigurer()));
     }
 
     @Override

@@ -10,9 +10,7 @@ import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,19 +26,19 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
         clzes.add(clzz);
         ClassUtility.getAllSupers(Persistable.class, clzz, true, true, clzes);
         boolean handled = false;
-        for(Class<?> oneClz : clzes){
+        for (Class<?> oneClz : clzes) {
             PersistFriendly presentationClass = oneClz.getAnnotation(PersistFriendly.class);
             if (presentationClass != null) {
-                for(Class<? extends IEntityValidator> validator : presentationClass.validators()){
+                for (Class<? extends IEntityValidator> validator : presentationClass.validators()) {
                     classMetadata.addValidator(validator);
                 }
-                for(Class<? extends IEntityValueGate> valueGate : presentationClass.valueGates()){
+                for (Class<? extends IEntityValueGate> valueGate : presentationClass.valueGates()) {
                     classMetadata.addValueGate(valueGate);
                 }
                 handled = true;
             }
         }
-        if(handled)
+        if (handled)
             return ProcessResult.HANDLED;
         return ProcessResult.INAPPLICABLE;
     }

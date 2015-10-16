@@ -14,6 +14,9 @@ import java.util.List;
  * Created by Gao Yuan on 2015/5/22.
  */
 public class NativeClassHelper {
+    public static FieldScanMethod scanAllPersistentNoSuper = new NativeClassHelper.FieldScanMethod()
+        .setScanSuper(false).setIncludeId(true).setIncludeStatic(false).setIncludeTransient(false);
+
     public static Class[] getSuperClasses(Class clz, boolean reverseOrder) {
         List<Class> classes = new ArrayList<Class>();
         if (clz != null) {
@@ -45,45 +48,6 @@ public class NativeClassHelper {
             return true;
         } else {
             return presentationClass.instantiable();
-        }
-    }
-
-    public static FieldScanMethod scanAllPersistentNoSuper = new NativeClassHelper.FieldScanMethod()
-        .setScanSuper(false).setIncludeId(true).setIncludeStatic(false).setIncludeTransient(false);
-
-    public static class FieldScanMethod {
-        boolean includeId = false;
-        boolean includeStatic = false;
-        boolean includeTransient = false;
-        boolean scanSuper = true;
-
-        public FieldScanMethod setIncludeId(boolean includeId) {
-            this.includeId = includeId;
-            return this;
-        }
-
-        public FieldScanMethod setIncludeStatic(boolean includeStatic) {
-            this.includeStatic = includeStatic;
-            return this;
-        }
-
-        public FieldScanMethod setIncludeTransient(boolean includeTransient) {
-            this.includeTransient = includeTransient;
-            return this;
-        }
-
-        public FieldScanMethod setScanSuper(boolean scanSuper) {
-            this.scanSuper = scanSuper;
-            return this;
-        }
-
-
-        public Class<?> getTheSuper(Class<?> clz) {
-            if (!this.scanSuper) {
-                return null;
-            } else {
-                return clz.getSuperclass();
-            }
         }
     }
 
@@ -165,5 +129,41 @@ public class NativeClassHelper {
             }
         } while (clz != null);
         return null;
+    }
+
+    public static class FieldScanMethod {
+        boolean includeId = false;
+        boolean includeStatic = false;
+        boolean includeTransient = false;
+        boolean scanSuper = true;
+
+        public FieldScanMethod setIncludeId(boolean includeId) {
+            this.includeId = includeId;
+            return this;
+        }
+
+        public FieldScanMethod setIncludeStatic(boolean includeStatic) {
+            this.includeStatic = includeStatic;
+            return this;
+        }
+
+        public FieldScanMethod setIncludeTransient(boolean includeTransient) {
+            this.includeTransient = includeTransient;
+            return this;
+        }
+
+        public FieldScanMethod setScanSuper(boolean scanSuper) {
+            this.scanSuper = scanSuper;
+            return this;
+        }
+
+
+        public Class<?> getTheSuper(Class<?> clz) {
+            if (!this.scanSuper) {
+                return null;
+            } else {
+                return clz.getSuperclass();
+            }
+        }
     }
 }

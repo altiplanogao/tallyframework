@@ -8,7 +8,7 @@ public abstract class FieldValueGateBase<T>
 
     @Override
     public Object deposit(Object val) {
-        return this.doDeposit((T)val);
+        return this.doDeposit((T) val);
     }
 
     protected abstract T doDeposit(T val);

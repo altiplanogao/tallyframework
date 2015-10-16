@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
@@ -15,20 +14,14 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/9.
  */
 public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo {
-    @Override
-    public String getType() {
-        return EntityInfoType.Full.getName();
-    }
-
     public final String idField;
     public final String nameField;
     public final String primarySearchField;
-
     public final Map<String, FieldInfo> fields;
     public final List<ITabInfo> tabs;
     public final List<String> gridFields;
 
-    public EntityFullInfo(EntityInfo entityInfo){
+    public EntityFullInfo(EntityInfo entityInfo) {
         super(entityInfo);
         this.idField = entityInfo.getIdField();
         this.nameField = entityInfo.getNameField();
@@ -36,5 +29,10 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
         this.fields = CloneUtility.makeClone(entityInfo.getFields());
         this.tabs = CloneUtility.makeClone(entityInfo.getTabs());
         this.gridFields = CloneUtility.makeClone(entityInfo.getGridFields());
+    }
+
+    @Override
+    public String getType() {
+        return EntityInfoType.Full.getName();
     }
 }

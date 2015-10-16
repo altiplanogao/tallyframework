@@ -16,7 +16,7 @@ public class TabInfoImpl extends NamedOrderedInfoImpl implements ITabInfo {
      */
     private final List<IGroupInfo> groups;
 
-    public TabInfoImpl(List<IGroupInfo> groups){
+    public TabInfoImpl(List<IGroupInfo> groups) {
         this.groups = NamedOrderedInfo.NameSorter.makeObjectOrdered(groups);
     }
 
