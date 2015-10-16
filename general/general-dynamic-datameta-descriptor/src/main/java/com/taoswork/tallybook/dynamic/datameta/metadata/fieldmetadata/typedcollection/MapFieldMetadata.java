@@ -14,8 +14,6 @@ public class MapFieldMetadata extends BaseCollectionFieldMetadata {
     private final Class valueBasicType;
     private final ClassMetadata valueEmbeddedClassMetadata;
     private final Class valueEntityType;
-    private transient ClassMetadata keyEntityClassMetadata;
-    private transient ClassMetadata valueEntityClassMetadata;
 
     public MapFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
@@ -54,19 +52,4 @@ public class MapFieldMetadata extends BaseCollectionFieldMetadata {
         return valueEntityType;
     }
 
-    public ClassMetadata getKeyEntityClassMetadata() {
-        return keyEntityClassMetadata;
-    }
-
-    public void setKeyEntityClassMetadata(ClassMetadata keyEntityClassMetadata) {
-        this.keyEntityClassMetadata = keyEntityClassMetadata;
-    }
-
-    public ClassMetadata getValueEntityClassMetadata() {
-        return valueEntityClassMetadata;
-    }
-
-    public void setValueEntityClassMetadata(ClassMetadata valueEntityClassMetadata) {
-        this.valueEntityClassMetadata = valueEntityClassMetadata;
-    }
 }

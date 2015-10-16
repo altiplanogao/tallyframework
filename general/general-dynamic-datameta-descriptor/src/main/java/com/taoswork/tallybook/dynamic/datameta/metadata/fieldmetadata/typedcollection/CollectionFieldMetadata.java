@@ -11,8 +11,6 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
     private final ClassMetadata embeddedClassMetadata;
     private final Class entityType;
 
-    private transient ClassMetadata entityClassMetadata;
-
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         CollectionFieldFacet facet = (CollectionFieldFacet) intermediate.getFacet(FieldFacetType.Collection);
@@ -32,14 +30,6 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
 
     public Class getEntityType() {
         return entityType;
-    }
-
-    public ClassMetadata getEntityClassMetadata() {
-        return entityClassMetadata;
-    }
-
-    public void setEntityClassMetadata(ClassMetadata entityClassMetadata) {
-        this.entityClassMetadata = entityClassMetadata;
     }
 
 }

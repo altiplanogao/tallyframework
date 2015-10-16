@@ -14,6 +14,7 @@ public class EmbeddedFieldMetadata extends BaseNonCollectionFieldMetadata implem
         super(intermediate);
         EmbeddedFieldFacet embeddedFieldFacet = (EmbeddedFieldFacet) intermediate.getFacet(FieldFacetType.Embedded);
         this.classMetadata = embeddedFieldFacet.embeddedClassMetadata;
+        classMetadata.publishReferencedEntityMetadatas(null);
     }
 
     public ClassMetadata getClassMetadata() {

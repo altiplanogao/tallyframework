@@ -15,4 +15,6 @@ public interface MetadataService {
     ClassMetadata generateMetadata(Class clz);
 
     ClassMetadata generateMetadata(Class clz, boolean handleSuper);
+
+    boolean isMetadataCached(Class clz);
 }

@@ -1,5 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.FriendlyMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
@@ -22,6 +25,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, IFieldMetadata> fieldMetadataMap = new HashMap<String, IFieldMetadata>();
+    private final Map<String, ClassMetadata> referencedEntityMetadata = new HashMap<String, ClassMetadata>();
     private final Set<String> nonCollectionFields = new HashSet<String>();
     private final Set<String> validators = new HashSet();
     private final Set<String> valueGates = new HashSet();
@@ -31,6 +35,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private String nameFieldName;
     private transient Field idField;
     private transient Field nameField;
+    private boolean referencedEntityMetadataPublished = false;
 
     public ClassMetadata() {
         this(null);
@@ -169,10 +174,12 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
+        MapUtility.putIfAbsent(thatMeta.referencedEntityMetadata, referencedEntityMetadata);
 
         this.nonCollectionFields.addAll(thatMeta.nonCollectionFields);
         this.validators.addAll(thatMeta.getValidators());
         this.valueGates.addAll(thatMeta.getValueGates());
+        this.referencedEntityMetadataPublished &= thatMeta.referencedEntityMetadataPublished;
     }
 
     public void finishBuilding() {
@@ -190,6 +197,45 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
 
     public Collection<String> getNonCollectionFields() {
         return Collections.unmodifiableCollection(nonCollectionFields);
+    }
+
+    public boolean isReferencedEntityMetadataPublished() {
+        return referencedEntityMetadataPublished;
+    }
+
+    public void publishReferencedEntityMetadatas(Collection<ClassMetadata> cms) {
+        if(null != cms) {
+            for (ClassMetadata cm : cms) {
+                this.referencedEntityMetadata.put(cm.getEntityClz().getName(), cm);
+            }
+        }
+        referencedEntityMetadataPublished = true;
+    }
+
+    public ClassMetadata getReferencedEntityMetadata(String entity) {
+        return this.referencedEntityMetadata.getOrDefault(entity, null);
+    }
+
+    public Collection<Class> getReferencedEntities() {
+        Set<Class> entities = new HashSet<Class>();
+        for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
+            IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+            if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
+                entities.add(((ForeignEntityFieldMetadata) fieldMetadata).getEntityType());
+            } else if (fieldMetadata instanceof CollectionFieldMetadata) {
+                if (((CollectionFieldMetadata) fieldMetadata).getEntityType() != null) {
+                    entities.add(((CollectionFieldMetadata) fieldMetadata).getEntityType());
+                }
+            } else if (fieldMetadata instanceof MapFieldMetadata) {
+                if (((MapFieldMetadata) fieldMetadata).getKeyEntityType() != null) {
+                    entities.add(((MapFieldMetadata) fieldMetadata).getKeyEntityType());
+                }
+                if (((MapFieldMetadata) fieldMetadata).getValueEntityType() != null) {
+                    entities.add(((MapFieldMetadata) fieldMetadata).getValueEntityType());
+                }
+            }
+        }
+        return entities;
     }
 
     public boolean hasField(String fieldName) {

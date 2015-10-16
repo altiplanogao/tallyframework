@@ -17,10 +17,7 @@ import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/27.
@@ -29,15 +26,17 @@ import java.util.Set;
 public class MetadataServiceImpl implements MetadataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataService.class);
-    private static boolean useCache = true;
+
     protected final ClassProcessor classProcessor;
+
+    private static boolean useCache = true;
     //Just cache for Class (without super metadata) , not for EntityClassTree
     @GuardedBy("lock")
     private ICacheMap<String, ClassMetadata> classMetadataCache =
-        CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
+            CachedRepoManager.getCacheMap(CacheType.EhcacheCache);
     private Object lock = new Object();
 
-    public MetadataServiceImpl() {
+    public MetadataServiceImpl(){
         classProcessor = new ClassProcessor();
     }
 
@@ -57,7 +56,7 @@ public class MetadataServiceImpl implements MetadataService {
             @Override
             public Void callback(EntityClass parameter) throws AutoTreeException {
                 Class clz = parameter.clz;
-                if (!clz.isInterface()) {
+                if(!clz.isInterface()){
                     classesInTree.add(clz);
                 }
                 return null;
@@ -65,16 +64,16 @@ public class MetadataServiceImpl implements MetadataService {
         }, false);
 
         final Set<Class> classesIncludingSuper = new HashSet<Class>();
-        for (Class clz : classesInTree) {
+        for(Class clz : classesInTree){
             Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
             classesIncludingSuper.add(clz);
-            for (Class spClz : superClasses) {
+            for (Class spClz : superClasses){
                 classesIncludingSuper.add(spClz);
             }
         }
         classesIncludingSuper.remove(Object.class);
 
-        for (Class clz : classesIncludingSuper) {
+        for(Class clz : classesIncludingSuper){
             ClassMetadata classMetadata = generateMetadata(clz);
             classTreeMetadata.absorb(classMetadata);
         }
@@ -85,32 +84,14 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public ClassMetadata generateMetadata(Class clz) {
         String clzName = clz.getName();
-
-        if (!useCache) {
-            ClassMetadata classMetadata = new ClassMetadata();
-
-            classProcessor.process(clz, classMetadata);
-            //doGenerateClassMetadata(clz, classMetadata);
-            classMetadataCache.put(clzName, classMetadata);
-            return classMetadata;
-        }
-
-        synchronized (lock) {
-            ClassMetadata classMetadata = classMetadataCache.getOrDefault(clzName, null);
-            if (null == classMetadata) {
-                classMetadata = new ClassMetadata();
-
-                classProcessor.process(clz, classMetadata);
-                //doGenerateClassMetadata(clz, classMetadata);
-                classMetadataCache.put(clzName, classMetadata);
-            }
-            return classMetadata;
-        }
+        ClassMetadata classMetadata = innerGenerateMetadata(clz);
+        publishReferencedEntityMetadataIfNot(classMetadata);
+        return classMetadata;
     }
 
     @Override
     public ClassMetadata generateMetadata(Class clz, boolean handleSuper) {
-        if (!handleSuper) {
+        if(!handleSuper){
             return generateMetadata(clz);
         }
         ClassMetadata mergedMetadata = generateMetadata(clz).clone();
@@ -122,10 +103,54 @@ public class MetadataServiceImpl implements MetadataService {
             tobeMerged.add(classMetadata);
         }
 
-        for (ClassMetadata classMetadata : tobeMerged) {
+        for(ClassMetadata classMetadata : tobeMerged){
             mergedMetadata.absorbSuper(classMetadata);
         }
 
         return mergedMetadata;
+    }
+
+    @Override
+    public boolean isMetadataCached(Class clz) {
+        return classMetadataCache.containsKey(clz.getName());
+    }
+
+    private ClassMetadata innerGenerateMetadata(Class clz) {
+        String clzName = clz.getName();
+        ClassMetadata classMetadata = null;
+
+        if(!useCache){
+            classMetadata = new ClassMetadata();
+
+            classProcessor.process(clz, classMetadata);
+            //doGenerateClassMetadata(clz, classMetadata);
+            classMetadataCache.put(clzName, classMetadata);
+
+            return classMetadata;
+        }
+
+        synchronized (lock) {
+            classMetadata = classMetadataCache.getOrDefault(clzName, null);
+            if (null == classMetadata) {
+                classMetadata = new ClassMetadata();
+
+                classProcessor.process(clz, classMetadata);
+                //doGenerateClassMetadata(clz, classMetadata);
+                classMetadataCache.put(clzName, classMetadata);
+            }
+            return classMetadata;
+        }
+    }
+
+    private void publishReferencedEntityMetadataIfNot(ClassMetadata classMetadata){
+        if(!classMetadata.isReferencedEntityMetadataPublished()){
+            Collection<Class> entities = classMetadata.getReferencedEntities();
+            Set<ClassMetadata> classMetadatas = new HashSet<ClassMetadata>();
+            for (Class entity : entities){
+                ClassMetadata metadata = this.innerGenerateMetadata(entity);
+                classMetadatas.add(metadata);
+            }
+            classMetadata.publishReferencedEntityMetadatas(classMetadatas);
+        }
     }
 }
