@@ -25,7 +25,6 @@ public abstract class PermissionBaseImpl<PS extends PermissionSpecial>
 
     @Id
     @Column(name = "ID")
-    @PresentationField(order = 1)
     protected Long id;
 
     @Column(name = "SCREEN_NAME", nullable = false)

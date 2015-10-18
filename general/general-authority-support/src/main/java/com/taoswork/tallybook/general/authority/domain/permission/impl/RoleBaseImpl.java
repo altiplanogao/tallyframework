@@ -18,7 +18,6 @@ public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
 
     @Id
     @Column(name = "ID")
-    @PresentationField(order = 1)
     protected Long id;
 
     @Column(name = "SCREEN_NAME", nullable = false)

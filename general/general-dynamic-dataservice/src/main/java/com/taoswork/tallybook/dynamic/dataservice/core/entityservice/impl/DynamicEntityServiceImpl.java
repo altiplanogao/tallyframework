@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
@@ -75,8 +76,13 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
+        return read(entityClz, key, null);
+    }
+
+    @Override
+    public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
         try {
-            return persistenceService.read(entityClz, key);
+            return persistenceService.read(entityClz, key, externalReference);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
@@ -85,7 +91,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
-        PersistableResult<T> result = read(entityClz, key);
+        PersistableResult<T> result = read(entityClz, key, new ExternalReference());
         return result.getEntity();
     }
 
@@ -133,8 +139,13 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException {
+        return this.query(entityClz, query, null);
+    }
+
+    @Override
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
         try {
-            return persistenceService.query(entityClz, query);
+            return persistenceService.query(entityClz, query, externalReference);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
             return null;

@@ -11,7 +11,7 @@ public class BeginFieldMetadataFieldHandler implements IFieldHandler {
     @Override
     public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         BasicFieldMetadataObject bfmo = fieldMetadata.getBasicFieldMetadataObject();
-        bfmo.setField(field);
+//        bfmo.setField(field);
         bfmo.setFriendlyName(FriendlyNameHelper.makeFriendlyName4Field(field));
 
         return ProcessResult.PASSING_THROUGH;

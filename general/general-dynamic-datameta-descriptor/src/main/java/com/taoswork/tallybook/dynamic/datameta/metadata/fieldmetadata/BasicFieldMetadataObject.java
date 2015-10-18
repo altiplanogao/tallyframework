@@ -12,17 +12,27 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
     private final static Logger LOGGER = LoggerFactory.getLogger(BasicFieldMetadataObject.class);
     private final int originalOrder;
     protected boolean required = false;
-    private String declaringClassName;
+
+    private final String declaringClassName;
+    private final Class fieldClass;
     private transient Field field;
-    private Class fieldClass;
+
     private String tabName;
     private String groupName;
     private FieldType fieldType;
     private int visibility;
 
     public BasicFieldMetadataObject(int originalOrder, Field field) {
-        setField(field);
         this.originalOrder = originalOrder;
+        name = field.getName();
+        declaringClassName = field.getDeclaringClass().getName();
+        fieldClass = field.getType();
+        this.setTransientField(field);
+    }
+
+    private void setTransientField(Field field) {
+        this.field = field;
+        this.field.setAccessible(true);
     }
 
     public Field getField() {
@@ -30,7 +40,7 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
             try {
                 Class ownerClz = Class.forName(declaringClassName);
                 Field field = ownerClz.getDeclaredField(this.name);
-                this.setField(field);
+                this.setTransientField(field);
             } catch (ClassNotFoundException e) {
                 LOGGER.error("Field declaring class not found");
                 throw new RuntimeException(e);
@@ -42,13 +52,6 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
         return this.field;
     }
 
-    public void setField(Field field) {
-        this.field = field;
-        this.field.setAccessible(true);
-        name = field.getName();
-        declaringClassName = field.getDeclaringClass().getName();
-        fieldClass = field.getType();
-    }
 
     public String getTabName() {
         return tabName;
@@ -112,6 +115,10 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
         } else if (fieldType == FieldType.NAME) {
             fieldType = FieldType.UNKNOWN;
         }
+    }
+
+    public String getDeclaringClassName() {
+        return declaringClassName;
     }
 
     public Class getFieldClass() {

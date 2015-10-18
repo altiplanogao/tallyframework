@@ -4,6 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.translator.EntityInstanceTranslator;
@@ -195,9 +196,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key, ExternalReference externalReference) throws ServiceException {
         T result = unsafePm.doRead(entityType, key);
-        CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess);
+        CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess, externalReference);
         T safeResult = copier.makeSafeCopyForRead(result);
 
         return unsafePm.makePersistableResult(safeResult);
@@ -229,7 +230,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     @Override
-    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
         if(query == null)
             query = new CriteriaTransferObject();
         CriteriaQueryResult<T> criteriaQueryResult = unsafePm.doQuery(entityType, query);
@@ -239,7 +240,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         List<T> records = criteriaQueryResult.getEntityCollection();
         if(records != null){
             List<T> entities = new ArrayList();
-            CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess);
+            CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess, externalReference);
             for(T rec : records){
                 T shallowCopy = copier.makeSafeCopyForQuery(rec);
                 entities.add(shallowCopy);

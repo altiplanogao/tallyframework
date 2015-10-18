@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -45,6 +46,8 @@ public interface DynamicEntityService {
 
     <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
 
+    <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException;
+
     <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException;
 
     <T extends Persistable> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
@@ -56,6 +59,8 @@ public interface DynamicEntityService {
     <T extends Persistable> boolean delete(Entity entity, String id) throws ServiceException;
 
     <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;
+
+    <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 
     <T extends Persistable> PersistableResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException;
 

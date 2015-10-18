@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -101,7 +102,8 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         ServiceException se = null;
         try {
             CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
-            result = dynamicEntityService.query(entityType, cto);
+            //TODO: replace new ExternalReference()
+            result = dynamicEntityService.query(entityType, cto, new ExternalReference());
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -156,7 +158,8 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         PersistableResult result = null;
         ServiceException se = null;
         try {
-            result = dynamicEntityService.read(entityType, request.getId());
+            //TODO: replace new ExternalReference()
+            result = dynamicEntityService.read(entityType, request.getId(), new ExternalReference());
         } catch (ServiceException e) {
             se = e;
         } finally {

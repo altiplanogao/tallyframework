@@ -6,10 +6,10 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
 import java.lang.reflect.Field;
 
 public class ExternalForeignEntityFieldFacet implements IFieldFacet {
-    public final Field realTargetField;
+    public final String realTargetField;
     public final Class targetType;
 
-    public ExternalForeignEntityFieldFacet(Field realTargetField, Class targetType) {
+    public ExternalForeignEntityFieldFacet(String realTargetField, Class targetType) {
         this.realTargetField = realTargetField;
         this.targetType = targetType;
     }

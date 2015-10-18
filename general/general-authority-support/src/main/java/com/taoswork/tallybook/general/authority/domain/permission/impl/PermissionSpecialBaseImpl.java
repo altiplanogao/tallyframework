@@ -62,7 +62,6 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
 
     @Id
     @Column(name = "ID")
-    @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME")

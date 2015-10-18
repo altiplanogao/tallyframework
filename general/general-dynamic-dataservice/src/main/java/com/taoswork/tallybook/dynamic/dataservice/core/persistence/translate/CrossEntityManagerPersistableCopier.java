@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.Exte
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -76,9 +77,11 @@ public class CrossEntityManagerPersistableCopier {
     }
 
     private final DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+    private final ExternalReference externalReference;
 
-    public CrossEntityManagerPersistableCopier(DynamicEntityMetadataAccess dynamicEntityMetadataAccess) {
+    public CrossEntityManagerPersistableCopier(DynamicEntityMetadataAccess dynamicEntityMetadataAccess, ExternalReference externalReference) {
         this.dynamicEntityMetadataAccess = dynamicEntityMetadataAccess;
+        this.externalReference = externalReference;
     }
 
     private <T> T makeCopyForEmbeddable(final ClassMetadata topClassMetadata, T embeddable, ClassMetadata embedCm,
@@ -183,7 +186,23 @@ public class CrossEntityManagerPersistableCopier {
                 Object fn = walkFieldsAndCopy(topClassMetadata, foreignClassMetadata, fo, currentLevel, levelLimit);
                 field.set(target, fn);
             } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
-                throw new IllegalAccessException("Not Implemented");
+                ExternalForeignEntityFieldMetadata efeFm = (ExternalForeignEntityFieldMetadata) fieldMetadata;
+                Field foreignKeyField = fieldMetadata.getField();
+                Field foreignValField = efeFm.getEntityField();
+                Object keyVal = foreignKeyField.get(source);
+                foreignKeyField.set(target, keyVal);
+                if (null == keyVal) {
+                    foreignValField.set(target, null);
+                } else {
+                    if(externalReference != null) {
+                        Class entityType = efeFm.getEntityType();
+                        //backlog data: [type: entityType, key: keyVal]
+                        //slot: [target: target, position: foreignValField]
+                        externalReference.publishReference(target, foreignValField, entityType, keyVal);
+                    }
+                    foreignValField.set(target, null);
+//                    throw new IllegalAccessException("Not Implemented");
+                }
             } else if (fieldMetadata instanceof CollectionFieldMetadata) {
                 Field field = fieldMetadata.getField();
                 Collection fo = (Collection) field.get(source);
