@@ -1,8 +1,10 @@
-/target/
-/.settings/
+target/
+.settings/
 /.idea/
 /.log/
 .classpath
 .project
 *.iml
 rebel.xml
+derby.log
+*.log
