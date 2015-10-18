@@ -2,7 +2,7 @@ package com.taoswork.tallybook.admincore.menu.impl;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import com.taoswork.tallybook.general.solution.menu.*;
 import org.apache.commons.lang3.StringUtils;

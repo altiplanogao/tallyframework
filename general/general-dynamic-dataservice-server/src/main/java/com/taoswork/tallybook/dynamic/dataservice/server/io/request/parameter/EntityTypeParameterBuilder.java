@@ -1,9 +1,8 @@
-package com.taoswork.tallybook.general.dataservice.management.parameter;
+package com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityTypeParameter;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 
 public class EntityTypeParameterBuilder {
 

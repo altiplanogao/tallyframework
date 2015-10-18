@@ -8,10 +8,12 @@ import java.lang.reflect.Field;
 public class ExternalForeignEntityFieldFacet implements IFieldFacet {
     public final String realTargetField;
     public final Class targetType;
+    public final String displayField;
 
-    public ExternalForeignEntityFieldFacet(String realTargetField, Class targetType) {
+    public ExternalForeignEntityFieldFacet(String realTargetField, Class targetType, String displayField) {
         this.realTargetField = realTargetField;
         this.targetType = targetType;
+        this.displayField = displayField;
     }
 
     @Override

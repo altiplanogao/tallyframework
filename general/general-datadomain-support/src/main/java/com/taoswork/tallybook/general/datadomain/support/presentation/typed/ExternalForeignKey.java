@@ -11,4 +11,6 @@ public @interface ExternalForeignKey {
     Class targetType() default void.class;
 
     String targetField() default "";
+
+    String displayField() default "name";
 }

@@ -1,20 +1,17 @@
 package com.taoswork.tallybook.general.dataservice.management.api;
 
-import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityTypeParameter;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
-import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
-import com.taoswork.tallybook.general.dataservice.management.parameter.EntityTypeParameterBuilder;
-import org.springframework.context.MessageSource;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +55,7 @@ public class TallyApiController  {
             requestParams, getParamInfoFilter());
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityQueryResponse response = frontEndEntityService.query(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
@@ -78,7 +75,7 @@ public class TallyApiController  {
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityReadResponse response = frontEndEntityService.read(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);

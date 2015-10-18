@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFil
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertySortCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;

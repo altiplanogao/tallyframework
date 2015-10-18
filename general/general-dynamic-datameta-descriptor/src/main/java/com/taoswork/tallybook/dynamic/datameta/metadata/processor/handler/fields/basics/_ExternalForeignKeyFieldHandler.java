@@ -27,10 +27,11 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
 
                     Class hostClass = field.getDeclaringClass();
                     Field realTargetField = hostClass.getDeclaredField(targetField);
-                    if(void.class.equals(targetType)){
+                    if (void.class.equals(targetType)) {
                         targetType = field.getType();
                     }
-                    ExternalForeignEntityFieldFacet facet = new ExternalForeignEntityFieldFacet(targetField, targetType);
+                    ExternalForeignEntityFieldFacet facet = new ExternalForeignEntityFieldFacet(targetField,
+                        targetType, externalForeignKey.displayField());
                     fieldMetadata.addFacet(facet);
                     fieldMetadata.setTargetMetadataType(ExternalForeignEntityFieldMetadata.class);
                     return ProcessResult.HANDLED;

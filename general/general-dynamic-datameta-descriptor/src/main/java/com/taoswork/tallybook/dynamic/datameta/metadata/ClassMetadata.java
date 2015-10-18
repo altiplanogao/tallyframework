@@ -45,6 +45,10 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         setEntityClz(entityClz);
     }
 
+    public String getIdFieldName() {
+        return idFieldName;
+    }
+
     public Field getIdField() {
         if (idField != null)
             return idField;

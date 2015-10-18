@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
+package com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter;
 
 /**
  * Created by Gao Yuan on 2015/10/2.

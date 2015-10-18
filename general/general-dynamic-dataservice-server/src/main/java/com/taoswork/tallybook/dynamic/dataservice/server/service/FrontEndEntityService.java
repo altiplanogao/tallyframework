@@ -2,13 +2,19 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.EntityRecords;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.IEntityRecordsFetcher;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
@@ -23,10 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/5/29.
@@ -35,17 +39,19 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     private final static Logger LOGGER = LoggerFactory.getLogger(FrontEndEntityService.class);
 
     private final IDataService dataService;
+    private final DataServiceManager dataServiceManager;
     private final DynamicEntityService dynamicEntityService;
     private final MessageSource errorMessageSource;
 
-    public FrontEndEntityService(IDataService dataService) {
+    public FrontEndEntityService(DataServiceManager dataServiceManager, IDataService dataService) {
+        this.dataServiceManager = dataServiceManager;
         this.dataService = dataService;
         this.dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);;
         this.errorMessageSource = dataService.getService(IDataService.ERROR_MESSAGE_SOURCE_BEAN_NAME);
     }
 
-    public static FrontEndEntityService newInstance(IDataService dataService) {
-        return new FrontEndEntityService(dataService);
+    public static FrontEndEntityService newInstance(DataServiceManager dataServiceManager, IDataService dataService) {
+        return new FrontEndEntityService(dataServiceManager, dataService);
     }
 
     private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus) {
@@ -102,8 +108,11 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         ServiceException se = null;
         try {
             CriteriaTransferObject cto = Request2CtoTranslator.translate(request);
-            //TODO: replace new ExternalReference()
-            result = dynamicEntityService.query(entityType, cto, new ExternalReference());
+            ExternalReference externalReference = new ExternalReference();
+            result = dynamicEntityService.query(entityType, cto, externalReference);
+            if(externalReference.hasReference()){
+                fillExternalReference(externalReference);
+            }
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -158,8 +167,11 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         PersistableResult result = null;
         ServiceException se = null;
         try {
-            //TODO: replace new ExternalReference()
-            result = dynamicEntityService.read(entityType, request.getId(), new ExternalReference());
+            ExternalReference externalReference = new ExternalReference();
+            result = dynamicEntityService.read(entityType, request.getId(), externalReference);
+            if(externalReference.hasReference()){
+                fillExternalReference(externalReference);
+            }
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -201,5 +213,46 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             responseTranslator().translateDeleteResponse(request, deleted, se, response, locale);
         }
         return response;
+    }
+
+    private void fillExternalReference(ExternalReference externalReference) throws ServiceException{
+        if(null != externalReference){
+            Map<String, EntityRecords> records = externalReference.calcReferenceValue(new IEntityRecordsFetcher() {
+                @Override
+                public Map<Object, Object> fetch(Class entityType, Collection<Object> ids) throws ServiceException {
+                    try {
+                        String entityTypeName = entityType.getName();
+                        Map<Object, Object> result = new HashMap<Object, Object>();
+                        IDataService externalUsingDataService = dataServiceManager.getDataService(entityTypeName);
+                        DynamicEntityService externalUsingEntityService = externalUsingDataService.getService(DynamicEntityService.COMPONENT_NAME);
+                        DynamicEntityMetadataAccess externalUsingMetadataAccess = externalUsingDataService.getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
+                        ClassMetadata classMetadata = externalUsingMetadataAccess.getClassMetadata(entityType, false);
+                        Field idField = classMetadata.getIdField();
+                        CriteriaTransferObject cto = new CriteriaTransferObject();
+                        cto.setPageSize(ids.size());
+                        List<String> idStrings = new ArrayList<String>();
+                        for (Object id : ids) {
+                            if (id != null)
+                                idStrings.add(id.toString());
+                        }
+                        cto.addFilterCriteria(new PropertyFilterCriteria(classMetadata.getIdFieldName(), idStrings));
+                        CriteriaQueryResult cqr = externalUsingEntityService.query(entityType, cto);
+                        if (cqr.getTotalCount() > 0) {
+                            List externalEntities = cqr.getEntityCollection();
+                            for (Object extEntity : externalEntities) {
+                                Object id = idField.get(extEntity);
+                                result.put(id, extEntity);
+                            }
+                        }
+
+                        return result;
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        throw new ServiceException(e);
+                    }
+                }
+            });
+            externalReference.fillReferencingSlots(records);
+        }
     }
 }

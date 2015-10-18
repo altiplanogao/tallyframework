@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.springframework.util.StringUtils;
 
@@ -91,7 +92,7 @@ public abstract class EntityRequest {
 
     public EntityRequest setEntityRequest(EntityTypeParameter entityTypeParam,
                          String resourceURI, String fullUrl){
-        this.setResourceName(entityTypeParam.typeName)
+        this.setResourceName(entityTypeParam.getTypeName())
             .setEntityType(entityTypeParam.getType())
             .setResourceURI(resourceURI)
             .setFullUrl(fullUrl);

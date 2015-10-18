@@ -9,8 +9,8 @@ import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDa
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
-import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
-import com.taoswork.tallybook.general.dataservice.management.manager.impl.DataServiceManagerImpl;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.manage.impl.DataServiceManagerImpl;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;

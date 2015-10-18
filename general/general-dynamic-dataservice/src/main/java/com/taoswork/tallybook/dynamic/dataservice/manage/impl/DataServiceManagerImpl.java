@@ -1,10 +1,10 @@
-package com.taoswork.tallybook.general.dataservice.management.manager.impl;
+package com.taoswork.tallybook.dynamic.dataservice.manage.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
-import com.taoswork.tallybook.general.dataservice.management.manager.DataServiceManager;
-import com.taoswork.tallybook.general.dataservice.management.manager.ManagedEntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.manage.ManagedEntityEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

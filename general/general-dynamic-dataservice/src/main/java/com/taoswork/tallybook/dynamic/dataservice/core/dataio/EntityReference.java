@@ -3,11 +3,11 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class PersistableReference {
+public class EntityReference {
     private final String entityType;
     private final Object entityId;
 
-    public PersistableReference(String entityType, Object entityId) {
+    public EntityReference(String entityType, Object entityId) {
         this.entityType = entityType;
         this.entityId = entityId;
     }
@@ -24,9 +24,9 @@ public class PersistableReference {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof PersistableReference)) return false;
+        if (!(o instanceof EntityReference)) return false;
 
-        PersistableReference that = (PersistableReference) o;
+        EntityReference that = (EntityReference) o;
 
         return new EqualsBuilder()
             .append(entityType, that.entityType)

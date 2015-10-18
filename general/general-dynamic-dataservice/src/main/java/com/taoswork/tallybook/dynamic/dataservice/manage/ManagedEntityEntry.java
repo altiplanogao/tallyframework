@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.general.dataservice.management.manager;
+package com.taoswork.tallybook.dynamic.dataservice.manage;
 
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
 
