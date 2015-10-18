@@ -81,7 +81,9 @@ class _MapFieldHandler extends __BaseCollectionFieldHandler {
                 embeddedValueCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetValueType);
             }
 
-            MapFieldFacet facet = new MapFieldFacet(keyType, embeddedKeyCm, targetValueType, embeddedValueCm);
+            MapFieldFacet facet = new MapFieldFacet(clazz,
+                keyType, embeddedKeyCm,
+                targetValueType, embeddedValueCm);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(MapFieldMetadata.class);
             return ProcessResult.HANDLED;

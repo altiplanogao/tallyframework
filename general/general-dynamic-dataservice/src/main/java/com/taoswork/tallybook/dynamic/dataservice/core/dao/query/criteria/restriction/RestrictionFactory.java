@@ -15,8 +15,10 @@ public class RestrictionFactory {
     private RestrictionFactory(){
     }
 
-    public Restriction getRestriction(FieldType fieldType){
-        switch (fieldType){
+    public Restriction getRestriction(FieldType fieldType, Class javaType){
+        switch (fieldType) {
+            case ID:
+                return Restrictions.LongRestriction;
             case NAME:
                 return Restrictions.StringLikeRestriction;
             case BOOLEAN:
@@ -28,8 +30,14 @@ public class RestrictionFactory {
             case ENUMERATION:
                 return Restrictions.EnumRestriction;
             default:
-                LOGGER.warn("Restriction for '{}' not found, use string for replacement.", fieldType);
-                return Restrictions.StringLikeRestriction;
+                if (Long.class.equals(javaType)) {
+                    return Restrictions.LongRestriction;
+                } else if (String.class.equals(javaType)) {
+                    return Restrictions.StringLikeRestriction;
+                } else {
+                    LOGGER.warn("Restriction for '{}' not found, use string for replacement.", fieldType);
+                    return Restrictions.StringEqualRestriction;
+                }
                 //break;
         }
         return null;

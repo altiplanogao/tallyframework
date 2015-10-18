@@ -7,7 +7,7 @@ import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertifica
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
@@ -30,7 +30,7 @@ public class TallyUserEntityServiceTest {
     @Before
     public void setupDataSource() {
         counter++;
-        dataService = new TallyUserDataService(new HsqlDbSetting());
+        dataService = new TallyUserDataService(new TestDbSetting());
     }
 
     @After

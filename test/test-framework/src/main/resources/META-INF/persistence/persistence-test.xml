@@ -22,6 +22,10 @@
         <class>com.taoswork.tallybook.testframework.domain.business.impl.DepartmentImpl</class>
         <class>com.taoswork.tallybook.testframework.domain.business.impl.ParkingSpaceImpl</class>
         <class>com.taoswork.tallybook.testframework.domain.business.impl.ProjectImpl</class>
+
+
+        <class>com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl</class>
+
         <!--
         <class>AdminRoleImpl</class>
         <class>AdminPermissionImpl</class>

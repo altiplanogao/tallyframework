@@ -8,6 +8,11 @@ public abstract class BaseCollectionFieldMetadata extends BaseFieldMetadata {
     }
 
     @Override
+    public boolean isPrimitiveField() {
+        return false;
+    }
+
+    @Override
     public boolean isCollectionField() {
         return true;
     }

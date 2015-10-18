@@ -19,14 +19,14 @@ public class StringLikePredicateProvider implements PredicateProvider<String, St
                                     From root,
                                     Class ceilingEntity, String fullPropertyName,
                                     Path<String> explicitPath, List<String> directValues) {
-        Path<String> path;
+        if (CollectionUtility.isEmpty(directValues)) {
+            return null;
+        }
+        final Path<String> path;
         if (explicitPath != null) {
             path = explicitPath;
         } else {
             path = fieldPathBuilder.buildPath(root, fullPropertyName);//.getPath(root, fullPropertyName, builder);
-        }
-        if (CollectionUtility.isEmpty(directValues)) {
-            return null;
         }
         if (directValues.size() == 1) {
             return builder.like(builder.lower(path), directValues.get(0));

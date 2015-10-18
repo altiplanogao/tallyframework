@@ -41,6 +41,7 @@ public class MetadataServiceTest_NoMissing {
         int callCounter = 0;
 
         callCounter = assertFieldTabGroup(fieldMetadataMap, "id", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
+        callCounter = assertFieldTabGroup(fieldMetadataMap, "asset", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "name", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "description", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "description2", CompanyImpl.Presentation.Tab.General, CompanyImpl.Presentation.Group.General, callCounter);
@@ -107,6 +108,7 @@ public class MetadataServiceTest_NoMissing {
         callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameArray",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "salary",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "type",  null, null, callCounter);
+        callCounter = assertFieldTabGroup(fieldMetadataMap, "citizenId",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "dob",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "startDate",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "comments",  null, null, callCounter);

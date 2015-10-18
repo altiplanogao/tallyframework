@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.testframework.database;
 
-import com.taoswork.tallybook.testframework.database.hsqldb.HsqlTestDbCreator;
+import com.taoswork.tallybook.testframework.database.derby.DerbyTestDbCreator;
 import org.hibernate.dialect.Dialect;
 
 import javax.sql.DataSource;
@@ -17,7 +17,7 @@ public class TestDataSourceCreator {
         Class<? extends Dialect> getDialectClass();
     }
 
-    private static ITestDbCreator dbCreator = new HsqlTestDbCreator();
+    private static ITestDbCreator dbCreator = new DerbyTestDbCreator();
 
     public static DataSource createDataSource(String dbName){
         return dbCreator.createDataSource(dbName);

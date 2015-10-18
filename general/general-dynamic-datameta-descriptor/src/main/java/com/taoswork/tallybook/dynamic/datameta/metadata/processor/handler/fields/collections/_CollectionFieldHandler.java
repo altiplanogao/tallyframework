@@ -68,7 +68,7 @@ class _CollectionFieldHandler extends __BaseCollectionFieldHandler {
                 embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetElementType);
             }
 
-            CollectionFieldFacet facet = new CollectionFieldFacet(elementType, targetElementType, embeddedCm);
+            CollectionFieldFacet facet = new CollectionFieldFacet(clazz, elementType, targetElementType, embeddedCm);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(CollectionFieldMetadata.class);
             return ProcessResult.HANDLED;

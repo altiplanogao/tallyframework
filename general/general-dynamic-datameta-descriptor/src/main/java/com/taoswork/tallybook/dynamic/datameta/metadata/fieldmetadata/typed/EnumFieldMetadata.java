@@ -22,4 +22,9 @@ public class EnumFieldMetadata extends BaseNonCollectionFieldMetadata implements
     public Class getEnumerationType() {
         return enumerationType;
     }
+
+    @Override
+    public boolean isPrimitiveField() {
+        return true;
+    }
 }

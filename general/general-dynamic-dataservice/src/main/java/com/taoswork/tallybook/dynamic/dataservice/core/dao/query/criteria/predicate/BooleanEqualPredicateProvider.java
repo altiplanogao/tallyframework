@@ -15,14 +15,14 @@ public class BooleanEqualPredicateProvider implements PredicateProvider {
                                     From root,
                                     Class ceilingEntity, String fullPropertyName,
                                     Path explicitPath, List directValues) {
-        Path<String> path;
+        if (CollectionUtility.isEmpty(directValues)) {
+            return null;
+        }
+        final Path<String> path;
         if (explicitPath != null) {
             path = explicitPath;
         } else {
             path = fieldPathBuilder.buildPath(root, fullPropertyName);//.getPath(root, fullPropertyName, builder);
-        }
-        if (CollectionUtility.isEmpty(directValues)) {
-            return null;
         }
         if (directValues.size() == 1) {
             return builder.equal(builder.lower(path), directValues.get(0));

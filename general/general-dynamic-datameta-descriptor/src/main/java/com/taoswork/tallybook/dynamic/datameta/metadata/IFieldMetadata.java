@@ -23,6 +23,8 @@ public interface IFieldMetadata extends IFriendlyOrdered {
 
     void setNameField(boolean b);
 
+    boolean isPrimitiveField();
+
     boolean isCollectionField();
 
     Field getField();

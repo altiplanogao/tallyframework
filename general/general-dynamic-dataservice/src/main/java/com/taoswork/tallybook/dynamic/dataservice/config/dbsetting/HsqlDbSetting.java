@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 /**
  * Created by Gao Yuan on 2015/5/17.
  */
-public class HsqlDbSetting implements IDbSetting {
+class HsqlDbSetting implements IDbSetting {
     @Override
     public Class<? extends Dialect> hibernateDialect() {
         return HSQLDialect.class;

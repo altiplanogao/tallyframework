@@ -18,4 +18,9 @@ public class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata i
     public Class getEntityType() {
         return entityType;
     }
+
+    @Override
+    public boolean isPrimitiveField() {
+        return false;
+    }
 }

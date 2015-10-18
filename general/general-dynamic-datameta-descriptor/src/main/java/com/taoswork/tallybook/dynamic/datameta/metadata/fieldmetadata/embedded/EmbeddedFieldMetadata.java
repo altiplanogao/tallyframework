@@ -20,4 +20,9 @@ public class EmbeddedFieldMetadata extends BaseNonCollectionFieldMetadata implem
     public ClassMetadata getClassMetadata() {
         return classMetadata;
     }
+
+    @Override
+    public boolean isPrimitiveField() {
+        return false;
+    }
 }

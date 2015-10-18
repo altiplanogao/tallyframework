@@ -23,4 +23,9 @@ public class BooleanFieldMetadata extends BaseNonCollectionFieldMetadata impleme
     public BooleanModel getModel() {
         return model;
     }
+
+    @Override
+    public boolean isPrimitiveField() {
+        return true;
+    }
 }

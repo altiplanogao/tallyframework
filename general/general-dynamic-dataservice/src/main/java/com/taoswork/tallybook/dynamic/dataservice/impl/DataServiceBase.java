@@ -4,9 +4,9 @@ import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDelegate;
 import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.MysqlDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
@@ -73,7 +73,7 @@ public abstract class DataServiceBase implements IDataService {
             this.dbSetting = dbSetting;
         } else {
             if (System.getProperty("usehsql", "false").equals("true")) {
-                this.dbSetting = new HsqlDbSetting();
+                this.dbSetting = new TestDbSetting();
             } else {
                 this.dbSetting = new MysqlDbSetting();
             }

@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
@@ -12,26 +13,14 @@ public class CollectionFieldFacet implements IFieldFacet {
     private final Class _elementType;
     private final Class _targetElementType;
 
-    private final Class basicType;
-    private final ClassMetadata embeddedClassMetadata;
-    private final Class entityType;
+    private final Class collectionType;
+    private final ElementTypeUnion elementType;
 
-    public CollectionFieldFacet(Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
+    public CollectionFieldFacet(Class collectionType, Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
         this._targetElementType = targetElementType;
         this._elementType = elementType;
-        if (FieldMetadataHelper.isEmbeddable(targetElementType)) {
-            this.basicType = null;
-            this.embeddedClassMetadata = embeddedClassMetadata;
-            this.entityType = null;
-        } else if (FieldMetadataHelper.isEntity(targetElementType)) {
-            this.basicType = null;
-            this.embeddedClassMetadata = null;
-            this.entityType = targetElementType;
-        } else {
-            this.basicType = targetElementType;
-            this.embeddedClassMetadata = null;
-            this.entityType = null;
-        }
+        this.collectionType = collectionType;
+        this.elementType = new ElementTypeUnion(targetElementType, embeddedClassMetadata);
     }
 
     @Override
@@ -44,15 +33,11 @@ public class CollectionFieldFacet implements IFieldFacet {
 
     }
 
-    public Class getBasicType() {
-        return basicType;
+    public Class getCollectionType() {
+        return collectionType;
     }
 
-    public ClassMetadata getEmbeddedClassMetadata() {
-        return embeddedClassMetadata;
-    }
-
-    public Class getEntityType() {
-        return entityType;
+    public ElementTypeUnion getElementType() {
+        return elementType;
     }
 }

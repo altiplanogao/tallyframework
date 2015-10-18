@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.servicemockup;
 
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.conf.TallyMockupDataServiceBeanConfiguration;
 import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
@@ -16,7 +16,7 @@ public class TallyMockupDataService extends DataServiceBase {
     public static final String COMPONENT_NAME = TallyMockupDataServiceDefinition.DATA_SERVICE_NAME;
 
     public TallyMockupDataService() {
-        this(new HsqlDbSetting());
+        this(new TestDbSetting());
     }
 
     public TallyMockupDataService(IDbSetting dbSetting) {

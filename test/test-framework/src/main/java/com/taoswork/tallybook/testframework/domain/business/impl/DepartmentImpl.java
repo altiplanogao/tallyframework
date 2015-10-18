@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business.impl;
 
+import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.IDepartment;
 import com.taoswork.tallybook.testframework.domain.business.IEmployee;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeName;
@@ -13,7 +14,15 @@ import java.util.Map;
 @Entity
 @Table(name = "DEPT")
 public class DepartmentImpl implements IDepartment {
+    protected static final String ID_GENERATOR_NAME = "DepartmentImpl_IdGen";
+
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
+    @TableGenerator(
+        name = ID_GENERATOR_NAME,
+        table = TallyMockupDataDomain.ID_GENERATOR_TABLE_NAME,
+        initialValue = 0)
+    @Column(name = "ID")
     private int id;
 
     private String name;
@@ -52,4 +61,103 @@ public class DepartmentImpl implements IDepartment {
     @MapKey(name = "name")
     private Map employeesByUnTypedName;
 
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Collection<IEmployee> getEmployees() {
+        return employees;
+    }
+
+    @Override
+    public void setEmployees(Collection<IEmployee> employees) {
+        this.employees = employees;
+    }
+
+    @Override
+    public List<IEmployee> getEmployeesList() {
+        return employeesList;
+    }
+
+    @Override
+    public void setEmployeesList(List<IEmployee> employeesList) {
+        this.employeesList = employeesList;
+    }
+
+    @Override
+    public Map<String, IEmployee> getEmployeesByCubicle() {
+        return employeesByCubicle;
+    }
+
+    @Override
+    public void setEmployeesByCubicle(Map<String, IEmployee> employeesByCubicle) {
+        this.employeesByCubicle = employeesByCubicle;
+    }
+
+    @Override
+    public Map<Integer, IEmployee> getEmployeesMap() {
+        return employeesMap;
+    }
+
+    @Override
+    public void setEmployeesMap(Map<Integer, IEmployee> employeesMap) {
+        this.employeesMap = employeesMap;
+    }
+
+    @Override
+    public Map<EmployeeName, IEmployee> getEmployeesByName() {
+        return employeesByName;
+    }
+
+    @Override
+    public void setEmployeesByName(Map<EmployeeName, IEmployee> employeesByName) {
+        this.employeesByName = employeesByName;
+    }
+
+    @Override
+    public Map<EmployeeNameX, IEmployee> getEmployeesByNameX() {
+        return employeesByNameX;
+    }
+
+    @Override
+    public void setEmployeesByNameX(Map<EmployeeNameX, IEmployee> employeesByNameX) {
+        this.employeesByNameX = employeesByNameX;
+    }
+
+    @Override
+    public Map getEmployeesByUnTypedId() {
+        return employeesByUnTypedId;
+    }
+
+    @Override
+    public void setEmployeesByUnTypedId(Map employeesByUnTypedId) {
+        this.employeesByUnTypedId = employeesByUnTypedId;
+    }
+
+    @Override
+    public Map getEmployeesByUnTypedName() {
+        return employeesByUnTypedName;
+    }
+
+    @Override
+    public void setEmployeesByUnTypedName(Map employeesByUnTypedName) {
+        this.employeesByUnTypedName = employeesByUnTypedName;
+    }
 }

@@ -2,6 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
+import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -20,6 +21,10 @@ public interface AdminEmployee extends Persistable {
     Long getPersonId();
 
     void setPersonId(Long personId);
+
+    Person getPerson();
+
+    void setPerson(Person person);
 
     String getTitle();
 

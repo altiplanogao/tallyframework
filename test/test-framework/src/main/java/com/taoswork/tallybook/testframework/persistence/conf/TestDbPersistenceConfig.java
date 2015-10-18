@@ -2,6 +2,7 @@ package com.taoswork.tallybook.testframework.persistence.conf;
 
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
+import com.taoswork.tallybook.testframework.database.derby.DerbyTestDbCreator;
 import com.taoswork.tallybook.testframework.database.mysql.MysqlTestDbCreator;
 import com.taoswork.tallybook.testframework.persistence.em.EntityManagerHolder;
 import org.hibernate.dialect.Dialect;
@@ -30,7 +31,8 @@ public class TestDbPersistenceConfig {
 
     @Bean
     public TestDataSourceCreator.ITestDbCreator theDbCreator(){
-        return new MysqlTestDbCreator();
+        return new DerbyTestDbCreator();
+//        return new MysqlTestDbCreator();
 //        return new HsqlTestDbCreator();
     }
 

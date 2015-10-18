@@ -78,7 +78,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
                     continue;
                 }
                 FieldType fieldType = fieldMetadata.getFieldType();
-                Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType);
+                Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType, fieldMetadata.getFieldClass());
                 List<Object> convertedValues = restriction.convertValues(fieldMetadata.getFieldClass(), values);
                 Predicate predicate = restriction.getPredicateProvider().buildPredicate(
                     criteriaBuilder, fieldPathBuilder,

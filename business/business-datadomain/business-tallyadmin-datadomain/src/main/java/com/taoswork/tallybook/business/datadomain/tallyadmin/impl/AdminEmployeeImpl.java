@@ -7,12 +7,15 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionImpl;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminRoleImpl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -43,10 +46,11 @@ public class AdminEmployeeImpl implements AdminEmployee {
     protected Long id;
 
     @Column(name = "PERSON_ID", nullable = false, unique = true)
-    //
+    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @ExternalForeignKey(targetType= PersonImpl.class, targetField="person")
     protected Long personId;
-//    @Transient
-//    private transient Person person;
+    @Transient
+    private transient Person person;
 
     @Column(name = "TITLE")
     @PresentationField(group = "General", order =3, fieldType = FieldType.STRING, visibility = Visibility.VISIBLE_ALL)
@@ -107,6 +111,16 @@ public class AdminEmployeeImpl implements AdminEmployee {
     @Override
     public void setPersonId(Long personId) {
         this.personId = personId;
+    }
+
+    @Override
+    public Person getPerson() {
+        return person;
+    }
+
+    @Override
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Override

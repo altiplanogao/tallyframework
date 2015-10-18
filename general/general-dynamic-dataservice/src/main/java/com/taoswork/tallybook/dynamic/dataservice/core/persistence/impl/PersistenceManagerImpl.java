@@ -13,7 +13,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceExceptio
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate.OutputTranslator;
+import com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate.CrossEntityManagerPersistableCopier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
@@ -50,17 +50,20 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     protected class UnsafePersistence{
         public <T extends Persistable> T doCreate(Class<T> ceilingType, T entity) throws ServiceException {
-        Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
-        String guardianName = guardian.getName();
-        securityVerifier.checkAccess(guardianName, Access.Create, entity);
-        PersistableResult persistableResult = makePersistableResult(entity);
+            if (ceilingType == null) {
+                ceilingType = (Class<T>) entity.getClass();
+            }
+            Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
+            String guardianName = guardian.getName();
+            securityVerifier.checkAccess(guardianName, Access.Create, entity);
+            PersistableResult persistableResult = makePersistableResult(entity);
 
-        //deposit before validate, for security reason
-        entityValueGateService.deposit(persistableResult.getEntity(), null);
-        entityValidationService.validate(persistableResult);
+            //deposit before validate, for security reason
+            entityValueGateService.deposit(persistableResult.getEntity(), null);
+            entityValidationService.validate(persistableResult);
 
-        return dynamicEntityDao.create(entity);
-    }
+            return dynamicEntityDao.create(entity);
+        }
 
         public <T extends Persistable> T doRead(Class<T> entityType, Object key) throws ServiceException {
             Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(entityType);
@@ -76,6 +79,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
         }
 
         public <T extends Persistable> T doUpdate(Class<T> ceilingType, T entity) throws ServiceException {
+            if (ceilingType == null) {
+                ceilingType = (Class<T>) entity.getClass();
+            }
             Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
             String guardianName = guardian.getName();
             PersistableResult<T> oldEntity = getManagedEntity(ceilingType, entity);
@@ -91,8 +97,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
         }
 
         public <T extends Persistable> void doDelete(Class<T> ceilingType, T entity) throws ServiceException {
-            if(ceilingType == null)
-                ceilingType = (Class<T>)entity.getClass();
+            if (ceilingType == null) {
+                ceilingType = (Class<T>) entity.getClass();
+            }
             Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
             String guardianName = guardian.getName();
             PersistableResult<T> oldEntity = getManagedEntity(ceilingType, entity);
@@ -154,7 +161,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
                     .setEntity(entity);
                 if(nameField != null){
                     Object name = nameField.get(entity);
-                    persistableResult.setEntityName(name.toString());
+                    persistableResult.setEntityName((name == null) ? null : name.toString());
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error(e.getMessage());
@@ -190,7 +197,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key) throws ServiceException {
         T result = unsafePm.doRead(entityType, key);
-        return unsafePm.makePersistableResult(result);
+        CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess);
+        T safeResult = copier.makeSafeCopyForRead(result);
+
+        return unsafePm.makePersistableResult(safeResult);
     }
 
     @Override
@@ -220,6 +230,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
+        if(query == null)
+            query = new CriteriaTransferObject();
         CriteriaQueryResult<T> criteriaQueryResult = unsafePm.doQuery(entityType, query);
         CriteriaQueryResult<T> safeResult = new CriteriaQueryResult<T>(criteriaQueryResult.getEntityType())
             .setStartIndex(criteriaQueryResult.getStartIndex())
@@ -227,9 +239,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
         List<T> records = criteriaQueryResult.getEntityCollection();
         if(records != null){
             List<T> entities = new ArrayList();
+            CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess);
             for(T rec : records){
-                OutputTranslator outputTranslator = new OutputTranslator(this.dynamicEntityMetadataAccess);
-                T shallowCopy = outputTranslator.makeSafeCopy(rec, true);
+                T shallowCopy = copier.makeSafeCopyForQuery(rec);
                 entities.add(shallowCopy);
             }
             safeResult.setEntityCollection(entities);

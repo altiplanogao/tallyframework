@@ -1,5 +1,9 @@
 package com.taoswork.tallybook.testframework.domain.business.impl;
 
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
+import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.IDepartment;
 import com.taoswork.tallybook.testframework.domain.business.IEmployee;
 import com.taoswork.tallybook.testframework.domain.business.IParkingSpace;
@@ -9,6 +13,8 @@ import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.EmployeeType;
 import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
+import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
+import com.taoswork.tallybook.testframework.domain.nature.ICitizen;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,7 +22,15 @@ import java.util.*;
 @Entity
 @Table(name="EMPLOYEE")
 public class EmployeeImpl implements IEmployee{
+    protected static final String ID_GENERATOR_NAME = "EmployeeImpl_IdGen";
+
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
+    @TableGenerator(
+        name = ID_GENERATOR_NAME,
+        table = TallyMockupDataDomain.ID_GENERATOR_TABLE_NAME,
+        initialValue = 0)
+    @Column(name = "ID")
     private int id;
     private String name;
 
@@ -48,6 +62,13 @@ public class EmployeeImpl implements IEmployee{
 
     @Enumerated(EnumType.STRING)
     private EmployeeType type;
+
+    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @ExternalForeignKey(targetType = CitizenImpl.class, targetField = "citizen")
+    private Long citizenId;
+
+    @Transient
+    private transient ICitizen citizen;
 
     @Temporal(TemporalType.DATE)
     private Calendar dob;
@@ -93,4 +114,264 @@ public class EmployeeImpl implements IEmployee{
     @Column(name="PHONE_NUM")
     private Map<PhoneType, String> phoneNumbers;
 // ...
+
+    @Override
+    public ICitizen getCitizen() {
+        return citizen;
+    }
+
+    @Override
+    public void setCitizen(ICitizen citizen) {
+        this.citizen = citizen;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @Override
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Override
+    public EmployeeNameX getNameX() {
+        return nameX;
+    }
+
+    @Override
+    public void setNameX(EmployeeNameX nameX) {
+        this.nameX = nameX;
+    }
+
+    @Override
+    public String getTranslatedName() {
+        return translatedName;
+    }
+
+    @Override
+    public void setTranslatedName(String translatedName) {
+        this.translatedName = translatedName;
+    }
+
+    @Override
+    public Set<String> getNickNameSet() {
+        return nickNameSet;
+    }
+
+    @Override
+    public void setNickNameSet(Set<String> nickNameSet) {
+        this.nickNameSet = nickNameSet;
+    }
+
+    @Override
+    public Set getNickNameSetNonType() {
+        return nickNameSetNonType;
+    }
+
+    @Override
+    public void setNickNameSetNonType(Set nickNameSetNonType) {
+        this.nickNameSetNonType = nickNameSetNonType;
+    }
+
+    @Override
+    public List<String> getNickNameList() {
+        return nickNameList;
+    }
+
+    @Override
+    public void setNickNameList(List<String> nickNameList) {
+        this.nickNameList = nickNameList;
+    }
+
+    @Override
+    public String[] getNickNameArray() {
+        return nickNameArray;
+    }
+
+    @Override
+    public void setNickNameArray(String[] nickNameArray) {
+        this.nickNameArray = nickNameArray;
+    }
+
+    @Override
+    public long getSalary() {
+        return salary;
+    }
+
+    @Override
+    public void setSalary(long salary) {
+        this.salary = salary;
+    }
+
+    @Override
+    public EmployeeType getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(EmployeeType type) {
+        this.type = type;
+    }
+
+    @Override
+    public Long getCitizenId() {
+        return citizenId;
+    }
+
+    @Override
+    public void setCitizenId(Long citizenId) {
+        this.citizenId = citizenId;
+    }
+
+    @Override
+    public Calendar getDob() {
+        return dob;
+    }
+
+    @Override
+    public void setDob(Calendar dob) {
+        this.dob = dob;
+    }
+
+    @Override
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    @Override
+    public String getComments() {
+        return comments;
+    }
+
+    @Override
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    @Override
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    @Override
+    public IParkingSpace getParkingSpace() {
+        return parkingSpace;
+    }
+
+    @Override
+    public void setParkingSpace(IParkingSpace parkingSpace) {
+        this.parkingSpace = parkingSpace;
+    }
+
+    @Override
+    public IDepartment getDepartment() {
+        return department;
+    }
+
+    @Override
+    public void setDepartment(IDepartment department) {
+        this.department = department;
+    }
+
+    @Override
+    public String getCube() {
+        return cube;
+    }
+
+    @Override
+    public void setCube(String cube) {
+        this.cube = cube;
+    }
+
+    @Override
+    public Collection<IProject> getProjects() {
+        return projects;
+    }
+
+    @Override
+    public void setProjects(Collection<IProject> projects) {
+        this.projects = projects;
+    }
+
+    @Override
+    public Collection getVacationBookings() {
+        return vacationBookings;
+    }
+
+    @Override
+    public void setVacationBookings(Collection vacationBookings) {
+        this.vacationBookings = vacationBookings;
+    }
+
+    @Override
+    public Set<String> getNickNames() {
+        return nickNames;
+    }
+
+    @Override
+    public void setNickNames(Set<String> nickNames) {
+        this.nickNames = nickNames;
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    @Override
+    public Map<PhoneType, String> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    @Override
+    public void setPhoneNumbers(Map<PhoneType, String> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
 }

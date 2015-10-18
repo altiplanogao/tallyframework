@@ -22,4 +22,9 @@ public class StringFieldMetadata extends BaseNonCollectionFieldMetadata implemen
     public int getLength() {
         return length;
     }
+
+    @Override
+    public boolean isPrimitiveField() {
+        return true;
+    }
 }

@@ -9,4 +9,8 @@ public class PaleFieldMetadata extends BaseNonCollectionFieldMetadata implements
         super(intermediate);
     }
 
+    @Override
+    public boolean isPrimitiveField() {
+        return true;
+    }
 }

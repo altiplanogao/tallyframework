@@ -23,30 +23,12 @@ public class DerbyTestDbCreator implements TestDataSourceCreator.ITestDbCreator 
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(EmbeddedDriver.class.getName());
 
-        try {
-            File tempFile = File.createTempFile("derby", ".dby.db");
-            tempFile.deleteOnExit();
-            //????
-            //????
-            //????
-            //????
-            //????
-            //????
-
-        } catch (IOException e) {
-            return null;
-        }
-//        dataSource.setDriverClassName(.class.getName());
-//        //dataSource.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
-//
-//        dataSource.setUrl("jdbc:hsqldb:mem:" + dbName);
-//        dataSource.setUsername("sa");
-//        dataSource.setPassword("");
+        dataSource.setUrl("jdbc:derby:memory:" + dbName + ";create=true");
         return dataSource;
     }
 
     @Override
     public Class<? extends Dialect> getDialectClass() {
-        return org.hibernate.dialect.DerbyDialect.class;
+        return org.hibernate.dialect.DerbyTenSevenDialect.class;
     }
 }

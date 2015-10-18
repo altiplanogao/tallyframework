@@ -1,14 +1,11 @@
 package com.taoswork.tallybook.dynamic.dataservice.servicemockup.conf;
 
 import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataServiceDefinition;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
-import org.hibernate.dialect.Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

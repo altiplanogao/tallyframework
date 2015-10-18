@@ -4,7 +4,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.HsqlDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class TallyAdminDataServiceTest {
 
     @Before
     public void setDataService() {
-        dataService = new TallyAdminDataService(new HsqlDbSetting());
+        dataService = new TallyAdminDataService(new TestDbSetting());
     }
 
     @Test

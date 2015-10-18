@@ -1,55 +1,56 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 
-public class MapFieldMetadata extends BaseCollectionFieldMetadata {
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
-    private final Class keyBasicType;
-    private final ClassMetadata keyEmbeddedClassMetadata;
-    private final Class keyEntityType;
-    private final Class valueBasicType;
-    private final ClassMetadata valueEmbeddedClassMetadata;
-    private final Class valueEntityType;
+public class MapFieldMetadata extends BaseCollectionFieldMetadata {
+    private final Class mapImplementType;
+
+    private final ElementTypeUnion keyType;
+    private final ElementTypeUnion valueType;
 
     public MapFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
-        MapFieldFacet mapFieldFacet = (MapFieldFacet) intermediate.getFacet(FieldFacetType.Map);
+        MapFieldFacet facet = (MapFieldFacet) intermediate.getFacet(FieldFacetType.Map);
 
-        this.keyBasicType = mapFieldFacet.getKeyBasicType();
-        this.keyEmbeddedClassMetadata = mapFieldFacet.getKeyEmbeddedClassMetadata();
-        this.keyEntityType = mapFieldFacet.getKeyEntityType();
+        this.keyType = facet.getKeyType();
 
-        this.valueBasicType = mapFieldFacet.getValueBasicType();
-        this.valueEmbeddedClassMetadata = mapFieldFacet.getValueEmbeddedClassMetadata();
-        this.valueEntityType = mapFieldFacet.getValueEntityType();
+        this.valueType = facet.getValueType();
+
+        this.mapImplementType = workOutMapImplementType(facet.getMapType());
     }
 
-    public Class getKeyBasicType() {
-        return keyBasicType;
+    public ElementTypeUnion getKeyType() {
+        return keyType;
     }
 
-    public ClassMetadata getKeyEmbeddedClassMetadata() {
-        return keyEmbeddedClassMetadata;
+    public ElementTypeUnion getValueType() {
+        return valueType;
     }
 
-    public Class getKeyEntityType() {
-        return keyEntityType;
+    private Class workOutMapImplementType(Class collectionType) {
+        try {
+            Constructor constructor = collectionType.getConstructor(new Class[]{});
+            return collectionType;
+        } catch (NoSuchMethodException e) {
+            //Ignore this exception, because it is not an instantiatable object.
+        }
+        if (Map.class.equals(collectionType)) {
+            return HashMap.class;
+        }  else {
+            return HashMap.class;
+        }
     }
 
-    public Class getValueBasicType() {
-        return valueBasicType;
+    public Class getMapImplementType() {
+        return mapImplementType;
     }
-
-    public ClassMetadata getValueEmbeddedClassMetadata() {
-        return valueEmbeddedClassMetadata;
-    }
-
-    public Class getValueEntityType() {
-        return valueEntityType;
-    }
-
 }

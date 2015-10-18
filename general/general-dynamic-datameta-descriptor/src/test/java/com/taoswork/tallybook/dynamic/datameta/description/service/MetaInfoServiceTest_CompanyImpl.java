@@ -43,7 +43,7 @@ public class MetaInfoServiceTest_CompanyImpl {
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
             Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
-            Assert.assertEquals(entityInfo.getFields().size(), 15);
+            Assert.assertEquals(entityInfo.getFields().size(), 16);
 
             Assert.assertNotNull(entityInfo);
             ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
@@ -61,13 +61,13 @@ public class MetaInfoServiceTest_CompanyImpl {
             Assert.assertEquals(contactTab.getName(), "Contact");
             Assert.assertEquals(contactTab.getGroups().size(), 1);
 
-            Assert.assertEquals(entityInfo.getGridFields().size(), 11);
+            Assert.assertEquals(entityInfo.getGridFields().size(), 12);
         }
 
         IEntityInfo entityGridInfo = metaInfoService.generateEntityInfo(classMetadata, EntityInfoType.Grid);
         Assert.assertNotNull(entityGridInfo);
         if (entityGridInfo != null) {
-            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 11);
+            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 12);
         }
     }
 

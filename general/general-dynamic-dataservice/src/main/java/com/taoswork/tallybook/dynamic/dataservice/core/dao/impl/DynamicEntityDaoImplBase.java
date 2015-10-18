@@ -96,8 +96,6 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
         TypedQuery<T> listQuery = cto2QueryTranslator.constructListQuery(em, entityType, classTreeMetadata, query);
         TypedQuery<Long> countQuery = cto2QueryTranslator.constructCountQuery(em, entityType, classTreeMetadata, query);
 
-        Collection<String> nonCollectionFields = classTreeMetadata.getNonCollectionFields();
-
         List<T> resultList = listQuery.getResultList();
         long count = countQuery.getSingleResult().longValue();
 
