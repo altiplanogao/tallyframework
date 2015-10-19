@@ -16,6 +16,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.relation.F
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -32,6 +33,11 @@ import java.util.Set;
                         " WHERE employee.personId = :personId")
 )
 public class AdminEmployeeImpl implements AdminEmployee {
+    private static class Presentation{
+        public static final class Tab{
+            public static final String Permission = "Permission";
+        }
+    }
 
     protected static final String ID_GENERATOR_NAME = "AdminEmployeeImpl_IdGen";
 
@@ -45,8 +51,12 @@ public class AdminEmployeeImpl implements AdminEmployee {
     @Column(name = "ID")
     protected Long id;
 
+    @Column(name = "NAME", length = 100, nullable = false)
+    @PresentationField(order =1 ,fieldType = FieldType.NAME)
+    protected String name;
+
     @Column(name = "PERSON_ID", nullable = false, unique = true)
-    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY, visibility = Visibility.HIDDEN_ALL)
     @ExternalForeignKey(targetType= PersonImpl.class, targetField="person")
     protected Long personId;
     @Transient
@@ -69,6 +79,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
 //    @BatchSize(size = 50)
 //    @AdminPresentationCollection(addType = AddMethodType.LOOKUP, friendlyName = "roleListTitle", manyToField = "allEmployees",
 //        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
+    @PresentationField(tab = Presentation.Tab.Permission)
     protected Set<AdminRole> allRoles = new HashSet<AdminRole>();
     public static final String OWN_M2M_ALL_ROLES = "allRoles";
     public static final String OWN_M2M_EMPLOYEE_ROLES_XTABLE = "ADMIN_EMPLOYEE_ROLE_XREF";
@@ -86,6 +97,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
 //        customCriteria = "includeFriendlyOnly",
 //        manyToField = "allEmployees",
 //        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
+    @PresentationField(tab = Presentation.Tab.Permission)
     protected Set<AdminPermission> allPermissions = new HashSet<AdminPermission>();
     public static final String OWN_M2M_ALL_PERMS = "allPermissions";
     public static final String OWN_M2M_EMPLOYEE_PERMS_XTABLE = "ADMIN_EMPLOYEE_PERM_XREF";
@@ -101,6 +113,16 @@ public class AdminEmployeeImpl implements AdminEmployee {
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -121,6 +143,9 @@ public class AdminEmployeeImpl implements AdminEmployee {
     @Override
     public void setPerson(Person person) {
         this.person = person;
+        if(StringUtils.isEmpty(name) && person != null){
+            this.setName(person.getName());
+        }
     }
 
     @Override

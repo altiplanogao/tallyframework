@@ -5,23 +5,34 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeI
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
+import org.junit.*;
 
 /**
  * Created by Gao Yuan on 2015/5/13.
  */
 public class TallyAdminDataServiceTest {
-    TallyAdminDataService dataService = null;
+    static TallyAdminDataService dataService = null;
 
-    @Before
-    public void setDataService() {
+    @BeforeClass
+    public static void setDataService() {
         dataService = new TallyAdminDataService(new TestDbSetting());
     }
 
+    @AfterClass
+    public static void tearDown() {
+        dataService = null;
+    }
+
+
     @Test
-    public void testDataService() {
+    public void testDataService() throws ServiceException {
+        DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
+        Assert.assertNotNull(dynamicEntityService);
+        CriteriaQueryResult<AdminEmployee> admins = dynamicEntityService.query(AdminEmployee.class, null);
+
         AdminEmployeeDao employeeDao = dataService.getService(AdminEmployeeDao.COMPONENT_NAME);
         Assert.assertNotNull(employeeDao);
 
@@ -44,6 +55,7 @@ public class TallyAdminDataServiceTest {
                 AdminEmployee employee = new AdminEmployeeImpl();
                 employee.setPersonId(personId);
                 employee.setTitle("Title" + expected);
+                employee.setName("Name" + expected);
 
                 employeeService.saveAdminEmployee(employee);
                 AdminEmployee employeeLoaded = employeeService.readAdminEmployeeByPersonId(personId);
@@ -54,6 +66,8 @@ public class TallyAdminDataServiceTest {
 
                 created++;
             }
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
         } finally {
             Assert.assertEquals(createAttempt, created);
         }

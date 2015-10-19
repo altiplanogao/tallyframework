@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
@@ -27,10 +29,11 @@ public class FieldInfoImpl
 
     private FieldType fieldType = FieldType.UNKNOWN;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<FieldFacetType, IFieldFacet> facets;
 
     public FieldInfoImpl() {
-
+        visibility = Visibility.DEFAULT;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -17,6 +18,8 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
 
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
+        this.basicFieldMetadataObject.setFieldTypeIfUnknown(FieldType.COLLECTION);
+
         CollectionFieldFacet facet = (CollectionFieldFacet) intermediate.getFacet(FieldFacetType.Collection);
 
         this.elementType = facet.getElementType();

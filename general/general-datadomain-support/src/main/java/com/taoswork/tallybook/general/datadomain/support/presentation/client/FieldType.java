@@ -26,6 +26,10 @@ public enum FieldType {
     FOREIGN_KEY,            //foreign key entity
     EXTERNAL_FOREIGN_KEY,  //foreign key entity in different data source
 
+    EMBEDDABLE,
+    COLLECTION,
+    MAP,
+
     //Less Specified
     DATE,
     INTEGER,

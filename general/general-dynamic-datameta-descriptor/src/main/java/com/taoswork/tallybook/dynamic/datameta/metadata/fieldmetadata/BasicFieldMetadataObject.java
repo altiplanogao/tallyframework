@@ -77,6 +77,12 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
         this.fieldType = fieldType;
     }
 
+    public void setFieldTypeIfUnknown(FieldType fieldType) {
+        if(FieldType.UNKNOWN.equals(this.fieldType)){
+            this.fieldType = fieldType;
+        }
+    }
+
     public boolean isRequired() {
         return required;
     }
