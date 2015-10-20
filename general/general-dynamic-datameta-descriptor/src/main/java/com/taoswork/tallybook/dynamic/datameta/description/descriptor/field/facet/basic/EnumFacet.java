@@ -1,5 +1,6 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
@@ -12,13 +13,13 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/9/1.
  */
-public class EnumFacetInfo implements IFieldFacet {
+public class EnumFacet implements IFieldFacet {
     private final List<String> options = new ArrayList<String>();
     private final Map<String, String> friendlyNames = new HashMap<String, String>();
     private String typeName;
     private String typeFriendlyName;
 
-    public EnumFacetInfo(Class<?> enumClz) {
+    public EnumFacet(Class<?> enumClz) {
         if (!enumClz.isEnum()) {
             throw new IllegalArgumentException();
         }

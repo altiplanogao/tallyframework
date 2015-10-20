@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.embedded;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EmbeddedFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EmbeddedFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
@@ -29,7 +29,7 @@ public class EmbeddedFieldHandler implements IFieldHandler {
             Class<?> embeddedType = field.getType();
             ClassMetadata embeddedMetadata = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, embeddedType);
             if (embeddedMetadata != null) {
-                EmbeddedFieldFacet embeddedFieldFacet = new EmbeddedFieldFacet(embeddedMetadata);
+                EmbeddedFieldMetadataFacet embeddedFieldFacet = new EmbeddedFieldMetadataFacet(embeddedMetadata);
                 fieldMetadata.addFacet(embeddedFieldFacet);
                 fieldMetadata.setTargetMetadataType(EmbeddedFieldMetadata.class);
                 return ProcessResult.HANDLED;

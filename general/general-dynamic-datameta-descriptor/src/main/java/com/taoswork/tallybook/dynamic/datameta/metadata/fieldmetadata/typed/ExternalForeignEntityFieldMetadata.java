@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ExternalForeignEntityFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ExternalForeignEntityFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
 
     public ExternalForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
-        ExternalForeignEntityFieldFacet foreignFieldFacet = (ExternalForeignEntityFieldFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
+        ExternalForeignEntityFieldMetadataFacet foreignFieldFacet = (ExternalForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
         this.entityType = foreignFieldFacet.targetType;
         this.entityFieldName = foreignFieldFacet.realTargetField;
     }

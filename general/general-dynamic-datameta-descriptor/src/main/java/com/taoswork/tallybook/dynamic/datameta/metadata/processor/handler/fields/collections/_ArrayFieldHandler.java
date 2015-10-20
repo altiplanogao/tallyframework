@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.ArrayFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.ArrayFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.ArrayFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
@@ -25,7 +25,7 @@ class _ArrayFieldHandler extends __BaseCollectionFieldHandler {
                 LOGGER.error("The List field should specify its parameter type.");
             }
             Class elementType = type.getComponentType();
-            ArrayFieldFacet facet = new ArrayFieldFacet(elementType);
+            ArrayFieldMetadataFacet facet = new ArrayFieldMetadataFacet(elementType);
 
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(ArrayFieldMetadata.class);

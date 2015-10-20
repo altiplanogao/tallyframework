@@ -1,5 +1,6 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 
 import java.util.Collections;
@@ -9,12 +10,12 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/9/1.
  */
-public class BooleanFacetInfo implements IFieldFacet {
+public class BooleanFacet implements IFieldFacet {
     private final static String TRUE = "t";
     private final static String FALSE = "f";
     private final Map<String, String> options = new HashMap<String, String>();
 
-    public BooleanFacetInfo() {
+    public BooleanFacet() {
         setAsTrueFalse();
     }
 

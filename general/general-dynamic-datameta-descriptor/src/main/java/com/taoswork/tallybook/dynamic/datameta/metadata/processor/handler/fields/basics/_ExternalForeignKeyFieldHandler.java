@@ -1,12 +1,9 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.basics;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ExternalForeignEntityFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ForeignEntityFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ExternalForeignEntityFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
-import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -30,7 +27,7 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
                     if (void.class.equals(targetType)) {
                         targetType = field.getType();
                     }
-                    ExternalForeignEntityFieldFacet facet = new ExternalForeignEntityFieldFacet(targetField,
+                    ExternalForeignEntityFieldMetadataFacet facet = new ExternalForeignEntityFieldMetadataFacet(targetField,
                         targetType, externalForeignKey.displayField());
                     fieldMetadata.addFacet(facet);
                     fieldMetadata.setTargetMetadataType(ExternalForeignEntityFieldMetadata.class);

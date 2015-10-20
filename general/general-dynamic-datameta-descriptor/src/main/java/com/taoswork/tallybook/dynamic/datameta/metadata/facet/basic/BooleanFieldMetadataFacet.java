@@ -1,17 +1,17 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 
-public class BooleanFieldFacet implements IFieldFacet {
+public class BooleanFieldMetadataFacet implements IFieldMetadataFacet {
     public final BooleanModel model;
 
-    public BooleanFieldFacet() {
+    public BooleanFieldMetadataFacet() {
         this(BooleanModel.YesNo);
     }
 
-    public BooleanFieldFacet(BooleanModel model) {
+    public BooleanFieldMetadataFacet(BooleanModel model) {
         this.model = model;
     }
 
@@ -21,7 +21,7 @@ public class BooleanFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 }

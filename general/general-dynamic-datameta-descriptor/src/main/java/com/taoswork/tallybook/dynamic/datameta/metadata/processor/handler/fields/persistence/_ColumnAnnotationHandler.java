@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.persistence;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.StringFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.StringFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BasicFieldMetadataObject;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
@@ -14,7 +14,7 @@ class _ColumnAnnotationHandler implements IFieldHandler {
     public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         BasicFieldMetadataObject bfmo = fieldMetadata.getBasicFieldMetadataObject();
 
-        StringFieldFacet columnFacet = new StringFieldFacet();
+        StringFieldMetadataFacet columnFacet = new StringFieldMetadataFacet();
         Column columnAnnotation = field.getDeclaredAnnotation(Column.class);
         if (null != columnAnnotation) {
             boolean nullable = columnAnnotation.nullable();

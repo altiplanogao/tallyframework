@@ -1,16 +1,14 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
-import java.lang.reflect.Field;
-
-public class ExternalForeignEntityFieldFacet implements IFieldFacet {
+public class ExternalForeignEntityFieldMetadataFacet implements IFieldMetadataFacet {
     public final String realTargetField;
     public final Class targetType;
     public final String displayField;
 
-    public ExternalForeignEntityFieldFacet(String realTargetField, Class targetType, String displayField) {
+    public ExternalForeignEntityFieldMetadataFacet(String realTargetField, Class targetType, String displayField) {
         this.realTargetField = realTargetField;
         this.targetType = targetType;
         this.displayField = displayField;
@@ -22,7 +20,7 @@ public class ExternalForeignEntityFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 }

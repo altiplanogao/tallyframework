@@ -7,10 +7,10 @@ import java.lang.reflect.Type;
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class ArrayFieldFacet extends CollectionFieldFacetBase {
+public class ArrayFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
     private Type elementType;
 
-    public ArrayFieldFacet(Type elementType) {
+    public ArrayFieldMetadataFacet(Type elementType) {
         this.elementType = elementType;
     }
 

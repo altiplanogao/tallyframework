@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class FieldMetadataIntermediate implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(FieldMetadataIntermediate.class);
-    public final Map<FieldFacetType, IFieldFacet> facets = new HashMap<FieldFacetType, IFieldFacet>();
+    public final Map<FieldFacetType, IFieldMetadataFacet> facets = new HashMap<FieldFacetType, IFieldMetadataFacet>();
     private final BasicFieldMetadataObject basicFieldMetadataObject;
     private Class<? extends IFieldMetadata> targetMetadataType;
 
@@ -26,8 +26,8 @@ public class FieldMetadataIntermediate implements Serializable {
         return facets.containsKey(FieldFacetType.Collection);
     }
 
-    public void addFacet(IFieldFacet facet) {
-        IFieldFacet existingFacet = facets.getOrDefault(facet.getType(), null);
+    public void addFacet(IFieldMetadataFacet facet) {
+        IFieldMetadataFacet existingFacet = facets.getOrDefault(facet.getType(), null);
         if (existingFacet == null) {
             facets.put(facet.getType(), facet);
         } else {
@@ -35,8 +35,8 @@ public class FieldMetadataIntermediate implements Serializable {
         }
     }
 
-    public IFieldFacet getFacet(FieldFacetType facetType) {
-        IFieldFacet existingFacet = facets.getOrDefault(facetType, null);
+    public IFieldMetadataFacet getFacet(FieldFacetType facetType) {
+        IFieldMetadataFacet existingFacet = facets.getOrDefault(facetType, null);
         return existingFacet;
     }
 

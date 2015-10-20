@@ -3,12 +3,11 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class MapFieldFacet extends CollectionFieldFacetBase {
+public class MapFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
     private final Class _keyType;
     private final Class _valueType;
 
@@ -17,9 +16,9 @@ public class MapFieldFacet extends CollectionFieldFacetBase {
 
     private final Class mapType;
 
-    public MapFieldFacet(Class mapType,
-                         Class keyType, ClassMetadata keyEmbeddedClassMetadata,
-                         Class valueType, ClassMetadata valueEmbeddedClassMetadata) {
+    public MapFieldMetadataFacet(Class mapType,
+                                 Class keyType, ClassMetadata keyEmbeddedClassMetadata,
+                                 Class valueType, ClassMetadata valueEmbeddedClassMetadata) {
         super();
         this.mapType = mapType;
 

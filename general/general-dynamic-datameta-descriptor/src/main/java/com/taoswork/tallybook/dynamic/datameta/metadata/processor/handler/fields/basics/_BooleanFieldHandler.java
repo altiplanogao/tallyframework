@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.basics;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.BooleanFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.BooleanFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
@@ -25,12 +25,12 @@ class _BooleanFieldHandler implements IFieldHandler {
     @Override
     public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         if (fits(field)) {
-            BooleanFieldFacet booleanFieldFacet = null;
+            BooleanFieldMetadataFacet booleanFieldFacet = null;
             BooleanField booleanField = field.getDeclaredAnnotation(BooleanField.class);
             if (booleanField != null) {
-                booleanFieldFacet = new BooleanFieldFacet(booleanField.model());
+                booleanFieldFacet = new BooleanFieldMetadataFacet(booleanField.model());
             } else {
-                booleanFieldFacet = new BooleanFieldFacet();
+                booleanFieldFacet = new BooleanFieldMetadataFacet();
             }
             fieldMetadata.addFacet(booleanFieldFacet);
             fieldMetadata.setTargetMetadataType(BooleanFieldMetadata.class);

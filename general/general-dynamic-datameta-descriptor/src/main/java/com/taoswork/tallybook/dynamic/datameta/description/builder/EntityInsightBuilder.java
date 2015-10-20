@@ -2,10 +2,10 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BooleanFacetInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.BooleanFacet;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.StringFacetInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.StringFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
@@ -119,10 +119,10 @@ final class EntityInsightBuilder {
             fieldInfo.setFieldType(fieldMetadata.getFieldType());
 
             if (fieldMetadata instanceof EnumFieldMetadata) {
-                IFieldFacet enumFacetInfo = new EnumFacetInfo(((EnumFieldMetadata) fieldMetadata).getEnumerationType());
+                IFieldFacet enumFacetInfo = new EnumFacet(((EnumFieldMetadata) fieldMetadata).getEnumerationType());
                 fieldInfo.addFacet(enumFacetInfo);
             } else if (fieldMetadata instanceof BooleanFieldMetadata) {
-                BooleanFacetInfo boolFacetInfo = new BooleanFacetInfo();
+                BooleanFacet boolFacetInfo = new BooleanFacet();
                 switch (((BooleanFieldMetadata) fieldMetadata).getModel()) {
                     case TrueFalse:
                         boolFacetInfo.setAsTrueFalse();
@@ -135,8 +135,8 @@ final class EntityInsightBuilder {
                 }
                 fieldInfo.addFacet(boolFacetInfo);
             } else if (fieldMetadata instanceof StringFieldMetadata) {
-                StringFacetInfo stringFacetInfo = new StringFacetInfo(((StringFieldMetadata) fieldMetadata).getLength());
-                fieldInfo.addFacet(stringFacetInfo);
+                StringFacet stringFacet = new StringFacet(((StringFieldMetadata) fieldMetadata).getLength());
+                fieldInfo.addFacet(stringFacet);
             }
 
             return fieldInfo;

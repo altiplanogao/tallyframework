@@ -3,8 +3,8 @@ package com.taoswork.tallybook.dynamic.dataservice.core.description.impl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.BooleanFacetInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.EnumFacetInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.BooleanFacet;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
@@ -79,27 +79,27 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
         if (fieldInfo instanceof FieldInfoRW) {
             makeNamedInfoFriendly(fieldInfo, (NamedInfoRW)fieldInfo, locale);
 
-            EnumFacetInfo enumFacetInfo = (EnumFacetInfo)fieldInfo.getFacet(FieldFacetType.Enum);
-            if(enumFacetInfo != null){
-                EnumFacetInfo freshEnumFacetInfo = CloneUtility.makeClone(enumFacetInfo);
-                for(String key : freshEnumFacetInfo.getOptions()){
-                    String val = enumFacetInfo.getFriendlyName(key);
+            EnumFacet enumFacet = (EnumFacet)fieldInfo.getFacet(FieldFacetType.Enum);
+            if(enumFacet != null){
+                EnumFacet freshEnumFacet = CloneUtility.makeClone(enumFacet);
+                for(String key : freshEnumFacet.getOptions()){
+                    String val = enumFacet.getFriendlyName(key);
                     String newVal = entityMessageSource.getMessage(val, null, val, locale);
-                    freshEnumFacetInfo.setFriendlyName(key, newVal);
+                    freshEnumFacet.setFriendlyName(key, newVal);
                 }
-                ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacetInfo);
+                ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacet);
             }
 
-            BooleanFacetInfo booleanFacetInfo = (BooleanFacetInfo)fieldInfo.getFacet(FieldFacetType.Boolean);
-            if(booleanFacetInfo != null){
-                BooleanFacetInfo freshBooleanFacetInfo = CloneUtility.makeClone(booleanFacetInfo);
+            BooleanFacet booleanFacet = (BooleanFacet)fieldInfo.getFacet(FieldFacetType.Boolean);
+            if(booleanFacet != null){
+                BooleanFacet freshBooleanFacet = CloneUtility.makeClone(booleanFacet);
                 for(int x = 0 ; x < 2 ; ++x){
                     boolean v = (x == 0);
-                    String val = booleanFacetInfo.getOption(v);
+                    String val = booleanFacet.getOption(v);
                     String newVal = entityMessageSource.getMessage(val, null, val, locale);
-                    freshBooleanFacetInfo.setOptionFor(v, newVal);
+                    freshBooleanFacet.setOptionFor(v, newVal);
                 }
-                ((FieldInfoRW)fieldInfo).addFacet(freshBooleanFacetInfo);
+                ((FieldInfoRW)fieldInfo).addFacet(freshBooleanFacet);
             }
         } else {
             LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", fieldInfo);

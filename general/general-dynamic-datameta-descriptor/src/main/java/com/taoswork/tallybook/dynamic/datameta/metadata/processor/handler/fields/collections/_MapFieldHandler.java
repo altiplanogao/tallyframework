@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
@@ -81,7 +81,7 @@ class _MapFieldHandler extends __BaseCollectionFieldHandler {
                 embeddedValueCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetValueType);
             }
 
-            MapFieldFacet facet = new MapFieldFacet(clazz,
+            MapFieldMetadataFacet facet = new MapFieldMetadataFacet(clazz,
                 keyType, embeddedKeyCm,
                 targetValueType, embeddedValueCm);
             fieldMetadata.addFacet(facet);

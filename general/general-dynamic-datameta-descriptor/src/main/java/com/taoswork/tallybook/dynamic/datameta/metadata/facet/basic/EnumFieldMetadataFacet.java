@@ -1,15 +1,15 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class EnumFieldFacet implements IFieldFacet {
+public class EnumFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class enumerationType;
 
-    public EnumFieldFacet(Class enumerationType) {
+    public EnumFieldMetadataFacet(Class enumerationType) {
         this.enumerationType = enumerationType;
     }
 
@@ -23,7 +23,7 @@ public class EnumFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 }

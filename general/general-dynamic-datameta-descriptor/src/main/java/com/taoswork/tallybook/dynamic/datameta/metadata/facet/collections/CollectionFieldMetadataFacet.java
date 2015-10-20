@@ -3,20 +3,19 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class CollectionFieldFacet implements IFieldFacet {
+public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class _elementType;
     private final Class _targetElementType;
 
     private final Class collectionType;
     private final ElementTypeUnion elementType;
 
-    public CollectionFieldFacet(Class collectionType, Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
+    public CollectionFieldMetadataFacet(Class collectionType, Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
         this._targetElementType = targetElementType;
         this._elementType = elementType;
         this.collectionType = collectionType;
@@ -29,7 +28,7 @@ public class CollectionFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 

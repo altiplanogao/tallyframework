@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.basics;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EnumFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EnumFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.EnumFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
@@ -22,7 +22,7 @@ class _EnumFieldHandler implements IFieldHandler {
             FieldType.ENUMERATION.equals(presentationField.fieldType())) {
             EnumField enumField = field.getDeclaredAnnotation(EnumField.class);
             if (!enumField.enumeration().equals(void.class)) {
-                EnumFieldFacet enumFacet = new EnumFieldFacet(enumField.enumeration());
+                EnumFieldMetadataFacet enumFacet = new EnumFieldMetadataFacet(enumField.enumeration());
                 fieldMetadata.addFacet(enumFacet);
                 fieldMetadata.setTargetMetadataType(EnumFieldMetadata.class);
                 return ProcessResult.HANDLED;

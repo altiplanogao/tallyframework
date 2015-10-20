@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
@@ -68,7 +68,7 @@ class _CollectionFieldHandler extends __BaseCollectionFieldHandler {
                 embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetElementType);
             }
 
-            CollectionFieldFacet facet = new CollectionFieldFacet(clazz, elementType, targetElementType, embeddedCm);
+            CollectionFieldMetadataFacet facet = new CollectionFieldMetadataFacet(clazz, elementType, targetElementType, embeddedCm);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(CollectionFieldMetadata.class);
             return ProcessResult.HANDLED;

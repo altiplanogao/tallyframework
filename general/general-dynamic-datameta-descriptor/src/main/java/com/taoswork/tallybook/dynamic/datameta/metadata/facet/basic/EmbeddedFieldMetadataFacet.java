@@ -2,15 +2,15 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class EmbeddedFieldFacet implements IFieldFacet {
+public class EmbeddedFieldMetadataFacet implements IFieldMetadataFacet {
     public final ClassMetadata embeddedClassMetadata;
 
-    public EmbeddedFieldFacet(ClassMetadata embeddedClassMetadata) {
+    public EmbeddedFieldMetadataFacet(ClassMetadata embeddedClassMetadata) {
         this.embeddedClassMetadata = embeddedClassMetadata;
     }
 
@@ -20,7 +20,7 @@ public class EmbeddedFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 }

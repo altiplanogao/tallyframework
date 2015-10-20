@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
-public class ForeignEntityFieldFacet implements IFieldFacet {
+public class ForeignEntityFieldMetadataFacet implements IFieldMetadataFacet {
     public final Class declaredType;
     public final Class targetType;
 
-    public ForeignEntityFieldFacet(Class declaredType, Class targetType) {
+    public ForeignEntityFieldMetadataFacet(Class declaredType, Class targetType) {
         this.declaredType = declaredType;
         this.targetType = targetType;
     }
@@ -18,7 +18,7 @@ public class ForeignEntityFieldFacet implements IFieldFacet {
     }
 
     @Override
-    public void merge(IFieldFacet facet) {
+    public void merge(IFieldMetadataFacet facet) {
 
     }
 }

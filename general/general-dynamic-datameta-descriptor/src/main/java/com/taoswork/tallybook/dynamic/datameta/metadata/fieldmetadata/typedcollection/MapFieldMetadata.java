@@ -1,9 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -20,7 +19,7 @@ public class MapFieldMetadata extends BaseCollectionFieldMetadata {
 
     public MapFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
-        MapFieldFacet facet = (MapFieldFacet) intermediate.getFacet(FieldFacetType.Map);
+        MapFieldMetadataFacet facet = (MapFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Map);
         this.basicFieldMetadataObject.setFieldTypeIfUnknown(FieldType.MAP);
 
         this.keyType = facet.getKeyType();
