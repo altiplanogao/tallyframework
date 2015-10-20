@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.servicemockup;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataServiceDefinition;
-import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
 
 /**
  * Created by Gao Yuan on 2015/5/8.
@@ -21,8 +20,7 @@ public final class TallyMockupDataServiceDefinition implements IDataServiceDefin
 
     public static final String TMOCKUP_PERSISTENCE_XML = PERSISTENCE_XML_PREFIX + "persistence-test.xml";
     //should be same as in persistence.xml
-    public final static String TMOCKUP_PU_NAME = //"tallymockupPU";
-        TestDbPersistenceConfig.TEST_DB_PU_NAME;
+    public final static String TMOCKUP_PU_NAME = "tallymockupPU";
 
     public static final String TMOCKUP_ENTITY_MANAGER_FACTORY_NAME = "tallymockupEntityManagerFactory";
 

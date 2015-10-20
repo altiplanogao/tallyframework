@@ -3,8 +3,6 @@ package com.taoswork.tallybook.testframework.persistence.conf;
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
 import com.taoswork.tallybook.testframework.database.derby.DerbyTestDbCreator;
-import com.taoswork.tallybook.testframework.database.mysql.MysqlTestDbCreator;
-import com.taoswork.tallybook.testframework.persistence.em.EntityManagerHolder;
 import org.hibernate.dialect.Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +23,13 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-public class TestDbPersistenceConfig {
-    public static final String TEST_DB_PU_NAME = "tallyTestPU";
-    public static final String ENTITY_MANAGER_HOLDER = "EntityManagerHolder";
+public abstract class TestDbPersistenceConfigBase {
+
+    public abstract String getPersistenceXml();
+
+    public abstract String getDataSourceName();
+
+    public abstract String getPuName();
 
     @Bean
     public TestDataSourceCreator.ITestDbCreator theDbCreator(){
@@ -41,14 +43,9 @@ public class TestDbPersistenceConfig {
         return new BeanCreationMonitor("TestApplicationContext");
     }
 
-    @Bean(name = ENTITY_MANAGER_HOLDER)
-    EntityManagerHolder entityManagerHolder(){
-        return new EntityManagerHolder();
-    }
-
     @Bean
     DataSource testDbDataSource(){
-        return theDbCreator().createDataSource("testDb");
+        return theDbCreator().createDataSource(getDataSourceName());
     }
 
     @Bean
@@ -56,7 +53,7 @@ public class TestDbPersistenceConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         entityManagerFactory.setPersistenceXmlLocation(
-            "classpath:/META-INF/persistence/" + "persistence-test.xml");
+            "classpath:/META-INF/persistence/" + getPersistenceXml());
         entityManagerFactory.setDataSource(testDbDataSource());
 
         Class dialect = theDbCreator().getDialectClass();
@@ -64,7 +61,7 @@ public class TestDbPersistenceConfig {
         entityManagerFactory.setPersistenceUnitPostProcessors(puPostProcessor);
         //       entityManagerFactory.setPersistenceXmlLocation("classpath*:/persistence/persistence-admin-tallyuser.xml");
 //        entityManagerFactory.setDataSource(hostUserDataSource());
-        entityManagerFactory.setPersistenceUnitName(TEST_DB_PU_NAME);
+        entityManagerFactory.setPersistenceUnitName(getPuName());
         return entityManagerFactory;
     }
 

@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataS
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataServiceDefinition;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
-import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
+import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfigBase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +48,7 @@ public class TallyMockupDataServiceBeanConfiguration extends ADataServiceBeanCon
         AbstractEntityManagerFactoryBean entityManagerFactory = super.entityManagerFactory();
         Class dialect = helper.getDbSetting().hibernateDialect();
         ((LocalContainerEntityManagerFactoryBean)entityManagerFactory).setPersistenceUnitPostProcessors(
-            TestDbPersistenceConfig.createPersistenceUnitPostProcessor(dialect)
+            TestDbPersistenceConfigBase.createPersistenceUnitPostProcessor(dialect)
         );
         return entityManagerFactory;
     }

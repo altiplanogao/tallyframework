@@ -6,10 +6,10 @@ import org.junit.Test;
 
 public class TallyBusinessDataServiceTest {
     @Test
-    public void testCreation(){
+    public void testCreation() {
         try {
             TallyBusinessDataService tbDataService = new TallyBusinessDataService(new TestDbSetting());
-        }catch (Exception e){
+        } catch (Exception e) {
             Assert.fail();
         }
     }

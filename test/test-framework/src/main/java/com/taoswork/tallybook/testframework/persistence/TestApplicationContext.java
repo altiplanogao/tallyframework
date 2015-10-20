@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.testframework.persistence;
 
-import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -16,7 +15,6 @@ public class TestApplicationContext {
         for(Class<?> clz : additionalAnnotationClasses){
             annotationClasses.add(clz);
         }
-        annotationClasses.add(TestDbPersistenceConfig.class);
         AnnotationConfigApplicationContext annotationConfigApplicationContext =
                 new AnnotationConfigApplicationContext(annotationClasses.toArray(new Class<?>[]{}));
         return annotationConfigApplicationContext;
