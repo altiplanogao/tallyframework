@@ -1,7 +1,7 @@
-package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl;
+package com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl;
 
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceFilter;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResource;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterBaseImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
@@ -14,25 +14,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ADMIN_RES_FILTER")
-public class AdminSecuredResourceFilterImpl
-    extends SecuredResourceFilterBaseImpl<AdminSecuredResource>
-    implements AdminSecuredResourceFilter {
+@Table(name = "TB_SEC_RES_FILTER")
+public class BuSecuredResourceFilterImpl
+    extends SecuredResourceFilterBaseImpl<BuSecuredResource>
+    implements BuSecuredResourceFilter {
 
     @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
-    @ManyToOne(targetEntity = AdminSecuredResourceImpl.class)
+    @ManyToOne(targetEntity = BuSecuredResourceImpl.class)
     @JoinColumn(name = "RES_TYPE_ID")
-    @PresentationField(order = 3, required = true)
-    public AdminSecuredResource securedResource;
+    @PresentationField(order = 3)
+    public BuSecuredResource securedResource;
     public static final String OWN_M2O_RES_ENTITY = "securedResource";
 
     @Override
-    public AdminSecuredResource getSecuredResource() {
+    public BuSecuredResource getSecuredResource() {
         return securedResource;
     }
 
     @Override
-    public SecuredResourceFilter setResourceType(AdminSecuredResource securedResource) {
+    public SecuredResourceFilter setResourceType(BuSecuredResource securedResource) {
         this.securedResource = securedResource;
         return this;
     }

@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * Created by Gao Yuan on 2015/8/27.
  */
 @Entity
-@Table(name="TB_PERM_ENTRY")
+@Table(name="TB_SEC_PERM_ENTRY")
 public class BuPermissionSpecialImpl
     extends PermissionSpecialBaseImpl<BuPermission>
     implements BuPermissionSpecial {

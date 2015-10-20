@@ -16,7 +16,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/8/27.
  */
 @Entity
-@Table(name="TB_ROLE")
+@Table(name="TB_SEC_ROLE")
 public class BuRoleImpl
     extends RoleBaseImpl<BuPermission>
     implements BuRole {
@@ -28,7 +28,7 @@ public class BuRoleImpl
             inverseJoinColumns = @JoinColumn(name = TABLE_NAME_JOIN_ROLE_PERM_PERM_COL))
     protected Set<BuPermission> allPermissions = new HashSet<BuPermission>();
     public static final String OWN_M2M_ALL_PERMS = "allPermissions";
-    public static final String TABLE_NAME_JOIN_ROLE_PERM = "ADMIN_ROLE_PERM_XREF";
+    public static final String TABLE_NAME_JOIN_ROLE_PERM = "TB_SEC_ROLE_PERM_XREF";
     public static final String TABLE_NAME_JOIN_ROLE_PERM_ROLE_COL = "ADMIN_ROLE_ID";
     public static final String TABLE_NAME_JOIN_ROLE_PERM_PERM_COL = "ADMIN_PERMISSION_ID";
 

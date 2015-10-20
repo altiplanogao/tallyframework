@@ -14,10 +14,6 @@ public interface SecuredResource<RF extends SecuredResourceFilter> extends Persi
 
     void setId(Long id);
 
-    Long getOrganization();
-
-    void setOrganization(Long organization);
-
     String getFriendlyName();
 
     void setFriendlyName(String friendlyName);
@@ -34,17 +30,15 @@ public interface SecuredResource<RF extends SecuredResourceFilter> extends Persi
 
     void setMasterControlled(boolean masterControlled);
 
-    ProtectionMode getProtectionMode();
+    ResourceProtectionMode getProtectionMode();
 
-    void setProtectionMode(ProtectionMode protectionMode);
+    void setProtectionMode(ResourceProtectionMode protectionMode);
 
     List<RF> getFilters();
 
     void setFilters(List<RF> criterias);
 
     int getVersion();
-
-    boolean isMainLine();
 
     /*
 

@@ -98,6 +98,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     }
 
     protected void clearCacheMaps() {
+        metadataService.clearCache();
         ceiling2ClassTreeMap.clear();
         ceiling2RootInstantiable.clear();
         ceiling2Instantiables.clear();
@@ -258,7 +259,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
             if (null == classMetadata) {
                 if (withHierarchy) {
                     EntityClassTree entityClassTree = getEntityClassTree(entityType);
-                    classMetadata = metadataService.generateMetadata(entityClassTree);
+                    classMetadata = metadataService.generateMetadata(entityClassTree, true);
                 } else {
                     classMetadata = metadataService.generateMetadata(entityType, true);
                     Field idField = entityMetaRawAccess.getIdField(entityType);

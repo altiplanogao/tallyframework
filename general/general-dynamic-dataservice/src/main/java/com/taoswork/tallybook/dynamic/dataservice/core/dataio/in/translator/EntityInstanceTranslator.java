@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.translator;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -45,12 +46,18 @@ public abstract class EntityInstanceTranslator {
             instanceBean.setWrappedInstance(tempInstance);
             ClassMetadata classMetadata = entityMetadataAccess.getClassMetadata(entityClass, false);
 
-            for(Map.Entry<String, String> entry : source.getEntity().entrySet()){
+            for(Map.Entry<String, String> entry : source.getEntity().entrySet()) {
                 String fieldKey = entry.getKey();
-                if(classMetadata.hasField(fieldKey)){
-                    PropertyValue pv = new PropertyValue(fieldKey, entry.getValue());
-                    instanceBean.setPropertyValue(pv);
-                }else {
+                IFieldMetadata fieldMetadata = classMetadata.getFieldMetadata(fieldKey);
+                if (fieldMetadata != null) {
+                    if (fieldMetadata.isPrimitiveField()) {
+                        PropertyValue pv = new PropertyValue(fieldKey, entry.getValue());
+                        instanceBean.setPropertyValue(pv);
+                    }else{
+                        LOGGER.error("Field with name '{}' not handled, please check", fieldKey);
+
+                    }
+                } else {
                     LOGGER.error("Field with name '{}' not handled, please check", fieldKey);
                 }
             }

@@ -19,7 +19,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/8/27.
  */
 @Entity
-@Table(name = "TB_PERM")
+@Table(name = "TB_SEC_PERM")
 public class BuPermissionImpl
     extends PermissionBaseImpl<BuPermissionSpecial>
     implements BuPermission {

@@ -3,6 +3,9 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permissio
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceBaseImpl;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
@@ -27,8 +30,9 @@ public class AdminSecuredResourceImpl
     @OneToMany(
         targetEntity = AdminSecuredResourceFilterImpl.class,
         mappedBy = AdminSecuredResourceFilterImpl.OWN_M2O_RES_ENTITY,
-        cascade = {CascadeType.ALL},
+        cascade = {},
         fetch = FetchType.LAZY)
+    @PresentationField(visibility = Visibility.HIDDEN_ALL)
     protected List<AdminSecuredResourceFilter> filters = new ArrayList<AdminSecuredResourceFilter>();
 
     @Override

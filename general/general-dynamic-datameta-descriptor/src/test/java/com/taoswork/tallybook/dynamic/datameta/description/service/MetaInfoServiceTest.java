@@ -43,7 +43,7 @@ public class MetaInfoServiceTest {
         accessor.add(classTree, AA.class);
         accessor.add(classTree, AAA.class);
 
-        ClassMetadata classMetadata = metadataService.generateMetadata(classTree);
+        ClassMetadata classMetadata = metadataService.generateMetadata(classTree, true);
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         Assert.assertEquals(entityInfo.getEntityType(), A.class.getName());

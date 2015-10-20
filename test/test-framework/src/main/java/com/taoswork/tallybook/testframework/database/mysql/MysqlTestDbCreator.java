@@ -21,8 +21,8 @@ public class MysqlTestDbCreator implements TestDataSourceCreator.ITestDbCreator 
         dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
 
         dataSource.setUrl("jdbc:mysql://localhost:3306/" + dbName);
-        dataSource.setUsername("sa");
-        dataSource.setPassword("sa");
+        dataSource.setUsername("testsa");
+        dataSource.setPassword("testsa");
         return dataSource;
     }
 

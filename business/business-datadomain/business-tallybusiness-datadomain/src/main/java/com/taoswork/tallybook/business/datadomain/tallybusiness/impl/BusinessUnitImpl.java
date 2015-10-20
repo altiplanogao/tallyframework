@@ -25,7 +25,7 @@ public class BusinessUnitImpl implements BusinessUnit {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
     @Column(name = "DESCRIP", length = Integer.MAX_VALUE - 1)

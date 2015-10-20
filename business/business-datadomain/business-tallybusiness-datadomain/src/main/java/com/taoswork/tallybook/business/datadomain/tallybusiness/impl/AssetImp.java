@@ -5,6 +5,7 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.Asset;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ public class AssetImp implements Asset {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
     @Column(name = "DESC")

@@ -1,8 +1,10 @@
 package com.taoswork.tallybook.testframework.persistence.conf;
 
 import com.taoswork.tallybook.general.solution.spring.BeanCreationMonitor;
+import com.taoswork.tallybook.testframework.TestSetting;
 import com.taoswork.tallybook.testframework.database.TestDataSourceCreator;
 import com.taoswork.tallybook.testframework.database.derby.DerbyTestDbCreator;
+import com.taoswork.tallybook.testframework.database.mysql.MysqlTestDbCreator;
 import org.hibernate.dialect.Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,9 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public abstract class TestDbPersistenceConfigBase {
+    protected boolean useMysql(){
+        return TestSetting.useMysql();
+    }
 
     public abstract String getPersistenceXml();
 
@@ -33,6 +38,9 @@ public abstract class TestDbPersistenceConfigBase {
 
     @Bean
     public TestDataSourceCreator.ITestDbCreator theDbCreator(){
+        if(useMysql()){
+            return new MysqlTestDbCreator();
+        }
         return new DerbyTestDbCreator();
 //        return new MysqlTestDbCreator();
 //        return new HsqlTestDbCreator();

@@ -32,4 +32,5 @@ public interface SecuredResourceFilter<R extends SecuredResource> extends Persis
 
     SecuredResourceFilter setFilterParameter(String filterParameter);
 
+    boolean isMainLine();
 }

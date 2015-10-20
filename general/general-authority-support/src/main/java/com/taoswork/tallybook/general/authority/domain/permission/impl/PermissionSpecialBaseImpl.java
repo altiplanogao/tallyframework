@@ -7,6 +7,7 @@ import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredReso
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
@@ -65,7 +66,7 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
     protected Long id;
 
     @Column(name = "NAME")
-    @PresentationField(order = 2, nameField = true)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
     @Column(name = "ORG_ID", nullable = false)

@@ -41,13 +41,16 @@ public class MetadataServiceImpl implements MetadataService {
     }
 
     @Override
-    public ClassTreeMetadata generateMetadata(final EntityClassTree entityClassTree) {
+    public ClassTreeMetadata generateMetadata(final EntityClassTree entityClassTree, boolean includeSuper) {
         final ClassTreeMetadata classTreeMetadata = new ClassTreeMetadata();
         classTreeMetadata.setEntityClassTree(entityClassTree);
         //Handle the fields in current class
         {
             final Class rootClz = entityClassTree.getData().clz;
             classProcessor.process(rootClz, classTreeMetadata);
+            if(includeSuper){
+                absorbSuper(rootClz, classTreeMetadata);
+            }
         }
 
         //Thread confinement object
@@ -95,6 +98,12 @@ public class MetadataServiceImpl implements MetadataService {
             return generateMetadata(clz);
         }
         ClassMetadata mergedMetadata = generateMetadata(clz).clone();
+        absorbSuper(clz, mergedMetadata);
+
+        return mergedMetadata;
+    }
+
+    private void absorbSuper(Class clz, ClassMetadata mergedMetadata) {
         final List<ClassMetadata> tobeMerged = new ArrayList<ClassMetadata>();
 
         Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
@@ -106,13 +115,16 @@ public class MetadataServiceImpl implements MetadataService {
         for(ClassMetadata classMetadata : tobeMerged){
             mergedMetadata.absorbSuper(classMetadata);
         }
-
-        return mergedMetadata;
     }
 
     @Override
     public boolean isMetadataCached(Class clz) {
         return classMetadataCache.containsKey(clz.getName());
+    }
+
+    @Override
+    public void clearCache() {
+        classMetadataCache.clear();
     }
 
     private ClassMetadata innerGenerateMetadata(Class clz) {

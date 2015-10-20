@@ -33,7 +33,7 @@ public class PresentationAnnotationFieldHandler implements IFieldHandler {
             }
             bfmo.setVisibility(presentationField.visibility());
             bfmo.setFieldType(presentationField.fieldType());
-            bfmo.setNameField(presentationField.nameField());
+            bfmo.setNameField(FieldType.NAME.equals(presentationField.fieldType()));
             if (presentationField.required()) {
                 bfmo.setRequired(true);
             }

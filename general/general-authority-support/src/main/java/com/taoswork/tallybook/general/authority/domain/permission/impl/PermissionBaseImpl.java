@@ -28,7 +28,7 @@ public abstract class PermissionBaseImpl<PS extends PermissionSpecial>
     protected Long id;
 
     @Column(name = "SCREEN_NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String screenName;
 
 //    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)

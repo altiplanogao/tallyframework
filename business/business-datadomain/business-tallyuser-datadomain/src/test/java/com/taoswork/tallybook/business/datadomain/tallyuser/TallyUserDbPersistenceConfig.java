@@ -18,7 +18,7 @@ public class TallyUserDbPersistenceConfig extends TestDbPersistenceConfigBase{
 
     @Override
     public String getDataSourceName() {
-        return "tallyuserDb";
+        return "test_tallyuser";
     }
 
     @Override

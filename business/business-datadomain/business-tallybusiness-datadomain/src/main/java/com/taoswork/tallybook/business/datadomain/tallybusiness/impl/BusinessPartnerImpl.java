@@ -28,7 +28,7 @@ public class BusinessPartnerImpl implements BusinessPartner {
     protected Long id;
 
     @Column(name = "ALIAS", nullable = false)
-    @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String alias;
 
     @Column(name = "DESCRIP", length = Integer.MAX_VALUE - 1)

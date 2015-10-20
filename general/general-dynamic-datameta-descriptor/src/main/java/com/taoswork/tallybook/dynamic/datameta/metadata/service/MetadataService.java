@@ -10,11 +10,13 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTre
 public interface MetadataService {
     public static final String SERVICE_NAME = "MetadataAnalyzeService";
 
-    ClassTreeMetadata generateMetadata(EntityClassTree entityClassTree);
+    ClassTreeMetadata generateMetadata(EntityClassTree entityClassTree, boolean includeSuper);
 
     ClassMetadata generateMetadata(Class clz);
 
     ClassMetadata generateMetadata(Class clz, boolean handleSuper);
 
     boolean isMetadataCached(Class clz);
+
+    void clearCache();
 }

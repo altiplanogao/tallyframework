@@ -1,11 +1,21 @@
 package com.taoswork.tallybook.general.authority.domain.resource.impl;
 
+import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
+import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.general.authority.domain.resource.converter.ProtectionModeToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,32 +30,47 @@ import java.util.List;
 public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
         implements SecuredResource<RF> {
 
+    protected static final String ID_GENERATOR_NAME = "SecuredResourceImpl_IdGen";
+
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
+    @TableGenerator(
+        name = ID_GENERATOR_NAME,
+        table = GeneralAuthoritySupportRoot.ID_GENERATOR_TABLE_NAME,
+        initialValue = 0)
     @Column(name = "ID")
+    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
-    @Column(name = "ORG")
-    protected Long organization;
-
-    @Column(name = "FRIENDLY_NAME")
+    @Column(name = "FRIENDLY_NAME", length = 100, nullable = false)
+    @PresentationField(order = 1, fieldType = FieldType.NAME)
     protected String friendlyName;
 
     //A Data line without resourceEntity, means its a main source line, only its version column is useful
-    @Column(name = "TYPE")
+    @Column(name = "TYPE", nullable = false)
+    @PresentationField(order = 2, fieldType = FieldType.STRING)
     protected String resourceEntity;
 
     @Column(name = "CATEGORY")
+    @PresentationField(order = 3, fieldType = FieldType.STRING)
     protected String category;
 
-    @Column(name = "MASTER_CTRL")
-    protected boolean masterControlled = true;
+    @Column(name = "PROT_MOD", nullable = false, length = 4
+        ,columnDefinition = "VARCHAR(4) DEFAULT '" + ResourceProtectionMode.DEFAULT_CHAR + "'"
+    )
+    @PresentationField(order = 4, fieldType = FieldType.ENUMERATION)
+    @EnumField(enumeration = ResourceProtectionMode.class)
+    @Convert(converter = ProtectionModeToStringConverter.class)
+    protected ResourceProtectionMode protectionMode;
 
-    @Column(name = "PROT_MOD")
-    protected String protectionMode;
+    @Column(name = "MASTER_CTRL")
+    @PresentationField(order = 5, fieldType = FieldType.BOOLEAN)
+    @BooleanField(model = BooleanModel.YesNo)
+    protected boolean masterControlled = true;
 
     @Version
     @Column(name="OPTLOCK")
-    protected Integer version;
+    protected Integer version = 0;
 
     @Override
     public Long getId() {
@@ -55,16 +80,6 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
     @Override
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public Long getOrganization() {
-        return organization;
-    }
-
-    @Override
-    public void setOrganization(Long organization) {
-        this.organization = organization;
     }
 
     @Override
@@ -108,24 +123,18 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
     }
 
     @Override
-    public ProtectionMode getProtectionMode() {
-        return ProtectionMode.fromType(protectionMode);
+    public ResourceProtectionMode getProtectionMode() {
+        return protectionMode;
     }
 
     @Override
-    public void setProtectionMode(ProtectionMode protectionMode) {
-        this.protectionMode = ProtectionMode.toType(protectionMode);
+    public void setProtectionMode(ResourceProtectionMode protectionMode) {
+        this.protectionMode = protectionMode;
     }
 
 
     @Override
     public int getVersion() {
         return version;
-    }
-
-    @Override
-    public boolean isMainLine() {
-        //A Data line without resourceEntity, means its a main source line, only its version column is useful
-        return (null == resourceEntity) || "".equals(resourceEntity);
     }
 }

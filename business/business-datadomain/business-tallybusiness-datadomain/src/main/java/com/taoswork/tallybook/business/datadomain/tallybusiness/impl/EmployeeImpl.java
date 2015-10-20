@@ -50,7 +50,7 @@ public class EmployeeImpl implements Employee {
     protected EmployeeStatus activeStatus;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true, fieldType = FieldType.NAME)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
     @Column(name = "TITLE", nullable = true)
@@ -71,7 +71,7 @@ public class EmployeeImpl implements Employee {
 //    @AdminPresentationCollection(addType = AddMethodType.LOOKUP, friendlyName = "roleListTitle", manyToField = "allEmployees",
 //        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
     protected Set<BuRole> roles;
-    public static final String OWN_M2M_ALL_ROLES = "allRoles";
+    public static final String OWN_M2M_ALL_ROLES = "roles";
     public static final String OWN_M2M_EMPLOYEE_ROLES_XTABLE = "TB_EMPLOYEE_ROLE_XREF";
     public static final String XTABLE_EMPLOYEE_ROLES__EMPLOYEE_COL = "TB_EMPLOYEE_ID";
     public static final String XTABLE_EMPLOYEE_ROLES__ROLE_COL = "TB_ROLE_ID";
@@ -88,7 +88,7 @@ public class EmployeeImpl implements Employee {
 //        manyToField = "allEmployees",
 //        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
     protected Set<BuPermission> permissions;
-    public static final String OWN_M2M_ALL_PERMS = "allPermissions";
+    public static final String OWN_M2M_ALL_PERMS = "permissions";
     public static final String OWN_M2M_EMPLOYEE_PERMS_XTABLE = "TB_EMPLOYEE_PERM_XREF";
     public static final String XTABLE_EMPLOYEE_PERMS__EMPLOYEE_COL = "TB_EMPLOYEE_ID";
     public static final String XTABLE_EMPLOYEE_PERMS__PERM_COL = "TB_PERM_ID";

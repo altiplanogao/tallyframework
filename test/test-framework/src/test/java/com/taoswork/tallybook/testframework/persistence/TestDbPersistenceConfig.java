@@ -33,7 +33,7 @@ public class TestDbPersistenceConfig extends TestDbPersistenceConfigBase {
 
     @Override
     public String getDataSourceName() {
-        return "testDb";
+        return "test_mockup";
     }
 
     @Override

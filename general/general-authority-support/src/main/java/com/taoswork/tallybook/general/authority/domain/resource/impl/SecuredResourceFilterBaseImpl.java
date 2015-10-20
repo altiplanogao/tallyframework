@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceF
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
@@ -25,7 +26,7 @@ public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
 
     //IResourceFilter.getCode()
     @Column(name = "FRIENDLY_NAME", nullable = false)
-    @PresentationField(order = 2, nameField = true)
+    @PresentationField(order = 2, fieldType = FieldType.NAME)
     public String name;
 
     @Column(name = "FILTER")
@@ -87,5 +88,10 @@ public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public boolean isMainLine() {
+        return null == filter;
     }
 }

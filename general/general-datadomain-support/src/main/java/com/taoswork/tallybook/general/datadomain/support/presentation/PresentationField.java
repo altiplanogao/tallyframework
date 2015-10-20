@@ -27,8 +27,6 @@ public @interface PresentationField {
 
     String group() default PresentationClass.Group.DEFAULT_NAME;
 
-    boolean nameField() default false;
-
     boolean required() default false;
 
     /**

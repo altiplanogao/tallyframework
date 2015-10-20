@@ -4,7 +4,9 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.ExternalForeignEntityFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCollectionFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BasicFieldMetadataObject;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,10 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
     public ExternalForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ExternalForeignEntityFieldMetadataFacet foreignFieldFacet = (ExternalForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
+        BasicFieldMetadataObject bfmo = intermediate.getBasicFieldMetadataObject();
+        if(FieldType.UNKNOWN == bfmo.getFieldType()){
+            bfmo.setFieldType(FieldType.EXTERNAL_FOREIGN_KEY);
+        }
         this.entityType = foreignFieldFacet.targetType;
         this.entityFieldName = foreignFieldFacet.realTargetField;
     }
