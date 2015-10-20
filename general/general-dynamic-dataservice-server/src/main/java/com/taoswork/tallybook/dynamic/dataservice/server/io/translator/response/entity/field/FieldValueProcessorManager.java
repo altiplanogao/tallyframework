@@ -44,12 +44,12 @@ public class FieldValueProcessorManager {
     public IFieldValueProcessor getProperProcessor(FieldInfo fieldInfo){
         FieldType fieldType = fieldInfo.getFieldType();
         if(basicFieldTypes.contains(fieldType)){
-            return processors.getOrDefault(SimpleFieldValueProcessor.PROCESSOR_NAME, null);
+            return processors.get(SimpleFieldValueProcessor.PROCESSOR_NAME);
         }
 
-        IFieldValueProcessor processor = processors.getOrDefault(fieldType.name(), null);
+        IFieldValueProcessor processor = processors.get(fieldType.name());
         if(processor == null){
-            processor = processors.getOrDefault(FieldType.UNKNOWN.name(), null);
+            processor = processors.get(FieldType.UNKNOWN.name());
         }
 
         return processor;

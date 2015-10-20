@@ -27,7 +27,7 @@ public class FieldMetadataIntermediate implements Serializable {
     }
 
     public void addFacet(IFieldMetadataFacet facet) {
-        IFieldMetadataFacet existingFacet = facets.getOrDefault(facet.getType(), null);
+        IFieldMetadataFacet existingFacet = facets.get(facet.getType());
         if (existingFacet == null) {
             facets.put(facet.getType(), facet);
         } else {
@@ -36,7 +36,7 @@ public class FieldMetadataIntermediate implements Serializable {
     }
 
     public IFieldMetadataFacet getFacet(FieldFacetType facetType) {
-        IFieldMetadataFacet existingFacet = facets.getOrDefault(facetType, null);
+        IFieldMetadataFacet existingFacet = facets.get(facetType);
         return existingFacet;
     }
 

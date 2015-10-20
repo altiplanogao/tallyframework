@@ -61,7 +61,7 @@ public class EntityInfoTypeNames {
     }
 
     public static EntityInfoType entityInfoTypeOf(String name){
-        return ENTITY_INFO_TYPES.getOrDefault(name, null);
+        return ENTITY_INFO_TYPES.get(name);
     }
 }
 

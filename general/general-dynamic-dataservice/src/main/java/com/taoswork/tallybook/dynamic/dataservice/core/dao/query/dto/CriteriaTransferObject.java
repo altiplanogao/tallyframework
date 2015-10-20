@@ -68,7 +68,7 @@ public class CriteriaTransferObject implements Cloneable {
     }
 
     public PropertyFilterCriteria getFilterCriteria(String name) {
-        PropertyFilterCriteria criteria = filterCriterias.getOrDefault(name, null);
+        PropertyFilterCriteria criteria = filterCriterias.get(name);
         if(criteria == null){
             criteria = new PropertyFilterCriteria(name);
             this.addFilterCriteria(criteria);

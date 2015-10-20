@@ -36,7 +36,7 @@ class RawEntityInsightImpl
 
     @Override
     public FieldInfo getField(String fieldName) {
-        return fields.getOrDefault(fieldName, null);
+        return fields.get(fieldName);
     }
 
     @Override
@@ -46,7 +46,7 @@ class RawEntityInsightImpl
 
     @Override
     public RawTabInsight getTab(String tabName) {
-        return tabs.getOrDefault(tabName, null);
+        return tabs.get(tabName);
     }
 
     @Override
@@ -56,14 +56,14 @@ class RawEntityInsightImpl
 
     @Override
     public FieldInfoRW getFieldRW(String fieldName) {
-        FieldInfoRW fieldInfoRW = (FieldInfoRW) fields.getOrDefault(fieldName, null);
+        FieldInfoRW fieldInfoRW = (FieldInfoRW) fields.get(fieldName);
         dirty = true;
         return fieldInfoRW;
     }
 
     @Override
     public RawTabInsightRW getTabRW(String tabName) {
-        RawTabInsightRW tabInfoRW = tabs.getOrDefault(tabName, null);
+        RawTabInsightRW tabInfoRW = tabs.get(tabName);
         dirty = true;
         return tabInfoRW;
     }

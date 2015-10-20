@@ -36,7 +36,10 @@ public final class ResourceProtectionManager implements IResourceProtectionManag
 
     @Override
     public String correctResourceEntity(String resourceEntity) {
-        return resourceEntityAlias.getOrDefault(resourceEntity, resourceEntity);
+        String v = resourceEntityAlias.get(resourceEntity);
+        if(v == null)
+            return resourceEntity;
+        return v;
     }
 
     @Override
@@ -53,8 +56,8 @@ public final class ResourceProtectionManager implements IResourceProtectionManag
 
     @Override
     public IResourceProtection getResourceProtection(String resourceEntity) {
-        resourceEntity = resourceEntityAlias.getOrDefault(resourceEntity, resourceEntity);
-        return resourceEntityRegistry.getOrDefault(resourceEntity, null);
+        resourceEntity = correctResourceEntity(resourceEntity);
+        return resourceEntityRegistry.get(resourceEntity);
     }
 
     @Override

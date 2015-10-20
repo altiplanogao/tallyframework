@@ -128,7 +128,7 @@ public class MetadataServiceTest_NoMissing {
 
     private void assertFieldNotExist(Map<String, IFieldMetadata> fieldMetadataMap,
                                     String fieldName){
-        IFieldMetadata fieldMetadata = fieldMetadataMap.getOrDefault(fieldName, null);
+        IFieldMetadata fieldMetadata = fieldMetadataMap.get(fieldName);
         Assert.assertNull(fieldMetadata);
     }
 
@@ -140,7 +140,7 @@ public class MetadataServiceTest_NoMissing {
         if(StringUtils.isEmpty(groupName)){
             groupName =  PresentationClass.Group.DEFAULT_NAME;
         }
-        IFieldMetadata fieldMetadata = fieldMetadataMap.getOrDefault(fieldName, null);
+        IFieldMetadata fieldMetadata = fieldMetadataMap.get(fieldName);
         Assert.assertNotNull(fieldMetadata);
         Assert.assertEquals(fieldMetadata.getTabName(), tabName);
         Assert.assertEquals(fieldMetadata.getGroupName(), groupName);

@@ -81,7 +81,7 @@ public class CachedSetting {
     }
 
     public <T> T getValue(String settingName) {
-        CacheableValueGetter vg = settingGetters.getOrDefault(settingName, null);
+        CacheableValueGetter vg = settingGetters.get(settingName);
         if (null == vg) {
             return null;
         }

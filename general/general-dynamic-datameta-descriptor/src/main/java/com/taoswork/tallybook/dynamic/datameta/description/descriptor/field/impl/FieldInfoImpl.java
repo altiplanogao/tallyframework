@@ -140,7 +140,7 @@ public class FieldInfoImpl
     @Override
     public IFieldFacet getFacet(FieldFacetType facetType) {
         if (facets != null) {
-            return facets.getOrDefault(facetType, null);
+            return facets.get(facetType);
         }
         return null;
     }

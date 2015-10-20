@@ -86,11 +86,11 @@ public class EntityInfoResult {
     }
 
     public <T extends IEntityInfo> T getDetail(String infoType){
-        return (T) details.getOrDefault(infoType, null);
+        return (T) details.get(infoType);
     }
 
     public <T extends IEntityInfo> T getDetail(EntityInfoType infoType){
-        return (T) details.getOrDefault(infoType.getName(), null);
+        return (T) details.get(infoType.getName());
     }
 
 }

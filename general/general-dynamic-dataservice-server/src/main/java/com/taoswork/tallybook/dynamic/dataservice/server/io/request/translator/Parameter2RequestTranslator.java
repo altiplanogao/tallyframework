@@ -7,6 +7,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertySor
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
+import com.taoswork.tallybook.general.extension.collections.MapUtility;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -83,10 +85,9 @@ public class Parameter2RequestTranslator {
             }
         }
 
-        int startIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_START_INDEX, 0);
-        Integer maxIndex = integerValues.getOrDefault(GeneralRequestParameter.REQUEST_MAX_INDEX, null);
-        Integer pageSize = integerValues.getOrDefault(GeneralRequestParameter.
-            REQUEST_PAGE_SIZE, null);
+        int startIndex = MapUtils.getIntValue(integerValues, GeneralRequestParameter.REQUEST_START_INDEX, 0);
+        Integer maxIndex = integerValues.get(GeneralRequestParameter.REQUEST_MAX_INDEX);
+        Integer pageSize = integerValues.get(GeneralRequestParameter.REQUEST_PAGE_SIZE);
 
         request.setStartIndex(startIndex);
         if (pageSize == null && maxIndex == null) {

@@ -120,7 +120,7 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
 
     protected IEntityInfo getEntityInfo_Locale_Type(Class<?> entityType, ClassScopeWithLocaleAndType scopeWithLocaleAndType) {
         synchronized (entityInfoMapWithLocaleType) {
-            IEntityInfo entityInfo = entityInfoMapWithLocaleType.getOrDefault(scopeWithLocaleAndType, null);
+            IEntityInfo entityInfo = entityInfoMapWithLocaleType.get(scopeWithLocaleAndType);
             if (entityInfo == null) {
                 ClassScopeWithLocale classScopeWithLocale = scopeWithLocaleAndType.getClassScopeWithLocale();
                 EntityInfoType infoType = scopeWithLocaleAndType.getInfoType();
@@ -133,7 +133,7 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
 
     protected EntityInfo getEntityInfo_Locale(Class<?> entityType, ClassScopeWithLocale classScopeWithLocale) {
         synchronized (entityInfoMapWithLocale) {
-            EntityInfo entityInfo = entityInfoMapWithLocale.getOrDefault(classScopeWithLocale, null);
+            EntityInfo entityInfo = entityInfoMapWithLocale.get(classScopeWithLocale);
             if (entityInfo == null) {
                 ClassScope classScope = classScopeWithLocale.getClassScope();
                 Locale locale = classScopeWithLocale.getNote();
@@ -146,7 +146,7 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
 
     protected EntityInfo getEntityInfo(Class<?> entityType, ClassScope classScope) {
         synchronized (entityInfoMap) {
-            EntityInfo entityInfo = entityInfoMap.getOrDefault(classScope, null);
+            EntityInfo entityInfo = entityInfoMap.get(classScope);
             if (entityInfo == null) {
                 entityInfo = calcEntityInfo(entityType, classScope);
                 entityInfoMap.put(classScope, entityInfo);

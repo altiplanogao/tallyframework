@@ -18,7 +18,7 @@ public class SimplePermissionAuthority implements ISimplePermissionAuthority {
 
     @Override
     public IEntityPermission getEntityPermission(String resourceEntity) {
-        return entityPermissionMap.getOrDefault(resourceEntity, null);
+        return entityPermissionMap.get(resourceEntity);
     }
 
     @Override

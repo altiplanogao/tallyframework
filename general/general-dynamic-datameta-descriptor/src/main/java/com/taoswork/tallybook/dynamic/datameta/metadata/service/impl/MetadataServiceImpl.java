@@ -142,7 +142,7 @@ public class MetadataServiceImpl implements MetadataService {
         }
 
         synchronized (lock) {
-            classMetadata = classMetadataCache.getOrDefault(clzName, null);
+            classMetadata = classMetadataCache.get(clzName);
             if (null == classMetadata) {
                 classMetadata = new ClassMetadata();
 

@@ -102,7 +102,7 @@ public class EntityInfoImpl
 
     @Override
     public FieldInfo getField(String fieldName) {
-        return this.fields.getOrDefault(fieldName, null);
+        return this.fields.get(fieldName);
     }
 
     @Override

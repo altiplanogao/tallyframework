@@ -37,15 +37,15 @@ public class FieldTypedHandlerManager<H extends IFieldTypedHandler> {
 
     public Collection<H> getHandlers(FieldType type, Class clz) {
         FieldTypeType typeType = new FieldTypeType(type, clz);
-        Set<H> cache = cachedFieldHandlers.getOrDefault(typeType, null);
+        Set<H> cache = cachedFieldHandlers.get(typeType);
         if (cache == null) {
             cache = new HashSet<H>();
             FieldTypeType typeOnlyType = new FieldTypeType(type);
             FieldTypeType typeOnlyClz = new FieldTypeType(clz);
 
-            List<H> typed = typedFieldHandlers.getOrDefault(typeType, null);
-            List<H> typedT = typedFieldHandlers.getOrDefault(typeOnlyType, null);
-            List<H> typedC = typedFieldHandlers.getOrDefault(typeOnlyClz, null);
+            List<H> typed = typedFieldHandlers.get(typeType);
+            List<H> typedT = typedFieldHandlers.get(typeOnlyType);
+            List<H> typedC = typedFieldHandlers.get(typeOnlyClz);
 
             if (typed != null)
                 cache.addAll(typed);

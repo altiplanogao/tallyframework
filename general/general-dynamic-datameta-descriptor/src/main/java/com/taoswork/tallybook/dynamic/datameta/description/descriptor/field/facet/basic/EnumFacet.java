@@ -61,7 +61,7 @@ public class EnumFacet implements IFieldFacet {
 
     public String getFriendlyName(String option) {
         if (friendlyNames != null) {
-            return friendlyNames.getOrDefault(option, null);
+            return friendlyNames.get(option);
         }
         return null;
     }

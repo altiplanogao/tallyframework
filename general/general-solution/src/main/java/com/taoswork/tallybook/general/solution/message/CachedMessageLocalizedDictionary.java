@@ -20,7 +20,7 @@ public class CachedMessageLocalizedDictionary {
     }
 
     public Map<String, String> getTranslated(Locale locale){
-        Map<String, String> readable = translated.getOrDefault(locale, null);
+        Map<String, String> readable = translated.get(locale);
         if(readable == null){
             readable = MessageUtility.translateMessageDictionary(original, messageSource, locale);
             translated.put(locale, readable);

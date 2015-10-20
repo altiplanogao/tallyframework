@@ -142,7 +142,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public IFieldMetadata getFieldMetadata(String fieldName) {
-        return fieldMetadataMap.getOrDefault(fieldName, null);
+        return fieldMetadataMap.get(fieldName);
     }
 
     public void addValidator(Class<? extends IEntityValidator> validator) {
@@ -217,7 +217,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     }
 
     public ClassMetadata getReferencedEntityMetadata(String entity) {
-        return this.referencedEntityMetadata.getOrDefault(entity, null);
+        return this.referencedEntityMetadata.get(entity);
     }
 
     public Collection<Class> getReferencedEntities() {

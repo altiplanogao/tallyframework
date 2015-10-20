@@ -29,11 +29,11 @@ public class EntityInterfaceManager {
     }
 
     public Class<?> lookupEntityClass(String entityInterfaceName){
-        return this.entityInterface2Class.getOrDefault(entityInterfaceName, null);
+        return this.entityInterface2Class.get(entityInterfaceName);
     }
 
     public <T> Class<? extends T> lookupEntityClass(Class<T> entityInterfaceType){
-        return (Class<T> )this.entityInterface2Class.getOrDefault(entityInterfaceType.getName(), null);
+        return (Class<T> )this.entityInterface2Class.get(entityInterfaceType.getName());
     }
 
 }

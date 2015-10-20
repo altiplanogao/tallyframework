@@ -67,7 +67,7 @@ public class PersonDetails extends User {
 
     public <T extends FacetDetails> T getFacetDetails(FacetType type, Long id){
         FacetId fid = new FacetId(type, id);
-        FacetDetails details = facetDetailsMap.getOrDefault(fid, null);
+        FacetDetails details = facetDetailsMap.get(fid);
         return (T)details;
     }
 }

@@ -127,7 +127,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     @Override
     public Collection<Class> getInstantiableEntityTypes(Class<?> entityCeilingType) {
         synchronized (ceiling2Instantiables) {
-            List<Class> root = ceiling2Instantiables.getOrDefault(entityCeilingType, null);
+            List<Class> root = ceiling2Instantiables.get(entityCeilingType);
             if (null == root) {
                 root = calcInstantiableEntityTypes(entityCeilingType);
                 ceiling2Instantiables.put(entityCeilingType, root);
@@ -139,7 +139,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     @Override
     public <T> Class<T> getRootInstantiableEntityType(Class<T> entityCeilingType) {
         synchronized (ceiling2RootInstantiable) {
-            Class<T> root = ceiling2RootInstantiable.getOrDefault(entityCeilingType, null);
+            Class<T> root = ceiling2RootInstantiable.get(entityCeilingType);
             if (null == root) {
                 root = calcRootInstantiableEntityClass(entityCeilingType);
                 ceiling2RootInstantiable.put(entityCeilingType, root);
@@ -151,7 +151,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     @Override
     public <T> Class<T> getPermissionGuardian(Class<T> entityType) {
         calcEntityTypeGuardians();
-        return entityType2GuardianType.getOrDefault(entityType, null);
+        return entityType2GuardianType.get(entityType);
     }
 
     /**
@@ -201,7 +201,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     @Override
     public EntityClassTree getEntityClassTree(Class<?> entityCeilingType) {
         synchronized (ceiling2ClassTreeMap){
-            EntityClassTree classTree = ceiling2ClassTreeMap.getOrDefault(entityCeilingType, null);
+            EntityClassTree classTree = ceiling2ClassTreeMap.get(entityCeilingType);
             if (classTree == null) {
                 classTree = calcEntityClassTreeFromCeiling(entityCeilingType);
                 ceiling2ClassTreeMap.put(entityCeilingType, classTree);
@@ -255,7 +255,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
         ClassMetadata classMetadata = null;
         synchronized (classMetadataMap) {
             ClassScope classScope = new ClassScope(entityType, true, withHierarchy);
-            classMetadata = classMetadataMap.getOrDefault(classScope, null);
+            classMetadata = classMetadataMap.get(classScope);
             if (null == classMetadata) {
                 if (withHierarchy) {
                     EntityClassTree entityClassTree = getEntityClassTree(entityType);

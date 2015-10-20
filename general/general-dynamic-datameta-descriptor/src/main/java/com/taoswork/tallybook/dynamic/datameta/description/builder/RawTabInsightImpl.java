@@ -26,12 +26,12 @@ final class RawTabInsightImpl
 
     @Override
     public RawGroupInsightRW getGroupRW(String groupName) {
-        return groups.getOrDefault(groupName, null);
+        return groups.get(groupName);
     }
 
     @Override
     public RawGroupInsight getGroup(final String groupName) {
-        return groups.getOrDefault(groupName, null);
+        return groups.get(groupName);
     }
 
     @Override

@@ -42,7 +42,7 @@ public interface NamedOrderedInfo extends NamedInfo {
         public static List<String> makeNamesOrdered(Collection<String> names, Map<String, ? extends NamedOrderedInfo> infoMap) {
             List<NamedOrderedInfo> infos = new ArrayList<NamedOrderedInfo>();
             for (String name : names) {
-                NamedOrderedInfo info = infoMap.getOrDefault(name, null);
+                NamedOrderedInfo info = infoMap.get(name);
                 if (info != null) {
                     infos.add(info);
                 }

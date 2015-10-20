@@ -13,6 +13,6 @@ public class EntityOut {
     }
 
     public Property getProperty(String propertyName){
-        return entity.getOrDefault(propertyName, null);
+        return entity.get(propertyName);
     }
 }

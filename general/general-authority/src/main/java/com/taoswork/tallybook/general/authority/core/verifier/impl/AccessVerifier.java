@@ -172,7 +172,7 @@ public class AccessVerifier implements IAccessVerifier, IMappedAccessVerifier {
     @Override
     public boolean canAccessMappedResource(IPermissionAuthority auth, Access access, String virtualResource) {
         _SimulatedResourceAccess simulatedResourceAccess = new _SimulatedResourceAccess(virtualResource, access);
-        IResourceProtectionMapping protection = this.simulatedResourceProtections.getOrDefault(simulatedResourceAccess, null);
+        IResourceProtectionMapping protection = this.simulatedResourceProtections.get(simulatedResourceAccess);
         if (protection == null)
             return false;
 

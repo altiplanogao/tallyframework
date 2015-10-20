@@ -45,7 +45,7 @@ public abstract class ReadWriteLockedMapAccess<K, V> {
         }
     }
     protected final V getCachedValueDirectly(K key){
-        return map.getOrDefault(key, null);
+        return map.get(key);
     }
 
     protected final boolean isCacheValid(K key, V value){

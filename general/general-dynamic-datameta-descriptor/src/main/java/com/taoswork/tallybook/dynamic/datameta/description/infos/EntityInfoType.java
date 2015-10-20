@@ -87,7 +87,7 @@ public class EntityInfoType {
     }
 
     public Class<? extends IEntityInfo> infoClass() {
-        return EntityTypeMapping.getOrDefault(name, null);
+        return EntityTypeMapping.get(name);
     }
 
     @Override

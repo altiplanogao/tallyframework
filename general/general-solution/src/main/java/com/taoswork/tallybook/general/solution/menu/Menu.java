@@ -74,17 +74,17 @@ public class Menu implements IMenu {
 
     @Override
     public Collection<MenuPath> getPathOfUrl(String url) {
-        return (Collection<MenuPath>)pathOfUrl.getOrDefault(url, null);
+        return (Collection<MenuPath>)pathOfUrl.get(url);
     }
 
     @Override
     public Collection<MenuPath> getPathOfEntity(String entity) {
-        return (Collection<MenuPath>)pathOfEntity.getOrDefault(entity, null);
+        return (Collection<MenuPath>)pathOfEntity.get(entity);
     }
 
     @Override
     public Collection<MenuPath> getPathOfEntry(String key) {
-        return (Collection<MenuPath>)pathOfKey.getOrDefault(key, null);
+        return (Collection<MenuPath>)pathOfKey.get(key);
     }
 
     @Override

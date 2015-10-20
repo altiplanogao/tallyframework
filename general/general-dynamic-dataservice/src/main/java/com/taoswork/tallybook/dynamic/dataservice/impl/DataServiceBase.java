@@ -12,8 +12,10 @@ import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityM
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
+import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -84,7 +86,7 @@ public abstract class DataServiceBase implements IDataService {
     private void load(
             List<Class> annotatedClasses) {
         String clzName = this.getClass().getName();
-        int oldCount = loadCounter.getOrDefault(clzName, 0).intValue();
+        int oldCount = MapUtils.getIntValue(loadCounter, clzName, 0);
         loadCounter.put(clzName, oldCount + 1);
 
         loadAnnotatedClasses(annotatedClasses.toArray(new Class[annotatedClasses.size()]));
@@ -253,7 +255,7 @@ public abstract class DataServiceBase implements IDataService {
     @Override
     public String getEntityResourceName(String typeName) {
         Map<String, EntityEntry> entityEntries = getEntityEntries();
-        EntityEntry entityEntry = entityEntries.getOrDefault(typeName, null);
+        EntityEntry entityEntry = entityEntries.get(typeName);
         if (entityEntry == null) {
             return null;
         }
@@ -262,7 +264,7 @@ public abstract class DataServiceBase implements IDataService {
 
     @Override
     public String getEntityTypeName(String resourceName) {
-        return entityResNameToTypeName.getOrDefault(resourceName, null);
+        return entityResNameToTypeName.get(resourceName);
     }
 
     @Override

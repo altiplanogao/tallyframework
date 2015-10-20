@@ -74,7 +74,7 @@ public class PermissionEngine {
 //    private final Map<Long, >
 
     private Set<SecuredResourceFilter> getResourceCriteriaSet(String resouceType){
-        Set<SecuredResourceFilter> resourceCriteriaSet = resourceTypesMapping.getOrDefault(resouceType, null);
+        Set<SecuredResourceFilter> resourceCriteriaSet = resourceTypesMapping.get(resouceType);
         if(resourceCriteriaSet == null){
             resourceCriteriaSet = new HashSet<SecuredResourceFilter>();
 //            resourceCriteriaSet.add(new ResourceCriteria().setType(resouceType).setName("General"));

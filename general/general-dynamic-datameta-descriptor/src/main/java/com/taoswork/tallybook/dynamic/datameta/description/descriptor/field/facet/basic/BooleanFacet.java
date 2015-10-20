@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.fac
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
+import org.apache.commons.collections4.MapUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +48,6 @@ public class BooleanFacet implements IFieldFacet {
     }
 
     public String getOption(boolean value) {
-        return options.getOrDefault(value ? TRUE : FALSE, value ? "true" : "false");
+        return MapUtils.getString(options, value ? TRUE : FALSE, value ? "true" : "false");
     }
 }

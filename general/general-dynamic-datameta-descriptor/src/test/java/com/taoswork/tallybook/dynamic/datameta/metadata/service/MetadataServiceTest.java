@@ -62,7 +62,7 @@ public class MetadataServiceTest {
             }
 
             ////////////
-            IFieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().getOrDefault(field.getName(), null);
+            IFieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().get(field.getName());
             Assert.assertNotNull(fieldMetadata);
         }
     }

@@ -55,12 +55,12 @@ public class DataServiceManagerImpl implements DataServiceManager {
 
     @Override
     public ManagedEntityEntry getInterfaceEntityEntry(String entityType){
-        return entityTypeNameToEntryMap.getOrDefault(entityType, null);
+        return entityTypeNameToEntryMap.get(entityType);
     }
 
     @Override
     public String getEntityInterfaceName(String resourceName) {
-        return entityResNameToTypeName.getOrDefault(resourceName, null);
+        return entityResNameToTypeName.get(resourceName);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DataServiceManagerImpl implements DataServiceManager {
     public IDataService getDataService(String entityType) {
         ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
         if (null != managedEntityEntry) {
-            return dataServiceMap.getOrDefault(managedEntityEntry.getDataServiceName(), null);
+            return dataServiceMap.get(managedEntityEntry.getDataServiceName());
         } else {
             return null;
         }

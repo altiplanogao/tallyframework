@@ -11,7 +11,7 @@ public class EntityValidationErrors extends ValidationErrors {
     private final Map<String, FieldValidationErrors> fieldErrorsMap = new HashMap<String, FieldValidationErrors>();
 
     public void addFieldErrors(FieldValidationErrors fieldErrors){
-        FieldValidationErrors existing = fieldErrorsMap.getOrDefault(fieldErrors.getFieldName(), null);
+        FieldValidationErrors existing = fieldErrorsMap.get(fieldErrors.getFieldName());
         if(existing == null){
             fieldErrorsMap.put(fieldErrors.getFieldName(), fieldErrors);
         }else {
