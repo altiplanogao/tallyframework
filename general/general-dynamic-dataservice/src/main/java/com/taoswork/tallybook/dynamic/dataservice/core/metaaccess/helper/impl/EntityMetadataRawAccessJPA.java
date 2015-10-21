@@ -165,14 +165,6 @@ public class EntityMetadataRawAccessJPA extends AEntityMetadataRawAccess {
         return propertyNames;
     }
 
-//    @Override
-//    public List<Type> getPropertyTypes(Class<?> entityClz) {
-//        ClassMetadata metadata = getSessionFactory().getClassMetadata(entityClz);
-//        List<Type> propertyTypes = new ArrayList<Type>();
-//        Collections.addAll(propertyTypes, metadata.getPropertyTypes());
-//        return propertyTypes;
-//    }
-
     private void clearCache() {
         synchronized (lock) {
             ENTITY_CACHE.clear();

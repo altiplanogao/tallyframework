@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.orm.hibernate4.support.OpenSessionInterceptor;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -22,19 +21,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
- * By referrence of OpenSessionInViewFilter, OpenEntityManagerInViewFilter
+ * By referrence of OpenEntityManagerInViewFilter
  */
 @Aspect
-public class OpenSessionAop implements ApplicationContextAware {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OpenSessionAop.class);
+public class OpenEntityManagerAop implements ApplicationContextAware {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpenEntityManagerAop.class);
 
-    private OpenSessionInterceptor interceptor;
     private IDataService dataService;
 
     private volatile EntityManagerFactory entityManagerFactory;
 
-    public OpenSessionAop(){
-        interceptor = new OpenSessionInterceptor();
+    public OpenEntityManagerAop(){
     }
 
     @Pointcut("execution(* com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService.*(..))")
@@ -59,7 +56,7 @@ public class OpenSessionAop implements ApplicationContextAware {
     }
 
     @Around("persistenceMethod()")
-    public Object wrapWithSession(ProceedingJoinPoint joinPoint) throws ServiceException {
+    public Object wrapWithEntityManager(ProceedingJoinPoint joinPoint) throws ServiceException {
         try {
             EntityManagerFactory emf = lookupEntityManagerFactory();
             boolean participate = false;

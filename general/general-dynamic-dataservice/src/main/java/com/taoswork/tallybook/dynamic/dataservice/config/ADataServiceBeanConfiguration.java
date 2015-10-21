@@ -17,7 +17,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.im
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.impl.EntityValueGateServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.OpenSessionAop;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.OpenEntityManagerAop;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl.DynamicEntityServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
@@ -224,8 +224,8 @@ public abstract class ADataServiceBeanConfiguration
     @Override
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public OpenSessionAop openSessionAop() {
-        return new OpenSessionAop();
+    public OpenEntityManagerAop openEntityManagerAop() {
+        return new OpenEntityManagerAop();
     }
 
     /* IPersistenceBeanList                                     */

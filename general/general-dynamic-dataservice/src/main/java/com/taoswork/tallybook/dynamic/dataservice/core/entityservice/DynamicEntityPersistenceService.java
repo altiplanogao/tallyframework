@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by Gao Yuan on 2015/9/28.
  */
 
-//Aspected by OpenSessionAop.java
+//Aspected by OpenEntityManagerAop.java
 public interface DynamicEntityPersistenceService {
     public static final String COMPONENT_NAME = "DynamicEntityPersistenceService";
 

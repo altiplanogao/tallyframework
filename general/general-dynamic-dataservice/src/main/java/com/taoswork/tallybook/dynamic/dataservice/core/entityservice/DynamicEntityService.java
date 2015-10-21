@@ -24,7 +24,7 @@ import java.util.Locale;
  *     \/
  * DynamicEntityPersistenceService(DynamicEntityPersistenceServiceImpl)
  * ({@link com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService})
- * (Aspected by OpenSessionAop.java)
+ * (Aspected by OpenEntityManagerAop.java)
  * (@Transactional)
  * (ThreadSafe by PersistenceManagerInvoker)
  *      |

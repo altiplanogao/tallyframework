@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-//Aspected by OpenSessionAop.java
+//Aspected by OpenEntityManagerAop.java
 public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersistenceService {
 
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
