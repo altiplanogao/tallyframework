@@ -38,10 +38,8 @@ public class ResponseTranslator {
     public void translateInstanceRequest(EntityInstancePostRequest request,
                                          EntityResponse response) {
         Entity entity = request.getEntity();
-        response.setResourceName(request.getResourceName())
-            .setEntityCeilingType(entity.getEntityCeilingType())
-            .setEntityType(entity.getEntityType())
-            .setBaseUrl(request.getResourceURI());
+        translateRequest(request, response);
+        response.setEntityCeilingType(entity.getEntityCeilingType());
     }
 
     public void translateRequest(EntityRequest request,
@@ -49,7 +47,8 @@ public class ResponseTranslator {
         response.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(request.getEntityType())
-            .setBaseUrl(request.getResourceURI());
+            .setBaseUrl(request.getBaseUri())
+            .setEntityUrl(request.getEntityUri());
     }
 
     public void translateInfoResponse(EntityInfoRequest request,

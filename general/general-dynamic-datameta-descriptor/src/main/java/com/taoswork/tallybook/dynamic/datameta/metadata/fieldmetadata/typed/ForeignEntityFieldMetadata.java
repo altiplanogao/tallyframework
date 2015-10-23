@@ -8,16 +8,14 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BasicField
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
+import static com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType.*;
+
 public class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private Class entityType;
 
     public ForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ForeignEntityFieldMetadataFacet foreignFieldFacet = (ForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ForeignEntity);
-        BasicFieldMetadataObject bfmo = intermediate.getBasicFieldMetadataObject();
-        if(FieldType.UNKNOWN == bfmo.getFieldType()){
-            bfmo.setFieldType(FieldType.FOREIGN_KEY);
-        }
         this.entityType = foreignFieldFacet.targetType;
     }
 
@@ -28,5 +26,10 @@ public class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata i
     @Override
     public boolean isPrimitiveField() {
         return false;
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FOREIGN_KEY;
     }
 }

@@ -18,6 +18,7 @@ public abstract class EntityResponse extends ResourceSupport {
     private String resourceName;
     private Class<? extends Persistable> entityCeilingType;
     private Class<? extends Persistable> entityType;
+    private String entityUrl;
     private String baseUrl;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -64,6 +65,15 @@ public abstract class EntityResponse extends ResourceSupport {
 
     public EntityResponse setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+        return this;
+    }
+
+    public String getEntityUrl() {
+        return entityUrl;
+    }
+
+    public EntityResponse setEntityUrl(String entityUrl) {
+        this.entityUrl = entityUrl;
         return this;
     }
 

@@ -24,6 +24,13 @@ public interface SecuredResourceFilter<R extends SecuredResource> extends Persis
 
     SecuredResourceFilter setResourceType(R securedResource);
 
+    /**
+     * Filter types:
+     * Name contains
+     * Has attribute
+     * Created by
+     * @return
+     */
     String getFilter();
 
     SecuredResourceFilter setFilter(String filter);

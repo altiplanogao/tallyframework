@@ -15,7 +15,7 @@ public class EntityInfoResult {
     private String resourceName;
     private Class<?> entityCeilingType;
     private Class<?> entityType;
-    private String baseUrl;
+    private String entityUrl;
 
     private Map<String, IEntityInfo> details;
 
@@ -46,12 +46,12 @@ public class EntityInfoResult {
         return this;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public String getEntityUrl() {
+        return entityUrl;
     }
 
-    public EntityInfoResult setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public EntityInfoResult setEntityUrl(String entityUrl) {
+        this.entityUrl = entityUrl;
         return this;
     }
 

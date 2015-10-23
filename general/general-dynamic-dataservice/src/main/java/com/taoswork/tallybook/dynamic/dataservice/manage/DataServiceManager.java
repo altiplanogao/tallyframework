@@ -9,6 +9,8 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEnti
 public interface DataServiceManager {
     public static final String COMPONENT_NAME = "DataServiceManager";
 
+    void doInitialize();
+
     DataServiceManager buildingAppendDataService(String dataServiceBeanName, IDataService dataService);
 
     DataServiceManager buildingAnnounceFinishing();
@@ -18,6 +20,8 @@ public interface DataServiceManager {
     String getEntityInterfaceName(String friendlyName);
 
     String getEntityResourceName(String entityClz);
+
+    IDataService getDataServiceByServiceName(String serviceName);
 
     IDataService getDataService(String entityClz);
 

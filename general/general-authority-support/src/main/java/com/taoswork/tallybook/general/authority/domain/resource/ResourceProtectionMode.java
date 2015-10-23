@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/10/20.
  */
-@PresentationEnum(unknownEnum = "unknown")
+@PresentationEnum(unknownEnum = ResourceProtectionMode.DEFAULT_CHAR)
 public enum ResourceProtectionMode implements IFriendlyEnum<String> {
     PassAll("all", "fit all"),
     PassAny("any", "fit any");

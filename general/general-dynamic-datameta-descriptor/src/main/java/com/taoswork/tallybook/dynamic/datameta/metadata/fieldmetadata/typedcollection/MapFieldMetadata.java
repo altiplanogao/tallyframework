@@ -20,13 +20,17 @@ public class MapFieldMetadata extends BaseCollectionFieldMetadata {
     public MapFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         MapFieldMetadataFacet facet = (MapFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Map);
-        this.basicFieldMetadataObject.setFieldTypeIfUnknown(FieldType.MAP);
 
         this.keyType = facet.getKeyType();
 
         this.valueType = facet.getValueType();
 
         this.mapImplementType = workOutMapImplementType(facet.getMapType());
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.MAP;
     }
 
     public ElementTypeUnion getKeyType() {

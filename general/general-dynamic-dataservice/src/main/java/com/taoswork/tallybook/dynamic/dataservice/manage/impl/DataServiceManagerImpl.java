@@ -7,6 +7,9 @@ import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.manage.ManagedEntityEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +17,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/2.
  */
-public class DataServiceManagerImpl implements DataServiceManager {
+public class DataServiceManagerImpl implements DataServiceManager, ApplicationContextAware {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceManager.class);
 
     // DataService name to DataService
@@ -22,6 +25,14 @@ public class DataServiceManagerImpl implements DataServiceManager {
     private final Map<String, ManagedEntityEntry> entityTypeNameToEntryMap = new HashMap<String, ManagedEntityEntry>();
 
     private final Map<String, String> entityResNameToTypeName = new HashMap<String, String>();
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        doInitialize();
+    }
+
+    @Override
+    public void doInitialize(){}
 
     @Override
     public DataServiceManager buildingAppendDataService(String dataServiceBeanName, IDataService dataService){
@@ -71,6 +82,11 @@ public class DataServiceManagerImpl implements DataServiceManager {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public IDataService getDataServiceByServiceName(String serviceName) {
+        return dataServiceMap.get(serviceName);
     }
 
     @Override

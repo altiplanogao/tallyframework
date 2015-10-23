@@ -18,7 +18,15 @@ abstract class BaseFieldMetadata implements IFieldMetadata, Serializable {
     }
 
     public BaseFieldMetadata(FieldMetadataIntermediate intermediate) {
-        this.basicFieldMetadataObject = SerializationUtils.clone(intermediate.getBasicFieldMetadataObject());
+        BasicFieldMetadataObject bfmo = intermediate.getBasicFieldMetadataObject();
+        if(FieldType.UNKNOWN.equals(bfmo.getFieldType())){
+            bfmo.setFieldType(overrideUnknownFieldType());
+        }
+        this.basicFieldMetadataObject = SerializationUtils.clone(bfmo);
+    }
+
+    protected FieldType overrideUnknownFieldType(){
+        return FieldType.UNKNOWN;
     }
 
     @Override

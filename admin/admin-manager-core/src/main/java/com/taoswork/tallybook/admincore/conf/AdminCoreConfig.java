@@ -2,15 +2,24 @@ package com.taoswork.tallybook.admincore.conf;
 
 import com.taoswork.tallybook.admincore.TallyBookAdminCoreRoot;
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceImpl;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.AdminEmployeeDetailsService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.impl.AdminEmployeeDetailsServiceImpl;
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.manage.impl.DataServiceManagerImpl;
+import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
 import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
 import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
@@ -68,8 +77,14 @@ public class AdminCoreConfig {
 
         @Bean(name = DataServiceManager.COMPONENT_NAME)
         public DataServiceManager dataServiceManager(){
-                return new DataServiceManagerImpl()
-                        .buildingAppendDataService(
+                DataServiceManager dataServiceManager = new DataServiceManagerImpl(){
+                        @Override
+                        public void doInitialize() {
+                                dataServiceManagerDoInitialize(this);
+                        }
+                };
+
+                dataServiceManager.buildingAppendDataService(
                                 TallyUserDataService.COMPONENT_NAME,
                                 tallyUserDataService())
                         .buildingAppendDataService(
@@ -83,5 +98,38 @@ public class AdminCoreConfig {
                                 tallyManagementDataService())
 
                         .buildingAnnounceFinishing();
+
+                return dataServiceManager;
+        }
+
+        private void dataServiceManagerDoInitialize(DataServiceManager dataServiceManager){
+                IDataService adminDataService = dataServiceManager.getDataServiceByServiceName(TallyAdminDataService.COMPONENT_NAME);
+                DynamicEntityService dynamicEntityService = adminDataService.getService(DynamicEntityService.COMPONENT_NAME);
+                try {
+                        for (SecuredResource res : SecuredResources.getResources()) {
+                                AdminSecuredResource asr = new AdminSecuredResourceImpl();
+                                asr.setFriendlyName(res.getName());
+                                asr.setResourceEntity(res.getEntity());
+                                asr.setCategory(res.getCategory());
+                                asr.setMasterControlled(res.isMasterControlled());
+                                switch (res.getProtectionMode()) {
+                                        case FitAll:
+                                                asr.setProtectionMode(ResourceProtectionMode.PassAll);
+                                                break;
+                                        case FitAny:
+                                                asr.setProtectionMode(ResourceProtectionMode.PassAny);
+                                                break;
+                                }
+                                CriteriaTransferObject cto = new CriteriaTransferObject();
+                                PropertyFilterCriteria propC = new PropertyFilterCriteria("friendlyName", res.getName());
+                                cto.addFilterCriteria(propC);
+                                CriteriaQueryResult cqr = dynamicEntityService.query(AdminSecuredResource.class, cto);
+                                if(cqr.fetchedCount() == 0){
+                                        dynamicEntityService.create(AdminSecuredResource.class, asr);
+                                }
+                        }
+                } catch (ServiceException e) {
+                        e.printStackTrace();
+                }
         }
 }

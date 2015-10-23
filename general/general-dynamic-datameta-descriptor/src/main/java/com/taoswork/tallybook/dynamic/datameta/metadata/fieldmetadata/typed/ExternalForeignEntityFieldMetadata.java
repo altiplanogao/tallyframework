@@ -22,12 +22,13 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
     public ExternalForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ExternalForeignEntityFieldMetadataFacet foreignFieldFacet = (ExternalForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
-        BasicFieldMetadataObject bfmo = intermediate.getBasicFieldMetadataObject();
-        if(FieldType.UNKNOWN == bfmo.getFieldType()){
-            bfmo.setFieldType(FieldType.EXTERNAL_FOREIGN_KEY);
-        }
         this.entityType = foreignFieldFacet.targetType;
         this.entityFieldName = foreignFieldFacet.realTargetField;
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.EXTERNAL_FOREIGN_KEY;
     }
 
     public Class getEntityType() {

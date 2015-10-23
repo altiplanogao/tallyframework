@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/5/6.
@@ -27,6 +28,10 @@ public abstract class BaseController {
     }
 
     public BaseController(){
+    }
+
+    protected String getPathVariable(Map<String, String> pathVars, String pathKey) {
+        return pathVars.get(pathKey);
     }
 
     public static boolean isSimpleViewRequest(HttpServletRequest request) {

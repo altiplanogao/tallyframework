@@ -47,6 +47,9 @@ public class CurrentPath {
     }
 
     public boolean isMatchPath(String... keys){
+        if(this.getPath() == null){
+            return false;
+        }
         String[] paths = this.getPath().getPath().toArray(new String[]{});
         if(keys.length > paths.length){
             return false;

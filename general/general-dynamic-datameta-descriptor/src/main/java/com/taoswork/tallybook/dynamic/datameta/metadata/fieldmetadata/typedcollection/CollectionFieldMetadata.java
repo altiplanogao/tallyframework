@@ -17,12 +17,16 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
 
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
-        this.basicFieldMetadataObject.setFieldTypeIfUnknown(FieldType.COLLECTION);
 
         CollectionFieldMetadataFacet facet = (CollectionFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Collection);
 
         this.elementType = facet.getElementType();
         this.collectionImplementType = workOutCollectionImplementType(facet.getCollectionType());
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.COLLECTION;
     }
 
     public Class getCollectionImplementType() {

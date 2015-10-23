@@ -19,7 +19,7 @@ public class ResultTranslator {
         result.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(response.getEntityType())
-            .setBaseUrl(request.getResourceURI());
+            .setEntityUrl(request.getEntityUri());
         return result;
     }
 
