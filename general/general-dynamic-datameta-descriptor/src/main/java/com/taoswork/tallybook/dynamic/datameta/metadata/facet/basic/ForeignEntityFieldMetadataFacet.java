@@ -6,10 +6,12 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFace
 public class ForeignEntityFieldMetadataFacet implements IFieldMetadataFacet {
     public final Class declaredType;
     public final Class targetType;
+    public final String displayField;
 
-    public ForeignEntityFieldMetadataFacet(Class declaredType, Class targetType) {
+    public ForeignEntityFieldMetadataFacet(Class declaredType, Class targetType,String displayField) {
         this.declaredType = declaredType;
         this.targetType = targetType;
+        this.displayField = displayField;
     }
 
     @Override

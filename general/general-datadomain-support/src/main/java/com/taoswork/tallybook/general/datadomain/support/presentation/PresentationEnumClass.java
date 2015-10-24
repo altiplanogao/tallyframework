@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface PresentationEnum {
+public @interface PresentationEnumClass {
     String unknownEnum() default "unknown";
 }

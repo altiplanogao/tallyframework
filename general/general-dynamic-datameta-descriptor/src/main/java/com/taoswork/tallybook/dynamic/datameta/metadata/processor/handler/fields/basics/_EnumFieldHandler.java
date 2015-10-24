@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
 import java.lang.reflect.Field;
 
@@ -20,9 +20,9 @@ class _EnumFieldHandler implements IFieldHandler {
         PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
         if (presentationField != null &&
             FieldType.ENUMERATION.equals(presentationField.fieldType())) {
-            EnumField enumField = field.getDeclaredAnnotation(EnumField.class);
-            if (!enumField.enumeration().equals(void.class)) {
-                EnumFieldMetadataFacet enumFacet = new EnumFieldMetadataFacet(enumField.enumeration());
+            PresentationEnum presentationEnum = field.getDeclaredAnnotation(PresentationEnum.class);
+            if (!presentationEnum.enumeration().equals(void.class)) {
+                EnumFieldMetadataFacet enumFacet = new EnumFieldMetadataFacet(presentationEnum.enumeration());
                 fieldMetadata.addFacet(enumFacet);
                 fieldMetadata.setTargetMetadataType(EnumFieldMetadata.class);
                 return ProcessResult.HANDLED;

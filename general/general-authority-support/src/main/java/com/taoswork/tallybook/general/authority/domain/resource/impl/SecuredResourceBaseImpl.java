@@ -4,22 +4,16 @@ import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
-import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.domain.resource.converter.ProtectionModeToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/6/5.
@@ -59,13 +53,13 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
         ,columnDefinition = "VARCHAR(4) DEFAULT '" + ResourceProtectionMode.DEFAULT_CHAR + "'"
     )
     @PresentationField(order = 4, fieldType = FieldType.ENUMERATION)
-    @EnumField(enumeration = ResourceProtectionMode.class)
+    @PresentationEnum(enumeration = ResourceProtectionMode.class)
     @Convert(converter = ProtectionModeToStringConverter.class)
     protected ResourceProtectionMode protectionMode;
 
     @Column(name = "MASTER_CTRL")
     @PresentationField(order = 5, fieldType = FieldType.BOOLEAN)
-    @BooleanField(model = BooleanModel.YesNo)
+    @PresentationBoolean(model = BooleanModel.YesNo)
     protected boolean masterControlled = true;
 
     @Version

@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetad
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 
 import java.lang.reflect.Field;
 
@@ -26,9 +26,9 @@ class _BooleanFieldHandler implements IFieldHandler {
     public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         if (fits(field)) {
             BooleanFieldMetadataFacet booleanFieldFacet = null;
-            BooleanField booleanField = field.getDeclaredAnnotation(BooleanField.class);
-            if (booleanField != null) {
-                booleanFieldFacet = new BooleanFieldMetadataFacet(booleanField.model());
+            PresentationBoolean presentationBoolean = field.getDeclaredAnnotation(PresentationBoolean.class);
+            if (presentationBoolean != null) {
+                booleanFieldFacet = new BooleanFieldMetadataFacet(presentationBoolean.model());
             } else {
                 booleanFieldFacet = new BooleanFieldMetadataFacet();
             }

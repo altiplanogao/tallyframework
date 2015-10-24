@@ -10,9 +10,9 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
 import javax.persistence.*;
 
@@ -60,7 +60,7 @@ public class PersonImpl
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.DEFAULT_CHAR + "'"
     )
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
-    @EnumField(enumeration = Gender.class)
+    @PresentationEnum(enumeration = Gender.class)
     @Convert(converter = GenderToStringConverter.class)
     protected Gender gender = Gender.unknown;
 
@@ -76,7 +76,7 @@ public class PersonImpl
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
     @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
-    @BooleanField(model = BooleanModel.YesNo)
+    @PresentationBoolean(model = BooleanModel.YesNo)
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)

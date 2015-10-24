@@ -2,7 +2,7 @@ package com.taoswork.tallybook.testframework.domain.business.impl;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.IDepartment;
 import com.taoswork.tallybook.testframework.domain.business.IEmployee;
@@ -64,7 +64,7 @@ public class EmployeeImpl implements IEmployee{
     private EmployeeType type;
 
     @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
-    @ExternalForeignKey(targetType = CitizenImpl.class, targetField = "citizen")
+    @PresentationExternalForeignKey(targetType = CitizenImpl.class, targetField = "citizen")
     private Long citizenId;
 
     @Transient

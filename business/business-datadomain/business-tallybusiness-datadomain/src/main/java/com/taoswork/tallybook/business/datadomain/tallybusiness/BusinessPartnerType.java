@@ -1,12 +1,12 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@PresentationEnum(unknownEnum = "normal")
+@PresentationEnumClass(unknownEnum = "normal")
 public enum BusinessPartnerType implements IFriendlyEnum<String> {
     blacklist("b", "blacklist"),
     whitelist("w", "whitelist"),

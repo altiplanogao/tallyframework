@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.fac
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,8 +29,8 @@ public class EnumFacet implements IFieldFacet {
 
         try {
             Method valuesMethod = enumClz.getMethod("values", new Class[]{});
-            PresentationEnum presentationEnum = enumClz.getAnnotation(PresentationEnum.class);
-            if (presentationEnum != null) {
+            PresentationEnumClass presentationEnumClass = enumClz.getAnnotation(PresentationEnumClass.class);
+            if (presentationEnumClass != null) {
 
             }
             boolean isStatic = Modifier.isStatic(valuesMethod.getModifiers());

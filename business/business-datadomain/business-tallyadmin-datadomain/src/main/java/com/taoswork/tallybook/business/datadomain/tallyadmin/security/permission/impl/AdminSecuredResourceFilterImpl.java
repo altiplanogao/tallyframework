@@ -7,6 +7,7 @@ import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredReso
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationForeignKey;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -23,6 +24,7 @@ public class AdminSecuredResourceFilterImpl
     @ManyToOne(targetEntity = AdminSecuredResourceImpl.class)
     @JoinColumn(name = "RES_TYPE_ID")
     @PresentationField(order = 3, required = true)
+    @PresentationForeignKey(displayField = "friendlyName")
     public AdminSecuredResource securedResource;
     public static final String OWN_M2O_RES_ENTITY = "securedResource";
 

@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
 
 import java.lang.reflect.Field;
 
@@ -17,10 +17,10 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
         try {
             PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
             if (presentationField != null && FieldType.EXTERNAL_FOREIGN_KEY.equals(presentationField.fieldType())) {
-                ExternalForeignKey externalForeignKey = field.getDeclaredAnnotation(ExternalForeignKey.class);
-                if (externalForeignKey != null) {
-                    String targetField = externalForeignKey.targetField();
-                    Class targetType = externalForeignKey.targetType();
+                PresentationExternalForeignKey presentationExternalForeignKey = field.getDeclaredAnnotation(PresentationExternalForeignKey.class);
+                if (presentationExternalForeignKey != null) {
+                    String targetField = presentationExternalForeignKey.targetField();
+                    Class targetType = presentationExternalForeignKey.targetType();
 
                     Class hostClass = field.getDeclaringClass();
                     Field realTargetField = hostClass.getDeclaredField(targetField);
@@ -28,7 +28,7 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
                         targetType = field.getType();
                     }
                     ExternalForeignEntityFieldMetadataFacet facet = new ExternalForeignEntityFieldMetadataFacet(targetField,
-                        targetType, externalForeignKey.displayField());
+                        targetType, presentationExternalForeignKey.displayField());
                     fieldMetadata.addFacet(facet);
                     fieldMetadata.setTargetMetadataType(ExternalForeignEntityFieldMetadata.class);
                     return ProcessResult.HANDLED;

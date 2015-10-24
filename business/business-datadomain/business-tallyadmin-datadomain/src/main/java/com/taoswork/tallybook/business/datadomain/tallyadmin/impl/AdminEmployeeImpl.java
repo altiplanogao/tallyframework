@@ -14,8 +14,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.ExternalForeignKey;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -57,7 +56,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
 
     @Column(name = "PERSON_ID", nullable = false, unique = true)
     @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY, visibility = Visibility.HIDDEN_ALL)
-    @ExternalForeignKey(targetType= PersonImpl.class, targetField="person")
+    @PresentationExternalForeignKey(targetType= PersonImpl.class, targetField="person")
     protected Long personId;
     @Transient
     private transient Person person;

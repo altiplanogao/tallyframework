@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.resource;
 
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/10/20.
  */
-@PresentationEnum(unknownEnum = ResourceProtectionMode.DEFAULT_CHAR)
+@PresentationEnumClass(unknownEnum = ResourceProtectionMode.DEFAULT_CHAR)
 public enum ResourceProtectionMode implements IFriendlyEnum<String> {
     PassAll("all", "fit all"),
     PassAny("any", "fit any");

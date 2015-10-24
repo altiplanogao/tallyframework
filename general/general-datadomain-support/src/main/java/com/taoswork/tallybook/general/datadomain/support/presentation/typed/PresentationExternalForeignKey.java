@@ -7,7 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface EnumField {
+public @interface PresentationExternalForeignKey {
+    Class targetType() default void.class;
 
-    Class enumeration() default void.class;
+    String targetField() default "";
+
+    String displayField() default "name";
 }

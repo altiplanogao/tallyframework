@@ -4,9 +4,9 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.ICompany;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.CompanyType;
@@ -106,16 +106,16 @@ public class CompanyImpl implements ICompany {
 
     @Column(name = "TYPE")
     @PresentationField(visibility = Visibility.VISIBLE_ALL, fieldType = FieldType.ENUMERATION)
-    @EnumField(enumeration = CompanyType.class)
+    @PresentationEnum(enumeration = CompanyType.class)
     @Convert(converter = CompanyTypeToStringConverter.class)
     private CompanyType companyType;
 
     @PresentationField
-    @BooleanField(model = BooleanModel.YesNo)
+    @PresentationBoolean(model = BooleanModel.YesNo)
     protected boolean locked = true;
 
     @PresentationField
-    @BooleanField(model = BooleanModel.TrueFalse)
+    @PresentationBoolean(model = BooleanModel.TrueFalse)
     protected Boolean active = true;
 
     @Column(name = "TAX_CODE")

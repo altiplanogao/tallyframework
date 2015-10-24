@@ -7,7 +7,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
 import javax.persistence.*;
 
@@ -40,7 +40,7 @@ public class BusinessPartnerImpl implements BusinessPartner {
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + BusinessPartnerType.DEFAULT_CHAR + "'"
     )
     @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
-    @EnumField(enumeration = BusinessPartnerType.class)
+    @PresentationEnum(enumeration = BusinessPartnerType.class)
     @Convert(converter = BusinessPartnerTypeToStringConverter.class)
     protected BusinessPartnerType type;
 

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business.enumtype;
 
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/31.
  */
-@PresentationEnum(unknownEnum = "Unknown")
+@PresentationEnumClass(unknownEnum = "Unknown")
 public enum CompanyType implements IFriendlyEnum<String> {
     National("nat", "National"),
     Multinationals("mul", "Multinationals"),

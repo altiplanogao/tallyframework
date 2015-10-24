@@ -2,7 +2,7 @@ package com.taoswork.tallybook.testframework.domain.zoo.impl;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.EnumField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 import com.taoswork.tallybook.testframework.domain.common.Gender;
 import com.taoswork.tallybook.testframework.domain.common.GenderToStringConverter;
 import com.taoswork.tallybook.testframework.domain.zoo.Animal;
@@ -68,7 +68,7 @@ public abstract class AnimalImpl implements Animal {
 
     @Column(name = "GENDER")
     @PresentationField()
-    @EnumField(enumeration = Gender.class)
+    @PresentationEnum(enumeration = Gender.class)
     @Convert(converter = GenderToStringConverter.class)
     private Gender gender;
 

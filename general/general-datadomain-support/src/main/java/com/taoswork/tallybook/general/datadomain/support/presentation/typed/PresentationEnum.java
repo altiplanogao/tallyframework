@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface BooleanField {
-    BooleanModel model() default BooleanModel.YesNo;
+public @interface PresentationEnum {
+
+    Class enumeration() default void.class;
 }
