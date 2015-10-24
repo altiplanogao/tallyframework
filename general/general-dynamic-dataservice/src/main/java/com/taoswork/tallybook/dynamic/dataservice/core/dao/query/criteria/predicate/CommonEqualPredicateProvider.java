@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommonEqualPredicateProvider implements PredicateProvider {
@@ -24,9 +25,17 @@ public class CommonEqualPredicateProvider implements PredicateProvider {
         } else {
             path = fieldPathBuilder.buildPath(root, fullPropertyName);//.getPath(root, fullPropertyName, builder);
         }
-        if (directValues.size() == 1) {
+        if (directValues.size() == 0) {
+            return null;
+        }else if (directValues.size() == 1) {
             return builder.equal(path, directValues.get(0));
+        } else{
+            List<Predicate> predicates = new ArrayList<Predicate>();
+            for (Object directVal : directValues) {
+                Predicate predicate = builder.equal(path, directVal);
+                predicates.add(predicate);
+            }
+            return builder.or(predicates.toArray(new Predicate[predicates.size()]));
         }
-        return null;
     }
 }

@@ -17,11 +17,13 @@ class _ForeignKeyFieldHandler implements IFieldHandler {
         if (targetType != null) {
             PresentationForeignKey presentationForeignKey = field.getDeclaredAnnotation(PresentationForeignKey.class);
             String nameField = "name";
-            if(presentationForeignKey != null){
+            String idField = "id";
+            if (presentationForeignKey != null) {
                 nameField = presentationForeignKey.displayField();
+                idField = presentationForeignKey.idField();
             }
             Class fieldType = field.getType();
-            ForeignEntityFieldMetadataFacet facet = new ForeignEntityFieldMetadataFacet(fieldType, targetType, nameField);
+            ForeignEntityFieldMetadataFacet facet = new ForeignEntityFieldMetadataFacet(fieldType, targetType, idField, nameField);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(ForeignEntityFieldMetadata.class);
             return ProcessResult.HANDLED;

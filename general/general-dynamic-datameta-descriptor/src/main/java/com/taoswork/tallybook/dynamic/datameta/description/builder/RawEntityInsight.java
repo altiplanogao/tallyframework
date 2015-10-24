@@ -44,11 +44,9 @@ interface RawEntityInsight
 
     Map<String, IFieldInfo> getFields();
 
-
     RawTabInsight getTab(String tabName);
 
     Collection<? extends RawTabInsight> getTabs();
-
 
     Collection<String> getGridFields();
 

@@ -13,7 +13,6 @@ public class EmbeddedFieldMetadata extends BaseNonCollectionFieldMetadata implem
 
     public EmbeddedFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
-        this.basicFieldMetadataObject.setFieldTypeIfUnknown(FieldType.EMBEDDABLE);
 
         EmbeddedFieldMetadataFacet embeddedFieldFacet = (EmbeddedFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Embedded);
         this.classMetadata = embeddedFieldFacet.embeddedClassMetadata;
@@ -22,6 +21,11 @@ public class EmbeddedFieldMetadata extends BaseNonCollectionFieldMetadata implem
 
     public ClassMetadata getClassMetadata() {
         return classMetadata;
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.EMBEDDABLE;
     }
 
     @Override

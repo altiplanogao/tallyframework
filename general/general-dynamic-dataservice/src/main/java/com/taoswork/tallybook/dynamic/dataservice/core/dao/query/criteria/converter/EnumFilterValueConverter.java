@@ -10,17 +10,16 @@ public class EnumFilterValueConverter implements FilterValueConverter<IFriendlyE
 
     @Override
     public IFriendlyEnum convert(Class type, String stringValue) {
-        if(IFriendlyEnum.class.isAssignableFrom(type)){
+        if (IFriendlyEnum.class.isAssignableFrom(type)) {
             IFriendlyEnum enumVal = null;
-            try{
-                enumVal = (IFriendlyEnum)type.getField(stringValue).get(null);
+            try {
+                enumVal = (IFriendlyEnum) type.getField(stringValue).get(null);
                 return enumVal;
-            }catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
-        }else {
+        } else {
             return null;
         }
     }
-
 }

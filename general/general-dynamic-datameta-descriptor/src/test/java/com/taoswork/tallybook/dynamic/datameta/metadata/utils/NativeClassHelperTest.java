@@ -3,6 +3,8 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.utils;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AAA;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 import com.taoswork.tallybook.general.extension.utils.TPredicate;
+import com.taoswork.tallybook.testframework.general.CollectionAssert;
+import com.taoswork.tallybook.testframework.general.Converter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -84,24 +86,12 @@ public class NativeClassHelperTest {
     }
 
     private void ensureFields(List<Field> fieldMap, String... fieldNames) {
-        Set<String> fieldNameSets = new HashSet<String>();
-        for (String fieldName : fieldNames) {
-            fieldNameSets.add(fieldName);
-        }
-        ensureFields(fieldMap, fieldNameSets);
-    }
-
-    private void ensureFields(List<Field> fieldMap, Set<String> fieldNames) {
-        Assert.assertEquals(fieldMap.size(), fieldNames.size());
-        for (final String fieldName : fieldNames) {
-            Field field = CollectionUtility.find(fieldMap, new TPredicate<Field>() {
-                @Override
-                public boolean evaluate(Field notNullObj) {
-                    return notNullObj.getName().equals(fieldName);
-                }
-            });
-            Assert.assertNotNull(field);
-        }
+        CollectionAssert.ensureFullyCover(fieldMap, new Converter<Field, String>() {
+            @Override
+            public String convert(Field from) {
+                return from.getName();
+            }
+        }, fieldNames);
     }
 
     @Test

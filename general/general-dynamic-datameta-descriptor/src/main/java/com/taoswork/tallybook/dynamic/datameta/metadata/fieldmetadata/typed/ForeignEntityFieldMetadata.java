@@ -12,17 +12,23 @@ import static com.taoswork.tallybook.general.datadomain.support.presentation.cli
 
 public class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private Class entityType;
+    private String idField;
     private String displayField;
 
     public ForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ForeignEntityFieldMetadataFacet foreignFieldFacet = (ForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ForeignEntity);
         this.entityType = foreignFieldFacet.targetType;
+        this.idField = foreignFieldFacet.idField;
         this.displayField = foreignFieldFacet.displayField;
     }
 
     public Class getEntityType() {
         return entityType;
+    }
+
+    public String getIdField() {
+        return idField;
     }
 
     public String getDisplayField() {

@@ -1,7 +1,6 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.BasicFieldInfoBase;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
 
@@ -11,15 +10,16 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
- * Created by Gao Yuan on 2015/9/1.
+ * Created by Gao Yuan on 2015/10/24.
  */
-public class EnumFacet implements IFieldFacet {
+public class EnumFieldInfo extends BasicFieldInfoBase {
     private final List<String> options = new ArrayList<String>();
-    private final Map<String, String> friendlyNames = new HashMap<String, String>();
+    private final Map<String, String> optionsFriendly = new HashMap<String, String>();
     private String typeName;
     private String typeFriendlyName;
 
-    public EnumFacet(Class<?> enumClz) {
+    public EnumFieldInfo(String name, String friendlyName, Class<?> enumClz) {
+        super(name, friendlyName);
         if (!enumClz.isEnum()) {
             throw new IllegalArgumentException();
         }
@@ -38,7 +38,7 @@ public class EnumFacet implements IFieldFacet {
             for (Object val : enumVals) {
                 String key = val.toString();
                 String value = FriendlyNameHelper.makeFriendlyName4EnumValue(enumClz, val);
-                friendlyNames.put(key, value);
+                optionsFriendly.put(key, value);
                 options.add(key);
             }
         } catch (NoSuchMethodException e) {
@@ -50,27 +50,23 @@ public class EnumFacet implements IFieldFacet {
         }
     }
 
-    @Override
-    public FieldFacetType getType() {
-        return FieldFacetType.Enum;
-    }
-
     public Collection<String> getOptions() {
         return Collections.unmodifiableCollection(options);
     }
 
     public String getFriendlyName(String option) {
-        if (friendlyNames != null) {
-            return friendlyNames.get(option);
+        if (optionsFriendly != null) {
+            return optionsFriendly.get(option);
         }
         return null;
     }
 
     public void setFriendlyName(String option, String friendlyName) {
-        friendlyNames.put(option, friendlyName);
+        optionsFriendly.put(option, friendlyName);
     }
 
-    public Map<String, String> getFriendlyNames() {
-        return friendlyNames;
+    public Map<String, String> getOptionsFriendly() {
+        return optionsFriendly;
     }
+
 }

@@ -30,14 +30,14 @@ public class EnumEqualPredicateProvider implements PredicateProvider<String, IFr
             path = fieldPathBuilder.buildPath(root, fullPropertyName);//.getPath(root, fullPropertyName, builder);
         }
         if (directValues.size() == 1) {
-            return builder.equal(builder.lower(path), directValues.get(0));
+            return builder.equal(path, directValues.get(0));
         } else {
             List<Predicate> predicates = new ArrayList<Predicate>();
             for (IFriendlyEnum directVal : directValues) {
-                Predicate predicate = builder.equal(builder.lower(path), directVal);
+                Predicate predicate = builder.equal(path, directVal);
                 predicates.add(predicate);
             }
-            return builder.or(predicates.toArray(new Predicate[]{}));
+            return builder.or(predicates.toArray(new Predicate[predicates.size()]));
         }
     }
 }

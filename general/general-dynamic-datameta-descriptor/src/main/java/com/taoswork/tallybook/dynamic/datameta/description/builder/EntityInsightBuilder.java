@@ -2,24 +2,18 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.BooleanFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.StringFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.GroupMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.EnumFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.StringFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendly;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -59,31 +53,34 @@ final class EntityInsightBuilder {
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
-            IFieldInfoRW fieldInfo = InfoCreator.createFieldInfo(fieldMetadata);
-            entityInsight.addField(fieldInfo);
-
-            String fieldName = fieldInfo.getName();
-
-            if (fieldMetadata.showOnGrid() || fieldMetadata.isId()) {
-                entityInsight.addGridField(fieldName);
-            }
-
-            if (fieldMetadata.isId()) {
-                entityInsight.setIdField(fieldName);
-            }
-
+            RawGroupInsightRW groupInsight = null;
             {
                 //handle groups
                 String tabName = fieldMetadata.getTabName();
                 String groupName = fieldMetadata.getGroupName();
 
                 RawTabInsightRW tabInsight = entityInsight.getTabRW(tabName);
-                RawGroupInsightRW groupInsight = tabInsight.getGroupRW(groupName);
+                groupInsight = tabInsight.getGroupRW(groupName);
                 if (groupInsight == null) {
                     groupInsight = InfoCreator.createGroupInsight(classMetadata.getReadonlyGroupMetadataMap().get(groupName));
                     tabInsight.addGroup(groupInsight);
                 }
-                groupInsight.addField(fieldInfo.getName());
+            }
+
+            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(fieldMetadata);
+            for(IFieldInfo fi : fieldInfos){
+                entityInsight.addField(fi);
+                String fieldName = fi.getName();
+                if(fi instanceof IBasicFieldInfo){
+                    IBasicFieldInfo bfi = (IBasicFieldInfo) fi;
+                    if(bfi.isGridVisible() || bfi.isIdField()){
+                        entityInsight.addGridField(fieldName);
+                    }
+                    if(bfi.isIdField()){
+                        entityInsight.setIdField(fieldName);
+                    }
+                }
+                groupInsight.addField(fieldName);
             }
         }
 
@@ -107,39 +104,6 @@ final class EntityInsightBuilder {
             RawTabInsightRW tabInsight = new RawTabInsightImpl();
             copyOrderedFriendlyMetadata(tabMetadata, tabInsight);
             return tabInsight;
-        }
-
-        static IFieldInfoRW createFieldInfo(IFieldMetadata fieldMetadata) {
-            IFieldInfoRW fieldInfo = new IFieldInfoImpl();
-            copyOrderedFriendlyMetadata(fieldMetadata, fieldInfo);
-
-            fieldInfo.setVisibility(fieldMetadata.getVisibility());
-            fieldInfo.setRequired(fieldMetadata.isRequired());
-            fieldInfo.setNameField(fieldMetadata.isNameField());
-            fieldInfo.setFieldType(fieldMetadata.getFieldType());
-
-            if (fieldMetadata instanceof EnumFieldMetadata) {
-                IFieldFacet enumFacetInfo = new EnumFacet(((EnumFieldMetadata) fieldMetadata).getEnumerationType());
-                fieldInfo.addFacet(enumFacetInfo);
-            } else if (fieldMetadata instanceof BooleanFieldMetadata) {
-                BooleanFacet boolFacetInfo = new BooleanFacet();
-                switch (((BooleanFieldMetadata) fieldMetadata).getModel()) {
-                    case TrueFalse:
-                        boolFacetInfo.setAsTrueFalse();
-                        break;
-                    case YesNo:
-                        boolFacetInfo.setAsYesNo();
-                        break;
-                    default:
-                        throw new IllegalStateException("Un expected Boolean model");
-                }
-                fieldInfo.addFacet(boolFacetInfo);
-            } else if (fieldMetadata instanceof StringFieldMetadata) {
-                StringFacet stringFacet = new StringFacet(((StringFieldMetadata) fieldMetadata).getLength());
-                fieldInfo.addFacet(stringFacet);
-            }
-
-            return fieldInfo;
         }
 
         static void copyOrderedFriendlyMetadata(IFriendlyOrdered source, NamedOrderedInfoRW target) {

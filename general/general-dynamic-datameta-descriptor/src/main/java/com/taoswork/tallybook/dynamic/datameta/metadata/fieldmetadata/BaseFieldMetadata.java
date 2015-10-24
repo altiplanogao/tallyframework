@@ -25,9 +25,7 @@ abstract class BaseFieldMetadata implements IFieldMetadata, Serializable {
         this.basicFieldMetadataObject = SerializationUtils.clone(bfmo);
     }
 
-    protected FieldType overrideUnknownFieldType(){
-        return FieldType.UNKNOWN;
-    }
+    protected abstract FieldType overrideUnknownFieldType();
 
     @Override
     public String getTabName() {

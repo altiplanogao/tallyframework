@@ -53,6 +53,14 @@ public abstract class Visibility {
         return BitUtility.containsAll(visibility, FORM_VISIBALE);
     }
 
+    public static int and(int va, int vb){
+        return va & vb;
+    }
+
+    public static int or(int va, int vb){
+        return va | vb;
+    }
+
     public static String makeString(int visibility) {
         StringBuilder sb = new StringBuilder("Visible:");
 

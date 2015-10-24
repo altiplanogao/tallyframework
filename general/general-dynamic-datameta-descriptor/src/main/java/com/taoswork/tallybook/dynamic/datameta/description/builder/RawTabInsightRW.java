@@ -10,5 +10,4 @@ interface RawTabInsightRW
     void addGroup(RawGroupInsightRW groupInfoByComp);
 
     RawGroupInsightRW getGroupRW(String groupName);
-
 }

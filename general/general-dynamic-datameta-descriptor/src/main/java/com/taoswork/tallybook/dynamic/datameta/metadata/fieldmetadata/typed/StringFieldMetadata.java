@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.StringFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 public class StringFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final int length;
@@ -17,6 +18,11 @@ public class StringFieldMetadata extends BaseNonCollectionFieldMetadata implemen
         } else {
             this.length = 255;
         }
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.STRING;
     }
 
     public int getLength() {

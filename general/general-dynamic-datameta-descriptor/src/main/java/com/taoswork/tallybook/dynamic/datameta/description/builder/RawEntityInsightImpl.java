@@ -2,8 +2,9 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.IFieldInfoRW;
 
 import java.util.*;
 
@@ -23,7 +24,7 @@ class RawEntityInsightImpl
     private transient boolean dirty = false;
 
     @Override
-    public void addField(IFieldInfoRW fieldInfo) {
+    public void addField(IFieldInfo fieldInfo) {
         fields.put(fieldInfo.getName(), fieldInfo);
         dirty = true;
     }
@@ -115,30 +116,33 @@ class RawEntityInsightImpl
                 fieldsOrdered.put(new OrderedName(entry.getKey(), IFieldInfo.getOrder()), IFieldInfo);
             }
             {
-                IFieldInfo firstIFieldInfo = null;
+                IFieldInfo firstFieldInfo = null;
                 for (Map.Entry<OrderedName, IFieldInfo> fieldInfoEntry : fieldsOrdered.entrySet()) {
-                    IFieldInfo IFieldInfo = fieldInfoEntry.getValue();
-                    if (IFieldInfo == null) {
+                    IFieldInfo fieldInfo = fieldInfoEntry.getValue();
+                    if (fieldInfo == null) {
                         continue;
                     }
-                    if (firstIFieldInfo == null) {
-                        firstIFieldInfo = IFieldInfo;
-                    }
-                    if (IFieldInfo.isIdField()) {
-                        if (this.idField == null) {
-                            this.idField = IFieldInfo.getName();
+                    if(fieldInfo instanceof IBasicFieldInfo){
+                        IBasicFieldInfo basicFieldInfo = (IBasicFieldInfo) fieldInfo;
+                        if (firstFieldInfo == null) {
+                            firstFieldInfo = fieldInfo;
                         }
-                    }
-                    if (IFieldInfo.isNameField() || (IFieldInfo.getName().toLowerCase().equals("name"))) {
-                        if (this.nameField == null) {
-                            this.nameField = IFieldInfo.getName();
+                        if (basicFieldInfo.isIdField()) {
+                            if (this.idField == null) {
+                                this.idField = fieldInfo.getName();
+                            }
+                        }
+                        if (basicFieldInfo.isNameField() || (basicFieldInfo.getName().toLowerCase().equals("name"))) {
+                            if (this.nameField == null) {
+                                this.nameField = fieldInfo.getName();
+                            }
                         }
                     }
                 }
                 if (null != this.nameField) {
                     primarySearchField = this.nameField;
-                } else if (null != firstIFieldInfo) {
-                    primarySearchField = firstIFieldInfo.getName();
+                } else if (null != firstFieldInfo) {
+                    primarySearchField = firstFieldInfo.getName();
                 } else {
                     primarySearchField = null;
                 }

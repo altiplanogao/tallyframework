@@ -7,6 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 
+import javax.persistence.Convert;
 import java.lang.reflect.Field;
 
 /**
@@ -32,6 +33,14 @@ class _BooleanFieldHandler implements IFieldHandler {
             } else {
                 booleanFieldFacet = new BooleanFieldMetadataFacet();
             }
+//            Convert convert = field.getDeclaredAnnotation(Convert.class);
+//            if (convert != null && BooleanToStringConverter.class.equals(convert.converter())) {
+//                //Configuration ok
+//            } else {
+//                Class declaringClass = field.getDeclaringClass();
+//                String fieldName = "Boolean field " + declaringClass.getName() + "." + field.getName();
+//                throw new IllegalArgumentException(fieldName + " should be marked with @Convert(converter = BooleanToStringConverter.class)");
+//            }
             fieldMetadata.addFacet(booleanFieldFacet);
             fieldMetadata.setTargetMetadataType(BooleanFieldMetadata.class);
             return ProcessResult.HANDLED;

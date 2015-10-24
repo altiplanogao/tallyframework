@@ -28,17 +28,16 @@ public class BooleanFilterValueConverter implements FilterValueConverter<Boolean
 
     @Override
     public Boolean convert(Class type, String stringValue) {
-        if(Boolean.class.isAssignableFrom(type)){
+        if (Boolean.class.isAssignableFrom(type) || boolean.class.equals(type)) {
             stringValue = stringValue.toLowerCase();
-            if(trues.contains(stringValue)){
+            if (trues.contains(stringValue)) {
                 return true;
-            }else if(falses.contains(stringValue)){
+            } else if (falses.contains(stringValue)) {
                 return false;
             }
             return null;
-        }else {
+        } else {
             return null;
         }
     }
-
 }

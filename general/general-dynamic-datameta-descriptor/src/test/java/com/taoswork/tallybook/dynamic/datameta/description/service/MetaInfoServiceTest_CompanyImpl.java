@@ -1,9 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.EnumFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
@@ -13,10 +14,13 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl;
+import com.taoswork.tallybook.testframework.general.CollectionAssert;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/6/26.
@@ -41,9 +45,12 @@ public class MetaInfoServiceTest_CompanyImpl {
         ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
+
+        Assert.assertEquals(classMetadata.getReadonlyFieldMetadataMap().size(), 16);
+        Assert.assertEquals(entityInfo.getFields().size(), 19); //Address expanded
+
         if (entityInfo != null) {
             Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
-            Assert.assertEquals(entityInfo.getFields().size(), 16);
 
             Assert.assertNotNull(entityInfo);
             ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
@@ -60,14 +67,21 @@ public class MetaInfoServiceTest_CompanyImpl {
             ITabInfo contactTab = tabInsights[2];
             Assert.assertEquals(contactTab.getName(), "Contact");
             Assert.assertEquals(contactTab.getGroups().size(), 1);
+            IGroupInfo generalGp = contactTab.getGroups().get(0);
+            Assert.assertNotNull(generalGp);
+            Collection<String> contactGeneralFields = generalGp.getFields();
+            Assert.assertEquals(contactGeneralFields.size(), 6);
+            CollectionAssert.ensureFullyCover(contactGeneralFields,
+                "email", "phone",
+                "address.street","address.city","address.state","address.zip");
 
-            Assert.assertEquals(entityInfo.getGridFields().size(), 12);
+            Assert.assertEquals(entityInfo.getGridFields().size(), 14);
         }
 
         IEntityInfo entityGridInfo = metaInfoService.generateEntityInfo(classMetadata, EntityInfoType.Grid);
         Assert.assertNotNull(entityGridInfo);
         if (entityGridInfo != null) {
-            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 12);
+            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 14);
         }
     }
 
@@ -77,10 +91,10 @@ public class MetaInfoServiceTest_CompanyImpl {
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
-            IFieldInfo IFieldInfo = entityInfo.getField("companyType");
-            EnumFacet facet = (EnumFacet) IFieldInfo.getFacet(FieldFacetType.Enum);
-
-            Assert.assertEquals(facet.getOptions().size(), 4);
+            IFieldInfo fieldInfo = entityInfo.getField("companyType");
+            EnumFieldInfo enumFieldInfo = (EnumFieldInfo)fieldInfo;
+            Assert.assertNotNull(enumFieldInfo);
+            Assert.assertEquals(enumFieldInfo.getOptions().size(), 4);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business.impl;
 
+import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -110,10 +111,16 @@ public class CompanyImpl implements ICompany {
     @Convert(converter = CompanyTypeToStringConverter.class)
     private CompanyType companyType;
 
+    @Column(name = "LOCKED", nullable = false, length = 2,
+        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+    @Convert(converter = BooleanToStringConverter.class)
     @PresentationField
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected boolean locked = true;
 
+    @Column(name = "ACTIVE", nullable = false, length = 2,
+        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+    @Convert(converter = BooleanToStringConverter.class)
     @PresentationField
     @PresentationBoolean(model = BooleanModel.TrueFalse)
     protected Boolean active = true;

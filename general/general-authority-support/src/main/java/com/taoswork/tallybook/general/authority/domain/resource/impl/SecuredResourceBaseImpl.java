@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.resource.impl;
 
+import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
@@ -57,7 +58,9 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
     @Convert(converter = ProtectionModeToStringConverter.class)
     protected ResourceProtectionMode protectionMode;
 
-    @Column(name = "MASTER_CTRL")
+    @Column(name = "MASTER_CTRL", nullable = false, length = 2,
+        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+    @Convert(converter = BooleanToStringConverter.class)
     @PresentationField(order = 5, fieldType = FieldType.BOOLEAN)
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected boolean masterControlled = true;

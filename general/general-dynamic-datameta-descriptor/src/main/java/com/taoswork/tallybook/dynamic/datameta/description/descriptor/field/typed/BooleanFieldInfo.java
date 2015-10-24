@@ -1,7 +1,8 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.BasicFieldInfoBase;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.Collections;
@@ -9,15 +10,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Gao Yuan on 2015/9/1.
+ * Created by Gao Yuan on 2015/10/24.
  */
-public class BooleanFacet implements IFieldFacet {
+public class BooleanFieldInfo extends BasicFieldInfoBase {
     private final static String TRUE = "t";
     private final static String FALSE = "f";
     private final Map<String, String> options = new HashMap<String, String>();
 
-    public BooleanFacet() {
-        setAsTrueFalse();
+    public BooleanFieldInfo(String name, String friendlyName, BooleanModel booleanModel) {
+        super(name, friendlyName);
+        switch (booleanModel) {
+            case TrueFalse:
+                setAsTrueFalse();
+                break;
+            case YesNo:
+                setAsYesNo();
+                break;
+            default:
+                throw new IllegalStateException("Un expected Boolean model");
+        }
     }
 
     public void setAsTrueFalse() {
@@ -28,11 +39,6 @@ public class BooleanFacet implements IFieldFacet {
     public void setAsYesNo() {
         options.put(TRUE, "general.boolean.yes");
         options.put(FALSE, "general.boolean.no");
-    }
-
-    @Override
-    public FieldFacetType getType() {
-        return FieldFacetType.Boolean;
     }
 
     public void setOptionFor(boolean value, String friendlyValue) {
@@ -50,4 +56,5 @@ public class BooleanFacet implements IFieldFacet {
     public String getOption(boolean value) {
         return MapUtils.getString(options, value ? TRUE : FALSE, value ? "true" : "false");
     }
+
 }

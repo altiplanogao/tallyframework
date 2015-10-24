@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.EnumFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 public class EnumFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final Class enumerationType;
@@ -17,6 +18,11 @@ public class EnumFieldMetadata extends BaseNonCollectionFieldMetadata implements
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    protected FieldType overrideUnknownFieldType() {
+        return FieldType.ENUMERATION;
     }
 
     public Class getEnumerationType() {
