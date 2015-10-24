@@ -6,8 +6,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.face
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.StringFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.GroupMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
@@ -59,7 +59,7 @@ final class EntityInsightBuilder {
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
-            FieldInfoRW fieldInfo = InfoCreator.createFieldInfo(fieldMetadata);
+            IFieldInfoRW fieldInfo = InfoCreator.createFieldInfo(fieldMetadata);
             entityInsight.addField(fieldInfo);
 
             String fieldName = fieldInfo.getName();
@@ -109,8 +109,8 @@ final class EntityInsightBuilder {
             return tabInsight;
         }
 
-        static FieldInfoRW createFieldInfo(IFieldMetadata fieldMetadata) {
-            FieldInfoRW fieldInfo = new FieldInfoImpl();
+        static IFieldInfoRW createFieldInfo(IFieldMetadata fieldMetadata) {
+            IFieldInfoRW fieldInfo = new IFieldInfoImpl();
             copyOrderedFriendlyMetadata(fieldMetadata, fieldInfo);
 
             fieldInfo.setVisibility(fieldMetadata.getVisibility());

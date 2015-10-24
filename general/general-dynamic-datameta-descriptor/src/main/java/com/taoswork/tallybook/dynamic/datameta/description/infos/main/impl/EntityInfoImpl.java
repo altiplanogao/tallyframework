@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
@@ -25,28 +25,28 @@ public class EntityInfoImpl
     private String nameField;
     private String primarySearchField;
 
-    private Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
+    private Map<String, IFieldInfo> fields = new HashMap<String, IFieldInfo>();
     private List<ITabInfo> tabs = new ArrayList<ITabInfo>();
 
     private List<String> gridFields = new ArrayList<String>();
 
-    public EntityInfoImpl(Class entityType, boolean containsHierarchy, List<ITabInfo> tabs, Map<String, FieldInfo> fields) {
+    public EntityInfoImpl(Class entityType, boolean containsHierarchy, List<ITabInfo> tabs, Map<String, IFieldInfo> fields) {
         this.containsHierarchy = containsHierarchy;
         this.entityType = entityType;
         this.tabs = tabs;
-        this.fields = new HashMap<String, FieldInfo>();
-        for (Map.Entry<String, FieldInfo> field : fields.entrySet()) {
+        this.fields = new HashMap<String, IFieldInfo>();
+        for (Map.Entry<String, IFieldInfo> field : fields.entrySet()) {
             this.fields.put(field.getKey(), field.getValue());
         }
     }
 
     @Override
-    public Map<String, FieldInfo> getFields() {
+    public Map<String, IFieldInfo> getFields() {
         return fields;
     }
 
     @Override
-    public void setFields(Map<String, FieldInfo> fields) {
+    public void setFields(Map<String, IFieldInfo> fields) {
         this.fields = fields;
     }
 
@@ -101,7 +101,7 @@ public class EntityInfoImpl
     }
 
     @Override
-    public FieldInfo getField(String fieldName) {
+    public IFieldInfo getField(String fieldName) {
         return this.fields.get(fieldName);
     }
 

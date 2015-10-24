@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public interface FieldInfo extends NamedOrderedInfo {
+public interface IFieldInfo extends NamedOrderedInfo {
     int getVisibility();
 
     boolean isGridVisible();

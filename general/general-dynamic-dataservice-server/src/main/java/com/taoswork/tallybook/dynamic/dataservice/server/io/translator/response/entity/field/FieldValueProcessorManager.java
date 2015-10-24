@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.PhoneFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.SimpleFieldValueProcessor;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.entity.field.processor.UnknownFieldValueProcessor;
@@ -41,8 +41,8 @@ public class FieldValueProcessorManager {
         return _instance;
     }
 
-    public IFieldValueProcessor getProperProcessor(FieldInfo fieldInfo){
-        FieldType fieldType = fieldInfo.getFieldType();
+    public IFieldValueProcessor getProperProcessor(IFieldInfo IFieldInfo){
+        FieldType fieldType = IFieldInfo.getFieldType();
         if(basicFieldTypes.contains(fieldType)){
             return processors.get(SimpleFieldValueProcessor.PROCESSOR_NAME);
         }

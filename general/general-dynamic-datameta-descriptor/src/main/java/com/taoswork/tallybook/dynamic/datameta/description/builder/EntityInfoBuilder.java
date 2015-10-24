@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.GroupInfoImpl;
@@ -36,7 +36,7 @@ public final class EntityInfoBuilder {
     }
 
     private static EntityInfo build(Class entityType, RawEntityInsight rawEntityInsight, boolean withHierarchy) {
-        Map<String, FieldInfo> fields = rawEntityInsight.getFields();
+        Map<String, IFieldInfo> fields = rawEntityInsight.getFields();
         EntityInfoImpl entityInfo = null;
         {//make tabs
             List<ITabInfo> tabTemp = new ArrayList<ITabInfo>();

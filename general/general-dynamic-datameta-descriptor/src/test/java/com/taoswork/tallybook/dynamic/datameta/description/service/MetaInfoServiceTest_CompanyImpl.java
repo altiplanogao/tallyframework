@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
@@ -77,8 +77,8 @@ public class MetaInfoServiceTest_CompanyImpl {
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         if (entityInfo != null) {
-            FieldInfo fieldInfo = entityInfo.getField("companyType");
-            EnumFacet facet = (EnumFacet)fieldInfo.getFacet(FieldFacetType.Enum);
+            IFieldInfo IFieldInfo = entityInfo.getField("companyType");
+            EnumFacet facet = (EnumFacet) IFieldInfo.getFacet(FieldFacetType.Enum);
 
             Assert.assertEquals(facet.getOptions().size(), 4);
         }

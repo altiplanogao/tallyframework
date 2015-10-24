@@ -2,8 +2,8 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.OrderedName;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ class RawEntityInsightImpl
     extends NamedInfoImpl
     implements RawEntityInsightRW {
 
-    private final Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
+    private final Map<String, IFieldInfo> fields = new HashMap<String, IFieldInfo>();
     private final Map<String, RawTabInsightRW> tabs = new HashMap<String, RawTabInsightRW>();
     private final Set<String> gridFields = new HashSet<String>();
     private String idField;
@@ -23,7 +23,7 @@ class RawEntityInsightImpl
     private transient boolean dirty = false;
 
     @Override
-    public void addField(FieldInfoRW fieldInfo) {
+    public void addField(IFieldInfoRW fieldInfo) {
         fields.put(fieldInfo.getName(), fieldInfo);
         dirty = true;
     }
@@ -35,12 +35,12 @@ class RawEntityInsightImpl
     }
 
     @Override
-    public FieldInfo getField(String fieldName) {
+    public IFieldInfo getField(String fieldName) {
         return fields.get(fieldName);
     }
 
     @Override
-    public Map<String, FieldInfo> getFields() {
+    public Map<String, IFieldInfo> getFields() {
         return Collections.unmodifiableMap(fields);
     }
 
@@ -55,8 +55,8 @@ class RawEntityInsightImpl
     }
 
     @Override
-    public FieldInfoRW getFieldRW(String fieldName) {
-        FieldInfoRW fieldInfoRW = (FieldInfoRW) fields.get(fieldName);
+    public IFieldInfoRW getFieldRW(String fieldName) {
+        IFieldInfoRW fieldInfoRW = (IFieldInfoRW) fields.get(fieldName);
         dirty = true;
         return fieldInfoRW;
     }
@@ -109,36 +109,36 @@ class RawEntityInsightImpl
     @Override
     public void finishWriting() {
         if (dirty) {
-            Map<OrderedName, FieldInfo> fieldsOrdered = new TreeMap<OrderedName, FieldInfo>(new OrderedName.OrderedComparator());
-            for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
-                FieldInfo fieldInfo = entry.getValue();
-                fieldsOrdered.put(new OrderedName(entry.getKey(), fieldInfo.getOrder()), fieldInfo);
+            Map<OrderedName, IFieldInfo> fieldsOrdered = new TreeMap<OrderedName, IFieldInfo>(new OrderedName.OrderedComparator());
+            for (Map.Entry<String, IFieldInfo> entry : fields.entrySet()) {
+                IFieldInfo IFieldInfo = entry.getValue();
+                fieldsOrdered.put(new OrderedName(entry.getKey(), IFieldInfo.getOrder()), IFieldInfo);
             }
             {
-                FieldInfo firstFieldInfo = null;
-                for (Map.Entry<OrderedName, FieldInfo> fieldInfoEntry : fieldsOrdered.entrySet()) {
-                    FieldInfo fieldInfo = fieldInfoEntry.getValue();
-                    if (fieldInfo == null) {
+                IFieldInfo firstIFieldInfo = null;
+                for (Map.Entry<OrderedName, IFieldInfo> fieldInfoEntry : fieldsOrdered.entrySet()) {
+                    IFieldInfo IFieldInfo = fieldInfoEntry.getValue();
+                    if (IFieldInfo == null) {
                         continue;
                     }
-                    if (firstFieldInfo == null) {
-                        firstFieldInfo = fieldInfo;
+                    if (firstIFieldInfo == null) {
+                        firstIFieldInfo = IFieldInfo;
                     }
-                    if (fieldInfo.isIdField()) {
+                    if (IFieldInfo.isIdField()) {
                         if (this.idField == null) {
-                            this.idField = fieldInfo.getName();
+                            this.idField = IFieldInfo.getName();
                         }
                     }
-                    if (fieldInfo.isNameField() || (fieldInfo.getName().toLowerCase().equals("name"))) {
+                    if (IFieldInfo.isNameField() || (IFieldInfo.getName().toLowerCase().equals("name"))) {
                         if (this.nameField == null) {
-                            this.nameField = fieldInfo.getName();
+                            this.nameField = IFieldInfo.getName();
                         }
                     }
                 }
                 if (null != this.nameField) {
                     primarySearchField = this.nameField;
-                } else if (null != firstFieldInfo) {
-                    primarySearchField = firstFieldInfo.getName();
+                } else if (null != firstIFieldInfo) {
+                    primarySearchField = firstIFieldInfo.getName();
                 } else {
                     primarySearchField = null;
                 }

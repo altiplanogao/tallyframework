@@ -1,15 +1,15 @@
 package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
 
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
 interface RawEntityInsightRW extends NamedInfoRW, RawEntityInsight {
-    void addField(FieldInfoRW fieldInfo);
+    void addField(IFieldInfoRW fieldInfo);
 
-    FieldInfoRW getFieldRW(String fieldName);
+    IFieldInfoRW getFieldRW(String fieldName);
 
     void addTab(RawTabInsightRW tabInfo);
 

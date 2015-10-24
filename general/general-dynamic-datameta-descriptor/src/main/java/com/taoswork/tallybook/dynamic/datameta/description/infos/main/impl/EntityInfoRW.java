@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 
@@ -18,7 +18,7 @@ public interface EntityInfoRW extends EntityInfo, NamedInfoRW {
 
     void setPrimarySearchField(String primarySearchField);
 
-    void setFields(Map<String, FieldInfo> fields);
+    void setFields(Map<String, IFieldInfo> fields);
 
     void setTabs(List<ITabInfo> tabs);
 

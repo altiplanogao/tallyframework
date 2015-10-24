@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
@@ -16,17 +16,17 @@ public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     public final String idField;
     public final String nameField;
     public final String primarySearchField;
-    public final List<FieldInfo> fields;
+    public final List<IFieldInfo> fields;
 
     public EntityGridInfo(EntityInfo entityInfo) {
         super(entityInfo);
         idField = entityInfo.getIdField();
         nameField = entityInfo.getNameField();
         primarySearchField = entityInfo.getPrimarySearchField();
-        fields = new ArrayList<FieldInfo>();
-        Map<String, FieldInfo> fieldMap = entityInfo.getFields();
+        fields = new ArrayList<IFieldInfo>();
+        Map<String, IFieldInfo> fieldMap = entityInfo.getFields();
         for (String gridField : entityInfo.getGridFields()) {
-            FieldInfo field = fieldMap.get(gridField);
+            IFieldInfo field = fieldMap.get(gridField);
             fields.add(field);
         }
     }

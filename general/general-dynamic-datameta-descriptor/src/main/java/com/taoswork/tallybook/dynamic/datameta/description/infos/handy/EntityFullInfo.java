@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
@@ -17,7 +17,7 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     public final String idField;
     public final String nameField;
     public final String primarySearchField;
-    public final Map<String, FieldInfo> fields;
+    public final Map<String, IFieldInfo> fields;
     public final List<ITabInfo> tabs;
     public final List<String> gridFields;
 

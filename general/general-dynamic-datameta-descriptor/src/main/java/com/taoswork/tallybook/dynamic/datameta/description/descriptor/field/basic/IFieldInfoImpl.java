@@ -1,9 +1,8 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.IFieldFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -16,9 +15,9 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-public class FieldInfoImpl
+public class IFieldInfoImpl
     extends NamedOrderedInfoImpl
-    implements FieldInfoRW {
+    implements IFieldInfoRW {
 
     public int visibility = Visibility.DEFAULT;
     public boolean nameField = false;
@@ -32,7 +31,7 @@ public class FieldInfoImpl
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<FieldFacetType, IFieldFacet> facets;
 
-    public FieldInfoImpl() {
+    public IFieldInfoImpl() {
         visibility = Visibility.DEFAULT;
     }
 
@@ -100,7 +99,7 @@ public class FieldInfoImpl
     }
 
     @Override
-    public void merge(FieldInfo another) {
+    public void merge(IFieldInfo another) {
         if (this.equals(another)) {
             return;
         }
@@ -113,7 +112,7 @@ public class FieldInfoImpl
     }
 
     @Override
-    public FieldInfo setSupportSort(boolean supportSort) {
+    public IFieldInfo setSupportSort(boolean supportSort) {
         this.supportSort = supportSort;
         return this;
     }
@@ -124,7 +123,7 @@ public class FieldInfoImpl
     }
 
     @Override
-    public FieldInfo setSupportFilter(boolean supportFilter) {
+    public IFieldInfo setSupportFilter(boolean supportFilter) {
         this.supportFilter = supportFilter;
         return this;
     }

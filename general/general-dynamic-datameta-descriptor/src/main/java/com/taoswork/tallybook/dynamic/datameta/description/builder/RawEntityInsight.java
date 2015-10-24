@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -40,9 +40,9 @@ import java.util.Map;
 interface RawEntityInsight
     extends NamedInfo, Serializable {
 
-    FieldInfo getField(String fieldName);
+    IFieldInfo getField(String fieldName);
 
-    Map<String, FieldInfo> getFields();
+    Map<String, IFieldInfo> getFields();
 
 
     RawTabInsight getTab(String tabName);

@@ -2,10 +2,10 @@ package com.taoswork.tallybook.dynamic.dataservice.core.description.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.FieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.BooleanFacet;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.facet.basic.EnumFacet;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.impl.FieldInfoRW;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.basic.IFieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
@@ -38,20 +38,20 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
         }else {
             LOGGER.error("new EntityInfo by Clone has un-writeable IEntityInfo {}", freshEntityInfo);
         }
-        for (FieldInfo fieldInfo : freshEntityInfo.getFields().values()) {
-            makeFieldInfoFriendly(fieldInfo, locale);
+        for (IFieldInfo IFieldInfo : freshEntityInfo.getFields().values()) {
+            makeFieldInfoFriendly(IFieldInfo, locale);
         }
         for(ITabInfo tabInfo : freshEntityInfo.getTabs()){
             if (tabInfo instanceof NamedInfoRW) {
                 makeNamedInfoFriendly(tabInfo, (NamedInfoRW)tabInfo, locale);
             } else {
-                LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", tabInfo);
+                LOGGER.error("new EntityInfo by Clone has un-writeable IFieldInfo {}", tabInfo);
             }
             for(IGroupInfo groupInfo : tabInfo.getGroups()){
                 if (groupInfo instanceof NamedInfoRW) {
                     makeNamedInfoFriendly(groupInfo, (NamedInfoRW)groupInfo, locale);
                 } else {
-                    LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", tabInfo);
+                    LOGGER.error("new EntityInfo by Clone has un-writeable IFieldInfo {}", tabInfo);
                 }
             }
         }
@@ -75,11 +75,11 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
         target.setFriendlyName(newFriendly);
     }
 
-    private void makeFieldInfoFriendly(FieldInfo fieldInfo, Locale locale){
-        if (fieldInfo instanceof FieldInfoRW) {
-            makeNamedInfoFriendly(fieldInfo, (NamedInfoRW)fieldInfo, locale);
+    private void makeFieldInfoFriendly(IFieldInfo IFieldInfo, Locale locale){
+        if (IFieldInfo instanceof IFieldInfoRW) {
+            makeNamedInfoFriendly(IFieldInfo, (NamedInfoRW) IFieldInfo, locale);
 
-            EnumFacet enumFacet = (EnumFacet)fieldInfo.getFacet(FieldFacetType.Enum);
+            EnumFacet enumFacet = (EnumFacet) IFieldInfo.getFacet(FieldFacetType.Enum);
             if(enumFacet != null){
                 EnumFacet freshEnumFacet = CloneUtility.makeClone(enumFacet);
                 for(String key : freshEnumFacet.getOptions()){
@@ -87,10 +87,10 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
                     String newVal = entityMessageSource.getMessage(val, null, val, locale);
                     freshEnumFacet.setFriendlyName(key, newVal);
                 }
-                ((FieldInfoRW)fieldInfo).addFacet(freshEnumFacet);
+                ((IFieldInfoRW) IFieldInfo).addFacet(freshEnumFacet);
             }
 
-            BooleanFacet booleanFacet = (BooleanFacet)fieldInfo.getFacet(FieldFacetType.Boolean);
+            BooleanFacet booleanFacet = (BooleanFacet) IFieldInfo.getFacet(FieldFacetType.Boolean);
             if(booleanFacet != null){
                 BooleanFacet freshBooleanFacet = CloneUtility.makeClone(booleanFacet);
                 for(int x = 0 ; x < 2 ; ++x){
@@ -99,10 +99,10 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
                     String newVal = entityMessageSource.getMessage(val, null, val, locale);
                     freshBooleanFacet.setOptionFor(v, newVal);
                 }
-                ((FieldInfoRW)fieldInfo).addFacet(freshBooleanFacet);
+                ((IFieldInfoRW) IFieldInfo).addFacet(freshBooleanFacet);
             }
         } else {
-            LOGGER.error("new EntityInfo by Clone has un-writeable FieldInfo {}", fieldInfo);
+            LOGGER.error("new EntityInfo by Clone has un-writeable IFieldInfo {}", IFieldInfo);
         }
     }
 }
