@@ -49,7 +49,7 @@ public class MetadataServiceImpl implements MetadataService {
             final Class rootClz = entityClassTree.getData().clz;
             classProcessor.process(rootClz, classTreeMetadata);
             if(includeSuper){
-                absorbSuper(rootClz, classTreeMetadata);
+                innerAbsorbSuper(rootClz, classTreeMetadata);
             }
         }
 
@@ -81,40 +81,21 @@ public class MetadataServiceImpl implements MetadataService {
             classTreeMetadata.absorb(classMetadata);
         }
 
+        publishReferencedEntityMetadataIfNot(classTreeMetadata);
         return classTreeMetadata;
     }
 
     @Override
     public ClassMetadata generateMetadata(Class clz) {
-        String clzName = clz.getName();
-        ClassMetadata classMetadata = innerGenerateMetadata(clz);
-        publishReferencedEntityMetadataIfNot(classMetadata);
-        return classMetadata;
+        return generateMetadata(clz, false);
     }
 
     @Override
-    public ClassMetadata generateMetadata(Class clz, boolean handleSuper) {
-        if(!handleSuper){
-            return generateMetadata(clz);
-        }
-        ClassMetadata mergedMetadata = generateMetadata(clz).clone();
-        absorbSuper(clz, mergedMetadata);
+    public ClassMetadata generateMetadata(Class clz, boolean includeSuper) {
+        ClassMetadata classMetadata = innerGenerateMetadata(clz, includeSuper);
+        publishReferencedEntityMetadataIfNot(classMetadata);
 
-        return mergedMetadata;
-    }
-
-    private void absorbSuper(Class clz, ClassMetadata mergedMetadata) {
-        final List<ClassMetadata> tobeMerged = new ArrayList<ClassMetadata>();
-
-        Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
-        for (Class superClz : superClasses) {
-            ClassMetadata classMetadata = generateMetadata(superClz);
-            tobeMerged.add(classMetadata);
-        }
-
-        for(ClassMetadata classMetadata : tobeMerged){
-            mergedMetadata.absorbSuper(classMetadata);
-        }
+        return classMetadata;
     }
 
     @Override
@@ -125,6 +106,16 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public void clearCache() {
         classMetadataCache.clear();
+    }
+
+    private ClassMetadata innerGenerateMetadata(Class clz, boolean includeSuper) {
+        if(!includeSuper){
+            return innerGenerateMetadata(clz);
+        }
+        ClassMetadata mergedMetadata = innerGenerateMetadata(clz).clone();
+        innerAbsorbSuper(clz, mergedMetadata);
+
+        return mergedMetadata;
     }
 
     private ClassMetadata innerGenerateMetadata(Class clz) {
@@ -154,12 +145,26 @@ public class MetadataServiceImpl implements MetadataService {
         }
     }
 
+    private void innerAbsorbSuper(Class clz, ClassMetadata mergedMetadata) {
+        final List<ClassMetadata> tobeMerged = new ArrayList<ClassMetadata>();
+
+        Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
+        for (Class superClz : superClasses) {
+            ClassMetadata classMetadata = innerGenerateMetadata(superClz);
+            tobeMerged.add(classMetadata);
+        }
+
+        for(ClassMetadata classMetadata : tobeMerged){
+            mergedMetadata.absorbSuper(classMetadata);
+        }
+    }
+
     private void publishReferencedEntityMetadataIfNot(ClassMetadata classMetadata){
         if(!classMetadata.isReferencedEntityMetadataPublished()){
             Collection<Class> entities = classMetadata.getReferencedEntities();
             Set<ClassMetadata> classMetadatas = new HashSet<ClassMetadata>();
             for (Class entity : entities){
-                ClassMetadata metadata = this.innerGenerateMetadata(entity);
+                ClassMetadata metadata = this.innerGenerateMetadata(entity, true);
                 classMetadatas.add(metadata);
             }
             classMetadata.publishReferencedEntityMetadatas(classMetadatas);
