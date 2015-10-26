@@ -7,10 +7,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Gao Yuan on 2015/8/27.
@@ -21,12 +18,26 @@ public class BuPermissionSpecialImpl
     extends PermissionSpecialBaseImpl<BuPermission>
     implements BuPermissionSpecial {
 
+    @Column(name = "BU_ID", nullable = false)
+    @PresentationField(order = 3)
+    protected Long buId;
+
     @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
     @ManyToOne(targetEntity = BuPermissionSpecialImpl.class)
     @JoinColumn(name = "PERM_ID")
     @PresentationField(order = 7)
     protected BuPermission permission;
     public static final String OWN_M2O_PERM = "permission";
+
+    @Override
+    public Long getBuId() {
+        return buId;
+    }
+
+    @Override
+    public void setBuId(Long buId) {
+        this.buId = buId;
+    }
 
     @Override
     public BuPermission getPermission() {

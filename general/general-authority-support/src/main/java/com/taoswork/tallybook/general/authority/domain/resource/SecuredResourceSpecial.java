@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.general.authority.domain.resource;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
@@ -10,7 +9,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  */
 
 //@PersistFriendly(nameOverride = "admin-resource-criteria")
-public interface SecuredResourceFilter<R extends SecuredResource> extends Persistable {
+public interface SecuredResourceSpecial<R extends SecuredResource> extends Persistable {
 
     Long getId();
 
@@ -18,11 +17,11 @@ public interface SecuredResourceFilter<R extends SecuredResource> extends Persis
 
     String getName();
 
-    SecuredResourceFilter setName(String name);
+    SecuredResourceSpecial setName(String name);
 
     R getSecuredResource();
 
-    SecuredResourceFilter setResourceType(R securedResource);
+    SecuredResourceSpecial setResourceType(R securedResource);
 
     /**
      * Filter types:
@@ -31,13 +30,13 @@ public interface SecuredResourceFilter<R extends SecuredResource> extends Persis
      * Created by
      * @return
      */
-    String getFilter();
+    FilterType getFilter();
 
-    SecuredResourceFilter setFilter(String filter);
+    SecuredResourceSpecial setFilter(FilterType filter);
 
     String getFilterParameter();
 
-    SecuredResourceFilter setFilterParameter(String filterParameter);
+    SecuredResourceSpecial setFilterParameter(String filterParameter);
 
     boolean isMainLine();
 }

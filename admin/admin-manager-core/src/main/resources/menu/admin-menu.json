@@ -73,7 +73,7 @@
           "description": "",
           "icon": "glyphicon-user",
           "url": null,
-          "entity": "com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceFilter",
+          "entity": "com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceSpecial",
           "securityGuard": null,
           "entries": []
         },

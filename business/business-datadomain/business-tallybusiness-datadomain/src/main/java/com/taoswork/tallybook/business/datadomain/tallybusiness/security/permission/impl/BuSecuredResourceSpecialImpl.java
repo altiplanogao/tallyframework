@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResource;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResourceFilter;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
-import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterBaseImpl;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResourceSpecial;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
+import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceSpecialBaseImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
@@ -14,10 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TB_SEC_RES_FILTER")
-public class BuSecuredResourceFilterImpl
-    extends SecuredResourceFilterBaseImpl<BuSecuredResource>
-    implements BuSecuredResourceFilter {
+@Table(name = "TB_SEC_RES_SPECIAL")
+public class BuSecuredResourceSpecialImpl
+    extends SecuredResourceSpecialBaseImpl<BuSecuredResource>
+    implements BuSecuredResourceSpecial {
 
     @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
     @ManyToOne(targetEntity = BuSecuredResourceImpl.class)
@@ -32,7 +32,7 @@ public class BuSecuredResourceFilterImpl
     }
 
     @Override
-    public SecuredResourceFilter setResourceType(BuSecuredResource securedResource) {
+    public SecuredResourceSpecial setResourceType(BuSecuredResource securedResource) {
         this.securedResource = securedResource;
         return this;
     }

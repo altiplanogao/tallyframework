@@ -10,7 +10,7 @@
 
 
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceImpl</class>
-        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceFilterImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceSpecialImpl</class>
 
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionSpecialImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminPermissionImpl</class>

@@ -1,12 +1,14 @@
 package com.taoswork.tallybook.general.authority.domain.resource.impl;
 
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
+import com.taoswork.tallybook.general.authority.domain.resource.FilterType;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
 import javax.persistence.*;
 
@@ -17,11 +19,19 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @PresentationClass(instantiable =false)
 //@Table(name = "AUTH_SECURED_RESOURCE_FILTER")
-public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
-    implements SecuredResourceFilter<R> {
+public abstract class SecuredResourceSpecialBaseImpl<R extends SecuredResource>
+    implements SecuredResourceSpecial<R> {
+
+    protected static final String ID_GENERATOR_NAME = "SecuredResourceSpecialBaseImpl_IdGen";
 
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
+    @TableGenerator(
+        name = ID_GENERATOR_NAME,
+        table = GeneralAuthoritySupportRoot.ID_GENERATOR_TABLE_NAME,
+        initialValue = 0)
     @Column(name = "ID")
+    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     public Long id;
 
     //IResourceFilter.getCode()
@@ -30,8 +40,9 @@ public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
     public String name;
 
     @Column(name = "FILTER")
-    @PresentationField(order = 6)
-    public String filter;
+    @PresentationField(order = 6, fieldType = FieldType.ENUMERATION)
+    @PresentationEnum(enumeration = FilterType.class)
+    public FilterType filter;
 
     @Column(name = "FILTER_PARAM")
     @PresentationField(order = 7)
@@ -53,18 +64,18 @@ public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
     }
 
     @Override
-    public SecuredResourceFilter setName(String name) {
+    public SecuredResourceSpecial setName(String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public String getFilter() {
+    public FilterType getFilter() {
         return filter;
     }
 
     @Override
-    public SecuredResourceFilter setFilter(String filter) {
+    public SecuredResourceSpecial setFilter(FilterType filter) {
         this.filter = filter;
         return this;
     }
@@ -75,7 +86,7 @@ public abstract class SecuredResourceFilterBaseImpl<R extends SecuredResource>
     }
 
     @Override
-    public SecuredResourceFilter setFilterParameter(String filterParameter) {
+    public SecuredResourceSpecial setFilterParameter(String filterParameter) {
         this.filterParameter = filterParameter;
         return this;
     }

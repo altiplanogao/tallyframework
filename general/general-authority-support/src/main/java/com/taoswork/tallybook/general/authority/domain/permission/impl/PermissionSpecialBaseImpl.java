@@ -2,13 +2,12 @@ package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionSpecial;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
-import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceFilterBaseImpl;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
+import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceSpecialBaseImpl;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
@@ -23,7 +22,7 @@ import javax.persistence.*;
  *      | SimplePermissionAuthority.java       | EntityPermission.java |              | EntityPermissionSpecial.java  |
  *      |-----------------------|              |-----------------------|              |-----------------------|
  *      | id                    |              | id                    |              | id                    |
- *      |                       |              | entity name (resourceEntity)         | filter (SecuredResourceFilterBaseImpl.java)
+ *      |                       |              | entity name (resourceEntity)         | filter (SecuredResourceSpecialBaseImpl.java)
  *      |                       |              | master access         |              | access                |
  *      |                       |              |                       |              |                       |
  *      |                       |              |                       |              |                       |
@@ -44,7 +43,7 @@ import javax.persistence.*;
  *      | id                    |              | id                    |
  *      | name                  |              | entity name (resourceEntity)
  *      | owner (optional)      |              | is main or filtered   |
- *      |                       |              | filter (SecuredResourceFilterBaseImpl.java)
+ *      |                       |              | filter (SecuredResourceSpecialBaseImpl.java)
  *      |                       |              | access (or master access)
  *      |                       |              |                       |
  *      |                       |              |                       |
@@ -59,8 +58,6 @@ import javax.persistence.*;
 public abstract class PermissionSpecialBaseImpl<P extends Permission>
         implements PermissionSpecial<P> {
 
-    public static final String TABLE_NAME = "AUTH_PERM_ENTRY";
-
     @Id
     @Column(name = "ID")
     protected Long id;
@@ -69,19 +66,15 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
     @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
-    @Column(name = "ORG_ID", nullable = false)
-    @PresentationField(order = 3)
-    protected Long organizationId;
-
     @Column(name = "RES_ENTITY", nullable = false)
     @PresentationField(order = 4)
     protected String resourceEntity;
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
-    @ManyToOne(targetEntity = SecuredResourceFilterBaseImpl.class)
-    @JoinColumn(name = "RES_FILTER_ID")
+    @ManyToOne(targetEntity = SecuredResourceSpecialBaseImpl.class)
+    @JoinColumn(name = "RES_SPEC_ID")
     @PresentationField(order = 5)
-    protected SecuredResourceFilter securedResourceFilter;
+    protected SecuredResourceSpecial securedResourceSpecial;
 
     @Embedded
     @Column(name = "ACCESS", nullable=false)
@@ -126,23 +119,13 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
     }
 
     @Override
-    public Long getOrganizationId() {
-        return organizationId;
+    public SecuredResourceSpecial getSecuredResourceSpecial() {
+        return securedResourceSpecial;
     }
 
     @Override
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
-    }
-
-    @Override
-    public SecuredResourceFilter getSecuredResourceFilter() {
-        return securedResourceFilter;
-    }
-
-    @Override
-    public void setSecuredResourceFilter(SecuredResourceFilter securedResourceFilter) {
-        this.securedResourceFilter = securedResourceFilter;
+    public void setSecuredResourceSpecial(SecuredResourceSpecial securedResourceSpecial) {
+        this.securedResourceSpecial = securedResourceSpecial;
     }
 
     @Override

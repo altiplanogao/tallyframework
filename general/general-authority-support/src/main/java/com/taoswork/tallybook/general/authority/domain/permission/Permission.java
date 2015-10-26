@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.permission;
 
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * User owns permission, and resource requires permission.
  *
  * Permission controls Resource access:
- * ResourceCriteria {@link SecuredResourceFilter}
+ * ResourceCriteria {@link SecuredResourceSpecial}
  * defines a kind of resource need to be secured.
  *
  * {@link PermissionSpecial} defines the access permission for a specified kind of resource (specified by ResourceCriteria).

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.authority.domain.permission;
 
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
@@ -17,17 +17,13 @@ public interface PermissionSpecial<P extends Permission>
 
     void setName(String name);
 
-    SecuredResourceFilter getSecuredResourceFilter();
+    SecuredResourceSpecial getSecuredResourceSpecial();
 
-    void setSecuredResourceFilter(SecuredResourceFilter resourceCriteria);
+    void setSecuredResourceSpecial(SecuredResourceSpecial resourceCriteria);
 
     ResourceAccess getAccess();
 
     void setAccess(ResourceAccess access);
-
-    Long getOrganizationId();
-
-    void setOrganizationId(Long organizationId);
 
     String getResourceEntity();
 

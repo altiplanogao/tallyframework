@@ -3,7 +3,7 @@ package com.taoswork.tallybook.general.authority.domain.resource.impl;
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.converter.ProtectionModeToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
@@ -22,10 +22,10 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @PresentationClass(instantiable =false)
-public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceFilter>
+public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
         implements SecuredResource<RF> {
 
-    protected static final String ID_GENERATOR_NAME = "SecuredResourceImpl_IdGen";
+    protected static final String ID_GENERATOR_NAME = "SecuredResourceBaseImpl_IdGen";
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)

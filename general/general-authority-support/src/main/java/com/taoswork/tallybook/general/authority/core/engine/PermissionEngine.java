@@ -2,7 +2,7 @@ package com.taoswork.tallybook.general.authority.core.engine;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceFilter;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
 import org.slf4j.Logger;
@@ -70,13 +70,13 @@ public class PermissionEngine {
         // em.createQuery()
     }
 
-    private final Map<String, Set<SecuredResourceFilter>> resourceTypesMapping = new HashMap<String, Set<SecuredResourceFilter>>();
+    private final Map<String, Set<SecuredResourceSpecial>> resourceTypesMapping = new HashMap<String, Set<SecuredResourceSpecial>>();
 //    private final Map<Long, >
 
-    private Set<SecuredResourceFilter> getResourceCriteriaSet(String resouceType){
-        Set<SecuredResourceFilter> resourceCriteriaSet = resourceTypesMapping.get(resouceType);
+    private Set<SecuredResourceSpecial> getResourceCriteriaSet(String resouceType){
+        Set<SecuredResourceSpecial> resourceCriteriaSet = resourceTypesMapping.get(resouceType);
         if(resourceCriteriaSet == null){
-            resourceCriteriaSet = new HashSet<SecuredResourceFilter>();
+            resourceCriteriaSet = new HashSet<SecuredResourceSpecial>();
 //            resourceCriteriaSet.add(new ResourceCriteria().setType(resouceType).setName("General"));
             resourceTypesMapping.put(resouceType, resourceCriteriaSet);
         }
