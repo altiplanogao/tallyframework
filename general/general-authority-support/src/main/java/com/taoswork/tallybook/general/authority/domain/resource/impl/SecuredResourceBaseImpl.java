@@ -63,7 +63,7 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     @Convert(converter = BooleanToStringConverter.class)
     @PresentationField(order = 5, fieldType = FieldType.BOOLEAN)
     @PresentationBoolean(model = BooleanModel.YesNo)
-    protected boolean masterControlled = true;
+    protected Boolean masterControlled = Boolean.TRUE;
 
     @Version
     @Column(name="OPTLOCK")
