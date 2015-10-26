@@ -15,7 +15,9 @@ public abstract class FieldValidatorBase<T>
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FieldValidatorBase.class);
 
-    protected boolean nullValueAsValid() {
+    protected boolean nullValueAsValid(IFieldMetadata fieldMetadata) {
+        if(fieldMetadata.isRequired())
+            return false;
         return true;
     }
 
@@ -23,8 +25,11 @@ public abstract class FieldValidatorBase<T>
     public final ValidationError validate(IFieldMetadata fieldMetadata, Object fieldValue) {
         if (canHandle(fieldMetadata)) {
             if (null == fieldValue) {
-                if (nullValueAsValid())
+                if (nullValueAsValid(fieldMetadata)) {
                     return null;
+                } else {
+                    return new ValidationError("validation.error.field.required");
+                }
             }
             ValidationError result = this.doValidate(fieldMetadata, (T) fieldValue);
             return result;

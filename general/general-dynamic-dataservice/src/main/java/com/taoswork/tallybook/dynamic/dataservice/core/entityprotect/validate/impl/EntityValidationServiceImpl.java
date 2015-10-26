@@ -4,10 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.EmailFieldValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.FieldLengthValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.FieldRequiredValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.PhoneFieldValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.*;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -33,7 +30,8 @@ public class EntityValidationServiceImpl implements EntityValidationService {
             .addHandler(new FieldRequiredValidator())
             .addHandler(new FieldLengthValidator())
             .addHandler(new EmailFieldValidator())
-            .addHandler(new PhoneFieldValidator());
+            .addHandler(new PhoneFieldValidator())
+            .addHandler(new ForeignKeyFieldValidator());
     }
 
     @Override

@@ -39,10 +39,12 @@ public abstract class SecuredResourceSpecialBaseImpl<R extends SecuredResource>
     @PresentationField(order = 2, fieldType = FieldType.NAME)
     public String name;
 
-    @Column(name = "FILTER")
+    @Column(name = "FILTER", nullable = false, length = 10
+        ,columnDefinition = "VARCHAR(10) DEFAULT '" + FilterType.DEFAULT_VAL + "'"
+    )
     @PresentationField(order = 6, fieldType = FieldType.ENUMERATION)
     @PresentationEnum(enumeration = FilterType.class)
-    public FilterType filter;
+    public FilterType filter = FilterType.None;
 
     @Column(name = "FILTER_PARAM")
     @PresentationField(order = 7)

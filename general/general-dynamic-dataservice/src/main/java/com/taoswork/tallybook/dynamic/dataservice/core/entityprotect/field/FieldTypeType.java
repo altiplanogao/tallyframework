@@ -17,8 +17,7 @@ public class FieldTypeType {
     }
 
     public FieldTypeType(Class clz) {
-        this.type = null;
-        this.clz = clz.getName();
+        this(null, clz);
     }
 
     public FieldTypeType(String clz) {
@@ -28,7 +27,11 @@ public class FieldTypeType {
 
     public FieldTypeType(FieldType type, Class clz) {
         this.type = type;
-        this.clz = clz.getName();
+        if (clz == null) {
+            this.clz = null;
+        } else {
+            this.clz = clz.getName();
+        }
     }
 
     public FieldTypeType(FieldType type, String clz) {
