@@ -12,11 +12,15 @@ public class CriteriaTransferObject implements Cloneable {
     public static final int SINGLE_QUERY_DEFAULT_PAGE_SIZE = 50;
     public static final int SINGLE_QUERY_MAX_PAGE_SIZE_ALLOWED = 200;
 
-    private long firstResult = 0;
+    private long firstResult;
     private int pageSize = SINGLE_QUERY_DEFAULT_PAGE_SIZE;
 
     private Map<String, PropertyFilterCriteria> filterCriterias = new HashMap<String, PropertyFilterCriteria>();
     private List<PropertySortCriteria> sortCriterias = new ArrayList<PropertySortCriteria>();
+
+    public CriteriaTransferObject() {
+        firstResult = 0;
+    }
 
     public long getFirstResult() {
         return firstResult;
