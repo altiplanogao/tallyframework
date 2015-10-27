@@ -12,11 +12,11 @@ import javax.persistence.Embeddable;
 public class ResourceAccess {
     public final static int NONE_EXTENDED = 0x00;
 
-    private boolean canCreate = false;
-    private boolean canRead = false;
-    private boolean canUpdate = false;
-    private boolean canDelete = false;
-    private boolean canQuery = false;
+    private Boolean canCreate = false;
+    private Boolean canRead = false;
+    private Boolean canUpdate = false;
+    private Boolean canDelete = false;
+    private Boolean canQuery = false;
 
     private int extended = NONE_EXTENDED;
 
