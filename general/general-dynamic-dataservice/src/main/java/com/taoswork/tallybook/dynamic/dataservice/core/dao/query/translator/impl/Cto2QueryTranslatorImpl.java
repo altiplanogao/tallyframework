@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.imp
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.Restriction;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.RestrictionFactory;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.util.FieldPathBuilder;
@@ -77,6 +78,13 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
                 if(fieldMetadata == null){
                     continue;
                 }
+                Path explicitPath = null;
+                if(fieldMetadata instanceof ForeignEntityFieldMetadata){
+                    ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
+                    String idField = foreignEntityFieldMetadata.getIdField();
+                    explicitPath = fieldPathBuilder.buildPathBySegments(original, propertyName, idField);
+                    //path = fieldPathBuilder.buildPath(original, propertyName);//.getPath(root, fullPropertyName, builder);
+                }
                 FieldType fieldType = fieldMetadata.getFieldType();
                 Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType, fieldMetadata.getFieldClass());
                 List<Object> convertedValues = restriction.convertValues(fieldMetadata.getFieldClass(), values);
@@ -84,7 +92,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
                     criteriaBuilder, fieldPathBuilder,
                     original,
                     entityClz, propertyName,
-                    null, convertedValues);
+                    explicitPath, convertedValues);
                 if (null != predicate) {
                     restrictions.add(predicate);
                 }

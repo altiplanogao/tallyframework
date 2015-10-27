@@ -14,6 +14,7 @@ public class Restrictions {
         public static final FilterValueConverter EnumConverter = new EnumFilterValueConverter();
         public static final FilterValueConverter BooleanConverter = new BooleanFilterValueConverter();
         public static final FilterValueConverter LongConverter = new LongFilterValueConverter();
+        public static final FilterValueConverter ForeignKeyConverter = new ForeignKeyFilterValueConverter();
     }
 
     private static class Predicates{
@@ -22,6 +23,7 @@ public class Restrictions {
         public static final PredicateProvider EnumEqualProvider = new EnumEqualPredicateProvider();
         public static final PredicateProvider BooleanEqualProvider = new BooleanEqualPredicateProvider();
         public static final PredicateProvider CommonEqualProvider = new CommonEqualPredicateProvider();
+        public static final PredicateProvider ForeignKeyEqualProvider = new ForeignKeyEqualPredicateProvider();
     }
 
     public static final Restriction StringEqualRestriction = new Restriction(
@@ -43,5 +45,10 @@ public class Restrictions {
     public static final Restriction LongRestriction = new Restriction(
         Converters.LongConverter,
         Predicates.CommonEqualProvider);
+
+    public static final Restriction ForeignKeyRestriction = new Restriction(
+        Converters.ForeignKeyConverter,
+        Predicates.ForeignKeyEqualProvider);
+
 
 }

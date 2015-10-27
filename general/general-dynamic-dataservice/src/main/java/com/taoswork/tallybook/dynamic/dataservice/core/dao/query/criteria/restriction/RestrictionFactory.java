@@ -29,6 +29,8 @@ public class RestrictionFactory {
                 break;
             case ENUMERATION:
                 return Restrictions.EnumRestriction;
+            case FOREIGN_KEY:
+                return Restrictions.ForeignKeyRestriction;
             default:
                 if (Long.class.equals(javaType)) {
                     return Restrictions.LongRestriction;
