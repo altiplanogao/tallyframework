@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/8/27.
  */
 @PersistFriendly(nameOverride = "bu-permission")
-public interface BuPermission extends Permission<BuPermissionSpecial> {
+public interface BuPermission extends Permission<BuPermissionEntry> {
 
     Long getOrganizationId();
 

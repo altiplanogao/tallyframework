@@ -24,7 +24,7 @@ public class AdminSecuredResourceSpecialImpl
     @ManyToOne(targetEntity = AdminSecuredResourceImpl.class)
     @JoinColumn(name = "RES_TYPE_ID")
     @PresentationField(order = 3, required = true)
-    @PresentationForeignKey(displayField = "friendlyName")
+    @PresentationForeignKey(displayField = "name")
     public AdminSecuredResource securedResource;
     public static final String OWN_M2O_RES_ENTITY = "securedResource";
 

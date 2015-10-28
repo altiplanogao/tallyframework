@@ -37,31 +37,34 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
-    @Column(name = "FRIENDLY_NAME", length = 100, nullable = false)
+    @Column(name = "NAME", length = 100, nullable = false)
     @PresentationField(order = 1, fieldType = FieldType.NAME)
-    protected String friendlyName;
+    protected String name;
+
+    @Column(name = "DESCRIPTION")
+    @PresentationField(order = 2, visibility = Visibility.GRID_HIDE, fieldType = FieldType.STRING)
+    protected String description;
 
     //A Data line without resourceEntity, means its a main source line, only its version column is useful
     @Column(name = "TYPE", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.STRING)
+    @PresentationField(order = 3, fieldType = FieldType.STRING)
     protected String resourceEntity;
 
     @Column(name = "CATEGORY")
-    @PresentationField(order = 3, fieldType = FieldType.STRING)
+    @PresentationField(order = 4, fieldType = FieldType.STRING)
     protected String category;
 
     @Column(name = "PROT_MOD", nullable = false, length = 4
         ,columnDefinition = "VARCHAR(4) DEFAULT '" + ResourceProtectionMode.DEFAULT_CHAR + "'"
     )
-    @PresentationField(order = 4, fieldType = FieldType.ENUMERATION)
+    @PresentationField(order = 5, fieldType = FieldType.ENUMERATION)
     @PresentationEnum(enumeration = ResourceProtectionMode.class)
     @Convert(converter = ProtectionModeToStringConverter.class)
     protected ResourceProtectionMode protectionMode;
 
-    @Column(name = "MASTER_CTRL", nullable = false, length = 2,
-        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+    @Column(name = "MASTER_CTRL", nullable = false, length = 2)
     @Convert(converter = BooleanToStringConverter.class)
-    @PresentationField(order = 5, fieldType = FieldType.BOOLEAN)
+    @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected Boolean masterControlled = Boolean.TRUE;
 
@@ -80,13 +83,13 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     }
 
     @Override
-    public String getFriendlyName() {
-        return friendlyName;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void setFriendlyName(String friendlyName) {
-        this.friendlyName = friendlyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

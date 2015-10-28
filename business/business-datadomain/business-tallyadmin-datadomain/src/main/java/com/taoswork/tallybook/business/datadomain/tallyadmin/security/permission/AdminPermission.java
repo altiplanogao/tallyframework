@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/8/27.
  */
 @PersistFriendly(nameOverride = "admin-permission")
-public interface AdminPermission extends Permission<AdminPermissionSpecial> {
+public interface AdminPermission extends Permission<AdminPermissionEntry> {
     Set<AdminEmployee> getAllEmployees();
 
     void setAllEmployees(Set<AdminEmployee> allEmployees);

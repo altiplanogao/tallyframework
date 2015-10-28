@@ -108,7 +108,7 @@ public class AdminCoreConfig {
                 try {
                         for (SecuredResource res : SecuredResources.getResources()) {
                                 AdminSecuredResource asr = new AdminSecuredResourceImpl();
-                                asr.setFriendlyName(res.getName());
+                                asr.setName(res.getName());
                                 asr.setResourceEntity(res.getEntity());
                                 asr.setCategory(res.getCategory());
                                 asr.setMasterControlled(res.isMasterControlled());
@@ -121,7 +121,7 @@ public class AdminCoreConfig {
                                                 break;
                                 }
                                 CriteriaTransferObject cto = new CriteriaTransferObject();
-                                PropertyFilterCriteria propC = new PropertyFilterCriteria("friendlyName", res.getName());
+                                PropertyFilterCriteria propC = new PropertyFilterCriteria("name", res.getName());
                                 cto.addFilterCriteria(propC);
                                 CriteriaQueryResult cqr = dynamicEntityService.query(AdminSecuredResource.class, cto);
                                 if(cqr.fetchedCount() == 0){

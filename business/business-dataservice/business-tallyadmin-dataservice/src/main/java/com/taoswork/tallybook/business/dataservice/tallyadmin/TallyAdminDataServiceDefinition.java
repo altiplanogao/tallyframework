@@ -30,8 +30,9 @@ public class TallyAdminDataServiceDefinition implements IDataServiceDefinition {
             ENTITY_MESSAGES_FILE_PREFIX + "tallyadmin/" + FILE_DELIMTER +
             ENTITY_MESSAGES_FILE_PREFIX + "permission/";
 
-    public static final String TADMIN_ERROR_MESSAGES = ERROR_MESSAGES_FILE_PREFIX +
-        "tallyadmin/";
+    public static final String TADMIN_ERROR_MESSAGES =
+        ERROR_MESSAGES_FILE_PREFIX + "tallyadmin/" + FILE_DELIMTER +
+        ERROR_MESSAGES_FILE_PREFIX + "permission/";
 
     public static final String TADMIN_RUNTIME_PROPERTIES =
             RUNTIME_PROPERTIES_FILE_PREFIX + "tallyadmin/";

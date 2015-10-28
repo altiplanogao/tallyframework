@@ -1,15 +1,12 @@
 package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
+import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
-import com.taoswork.tallybook.general.authority.domain.permission.PermissionSpecial;
-import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
-import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceSpecialBaseImpl;
+import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
 import javax.persistence.*;
 
@@ -19,7 +16,7 @@ import javax.persistence.*;
  *      |   Permission          |  --------->  | Permission 4 Entity   |   ---------> |   Permission Entry    |
  *      | ( Permission Package) |              |                       |              |                       |
  *      | owned by user or group|              |                       |              |                       |
- *      | SimplePermissionAuthority.java       | EntityPermission.java |              | EntityPermissionSpecial.java  |
+ *      | SimplePermissionAuthority.java       | EntityPermission.java |              | EntityPermissionEntry.java  |
  *      |-----------------------|              |-----------------------|              |-----------------------|
  *      | id                    |              | id                    |              | id                    |
  *      |                       |              | entity name (resourceEntity)         | filter (SecuredResourceSpecialBaseImpl.java)
@@ -38,7 +35,7 @@ import javax.persistence.*;
  *      |   Permission          |  --------->  |   Permission Entry    |
  *      | ( Permission Package) |              |                       |
  *      | owned by user or group|              |                       |
- *      | SimplePermissionAuthority.java       | EntityPermissionSpecial.java  |
+ *      | SimplePermissionAuthority.java       | EntityPermissionEntry.java  |
  *      |-----------------------|              |-----------------------|
  *      | id                    |              | id                    |
  *      | name                  |              | entity name (resourceEntity)
@@ -54,11 +51,22 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@PresentationClass(instantiable =false)
-public abstract class PermissionSpecialBaseImpl<P extends Permission>
-        implements PermissionSpecial<P> {
+@PresentationClass(instantiable =false,
+    groups = {
+        @PresentationClass.Group(name = PermissionEntryBaseImpl.Presentation.Group.General, order = 1),
+        @PresentationClass.Group(name = PermissionEntryBaseImpl.Presentation.Group.Access, order = 2)}
+)
+public abstract class PermissionEntryBaseImpl<P extends Permission>
+        implements PermissionEntry<P> {
+
+    protected static final String ID_GENERATOR_NAME = "PermissionEntryBaseImpl_IdGen";
 
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
+    @TableGenerator(
+        name = ID_GENERATOR_NAME,
+        table = GeneralAuthoritySupportRoot.ID_GENERATOR_TABLE_NAME,
+        initialValue = 0)
     @Column(name = "ID")
     protected Long id;
 
@@ -66,20 +74,10 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
     @PresentationField(order = 2, fieldType = FieldType.NAME)
     protected String name;
 
-    @Column(name = "RES_ENTITY", nullable = false)
-    @PresentationField(order = 4)
-    protected String resourceEntity;
-
-    @FieldRelation(RelationType.OneWay_ManyToOne)
-    @ManyToOne(targetEntity = SecuredResourceSpecialBaseImpl.class)
-    @JoinColumn(name = "RES_SPEC_ID")
-    @PresentationField(order = 5)
-    protected SecuredResourceSpecial securedResourceSpecial;
-
     @Embedded
     @Column(name = "ACCESS", nullable=false)
-    @PresentationField(order = 6)
-    protected ResourceAccess access;
+    @PresentationField(order = 6, group = "Access")
+    protected ResourceAccess access = new ResourceAccess();
 
 //    @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
 //    @ManyToOne(targetEntity = PermissionBaseImpl.class)
@@ -117,27 +115,6 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
     public void setAccess(ResourceAccess access) {
         this.access = access;
     }
-
-    @Override
-    public SecuredResourceSpecial getSecuredResourceSpecial() {
-        return securedResourceSpecial;
-    }
-
-    @Override
-    public void setSecuredResourceSpecial(SecuredResourceSpecial securedResourceSpecial) {
-        this.securedResourceSpecial = securedResourceSpecial;
-    }
-
-    @Override
-    public String getResourceEntity() {
-        return resourceEntity;
-    }
-
-    @Override
-    public void setResourceEntity(String resourceEntity) {
-        this.resourceEntity = resourceEntity;
-    }
-
 //    @Override
 //    public P getPermission() {
 //        return permission;
@@ -147,4 +124,13 @@ public abstract class PermissionSpecialBaseImpl<P extends Permission>
 //    public void setPermission(P permission) {
 //        this.permission = permission;
 //    }
+
+    public static class Presentation{
+        public static class Tab{
+        }
+        public static class Group{
+            public static final String General = "General";
+            public static final String Access = "Access";
+        }
+    }
 }

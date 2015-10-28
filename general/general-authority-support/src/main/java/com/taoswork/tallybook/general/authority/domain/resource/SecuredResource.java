@@ -13,9 +13,9 @@ public interface SecuredResource<RF extends SecuredResourceSpecial> extends Pers
 
     void setId(Long id);
 
-    String getFriendlyName();
+    String getName();
 
-    void setFriendlyName(String friendlyName);
+    void setName(String name);
 
     String getResourceEntity();
 

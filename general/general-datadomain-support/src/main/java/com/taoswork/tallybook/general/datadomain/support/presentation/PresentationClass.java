@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface PresentationClass {
-    PresentationClass.Tab[] tabs() default { @PresentationClass.Tab(name = Tab.DEFAULT_NAME) };
+    PresentationClass.Tab[] tabs() default { @PresentationClass.Tab(name = Tab.DEFAULT_NAME, order = 1) };
 
-    PresentationClass.Group[] groups() default { @PresentationClass.Group(name = Group.DEFAULT_NAME) };
+    PresentationClass.Group[] groups() default { @PresentationClass.Group(name = Group.DEFAULT_NAME, order = 1) };
 
     boolean instantiable() default true;
 

@@ -11,7 +11,7 @@
 
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceSpecialImpl</class>
-        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionSpecialImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionEntryImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuRoleImpl</class>
 

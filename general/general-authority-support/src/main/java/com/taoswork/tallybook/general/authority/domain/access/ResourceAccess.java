@@ -1,8 +1,15 @@
 package com.taoswork.tallybook.general.authority.domain.access;
 
+import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 /**
@@ -12,12 +19,37 @@ import javax.persistence.Embeddable;
 public class ResourceAccess {
     public final static int NONE_EXTENDED = 0x00;
 
-    private Boolean canCreate = false;
-    private Boolean canRead = false;
-    private Boolean canUpdate = false;
-    private Boolean canDelete = false;
-    private Boolean canQuery = false;
+    @Column(name = "CAN_CREATE", nullable = false, length = 2)
+    @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField
+    @PresentationBoolean
+    private Boolean canCreate;
 
+    @Column(name = "CAN_READ", nullable = false, length = 2)
+    @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField
+    @PresentationBoolean
+    private Boolean canRead;
+
+    @Column(name = "CAN_UPDATE", nullable = false, length = 2)
+    @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField
+    @PresentationBoolean
+    private Boolean canUpdate;
+
+    @Column(name = "CAN_DELETE", nullable = false, length = 2)
+    @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField
+    @PresentationBoolean
+    private Boolean canDelete;
+
+    @Column(name = "CAN_QUERY", nullable = false, length = 2)
+    @Convert(converter = BooleanToStringConverter.class)
+    @PresentationField
+    @PresentationBoolean
+    private Boolean canQuery;
+
+    @PresentationField(visibility = Visibility.HIDDEN_ALL)
     private int extended = NONE_EXTENDED;
 
     public ResourceAccess() {

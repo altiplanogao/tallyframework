@@ -1,13 +1,19 @@
 package com.taoswork.tallybook.general.authority.domain.permission;
 
+import com.taoswork.tallybook.general.authority.domain.permission.validation.PermissionEntryValidator;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
-public interface PermissionSpecial<P extends Permission>
+@PersistFriendly(
+    validators = {PermissionEntryValidator.class}
+)
+public interface PermissionEntry<P extends Permission>
          extends Persistable {
     Long getId();
 
@@ -17,6 +23,10 @@ public interface PermissionSpecial<P extends Permission>
 
     void setName(String name);
 
+    SecuredResource getSecuredResource();
+
+    void setSecuredResource(SecuredResource securedResource);
+
     SecuredResourceSpecial getSecuredResourceSpecial();
 
     void setSecuredResourceSpecial(SecuredResourceSpecial resourceCriteria);
@@ -24,10 +34,6 @@ public interface PermissionSpecial<P extends Permission>
     ResourceAccess getAccess();
 
     void setAccess(ResourceAccess access);
-
-    String getResourceEntity();
-
-    void setResourceEntity(String resourceEntity);
 
     P getPermission();
 

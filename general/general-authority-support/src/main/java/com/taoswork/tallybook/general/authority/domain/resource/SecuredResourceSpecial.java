@@ -37,6 +37,4 @@ public interface SecuredResourceSpecial<R extends SecuredResource> extends Persi
     String getFilterParameter();
 
     SecuredResourceSpecial setFilterParameter(String filterParameter);
-
-    boolean isMainLine();
 }

@@ -17,7 +17,7 @@ public interface DataServiceManager {
 
     ManagedEntityEntry getInterfaceEntityEntry(String entityClz);
 
-    String getEntityInterfaceName(String friendlyName);
+    String getEntityInterfaceName(String resourceName);
 
     String getEntityResourceName(String entityClz);
 

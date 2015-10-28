@@ -3,10 +3,13 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin.security.permissio
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionSpecial;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionBaseImpl;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,15 +23,17 @@ import java.util.Set;
 @Entity
 @Table(name = "ADMIN_PERM")
 public class AdminPermissionImpl
-    extends PermissionBaseImpl<AdminPermissionSpecial>
+    extends PermissionBaseImpl<AdminPermissionEntry>
     implements AdminPermission {
 
     @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
     @OneToMany(
-            targetEntity = AdminPermissionSpecialImpl.class,
-            mappedBy = AdminPermissionSpecialImpl.OWN_M2O_PERM,
+            targetEntity = AdminPermissionEntryImpl.class,
+            mappedBy = AdminPermissionEntryImpl.OWN_M2O_PERM,
             fetch = FetchType.LAZY)
-    protected List<AdminPermissionSpecial> allEntries = new ArrayList<AdminPermissionSpecial>();
+    @PresentationField
+    @PresentationCollection
+    protected List<AdminPermissionEntry> allEntries = new ArrayList<AdminPermissionEntry>();
     public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
     /** All employees that have this role */
@@ -38,15 +43,16 @@ public class AdminPermissionImpl
 //    @JoinTable(name = AdminEmployeeImpl.OWN_M2M_EMPLOYEE_PERMS_XTABLE,
 //        joinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_PERMS__PERM_COL),
 //        inverseJoinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_PERMS__EMPLOYEE_COL))
+    @PresentationField(visibility = Visibility.HIDDEN_ALL)
     protected Set<AdminEmployee> allEmployees = new HashSet<AdminEmployee>();
 
     @Override
-    public List<AdminPermissionSpecial> getAllEntries() {
+    public List<AdminPermissionEntry> getAllEntries() {
         return allEntries;
     }
 
     @Override
-    public void setAllEntries(List<AdminPermissionSpecial> allEntries) {
+    public void setAllEntries(List<AdminPermissionEntry> allEntries) {
         this.allEntries = allEntries;
     }
 

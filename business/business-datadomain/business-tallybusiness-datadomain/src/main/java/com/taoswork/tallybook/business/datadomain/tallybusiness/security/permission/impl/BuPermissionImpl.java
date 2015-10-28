@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.security.permis
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Employee;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.impl.EmployeeImpl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermission;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermissionSpecial;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionBaseImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
@@ -21,7 +21,7 @@ import java.util.Set;
 @Entity
 @Table(name = "TB_SEC_PERM")
 public class BuPermissionImpl
-    extends PermissionBaseImpl<BuPermissionSpecial>
+    extends PermissionBaseImpl<BuPermissionEntry>
     implements BuPermission {
 
     @Column(name = "ORG_ID", nullable = false)
@@ -30,10 +30,10 @@ public class BuPermissionImpl
 
     @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)
     @OneToMany(
-            targetEntity = BuPermissionSpecialImpl.class,
-            mappedBy = BuPermissionSpecialImpl.OWN_M2O_PERM,
+            targetEntity = BuPermissionEntryImpl.class,
+            mappedBy = BuPermissionEntryImpl.OWN_M2O_PERM,
             fetch = FetchType.LAZY)
-    protected List<BuPermissionSpecial> allEntries = new ArrayList<BuPermissionSpecial>();
+    protected List<BuPermissionEntry> allEntries = new ArrayList<BuPermissionEntry>();
     public static final String OWN_M2M_ALL_ENTRIES = "allEntries";
 
     /** All employees that have this role */
@@ -46,12 +46,12 @@ public class BuPermissionImpl
     protected Set<Employee> allEmployees = new HashSet<Employee>();
 
     @Override
-    public List<BuPermissionSpecial> getAllEntries() {
+    public List<BuPermissionEntry> getAllEntries() {
         return allEntries;
     }
 
     @Override
-    public void setAllEntries(List<BuPermissionSpecial> allEntries) {
+    public void setAllEntries(List<BuPermissionEntry> allEntries) {
         this.allEntries = allEntries;
     }
 

@@ -35,7 +35,7 @@ public abstract class SecuredResourceSpecialBaseImpl<R extends SecuredResource>
     public Long id;
 
     //IResourceFilter.getCode()
-    @Column(name = "FRIENDLY_NAME", nullable = false)
+    @Column(name = "NAME", nullable = false)
     @PresentationField(order = 2, fieldType = FieldType.NAME)
     public String name;
 
@@ -101,10 +101,5 @@ public abstract class SecuredResourceSpecialBaseImpl<R extends SecuredResource>
         }
         sb.append("]");
         return sb.toString();
-    }
-
-    @Override
-    public boolean isMainLine() {
-        return null == filter;
     }
 }
