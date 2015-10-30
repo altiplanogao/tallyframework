@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.impl;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
@@ -74,7 +75,8 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
             List<String> values = pfc.getFilterValues();
             if (!CollectionUtility.isEmpty(values)) {
                 FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
-                IFieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                //IFieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
+                IFieldMetadata fieldMetadata = ClassMetadata.getRoutedFieldMetadata(classTreeMetadata, propertyName);
                 if(fieldMetadata == null){
                     continue;
                 }

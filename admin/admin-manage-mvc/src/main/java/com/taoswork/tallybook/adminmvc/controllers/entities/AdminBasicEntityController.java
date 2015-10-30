@@ -9,6 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
@@ -550,6 +551,14 @@ public class AdminBasicEntityController extends BaseController {
 
         if(fieldMetadata instanceof ForeignEntityFieldMetadata){
             ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
+            String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
+
+            String oldUri = request.getRequestURI();
+            URI uri = new URI(request.getRequestURI(), false);
+            uri.setPath(fieldEntityType);
+            return "forward:/" + uri.toString();
+        }else if(fieldMetadata instanceof ExternalForeignEntityFieldMetadata){
+            ExternalForeignEntityFieldMetadata foreignEntityFieldMetadata = (ExternalForeignEntityFieldMetadata) fieldMetadata;
             String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
 
             String oldUri = request.getRequestURI();

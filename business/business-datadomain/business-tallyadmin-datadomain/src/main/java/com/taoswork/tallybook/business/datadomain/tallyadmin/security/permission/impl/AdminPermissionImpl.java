@@ -31,7 +31,7 @@ public class AdminPermissionImpl
             targetEntity = AdminPermissionEntryImpl.class,
             mappedBy = AdminPermissionEntryImpl.OWN_M2O_PERM,
             fetch = FetchType.LAZY)
-    @PresentationField
+    @PresentationField(group = Presentation.Group.Authority, order = 2)
     @PresentationCollection
     protected List<AdminPermissionEntry> allEntries = new ArrayList<AdminPermissionEntry>();
     public static final String OWN_M2M_ALL_ENTRIES = "allEntries";

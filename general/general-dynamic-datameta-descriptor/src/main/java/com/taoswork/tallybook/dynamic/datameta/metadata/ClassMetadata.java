@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
@@ -226,6 +228,9 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
             if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
                 entities.add(((ForeignEntityFieldMetadata) fieldMetadata).getEntityType());
+            } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
+                //add or not?
+                entities.add(((ExternalForeignEntityFieldMetadata) fieldMetadata).getEntityType());
             } else if (fieldMetadata instanceof CollectionFieldMetadata) {
                 if (((CollectionFieldMetadata) fieldMetadata).getElementType().isEntity()) {
                     entities.add(((CollectionFieldMetadata) fieldMetadata).getElementType().getEntityType());
@@ -277,5 +282,31 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         result = 31 * result + (groupMetadataMap != null ? groupMetadataMap.size() : 0);
         result = 31 * result + (fieldMetadataMap != null ? fieldMetadataMap.size() : 0);
         return result;
+    }
+
+    //Usually used by query filter
+    public static IFieldMetadata getRoutedFieldMetadata(ClassMetadata classMetadata, String propertyPath){
+        int dpos = propertyPath.indexOf(".");
+        if (dpos < 0) {
+            IFieldMetadata fieldMetadata = classMetadata.getFieldMetadata(propertyPath);
+            return fieldMetadata;
+        }
+        String currentPiece = propertyPath.substring(0, dpos);
+        String remainPiece = propertyPath.substring(dpos + 1);
+
+        IFieldMetadata fieldMetadata = classMetadata.getFieldMetadata(currentPiece);
+         if(fieldMetadata instanceof ForeignEntityFieldMetadata) {
+            ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
+            String entityTypeName = foreignEntityFieldMetadata.getEntityType().getName();
+            ClassMetadata subCm = classMetadata.getReferencedEntityMetadata(entityTypeName);
+             return getRoutedFieldMetadata(subCm, remainPiece);
+        }else if(fieldMetadata instanceof EmbeddedFieldMetadata){
+             EmbeddedFieldMetadata embeddedFieldMetadata = (EmbeddedFieldMetadata) fieldMetadata;
+             ClassMetadata subCm = embeddedFieldMetadata.getClassMetadata();
+             return getRoutedFieldMetadata(subCm, remainPiece);
+         }else {
+             LOGGER.error("Get Routed FieldMetadata of '{}' not handled.", fieldMetadata.getName());
+             return null;
+         }
     }
 }

@@ -17,6 +17,8 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
 
     private final Class entityType;
     private final String entityFieldName;
+    private final String entityDisplayProperty;
+    private final String entityIdProperty;
     private transient Field entityField;
 
     public ExternalForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
@@ -24,6 +26,8 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
         ExternalForeignEntityFieldMetadataFacet foreignFieldFacet = (ExternalForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
         this.entityType = foreignFieldFacet.targetType;
         this.entityFieldName = foreignFieldFacet.realTargetField;
+        this.entityDisplayProperty = foreignFieldFacet.displayField;
+        this.entityIdProperty = foreignFieldFacet.idProperty;
     }
 
     @Override
@@ -62,5 +66,13 @@ public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMe
             }
             return this.entityField;
         }
+    }
+
+    public String getEntityIdProperty() {
+        return entityIdProperty;
+    }
+
+    public String getEntityDisplayProperty() {
+        return entityDisplayProperty;
     }
 }

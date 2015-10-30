@@ -7,10 +7,12 @@ public class ExternalForeignEntityFieldMetadataFacet implements IFieldMetadataFa
     public final String realTargetField;
     public final Class targetType;
     public final String displayField;
+    public final String idProperty;
 
-    public ExternalForeignEntityFieldMetadataFacet(String realTargetField, Class targetType, String displayField) {
+    public ExternalForeignEntityFieldMetadataFacet(String realTargetField, Class targetType, String idProperty, String displayField) {
         this.realTargetField = realTargetField;
         this.targetType = targetType;
+        this.idProperty = idProperty;
         this.displayField = displayField;
     }
 

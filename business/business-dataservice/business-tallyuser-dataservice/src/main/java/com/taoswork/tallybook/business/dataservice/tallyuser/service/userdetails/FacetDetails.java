@@ -20,7 +20,7 @@ public abstract class FacetDetails extends User {
                         String facetName, String password, AccountStatus accountStatus, Collection<? extends GrantedAuthority> authorities) {
         super(facetName, password,
                 accountStatus.isEnabled(),
-                accountStatus.isNonExpired(),
+                accountStatus.checkNowIfExpired(),
                 true, !accountStatus.isLocked(),
                 authorities);
         this.personDetails = personDetails;

@@ -28,7 +28,7 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
                         targetType = field.getType();
                     }
                     ExternalForeignEntityFieldMetadataFacet facet = new ExternalForeignEntityFieldMetadataFacet(targetField,
-                        targetType, presentationExternalForeignKey.displayField());
+                        targetType, presentationExternalForeignKey.idField(), presentationExternalForeignKey.displayField());
                     fieldMetadata.addFacet(facet);
                     fieldMetadata.setTargetMetadataType(ExternalForeignEntityFieldMetadata.class);
                     return ProcessResult.HANDLED;

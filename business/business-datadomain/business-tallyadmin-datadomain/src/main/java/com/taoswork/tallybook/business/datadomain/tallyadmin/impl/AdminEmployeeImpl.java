@@ -9,6 +9,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -31,8 +32,12 @@ import java.util.Set;
                 query = "SELECT employee FROM com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee employee" +
                         " WHERE employee.personId = :personId")
 )
+@PresentationClass(tabs = {
+    @PresentationClass.Tab(
+        name = AdminEmployeeImpl.Presentation.Tab.Permission)
+})
 public class AdminEmployeeImpl implements AdminEmployee {
-    private static class Presentation{
+    public static class Presentation{
         public static final class Tab{
             public static final String Permission = "Permission";
         }
@@ -55,7 +60,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
     protected String name;
 
     @Column(name = "PERSON_ID", nullable = false, unique = true)
-    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY, visibility = Visibility.HIDDEN_ALL)
+    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY, visibility = Visibility.VISIBLE_ALL)
     @PresentationExternalForeignKey(targetType= PersonImpl.class, targetField="person")
     protected Long personId;
     @Transient

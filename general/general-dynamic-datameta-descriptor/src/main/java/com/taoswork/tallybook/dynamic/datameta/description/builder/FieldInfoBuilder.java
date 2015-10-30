@@ -53,6 +53,11 @@ public class FieldInfoBuilder {
             ForeignKeyFieldInfo fkFieldInfo = new ForeignKeyFieldInfo(name, friendlyName,
                 feFm.getEntityType().getName(), feFm.getIdField(), feFm.getDisplayField());
             result = fkFieldInfo;
+        } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
+            ExternalForeignEntityFieldMetadata feFm = (ExternalForeignEntityFieldMetadata) fieldMetadata;
+            ExternalForeignKeyFieldInfo fkFieldInfo = new ExternalForeignKeyFieldInfo(name, friendlyName,
+                feFm.getEntityType().getName(), feFm.getEntityFieldName(), feFm.getEntityIdProperty(), feFm.getEntityDisplayProperty());
+            result = fkFieldInfo;
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {

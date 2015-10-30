@@ -13,4 +13,6 @@ public @interface PresentationExternalForeignKey {
     String targetField() default "";
 
     String displayField() default "name";
+
+    String idField() default "id";
 }

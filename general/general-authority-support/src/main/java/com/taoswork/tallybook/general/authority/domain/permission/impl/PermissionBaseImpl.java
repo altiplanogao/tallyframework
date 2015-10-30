@@ -12,7 +12,9 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@PresentationClass(instantiable =false)
+@PresentationClass(instantiable =false, groups = {
+    @PresentationClass.Group(name = PermissionBaseImpl.Presentation.Group.Authority, order = 2)
+})
 public abstract class PermissionBaseImpl<PS extends PermissionEntry>
         implements Permission<PS> {
 
@@ -84,5 +86,13 @@ public abstract class PermissionBaseImpl<PS extends PermissionEntry>
 //    public void setAllEntries(List<PS> allEntries) {
 //        this.allEntries = allEntries;
 //    }
+public static class Presentation{
+    public static class Tab{
+    }
+    public static class Group{
+        public static final String General = "General";
+        public static final String Authority = "Authority";
+    }
+}
 
 }
