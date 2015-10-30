@@ -24,6 +24,7 @@ public class Restrictions {
         public static final PredicateProvider BooleanEqualProvider = new BooleanEqualPredicateProvider();
         public static final PredicateProvider CommonEqualProvider = new CommonEqualPredicateProvider();
         public static final PredicateProvider ForeignKeyEqualProvider = new ForeignKeyEqualPredicateProvider();
+        public static final PredicateProvider ExternalForeignKeyEqualProvider = new ExternalForeignKeyEqualPredicateProvider();
     }
 
     public static final Restriction StringEqualRestriction = new Restriction(
@@ -49,6 +50,10 @@ public class Restrictions {
     public static final Restriction ForeignKeyRestriction = new Restriction(
         Converters.ForeignKeyConverter,
         Predicates.ForeignKeyEqualProvider);
+
+    public static final Restriction ExternalForeignKeyRestriction = new Restriction(
+        Converters.ForeignKeyConverter,
+        Predicates.ExternalForeignKeyEqualProvider);
 
 
 }

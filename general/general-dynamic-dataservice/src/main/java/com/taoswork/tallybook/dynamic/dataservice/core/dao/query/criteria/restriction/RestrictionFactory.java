@@ -31,6 +31,8 @@ public class RestrictionFactory {
                 return Restrictions.EnumRestriction;
             case FOREIGN_KEY:
                 return Restrictions.ForeignKeyRestriction;
+            case EXTERNAL_FOREIGN_KEY:
+                return Restrictions.ExternalForeignKeyRestriction;
             default:
                 if (Long.class.equals(javaType)) {
                     return Restrictions.LongRestriction;
