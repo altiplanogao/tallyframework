@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.DateFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
 import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.beans.PropertyValue;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -112,8 +115,26 @@ public abstract class EntityInstanceTranslator {
             IFieldMetadata fieldMetadata = classMetadata.getFieldMetadata(fieldKey);
             if (fieldMetadata != null) {
                 if (fieldMetadata.isPrimitiveField()) {
-                    PropertyValue pv = new PropertyValue(fieldKey, entry.getValue());
-                    instanceBean.setPropertyValue(pv);
+                    if (fieldMetadata instanceof DateFieldMetadata) {
+                        Field field = fieldMetadata.getField();
+                        String fieldValue = (String) entry.getValue();
+                        if(StringUtils.isEmpty(fieldValue)){
+                            field.set(instance, null);
+                        } else {
+                            DateFieldMetadata dateFieldMetadata = (DateFieldMetadata) fieldMetadata;
+                            DateModel model = dateFieldMetadata.getModel();
+                            boolean useJavaDate = dateFieldMetadata.isUseJavaDate();
+                            Long ms = Long.parseLong(fieldValue);
+                            Object val = ms;
+                            if (useJavaDate) {
+                                val = new Date(ms);
+                            }
+                            field.set(instance, val);
+                        }
+                    } else {
+                        PropertyValue pv = new PropertyValue(fieldKey, entry.getValue());
+                        instanceBean.setPropertyValue(pv);
+                    }
                 } else {
                     String valKey = entry.getKey();
                     if (fieldMetadata instanceof ForeignEntityFieldMetadata) {

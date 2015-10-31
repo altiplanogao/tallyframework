@@ -93,6 +93,16 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     }
 
     @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
     public String getResourceEntity() {
         return resourceEntity;
     }
@@ -118,7 +128,7 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     }
 
     @Override
-    public void setMasterControlled(boolean masterControlled) {
+    public void setMasterControlled(Boolean masterControlled) {
         this.masterControlled = masterControlled;
     }
 

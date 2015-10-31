@@ -10,10 +10,19 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/6/1.
  */
 public class Entity implements Serializable{
+    private Integer timezoneOffset;
     private Class<? extends Persistable> entityType;
     private Class<? extends Persistable> entityCeilingType;
     private final Map<String, String> entity = new HashMap<String, String>();
     public final static String ENTITY_PROPERTY_NAME = "entity";
+
+    public Integer getTimezoneOffset() {
+        return timezoneOffset;
+    }
+
+    public void setTimezoneOffset(Integer timezoneOffset) {
+        this.timezoneOffset = timezoneOffset;
+    }
 
     public Class<? extends Persistable> getEntityType() {
         return entityType;

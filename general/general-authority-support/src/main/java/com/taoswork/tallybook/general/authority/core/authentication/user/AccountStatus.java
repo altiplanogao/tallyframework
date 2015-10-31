@@ -26,11 +26,12 @@ public class AccountStatus {
     public Boolean locked = false;
 
     @Column(name = "ACCOUNT_CREATE_DATE")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @PresentationField(order = 3, fieldType = FieldType.DATE)
     public Date createDate = new Date();
 
     @Column(name = "ACCOUNT_LAST_LOGIN_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
     @PresentationField(order = 4, fieldType = FieldType.DATE)
     public Date lastLoginDate;
 

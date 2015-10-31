@@ -17,6 +17,10 @@ public interface SecuredResource<RF extends SecuredResourceSpecial> extends Pers
 
     void setName(String name);
 
+    String getDescription();
+
+    void setDescription(String description);
+
     String getResourceEntity();
 
     void setResourceEntity(String type);
@@ -27,7 +31,7 @@ public interface SecuredResource<RF extends SecuredResourceSpecial> extends Pers
 
     boolean isMasterControlled();
 
-    void setMasterControlled(boolean masterControlled);
+    void setMasterControlled(Boolean masterControlled);
 
     ResourceProtectionMode getProtectionMode();
 

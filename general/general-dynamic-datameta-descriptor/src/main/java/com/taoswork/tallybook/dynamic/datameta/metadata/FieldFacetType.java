@@ -10,6 +10,7 @@ public enum FieldFacetType {
     Boolean,
     ForeignEntity,
     ExternalForeignEntity,
+    Date,
 
     Embedded,
 

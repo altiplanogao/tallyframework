@@ -16,6 +16,7 @@ public class BasicFieldHandler
     public BasicFieldHandler() {
         metaHandlers.add(new _EnumFieldHandler());
         metaHandlers.add(new _BooleanFieldHandler());
+        metaHandlers.add(new _DateFieldHandler());
         metaHandlers.add(new _ForeignKeyFieldHandler());
         metaHandlers.add(new _ExternalForeignKeyFieldHandler());
         metaHandlers.add(new _StringFieldHandler());

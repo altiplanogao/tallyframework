@@ -41,6 +41,9 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof BooleanFieldMetadata) {
             BooleanFieldInfo booleanFieldInfo = new BooleanFieldInfo(name, friendlyName, ((BooleanFieldMetadata) fieldMetadata).getModel());
             result = booleanFieldInfo;
+        } else if (fieldMetadata instanceof DateFieldMetadata) {
+            DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, ((DateFieldMetadata) fieldMetadata).getModel());
+            result = dateFieldInfo;
         } else if (fieldMetadata instanceof StringFieldMetadata) {
             StringFieldInfo stringFieldInfo = new StringFieldInfo(name, friendlyName, ((StringFieldMetadata) fieldMetadata).getLength());
             stringFieldInfo.setNameField(fieldMetadata.isNameField());
