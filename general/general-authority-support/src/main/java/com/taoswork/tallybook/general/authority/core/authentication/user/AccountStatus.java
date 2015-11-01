@@ -3,7 +3,9 @@ package com.taoswork.tallybook.general.authority.core.authentication.user;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationDate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,6 +30,7 @@ public class AccountStatus {
     @Column(name = "ACCOUNT_CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     @PresentationField(order = 3, fieldType = FieldType.DATE)
+    @PresentationDate(model = DateModel.DateTime)
     public Date createDate = new Date();
 
     @Column(name = "ACCOUNT_LAST_LOGIN_DATE")

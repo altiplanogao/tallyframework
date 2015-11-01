@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
 
 import javax.persistence.Temporal;
@@ -11,11 +12,13 @@ import javax.persistence.Temporal;
  */
 public class DateFieldMetadataFacet implements IFieldMetadataFacet {
     public final DateModel model;
+    public final DateCellModel cellModel;
 
     public final boolean useJavaDate;
 
-    public DateFieldMetadataFacet(DateModel model, boolean useJavaDate) {
+    public DateFieldMetadataFacet(DateModel model, DateCellModel cellModel, boolean useJavaDate) {
         this.model = model;
+        this.cellModel = cellModel;
         this.useJavaDate = useJavaDate;
     }
 

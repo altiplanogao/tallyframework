@@ -20,6 +20,7 @@ public class BasicFieldHandler
         metaHandlers.add(new _ForeignKeyFieldHandler());
         metaHandlers.add(new _ExternalForeignKeyFieldHandler());
         metaHandlers.add(new _StringFieldHandler());
+        metaHandlers.add(new _VersionFieldHandler());
         metaHandlers.add(new _PaleFieldHandler());
     }
 }

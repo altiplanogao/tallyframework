@@ -104,9 +104,10 @@ public class NativeClassHelper {
                     abandon = true;
                 }
             }
-            if (field.isAnnotationPresent(Version.class)) {
-                abandon = true;
-            }
+            //Version still needed when doing value copy
+//            if (field.isAnnotationPresent(Version.class)) {
+//                abandon = true;
+//            }
             if (!abandon) {
                 fieldList.add(field);
             }

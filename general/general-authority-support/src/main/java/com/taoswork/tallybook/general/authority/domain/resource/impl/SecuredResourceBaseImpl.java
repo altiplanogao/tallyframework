@@ -142,6 +142,9 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
         this.protectionMode = protectionMode;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     @Override
     public int getVersion() {

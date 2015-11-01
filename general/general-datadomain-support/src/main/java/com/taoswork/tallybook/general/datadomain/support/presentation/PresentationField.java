@@ -38,6 +38,8 @@ public @interface PresentationField {
      */
     int visibility() default Visibility.VISIBLE_ALL;
 
+    boolean editable() default true;
+
     /**
      * Optional - only required if you want to explicitly specify the field type. This
      * value is normally inferred by the system based on the field type in the entity class.

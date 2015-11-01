@@ -5,6 +5,8 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.validation.PersonVal
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
+import java.util.Date;
+
 @PersistFriendly(
     validators = {PersonValidator.class},
     valueGates = {PersonValueGate.class}
@@ -37,4 +39,8 @@ public interface Person extends Persistable {
     String getMobile();
 
     Person setMobile(String mobile);
+
+    Date getCreateDate();
+
+    void setCreateDate(Date createDate);
 }

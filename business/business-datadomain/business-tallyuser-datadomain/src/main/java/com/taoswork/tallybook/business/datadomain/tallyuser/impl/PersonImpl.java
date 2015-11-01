@@ -10,11 +10,10 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "TB_PERSON")
@@ -82,6 +81,12 @@ public class PersonImpl
     @Column(name = "UUID", unique = true)
     @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.HIDDEN_ALL)
     protected String uuid;
+
+    @Column(name = "CREATE_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    @PresentationField(order = 99, fieldType = FieldType.DATE, visibility = Visibility.GRID_HIDE)
+    @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
+    public Date createDate = new Date();
 
     public PersonImpl() {
     }
@@ -160,6 +165,16 @@ public class PersonImpl
     public PersonImpl setUuid(String uuid) {
         this.uuid = uuid;
         return this;
+    }
+
+    @Override
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override

@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface PresentationDate {
     DateModel model() default DateModel.DateTime;
+    DateCellModel cellModel() default DateCellModel.DateAndTime;
 }
