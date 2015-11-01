@@ -2,6 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.TallyBusinessDataDomain;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -21,16 +22,19 @@ public class BusinessUnitImpl implements BusinessUnit {
         table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
         initialValue = 1)
     @Column(name = "ID")
-    @PresentationField(order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String name;
 
     @Column(name = "DESCRIP", length = Integer.MAX_VALUE - 1)
     @Lob
-    @PresentationField(order = 4, fieldType = FieldType.HTML, visibility = Visibility.GRID_HIDE)
+    @PersistField(fieldType = FieldType.HTML)
+    @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
     protected String description;
 
 

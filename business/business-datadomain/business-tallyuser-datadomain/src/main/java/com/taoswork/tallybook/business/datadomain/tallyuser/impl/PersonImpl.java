@@ -6,6 +6,8 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.convert.GenderToStri
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
+import com.taoswork.tallybook.general.datadomain.support.entity.handyprotect.valuegate.FieldCreateDateValueGate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -48,43 +50,51 @@ public class PersonImpl
             table = TallyUserDataDomain.ID_GENERATOR_TABLE_NAME,
             initialValue = 0)
     @Column(name = "ID")
-    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(group = "General", order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(group = "General", order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(group = "General", order = 2)
     protected String name;
 
     @Column(name = "GENDER", nullable = false, length = 1
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.DEFAULT_CHAR + "'"
     )
-    @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PresentationField(group = "General", order = 3)
     @PresentationEnum(enumeration = Gender.class)
     @Convert(converter = GenderToStringConverter.class)
     protected Gender gender = Gender.unknown;
 
     @Column(name = "EMAIL", length = 120)
-    @PresentationField(group = "General", order = 4, fieldType = FieldType.EMAIL)
+    @PersistField(fieldType = FieldType.EMAIL)
+    @PresentationField(group = "General", order = 4)
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
-    @PresentationField(group = "General", order = 5, fieldType = FieldType.PHONE)
+    @PersistField(fieldType = FieldType.PHONE)
+    @PresentationField(group = "General", order = 5)
     protected String mobile;
 
     @Column(name = "ACTIVE", nullable = false, length = 2,
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
-    @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
+    @PersistField(fieldType = FieldType.BOOLEAN)
+    @PresentationField(order = 6)
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
-    @PresentationField(fieldType = FieldType.CODE, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.CODE)
+    @PresentationField(visibility = Visibility.HIDDEN_ALL)
     protected String uuid;
 
     @Column(name = "CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PresentationField(order = 99, fieldType = FieldType.DATE, visibility = Visibility.GRID_HIDE)
+    @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = FieldCreateDateValueGate.class, skipDefaultFieldValueGate = true)
+    @PresentationField(order = 99, visibility = Visibility.GRID_HIDE)
     @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
     public Date createDate = new Date();
 

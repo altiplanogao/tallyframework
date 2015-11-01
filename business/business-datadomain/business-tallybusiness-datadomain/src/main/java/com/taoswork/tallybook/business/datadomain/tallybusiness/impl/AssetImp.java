@@ -4,6 +4,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Asset;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -27,7 +28,8 @@ public class AssetImp implements Asset {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String name;
 
     @Column(name = "DESC")

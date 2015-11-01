@@ -59,8 +59,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
             securityVerifier.checkAccess(guardianName, Access.Create, entity);
             PersistableResult persistableResult = makePersistableResult(entity);
 
-            //deposit before validate, for security reason
-            entityValueGateService.deposit(persistableResult.getEntity(), null);
+            //store before validate, for security reason
+            entityValueGateService.store(persistableResult.getEntity(), null);
             entityValidationService.validate(persistableResult);
 
             return dynamicEntityDao.create(entity);
@@ -75,7 +75,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
             if(result == null){
                 throw new NoSuchRecordException(entityType, key);
             }
-            entityValueGateService.withdraw(result);
+            entityValueGateService.fetch(result);
             return result;
         }
 
@@ -90,8 +90,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
             securityVerifier.checkAccess(guardianName, Access.Update, entity);
             PersistableResult persistableResult = makePersistableResult(entity);
 
-            //deposit before validate, for security reason
-            entityValueGateService.deposit(persistableResult.getEntity(), oldEntity.getEntity());
+            //store before validate, for security reason
+            entityValueGateService.store(persistableResult.getEntity(), oldEntity.getEntity());
             entityValidationService.validate(persistableResult);
 
             return dynamicEntityDao.update(entity);
@@ -120,7 +120,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
             Class<T> entityRootClz = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityType);
             CriteriaQueryResult<T> result = dynamicEntityDao.query(entityRootClz, query);
             for(T one : result.getEntityCollection()){
-                entityValueGateService.withdraw(one);
+                entityValueGateService.fetch(one);
             }
             return result;
         }

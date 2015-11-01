@@ -9,6 +9,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -56,18 +57,21 @@ public class AdminEmployeeImpl implements AdminEmployee {
     protected Long id;
 
     @Column(name = "NAME", length = 100, nullable = false)
-    @PresentationField(order =1 ,fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order =1)
     protected String name;
 
     @Column(name = "PERSON_ID", nullable = false, unique = true)
-    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY, visibility = Visibility.VISIBLE_ALL)
+    @PersistField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @PresentationField(visibility = Visibility.VISIBLE_ALL)
     @PresentationExternalForeignKey(targetType= PersonImpl.class, targetField="person")
     protected Long personId;
     @Transient
     private transient Person person;
 
     @Column(name = "TITLE")
-    @PresentationField(group = "General", order =3, fieldType = FieldType.STRING, visibility = Visibility.VISIBLE_ALL)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(group = "General", order =3, visibility = Visibility.VISIBLE_ALL)
     protected String title;
 
     @Embedded

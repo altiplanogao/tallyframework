@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business.impl;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
@@ -63,7 +64,9 @@ public class EmployeeImpl implements IEmployee{
     @Enumerated(EnumType.STRING)
     private EmployeeType type;
 
-    @PresentationField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+
+    @PersistField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @PresentationField()
     @PresentationExternalForeignKey(targetType = CitizenImpl.class, targetField = "citizen")
     private Long citizenId;
 

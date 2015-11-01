@@ -4,17 +4,17 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 public abstract class EntityValueGateBase<T extends Persistable> implements IEntityValueGate {
     @Override
-    public final void deposit(Persistable entity, Persistable reference) {
-        this.doDeposit((T)entity, (T)reference);
+    public final void store(Persistable entity, Persistable reference) {
+        this.doStore((T) entity, (T) reference);
     }
 
     @Override
-    public final void withdraw(Persistable entity) {
-        this.doWithdraw((T) entity);
+    public final void fetch(Persistable entity) {
+        this.doFetch((T) entity);
     }
 
-    protected abstract void doDeposit(T entity, T oldEntity);
+    protected abstract void doStore(T entity, T oldEntity);
 
-    protected abstract void doWithdraw(T entity);
+    protected abstract void doFetch(T entity);
 
 }

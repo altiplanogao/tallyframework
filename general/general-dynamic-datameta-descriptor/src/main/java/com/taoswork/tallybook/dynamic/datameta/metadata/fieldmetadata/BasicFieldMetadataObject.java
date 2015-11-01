@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.FriendlyOrderedMetadata;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IFieldValueGate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
     private final String declaringClassName;
     private final Class fieldClass;
     private transient Field field;
+
+    private Class<? extends IFieldValueGate> fieldValueGateOverride;
+    private boolean skipDefaultFieldValueGate = false;
 
     private String tabName;
     private String groupName;
@@ -135,4 +139,16 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
         return originalOrder;
     }
 
+    public void setFieldValueGate(Class<? extends IFieldValueGate> fvg, boolean skipDefaultFieldValueGate) {
+        this.fieldValueGateOverride = fvg;
+        this.skipDefaultFieldValueGate = skipDefaultFieldValueGate;
+    }
+
+    public Class<? extends IFieldValueGate> getFieldValueGateOverride() {
+        return fieldValueGateOverride;
+    }
+
+    public boolean isSkipDefaultFieldValueGate() {
+        return skipDefaultFieldValueGate;
+    }
 }

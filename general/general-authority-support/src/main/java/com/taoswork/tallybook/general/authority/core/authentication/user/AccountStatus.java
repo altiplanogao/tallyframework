@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.general.authority.core.authentication.user;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
@@ -18,24 +19,28 @@ import java.util.Date;
 public class AccountStatus {
 
     @Column(name = "ACCOUNT_ENABLED")
-    @PresentationField(order = 1, fieldType = FieldType.BOOLEAN)
+    @PersistField(fieldType = FieldType.BOOLEAN)
+    @PresentationField(order = 1)
     @PresentationBoolean(model = BooleanModel.YesNo)
     public Boolean enabled = true;
 
     @Column(name = "ACCOUNT_LOCKED")
-    @PresentationField(order = 2, fieldType = FieldType.BOOLEAN)
+    @PersistField(fieldType = FieldType.BOOLEAN)
+    @PresentationField(order = 2)
     @PresentationBoolean(model = BooleanModel.YesNo)
     public Boolean locked = false;
 
     @Column(name = "ACCOUNT_CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PresentationField(order = 3, fieldType = FieldType.DATE)
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationField(order = 3)
     @PresentationDate(model = DateModel.DateTime)
     public Date createDate = new Date();
 
     @Column(name = "ACCOUNT_LAST_LOGIN_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PresentationField(order = 4, fieldType = FieldType.DATE)
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationField(order = 4)
     public Date lastLoginDate;
 
     public Boolean isEnabled() {

@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.resource.FilterType;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -31,18 +32,21 @@ public abstract class SecuredResourceSpecialBaseImpl<R extends SecuredResource>
         table = GeneralAuthoritySupportRoot.ID_GENERATOR_TABLE_NAME,
         initialValue = 0)
     @Column(name = "ID")
-    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(group = "General", order = 1, visibility = Visibility.HIDDEN_ALL)
     public Long id;
 
     //IResourceFilter.getCode()
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     public String name;
 
     @Column(name = "FILTER", nullable = false, length = 10
         ,columnDefinition = "VARCHAR(10) DEFAULT '" + FilterType.DEFAULT_VAL + "'"
     )
-    @PresentationField(order = 6, fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PresentationField(order = 6)
     @PresentationEnum(enumeration = FilterType.class)
     public FilterType filter = FilterType.None;
 

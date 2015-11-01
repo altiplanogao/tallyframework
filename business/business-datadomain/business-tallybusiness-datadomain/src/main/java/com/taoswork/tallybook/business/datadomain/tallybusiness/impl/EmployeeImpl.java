@@ -8,6 +8,7 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permiss
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -33,7 +34,8 @@ public class EmployeeImpl implements Employee {
         table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
         initialValue = 1)
     @Column(name = "ID")
-    @PresentationField(order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "PERSON_ID", nullable = false)
@@ -44,17 +46,19 @@ public class EmployeeImpl implements Employee {
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
     @JoinColumn(name = "host_id",  nullable = false, updatable = false)
-    @PresentationField(required = true, fieldType = FieldType.FOREIGN_KEY)
+    @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
     protected BusinessUnit businessUnit;
 
     protected EmployeeStatus activeStatus;
 
     @Column(name = "NAME", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String name;
 
     @Column(name = "TITLE", nullable = true)
-    @PresentationField(order = 2, fieldType = FieldType.STRING)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(order = 2)
     protected String title;
 
     @Embedded

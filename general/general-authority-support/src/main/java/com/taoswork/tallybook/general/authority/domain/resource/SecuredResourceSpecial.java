@@ -8,7 +8,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  * Created by Gao Yuan on 2015/4/28.
  */
 
-//@PersistFriendly(nameOverride = "admin-resource-criteria")
+//@PersistEntity(nameOverride = "admin-resource-criteria")
 public interface SecuredResourceSpecial<R extends SecuredResource> extends Persistable {
 
     Long getId();

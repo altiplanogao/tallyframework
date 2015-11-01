@@ -8,21 +8,21 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 
-public class FieldTypedHandlerManager<H extends IFieldTypedHandler> {
+public class TypedFieldHandlerManager<H extends ITypedFieldHandler> {
     //Real data
     private MultiValueMap<FieldTypeType, H> typedFieldHandlers = new LinkedMultiValueMap<FieldTypeType, H>();
 
     //Cache
     private Map<FieldTypeType, Set<H>> cachedFieldHandlers = new HashMap<FieldTypeType, Set<H>>();
 
-    public FieldTypedHandlerManager addHandlers(H... fieldHandlers) {
+    public TypedFieldHandlerManager addHandlers(H... fieldHandlers) {
         for (H handler : fieldHandlers) {
             this.addHandler(handler);
         }
         return this;
     }
 
-    public FieldTypedHandlerManager addHandler(H fieldHandler) {
+    public TypedFieldHandlerManager addHandler(H fieldHandler) {
         if (fieldHandler != null) {
             FieldTypeType typeType = new FieldTypeType(
                 fieldHandler.supportedFieldType(), fieldHandler.supportedFieldClass());

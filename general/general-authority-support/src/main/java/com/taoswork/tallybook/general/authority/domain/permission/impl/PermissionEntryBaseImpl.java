@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -71,7 +72,8 @@ public abstract class PermissionEntryBaseImpl<P extends Permission>
     protected Long id;
 
     @Column(name = "NAME")
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String name;
 
     @Embedded

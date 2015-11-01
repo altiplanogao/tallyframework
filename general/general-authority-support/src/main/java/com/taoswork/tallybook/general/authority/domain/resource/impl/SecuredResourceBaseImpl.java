@@ -6,6 +6,7 @@ import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtecti
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.converter.ProtectionModeToStringConverter;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -34,37 +35,44 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
         table = GeneralAuthoritySupportRoot.ID_GENERATOR_TABLE_NAME,
         initialValue = 0)
     @Column(name = "ID")
-    @PresentationField(group = "General", order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(group = "General", order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME", length = 100, nullable = false)
-    @PresentationField(order = 1, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 1)
     protected String name;
 
     @Column(name = "DESCRIPTION")
-    @PresentationField(order = 2, visibility = Visibility.GRID_HIDE, fieldType = FieldType.STRING)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(order = 2, visibility = Visibility.GRID_HIDE)
     protected String description;
 
     //A Data line without resourceEntity, means its a main source line, only its version column is useful
     @Column(name = "TYPE", nullable = false)
-    @PresentationField(order = 3, fieldType = FieldType.STRING)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(order = 3)
     protected String resourceEntity;
 
     @Column(name = "CATEGORY")
-    @PresentationField(order = 4, fieldType = FieldType.STRING)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(order = 4)
     protected String category;
 
     @Column(name = "PROT_MOD", nullable = false, length = 4
         ,columnDefinition = "VARCHAR(4) DEFAULT '" + ResourceProtectionMode.DEFAULT_CHAR + "'"
     )
-    @PresentationField(order = 5, fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PresentationField(order = 5)
     @PresentationEnum(enumeration = ResourceProtectionMode.class)
     @Convert(converter = ProtectionModeToStringConverter.class)
     protected ResourceProtectionMode protectionMode;
 
     @Column(name = "MASTER_CTRL", nullable = false, length = 2)
     @Convert(converter = BooleanToStringConverter.class)
-    @PresentationField(order = 6, fieldType = FieldType.BOOLEAN)
+    @PersistField(fieldType = FieldType.BOOLEAN)
+    @PresentationField(order = 6)
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected Boolean masterControlled = Boolean.TRUE;
 

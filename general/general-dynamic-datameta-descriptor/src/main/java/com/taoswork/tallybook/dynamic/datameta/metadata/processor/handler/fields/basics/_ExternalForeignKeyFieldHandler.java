@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetad
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
 
@@ -15,8 +15,8 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
     @Override
     public ProcessResult process(Field field, FieldMetadataIntermediate fieldMetadata) {
         try {
-            PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
-            if (presentationField != null && FieldType.EXTERNAL_FOREIGN_KEY.equals(presentationField.fieldType())) {
+            PersistField persistField = field.getDeclaredAnnotation(PersistField.class);
+            if (persistField != null && FieldType.EXTERNAL_FOREIGN_KEY.equals(persistField.fieldType())) {
                 PresentationExternalForeignKey presentationExternalForeignKey = field.getDeclaredAnnotation(PresentationExternalForeignKey.class);
                 if (presentationExternalForeignKey != null) {
                     String targetField = presentationExternalForeignKey.targetField();

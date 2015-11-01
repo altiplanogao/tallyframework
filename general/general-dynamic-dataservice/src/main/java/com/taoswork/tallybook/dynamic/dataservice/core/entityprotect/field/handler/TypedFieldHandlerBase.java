@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.hand
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public abstract class FieldTypedHandlerBase<T> implements IFieldTypedHandler {
+public abstract class TypedFieldHandlerBase<T> implements ITypedFieldHandler {
 
     protected boolean canHandle(IFieldMetadata fieldMetadata) {
         Class fieldClass = fieldMetadata.getFieldClass();

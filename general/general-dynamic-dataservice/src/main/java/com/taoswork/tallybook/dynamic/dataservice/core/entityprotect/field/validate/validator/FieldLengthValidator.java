@@ -2,14 +2,14 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.vali
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.StringFieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorBase;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.TypedFieldValidatorBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 /**
  * Created by Gao Yuan on 2015/9/28.
  */
-public class FieldLengthValidator extends FieldValidatorBase<String> {
+public class FieldLengthValidator extends TypedFieldValidatorBase<String> {
     @Override
     public FieldType supportedFieldType() {
         return null;

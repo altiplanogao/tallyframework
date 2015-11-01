@@ -10,7 +10,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.AEntityMetadataRawAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.helper.impl.EntityMetadataRawAccessJPA;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.extension.collections.SetBuilder;
 import com.taoswork.tallybook.general.solution.autotree.AutoTree;
@@ -281,10 +281,10 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
                 Class<?> fallback = null;
                 Class<?> guardian = null;
                 for(Class<?> _intf : _interfaces){
-                    PersistFriendly persistFriendly = _intf.getDeclaredAnnotation(PersistFriendly.class);
-                    if(persistFriendly != null){
-                        Class annotationGuardian = persistFriendly.permissionGuardian();
-                        boolean asDefaultGuardian = persistFriendly.asDefaultPermissionGuardian();
+                    PersistEntity persistEntity = _intf.getDeclaredAnnotation(PersistEntity.class);
+                    if(persistEntity != null){
+                        Class annotationGuardian = persistEntity.permissionGuardian();
+                        boolean asDefaultGuardian = persistEntity.asDefaultPermissionGuardian();
                         if(annotationGuardian != void.class){
                             guardian = annotationGuardian;
                             break;

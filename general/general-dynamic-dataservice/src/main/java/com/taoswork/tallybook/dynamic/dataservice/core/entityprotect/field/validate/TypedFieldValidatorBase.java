@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.FieldTypedHandlerBase;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.TypedFieldHandlerBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Gao Yuan on 2015/9/29.
  */
-public abstract class FieldValidatorBase<T>
-    extends FieldTypedHandlerBase<T>
-    implements IFieldValidator {
+public abstract class TypedFieldValidatorBase<T>
+    extends TypedFieldHandlerBase<T>
+    implements TypedFieldValidator {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(FieldValidatorBase.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TypedFieldValidatorBase.class);
 
     protected boolean nullValueAsValid(IFieldMetadata fieldMetadata) {
         if(fieldMetadata.isRequired())

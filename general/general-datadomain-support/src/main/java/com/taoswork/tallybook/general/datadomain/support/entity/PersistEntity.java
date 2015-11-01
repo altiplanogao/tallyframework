@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface PersistFriendly {
+public @interface PersistEntity {
     String nameOverride() default "";
 
     boolean asDefaultPermissionGuardian () default false;

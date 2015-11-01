@@ -22,7 +22,6 @@ public class PresentationAnnotationFieldHandler implements IFieldHandler {
         bfmo.setGroupName(PresentationClass.Group.DEFAULT_NAME);
         bfmo.setOrder(PresentationField.DEFAULT_ORDER_BIAS + bfmo.getOriginalOrder());
         bfmo.setVisibility(Visibility.DEFAULT);
-        bfmo.setFieldType(FieldType.UNKNOWN);
         bfmo.setNameField(false);
 
         if (presentationField != null) {
@@ -32,11 +31,6 @@ public class PresentationAnnotationFieldHandler implements IFieldHandler {
                 bfmo.setOrder(presentationField.order());
             }
             bfmo.setVisibility(presentationField.visibility());
-            bfmo.setFieldType(presentationField.fieldType());
-            bfmo.setNameField(FieldType.NAME.equals(presentationField.fieldType()));
-            if (presentationField.required()) {
-                bfmo.setRequired(true);
-            }
         }
         return ProcessResult.HANDLED;
     }

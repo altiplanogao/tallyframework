@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.FriendlyMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdered;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IFieldValueGate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -85,6 +86,16 @@ abstract class BaseFieldMetadata implements IFieldMetadata, Serializable {
     @Override
     public FriendlyMetadata setFriendlyName(String friendlyName) {
         return basicFieldMetadataObject.setFriendlyName(friendlyName);
+    }
+
+    @Override
+    public Class<? extends IFieldValueGate> getFieldValueGateOverride() {
+        return basicFieldMetadataObject.getFieldValueGateOverride();
+    }
+
+    @Override
+    public boolean getSkipDefaultFieldValueGate() {
+        return basicFieldMetadataObject.isSkipDefaultFieldValueGate();
     }
 
     @Override

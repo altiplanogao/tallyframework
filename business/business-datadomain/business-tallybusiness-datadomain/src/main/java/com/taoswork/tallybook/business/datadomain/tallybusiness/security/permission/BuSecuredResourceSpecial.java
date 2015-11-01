@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission;
 
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 
-@PersistFriendly(nameOverride = "bu-secured-resource-filter")
+@PersistEntity(nameOverride = "bu-secured-resource-filter")
 public interface BuSecuredResourceSpecial extends SecuredResourceSpecial<BuSecuredResource> {
 }

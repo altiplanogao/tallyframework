@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class AdminEmployeeGate extends EntityValueGateBase<AdminEmployee> {
     @Override
-    protected void doDeposit(AdminEmployee entity, AdminEmployee oldEntity) {
+    protected void doStore(AdminEmployee entity, AdminEmployee oldEntity) {
         Person person = entity.getPerson();
         if(person != null){
             if (StringUtils.isEmpty(entity.getName())){
@@ -32,7 +32,7 @@ public class AdminEmployeeGate extends EntityValueGateBase<AdminEmployee> {
     }
 
     @Override
-    protected void doWithdraw(AdminEmployee entity) {
+    protected void doFetch(AdminEmployee entity) {
         AccountStatus as =entity.getStatus();
         if(as== null){
             as = new AccountStatus();

@@ -4,13 +4,13 @@ import com.taoswork.tallybook.general.authority.domain.permission.validation.Per
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
-@PersistFriendly(
+@PersistEntity(
     validators = {PermissionEntryValidator.class}
 )
 public interface PermissionEntry<P extends Permission>

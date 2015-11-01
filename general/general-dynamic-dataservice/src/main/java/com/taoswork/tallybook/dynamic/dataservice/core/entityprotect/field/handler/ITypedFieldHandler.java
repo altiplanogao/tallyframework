@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.hand
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public interface IFieldTypedHandler {
+public interface ITypedFieldHandler {
 
     FieldType supportedFieldType();
 

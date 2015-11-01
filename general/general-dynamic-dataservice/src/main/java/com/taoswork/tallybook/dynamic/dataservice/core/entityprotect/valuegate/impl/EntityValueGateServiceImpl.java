@@ -2,7 +2,8 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.FieldValueGateManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.EntityValueGate;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.EntityValueGateOnFields;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.gates.EmailValueGate;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.gates.HtmlValueGate;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.EntityValueGateManager;
@@ -16,28 +17,32 @@ public class EntityValueGateServiceImpl implements EntityValueGateService {
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
-    private FieldValueGateManager fieldValueGateManager = new FieldValueGateManager();
-    private EntityValueGateManager entityValueGateManager = new EntityValueGateManager();
+    private final EntityValueGate entityValueGateOnFields;
+    private final EntityValueGate entityValueGateManager;
 
     public EntityValueGateServiceImpl() {
-        fieldValueGateManager.addHandler(new EmailValueGate());
-        fieldValueGateManager.addHandler(new HtmlValueGate());
+        EntityValueGateOnFields valueGateOnFields = new EntityValueGateOnFields();
+        valueGateOnFields
+            .addHandler(new EmailValueGate())
+            .addHandler(new HtmlValueGate());
+        entityValueGateOnFields = valueGateOnFields;
+        entityValueGateManager = new EntityValueGateManager();
     }
 
     @Override
-    public <T extends Persistable> void deposit(T entity, T oldEntity) throws ServiceException {
+    public <T extends Persistable> void store(T entity, T oldEntity) throws ServiceException {
         Class entityType = entity.getClass();
         ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
 
-        fieldValueGateManager.normalize(entity, classMetadata);
-        entityValueGateManager.deposit(classMetadata, entity, oldEntity);
+        entityValueGateOnFields.store(classMetadata, entity, oldEntity);
+        entityValueGateManager.store(classMetadata, entity, oldEntity);
     }
 
     @Override
-    public <T extends Persistable> void withdraw(T entity) {
+    public <T extends Persistable> void fetch(T entity) {
         Class entityType = entity.getClass();
         ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
 
-        entityValueGateManager.withdraw(classMetadata, entity);
+        entityValueGateManager.fetch(classMetadata, entity);
     }
 }

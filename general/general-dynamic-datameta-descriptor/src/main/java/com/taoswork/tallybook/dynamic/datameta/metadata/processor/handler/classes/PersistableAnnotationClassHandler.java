@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.class
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
@@ -27,12 +27,12 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
         ClassUtility.getAllSupers(Persistable.class, clzz, true, true, clzes);
         boolean handled = false;
         for (Class<?> oneClz : clzes) {
-            PersistFriendly presentationClass = oneClz.getAnnotation(PersistFriendly.class);
-            if (presentationClass != null) {
-                for (Class<? extends IEntityValidator> validator : presentationClass.validators()) {
+            PersistEntity persistEntity = oneClz.getAnnotation(PersistEntity.class);
+            if (persistEntity != null) {
+                for (Class<? extends IEntityValidator> validator : persistEntity.validators()) {
                     classMetadata.addValidator(validator);
                 }
-                for (Class<? extends IEntityValueGate> valueGate : presentationClass.valueGates()) {
+                for (Class<? extends IEntityValueGate> valueGate : persistEntity.valueGates()) {
                     classMetadata.addValueGate(valueGate);
                 }
                 handled = true;

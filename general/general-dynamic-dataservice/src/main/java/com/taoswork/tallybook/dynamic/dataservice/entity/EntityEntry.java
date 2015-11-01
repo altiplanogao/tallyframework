@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -13,9 +13,9 @@ public class EntityEntry {
     public EntityEntry(Class<?> entityInterface) {
         this.entityInterfaceName = entityInterface.getName();
         String typeName = entityInterface.getSimpleName().toLowerCase();
-        PersistFriendly persistFriendly = entityInterface.getDeclaredAnnotation(PersistFriendly.class);
-        if(persistFriendly != null){
-            String nameOverride = persistFriendly.nameOverride();
+        PersistEntity persistEntity = entityInterface.getDeclaredAnnotation(PersistEntity.class);
+        if(persistEntity != null){
+            String nameOverride = persistEntity.nameOverride();
             if(StringUtils.isNotEmpty(nameOverride))
                 typeName = nameOverride;
         }

@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.zoo.impl;
 
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -58,7 +59,8 @@ public class ZooKeeperImpl
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
-    @PresentationField(fieldType = FieldType.PHONE)
+    @PersistField(fieldType = FieldType.PHONE)
+    @PresentationField
     protected String mobile;
 
     @ElementCollection

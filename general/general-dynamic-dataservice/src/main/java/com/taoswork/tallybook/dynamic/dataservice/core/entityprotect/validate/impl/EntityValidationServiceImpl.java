@@ -3,7 +3,8 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.i
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.FieldValidatorManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidator;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorOnFields;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.*;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorManager;
@@ -21,17 +22,20 @@ public class EntityValidationServiceImpl implements EntityValidationService {
     @Resource(name = DynamicEntityMetadataAccess.COMPONENT_NAME)
     protected DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
 
-    private FieldValidatorManager fieldValidatorManager = new FieldValidatorManager();
-
-    private EntityValidatorManager entityValidatorManager = new EntityValidatorManager();
+    private final EntityValidator entityValidatorOnFields;
+    private final EntityValidator entityValidatorManager;
 
     public EntityValidationServiceImpl() {
-        fieldValidatorManager
+        EntityValidatorOnFields validatorOnFields = new EntityValidatorOnFields();
+        validatorOnFields
             .addHandler(new FieldRequiredValidator())
             .addHandler(new FieldLengthValidator())
             .addHandler(new EmailFieldValidator())
             .addHandler(new PhoneFieldValidator())
             .addHandler(new ForeignKeyFieldValidator());
+
+        entityValidatorOnFields = validatorOnFields;
+        entityValidatorManager = new EntityValidatorManager();
     }
 
     @Override
@@ -43,7 +47,7 @@ public class EntityValidationServiceImpl implements EntityValidationService {
         try {
             EntityValidationErrors entityErrors = new EntityValidationErrors();
 
-            fieldValidatorManager.validate(entity, classMetadata, entityErrors);
+            entityValidatorOnFields.validate(entity, classMetadata, entityErrors);
             entityValidatorManager.validate(entity, classMetadata, entityErrors);
 
             if (!entityErrors.isValid()) {

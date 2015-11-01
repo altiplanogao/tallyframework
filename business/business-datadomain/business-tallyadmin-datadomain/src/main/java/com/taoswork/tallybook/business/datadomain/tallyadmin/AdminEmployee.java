@@ -5,7 +5,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyadmin.valueprotect.AdminEmployeeGate;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 import java.util.Set;
@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Created by Gao Yuan on 2015/5/10.
  */
-@PersistFriendly(nameOverride = "admin",
+@PersistEntity(nameOverride = "admin",
     valueGates = {AdminEmployeeGate.class}
 )
 public interface AdminEmployee extends Persistable {

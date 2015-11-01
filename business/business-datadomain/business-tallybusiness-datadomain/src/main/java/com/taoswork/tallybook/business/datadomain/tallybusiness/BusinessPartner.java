@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.validation.BusinessPartnerValidator;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 /**
@@ -9,7 +9,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  *
  * Business partner: a company, an organization, a division, a branch
  */
-@PersistFriendly(
+@PersistEntity(
     validators = {BusinessPartnerValidator.class}
 )
 public interface BusinessPartner extends Persistable {

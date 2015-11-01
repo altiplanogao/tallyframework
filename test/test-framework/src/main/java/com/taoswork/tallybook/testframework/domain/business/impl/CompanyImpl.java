@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.testframework.domain.business.impl;
 
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -71,10 +72,11 @@ public class CompanyImpl implements ICompany {
         table = TallyMockupDataDomain.ID_GENERATOR_TABLE_NAME,
         initialValue = 0)
     @Column(name = "ID")
+    @PersistField(fieldType = FieldType.ID)
     @PresentationField(
         tab = Presentation.Tab.General,
         group = Presentation.Group.General,
-        order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+        order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "NAME")
@@ -106,7 +108,8 @@ public class CompanyImpl implements ICompany {
     protected Date creationDate;
 
     @Column(name = "TYPE")
-    @PresentationField(visibility = Visibility.VISIBLE_ALL, fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PresentationField(visibility = Visibility.VISIBLE_ALL)
     @PresentationEnum(enumeration = CompanyType.class)
     @Convert(converter = CompanyTypeToStringConverter.class)
     private CompanyType companyType;

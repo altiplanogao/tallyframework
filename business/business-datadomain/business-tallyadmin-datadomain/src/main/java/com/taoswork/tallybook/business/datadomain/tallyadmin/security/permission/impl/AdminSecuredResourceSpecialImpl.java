@@ -4,6 +4,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.resource.impl.SecuredResourceSpecialBaseImpl;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
@@ -23,7 +24,8 @@ public class AdminSecuredResourceSpecialImpl
     @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
     @ManyToOne(targetEntity = AdminSecuredResourceImpl.class)
     @JoinColumn(name = "RES_TYPE_ID")
-    @PresentationField(order = 3, required = true)
+    @PersistField(required = true)
+    @PresentationField(order = 3)
     @PresentationForeignKey(displayField = "name")
     public AdminSecuredResource securedResource;
     public static final String OWN_M2O_RES_ENTITY = "securedResource";

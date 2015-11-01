@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
-public class EntityValidatorManager {
+public class EntityValidatorManager implements EntityValidator {
     private final static FakeValidator fakeValidator = new FakeValidator();
     private final ConcurrentMap<String, IEntityValidator> validatorCache = new ConcurrentHashMap<String, IEntityValidator>();
 
@@ -32,6 +32,7 @@ public class EntityValidatorManager {
         return validator;
     }
 
+    @Override
     public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityValidationErrors) {
         Collection<String> validatorNames = classMetadata.getValidators();
         for (String validatorName : validatorNames) {

@@ -3,6 +3,7 @@ package com.taoswork.tallybook.general.authority.domain.permission.impl;
 import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -39,11 +40,13 @@ public abstract class PermissionBaseImpl<PS extends PermissionEntry>
     protected Long id;
 
     @Column(name = "NAME", nullable = false, length = 100)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String name;
 
     @Column(name = "DESCRIPTION")
-    @PresentationField(order = 3, visibility = Visibility.GRID_HIDE, fieldType = FieldType.STRING)
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(order = 3, visibility = Visibility.GRID_HIDE)
     protected String description;
 
 //    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)

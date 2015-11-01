@@ -9,7 +9,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 public interface EntityValueGateService {
     public final static String COMPONENT_NAME = "EntityValueGateService";
 
-    <T extends Persistable> void deposit(T entity, T oldEntity) throws ServiceException;
+    <T extends Persistable> void store(T entity, T oldEntity) throws ServiceException;
 
-    <T extends Persistable> void withdraw(T entity);
+    <T extends Persistable> void fetch(T entity);
 }

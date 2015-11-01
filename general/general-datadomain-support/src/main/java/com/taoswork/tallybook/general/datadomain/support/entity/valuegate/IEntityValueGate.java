@@ -13,12 +13,12 @@ public interface IEntityValueGate {
      *                    [used in update mode] ['null' for creation mode]
      *
      */
-    void deposit(Persistable entity, Persistable oldEntity);
+    void store(Persistable entity, Persistable oldEntity);
 
     /**
      * Called before returning result to client.
      * Typically used to hide sensitive data
      * @param entity
      */
-    void withdraw(Persistable entity);
+    void fetch(Persistable entity);
 }

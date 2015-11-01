@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.authority.domain.permission.impl;
 
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.Role;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -22,7 +23,8 @@ public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
     protected Long id;
 
     @Column(name = "SCREEN_NAME", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String screenName;
 
     @Column(name = "INSIDE_NAME", nullable = false)

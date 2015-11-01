@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.testframework.domain.business.dataprotect.CompanyValidator;
 import com.taoswork.tallybook.testframework.domain.business.dataprotect.CompanyValueGate;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Gao Yuan on 2015/9/21.
  */
-@PersistFriendly(
+@PersistEntity(
     validators = {CompanyValidator.class},
     valueGates = {CompanyValueGate.class}
 )

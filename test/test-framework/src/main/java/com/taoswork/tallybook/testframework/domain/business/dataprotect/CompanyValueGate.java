@@ -18,7 +18,7 @@ public class CompanyValueGate extends EntityValueGateBase<ICompany> {
     private Random random = new Random();
 
     @Override
-    protected void doDeposit(ICompany entity, ICompany oldEntity) {
+    protected void doStore(ICompany entity, ICompany oldEntity) {
         if(oldEntity != null){
             entity.setCreationDate(oldEntity.getCreationDate());
         }
@@ -34,7 +34,7 @@ public class CompanyValueGate extends EntityValueGateBase<ICompany> {
     }
 
     @Override
-    protected void doWithdraw(ICompany entity) {
+    protected void doFetch(ICompany entity) {
 
     }
 }

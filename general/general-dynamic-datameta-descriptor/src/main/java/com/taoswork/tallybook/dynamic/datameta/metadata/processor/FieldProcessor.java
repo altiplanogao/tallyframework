@@ -9,6 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.basics.BasicFieldHandler;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections.CollectionFieldHandler;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.embedded.EmbeddedFieldHandler;
+import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.persist.PersistAnnotationFieldHandler;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.persistence.PersistenceAnnotationFieldHandler;
 
 import java.lang.reflect.Field;
@@ -22,7 +23,7 @@ public class FieldProcessor
 
     public FieldProcessor(ClassProcessor classProcessor) {
         metaHandlers.add(new BeginFieldMetadataFieldHandler());
-
+        metaHandlers.add(new PersistAnnotationFieldHandler());
         metaHandlers.add(new PresentationAnnotationFieldHandler());
         metaHandlers.add(new EmbeddedFieldHandler(classProcessor));
         metaHandlers.add(new BasicFieldHandler());

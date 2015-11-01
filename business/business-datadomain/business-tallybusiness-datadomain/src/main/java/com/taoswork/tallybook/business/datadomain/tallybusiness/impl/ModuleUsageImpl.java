@@ -2,14 +2,14 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.ModuleUsage;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 
 import java.util.Date;
 
 /**
  * Created by Gao Yuan on 2015/4/16.
  */
-@PersistFriendly
+@PersistEntity
 public class ModuleUsageImpl implements ModuleUsage {
     protected Long id;
     protected BusinessUnit businessUnit;

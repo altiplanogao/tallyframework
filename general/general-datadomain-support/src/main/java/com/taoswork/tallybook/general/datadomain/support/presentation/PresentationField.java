@@ -27,8 +27,6 @@ public @interface PresentationField {
 
     String group() default PresentationClass.Group.DEFAULT_NAME;
 
-    boolean required() default false;
-
     /**
      * Optional - only required if you want to restrict the visibility of this field in the admin tool
      *
@@ -37,17 +35,4 @@ public @interface PresentationField {
      * @return whether or not to hide the form field.
      */
     int visibility() default Visibility.VISIBLE_ALL;
-
-    boolean editable() default true;
-
-    /**
-     * Optional - only required if you want to explicitly specify the field type. This
-     * value is normally inferred by the system based on the field type in the entity class.
-     *
-     * Explicity specify the type the GUI should consider this field
-     * Specifying UNKNOWN will cause the system to make its best guess
-     *
-     * @return the field type
-     */
-    FieldType fieldType() default FieldType.UNKNOWN;
 }

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.gates;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.FieldValueGateBase;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.TypedFieldValueGateBase;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import net.sf.xsshtmlfilter.HTMLFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,7 @@ import java.net.URL;
 //http://stackoverflow.com/questions/24723/best-regex-to-catch-xss-cross-site-scripting-attack-in-java
 //https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet
 //https://www.owasp.org/index.php/Category:OWASP_AntiSamy_Project
-public class HtmlValueGate extends FieldValueGateBase<String> {
+public class HtmlValueGate extends TypedFieldValueGateBase<String> {
     private final static Logger LOGGER = LoggerFactory.getLogger(HtmlValueGate.class);
 
     //File from antisamy-sample-configs.jar
@@ -55,7 +55,7 @@ public class HtmlValueGate extends FieldValueGateBase<String> {
     }
 
     @Override
-    protected String doDeposit(String val) {
+    protected String doStore(String val, String oldVal) {
         if (StringUtils.isEmpty(val))
             return val;
         AntiSamy antiSamy = new AntiSamy();

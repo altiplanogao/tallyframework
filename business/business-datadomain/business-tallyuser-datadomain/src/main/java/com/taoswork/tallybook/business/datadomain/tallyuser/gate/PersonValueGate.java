@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class PersonValueGate extends EntityValueGateBase<Person> {
     @Override
-    protected void doDeposit(Person entity, Person oldEntity) {
+    protected void doStore(Person entity, Person oldEntity) {
         if(oldEntity != null){
             entity.setUuid(oldEntity.getUuid());
         }
@@ -18,7 +18,7 @@ public class PersonValueGate extends EntityValueGateBase<Person> {
     }
 
     @Override
-    protected void doWithdraw(Person entity) {
+    protected void doFetch(Person entity) {
         entity.setUuid("");
     }
 }

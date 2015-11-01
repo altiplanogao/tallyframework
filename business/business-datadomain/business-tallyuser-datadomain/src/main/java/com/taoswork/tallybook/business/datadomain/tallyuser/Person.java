@@ -2,12 +2,12 @@ package com.taoswork.tallybook.business.datadomain.tallyuser;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.gate.PersonValueGate;
 import com.taoswork.tallybook.business.datadomain.tallyuser.validation.PersonValidator;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistFriendly;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
 import java.util.Date;
 
-@PersistFriendly(
+@PersistEntity(
     validators = {PersonValidator.class},
     valueGates = {PersonValueGate.class}
 )

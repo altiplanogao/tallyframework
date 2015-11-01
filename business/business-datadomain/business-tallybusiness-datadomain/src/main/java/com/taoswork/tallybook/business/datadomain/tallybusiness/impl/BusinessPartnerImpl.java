@@ -2,6 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.*;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.convert.BusinessPartnerTypeToStringConverter;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -24,22 +25,26 @@ public class BusinessPartnerImpl implements BusinessPartner {
         table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
         initialValue = 1)
     @Column(name = "ID")
-    @PresentationField(order = 1, fieldType = FieldType.ID, visibility = Visibility.HIDDEN_ALL)
+    @PersistField(fieldType = FieldType.ID)
+    @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
     protected Long id;
 
     @Column(name = "ALIAS", nullable = false)
-    @PresentationField(order = 2, fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME)
+    @PresentationField(order = 2)
     protected String alias;
 
     @Column(name = "DESCRIP", length = Integer.MAX_VALUE - 1)
+    @PersistField(fieldType = FieldType.HTML)
     @Lob
-    @PresentationField(order = 4, fieldType = FieldType.HTML, visibility = Visibility.GRID_HIDE)
+    @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
     protected String description;
 
     @Column(name = "BP_TYP", nullable = false, length = 1
         ,columnDefinition = "VARCHAR(1) DEFAULT '" + BusinessPartnerType.DEFAULT_CHAR + "'"
     )
-    @PresentationField(group = "General", order = 3, fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PresentationField(group = "General", order = 3)
     @PresentationEnum(enumeration = BusinessPartnerType.class)
     @Convert(converter = BusinessPartnerTypeToStringConverter.class)
     protected BusinessPartnerType type;
@@ -47,13 +52,14 @@ public class BusinessPartnerImpl implements BusinessPartner {
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
     @JoinColumn(name = "host_id",  nullable = false, updatable = false)
-    @PresentationField(required = true, fieldType = FieldType.FOREIGN_KEY)
+    @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
     protected BusinessUnit host;
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
     @JoinColumn(name = "guest_id",  nullable = false, updatable = true)
-    @PresentationField(required = true, fieldType = FieldType.FOREIGN_KEY)
+    @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
+    @PresentationField()
     protected BusinessUnit guest;
 
     @Override
