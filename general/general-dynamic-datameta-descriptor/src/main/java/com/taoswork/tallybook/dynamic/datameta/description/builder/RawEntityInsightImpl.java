@@ -127,12 +127,12 @@ class RawEntityInsightImpl
                         if (firstFieldInfo == null) {
                             firstFieldInfo = fieldInfo;
                         }
-                        if (basicFieldInfo.isIdField()) {
+                        if (basicFieldInfo.getName().toLowerCase().equals("id")) {
                             if (this.idField == null) {
                                 this.idField = fieldInfo.getName();
                             }
                         }
-                        if (basicFieldInfo.isNameField() || (basicFieldInfo.getName().toLowerCase().equals("name"))) {
+                        if (basicFieldInfo.getName().toLowerCase().equals("name")) {
                             if (this.nameField == null) {
                                 this.nameField = fieldInfo.getName();
                             }

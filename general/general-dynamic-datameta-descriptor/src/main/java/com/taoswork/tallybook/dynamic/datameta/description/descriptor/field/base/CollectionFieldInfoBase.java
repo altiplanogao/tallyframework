@@ -5,8 +5,8 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.bas
  */
 public abstract class CollectionFieldInfoBase extends FieldInfoBase implements ICollectionFieldInfoRW {
 
-    public CollectionFieldInfoBase(String name, String friendlyName) {
-        super(name, friendlyName);
+    public CollectionFieldInfoBase(String name, String friendlyName, boolean editable) {
+        super(name, friendlyName, editable);
     }
 
     @Override

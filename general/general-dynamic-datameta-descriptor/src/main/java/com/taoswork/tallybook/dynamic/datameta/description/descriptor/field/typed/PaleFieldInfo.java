@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base
  */
 public class PaleFieldInfo extends BasicFieldInfoBase {
 
-    public PaleFieldInfo(String name, String friendlyName) {
-        super(name, friendlyName);
+    public PaleFieldInfo(String name, String friendlyName, boolean editable) {
+        super(name, friendlyName, editable);
     }
 }

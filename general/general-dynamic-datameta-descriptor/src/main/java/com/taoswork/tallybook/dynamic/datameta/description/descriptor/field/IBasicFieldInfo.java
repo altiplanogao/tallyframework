@@ -5,10 +5,6 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field;
  */
 public interface IBasicFieldInfo extends IFieldInfo {
 
-    boolean isIdField();
-
-    boolean isNameField();
-
     boolean isSupportSort();
 
     boolean isSupportFilter();

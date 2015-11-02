@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(BasicFieldMetadataObject.class);
     private final int originalOrder;
+    private boolean editable = true;
     protected boolean required = false;
 
     private final String declaringClassName;
@@ -93,6 +94,14 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public int getVisibility() {

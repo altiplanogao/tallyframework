@@ -14,6 +14,8 @@ public interface IFieldMetadata extends IFriendlyOrdered {
 
     FieldType getFieldType();
 
+    boolean isEditable();
+
     boolean isRequired();
 
     int getVisibility();

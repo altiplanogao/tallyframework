@@ -26,6 +26,8 @@ public class PersistAnnotationFieldHandler
                 bfmo.setRequired(true);
             }
 
+            bfmo.setEditable(persistField.editable());
+
             fvg = persistField.fieldValueGateOverride();
             if(IFieldValueGate.class.equals(fvg)){
                 fvg = null;

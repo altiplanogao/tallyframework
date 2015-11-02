@@ -8,8 +8,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base
 public class StringFieldInfo extends BasicFieldInfoBase {
     private final int length;
 
-    public StringFieldInfo(String name, String friendlyName, int length) {
-        super(name, friendlyName);
+    public StringFieldInfo(String name, String friendlyName, boolean editable, int length) {
+        super(name, friendlyName, editable);
         this.length = length;
     }
 

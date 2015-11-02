@@ -17,8 +17,8 @@ public class BooleanFieldInfo extends BasicFieldInfoBase {
     private final static String FALSE = "f";
     private final Map<String, String> options = new HashMap<String, String>();
 
-    public BooleanFieldInfo(String name, String friendlyName, BooleanModel booleanModel) {
-        super(name, friendlyName);
+    public BooleanFieldInfo(String name, String friendlyName, boolean editable, BooleanModel booleanModel) {
+        super(name, friendlyName, editable);
         switch (booleanModel) {
             case TrueFalse:
                 setAsTrueFalse();

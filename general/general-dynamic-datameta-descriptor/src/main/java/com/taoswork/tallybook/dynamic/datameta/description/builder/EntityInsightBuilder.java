@@ -10,6 +10,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendly;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdered;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,17 +74,19 @@ final class EntityInsightBuilder {
                 String fieldName = fi.getName();
                 if(fi instanceof IBasicFieldInfo){
                     IBasicFieldInfo bfi = (IBasicFieldInfo) fi;
-                    if(bfi.isGridVisible() || bfi.isIdField()){
+                    if(bfi.isGridVisible()){
                         entityInsight.addGridField(fieldName);
-                    }
-                    if(bfi.isIdField()){
-                        entityInsight.setIdField(fieldName);
                     }
                 }
                 groupInsight.addField(fieldName);
             }
         }
-
+        String idFieldName = classMetadata.getIdFieldName();
+        if(StringUtils.isNotEmpty(idFieldName)){
+            entityInsight.addGridField(idFieldName);
+            entityInsight.setIdField(idFieldName);
+        }
+        entityInsight.setNameField(classMetadata.getNameFieldName());
         entityInsight.finishWriting();
     }
 

@@ -44,6 +44,11 @@ abstract class BaseFieldMetadata implements IFieldMetadata, Serializable {
     }
 
     @Override
+    public boolean isEditable() {
+        return basicFieldMetadataObject.isEditable();
+    }
+
+    @Override
     public boolean isRequired() {
         return basicFieldMetadataObject.isRequired();
     }

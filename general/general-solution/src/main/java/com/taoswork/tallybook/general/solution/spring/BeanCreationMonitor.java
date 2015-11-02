@@ -167,7 +167,7 @@ public class BeanCreationMonitor implements
         if (SHOW_BEAN_BY_NAME) {
             int beanIdx = 1;
             for (Map.Entry<String, BeanProcessInfo> beanProInfoEntry : orderedBeanInfos.entrySet()) {
-                sb.append("\t" + beanIdx + ".\t" + beanProInfoEntry.getValue() + "\n");
+                sb.append("[+]" + beanIdx + ".\t" + beanProInfoEntry.getValue() + "\n");
                 beanIdx++;
             }
         }

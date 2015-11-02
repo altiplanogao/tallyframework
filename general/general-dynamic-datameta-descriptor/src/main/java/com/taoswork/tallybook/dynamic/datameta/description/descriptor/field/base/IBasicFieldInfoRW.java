@@ -8,8 +8,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFie
  */
 public interface IBasicFieldInfoRW extends IBasicFieldInfo {
 
-    void setNameField(boolean nameField);
-
     IFieldInfo setSupportSort(boolean supportSort);
 
     IFieldInfo setSupportFilter(boolean supportFilter);

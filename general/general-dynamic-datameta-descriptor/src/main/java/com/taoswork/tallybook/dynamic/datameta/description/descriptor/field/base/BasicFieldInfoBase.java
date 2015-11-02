@@ -7,28 +7,15 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Vis
 /**
  * Created by Gao Yuan on 2015/10/24.
  */
-public abstract class BasicFieldInfoBase extends FieldInfoBase implements IBasicFieldInfoRW {
+public abstract class BasicFieldInfoBase
+    extends FieldInfoBase
+    implements IBasicFieldInfoRW {
+
     private boolean supportSort = true;
     private boolean supportFilter = true;
-    public boolean nameField = false;
 
-    public BasicFieldInfoBase(String name, String friendlyName) {
-        super(name, friendlyName);
-    }
-
-    @Override
-    public boolean isIdField() {
-        return getFieldType().equals(FieldType.ID);
-    }
-
-    @Override
-    public boolean isNameField() {
-        return nameField;
-    }
-
-    @Override
-    public void setNameField(boolean nameField) {
-        this.nameField = nameField;
+    public BasicFieldInfoBase(String name, String friendlyName, boolean editable) {
+        super(name, friendlyName, editable);
     }
 
     @Override

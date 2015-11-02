@@ -19,8 +19,8 @@ public class DateFieldInfo extends BasicFieldInfoBase {
     private final String model;
     private final String cellModel;
 
-    public DateFieldInfo(String name, String friendlyName, DateModel dateModel, DateCellModel dateCellModel) {
-        super(name, friendlyName);
+    public DateFieldInfo(String name, String friendlyName, boolean editable, DateModel dateModel, DateCellModel dateCellModel) {
+        super(name, friendlyName, editable);
         switch (dateModel) {
             case Date:
                 model = DATE;

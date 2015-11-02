@@ -33,42 +33,43 @@ public class FieldInfoBuilder {
     private static IFieldInfo createFieldInfo(String prefix, IFieldMetadata fieldMetadata) {
         String name = prepend(prefix, fieldMetadata.getName());
         String friendlyName = fieldMetadata.getFriendlyName();
+        boolean editable = fieldMetadata.isEditable();
 
         IFieldInfoRW result = null;
         if (fieldMetadata instanceof EnumFieldMetadata) {
-            EnumFieldInfo enumFieldInfo = new EnumFieldInfo(name, friendlyName, ((EnumFieldMetadata) fieldMetadata).getEnumerationType());
+            EnumFieldInfo enumFieldInfo = new EnumFieldInfo(name, friendlyName, editable, ((EnumFieldMetadata) fieldMetadata).getEnumerationType());
             result = enumFieldInfo;
         } else if (fieldMetadata instanceof BooleanFieldMetadata) {
-            BooleanFieldInfo booleanFieldInfo = new BooleanFieldInfo(name, friendlyName, ((BooleanFieldMetadata) fieldMetadata).getModel());
+            BooleanFieldInfo booleanFieldInfo = new BooleanFieldInfo(name, friendlyName, editable, ((BooleanFieldMetadata) fieldMetadata).getModel());
             result = booleanFieldInfo;
         } else if (fieldMetadata instanceof DateFieldMetadata) {
             DateFieldMetadata dfm = (DateFieldMetadata)fieldMetadata;
-            DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, dfm.getModel(), dfm.getCellModel());
+            DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, editable, dfm.getModel(), dfm.getCellModel());
             result = dateFieldInfo;
         } else if (fieldMetadata instanceof StringFieldMetadata) {
-            StringFieldInfo stringFieldInfo = new StringFieldInfo(name, friendlyName, ((StringFieldMetadata) fieldMetadata).getLength());
-            stringFieldInfo.setNameField(fieldMetadata.isNameField());
+            StringFieldInfo stringFieldInfo = new StringFieldInfo(name, friendlyName, editable, ((StringFieldMetadata) fieldMetadata).getLength());
+//            stringFieldInfo.setNameField(fieldMetadata.isNameField());
             result = stringFieldInfo;
         } else if (fieldMetadata instanceof PaleFieldMetadata) {
-            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName);
+            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
             result = stringFieldInfo;
         } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata feFm = (ForeignEntityFieldMetadata) fieldMetadata;
-            ForeignKeyFieldInfo fkFieldInfo = new ForeignKeyFieldInfo(name, friendlyName,
+            ForeignKeyFieldInfo fkFieldInfo = new ForeignKeyFieldInfo(name, friendlyName, editable,
                 feFm.getEntityType().getName(), feFm.getIdField(), feFm.getDisplayField());
             result = fkFieldInfo;
         } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
             ExternalForeignEntityFieldMetadata feFm = (ExternalForeignEntityFieldMetadata) fieldMetadata;
-            ExternalForeignKeyFieldInfo fkFieldInfo = new ExternalForeignKeyFieldInfo(name, friendlyName,
+            ExternalForeignKeyFieldInfo fkFieldInfo = new ExternalForeignKeyFieldInfo(name, friendlyName, editable,
                 feFm.getEntityType().getName(), feFm.getEntityFieldName(), feFm.getEntityIdProperty(), feFm.getEntityDisplayProperty());
             result = fkFieldInfo;
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName);
+            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable);
             result = collectionFieldInfo;
         } else if (fieldMetadata instanceof MapFieldMetadata) {
-            MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName);
+            MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable);
             result = mapFieldInfo;
         } else {
             throw new IllegalArgumentException();

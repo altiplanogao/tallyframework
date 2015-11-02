@@ -103,6 +103,10 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         }
     }
 
+    public String getNameFieldName() {
+        return nameFieldName;
+    }
+
     public Class<?> getEntityClz() {
         return entityClz;
     }

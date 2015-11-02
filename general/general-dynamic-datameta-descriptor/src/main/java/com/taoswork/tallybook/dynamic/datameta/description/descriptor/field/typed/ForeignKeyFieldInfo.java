@@ -10,9 +10,9 @@ public class ForeignKeyFieldInfo extends BasicFieldInfoBase {
     public final String idFieldName;
     public final String displayFieldName;
 
-    public ForeignKeyFieldInfo(String name, String friendlyName,
+    public ForeignKeyFieldInfo(String name, String friendlyName, boolean editable,
                                String entityType, String idFieldName, String displayFieldName) {
-        super(name, friendlyName);
+        super(name, friendlyName, editable);
         this.entityType = entityType;
         this.idFieldName = idFieldName;
         this.displayFieldName = displayFieldName;

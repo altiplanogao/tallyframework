@@ -18,8 +18,8 @@ public class EnumFieldInfo extends BasicFieldInfoBase {
     private String typeName;
     private String typeFriendlyName;
 
-    public EnumFieldInfo(String name, String friendlyName, Class<?> enumClz) {
-        super(name, friendlyName);
+    public EnumFieldInfo(String name, String friendlyName, boolean editable, Class<?> enumClz) {
+        super(name, friendlyName, editable);
         if (!enumClz.isEnum()) {
             throw new IllegalArgumentException();
         }

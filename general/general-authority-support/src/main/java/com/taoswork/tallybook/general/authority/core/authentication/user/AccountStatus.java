@@ -32,14 +32,14 @@ public class AccountStatus {
 
     @Column(name = "ACCOUNT_CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PersistField(fieldType = FieldType.DATE)
+    @PersistField(fieldType = FieldType.DATE, editable = false)
     @PresentationField(order = 3)
     @PresentationDate(model = DateModel.DateTime)
     public Date createDate = new Date();
 
     @Column(name = "ACCOUNT_LAST_LOGIN_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PersistField(fieldType = FieldType.DATE)
+    @PersistField(fieldType = FieldType.DATE, editable = false)
     @PresentationField(order = 4)
     public Date lastLoginDate;
 

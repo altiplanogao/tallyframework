@@ -9,6 +9,8 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 public interface IFieldInfo extends NamedOrderedInfo {
     int getVisibility();
 
+    boolean isEditable();
+
     boolean isRequired();
 
     FieldType getFieldType();

@@ -87,13 +87,13 @@ public class PersonImpl
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
-    @PersistField(fieldType = FieldType.CODE)
+    @PersistField(fieldType = FieldType.CODE, editable = false)
     @PresentationField(visibility = Visibility.HIDDEN_ALL)
     protected String uuid;
 
     @Column(name = "CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = FieldCreateDateValueGate.class, skipDefaultFieldValueGate = true)
+    @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = FieldCreateDateValueGate.class, skipDefaultFieldValueGate = true, editable = false)
     @PresentationField(order = 99, visibility = Visibility.GRID_HIDE)
     @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
     public Date createDate = new Date();

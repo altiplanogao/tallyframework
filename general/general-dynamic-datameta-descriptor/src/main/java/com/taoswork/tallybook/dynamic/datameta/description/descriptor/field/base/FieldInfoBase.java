@@ -11,14 +11,21 @@ abstract class FieldInfoBase
     extends NamedOrderedInfoImpl
     implements IFieldInfoRW {
 
+    private final boolean editable;
     public int visibility = Visibility.DEFAULT;
     public boolean required = false;
 
     private FieldType fieldType = FieldType.UNKNOWN;
 
-    public FieldInfoBase(String name, String friendlyName) {
+    public FieldInfoBase(String name, String friendlyName, boolean editable) {
         super(name, friendlyName);
+        this.editable = editable;
         visibility = Visibility.DEFAULT;
+    }
+
+    @Override
+    public boolean isEditable() {
+        return editable;
     }
 
     @Override
