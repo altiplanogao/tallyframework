@@ -24,9 +24,9 @@ public class RestrictionFactory {
             case BOOLEAN:
                 return Restrictions.BooleanRestriction;
             case INTEGER:
-                break;
+                return Restrictions.IntRestriction;
             case DATE:
-                break;
+                return Restrictions.DateRangeRestriction;
             case ENUMERATION:
                 return Restrictions.EnumRestriction;
             case FOREIGN_KEY:
@@ -44,7 +44,7 @@ public class RestrictionFactory {
                 }
                 //break;
         }
-        return null;
+//        return null;
     }
 
     public static RestrictionFactory instance() {

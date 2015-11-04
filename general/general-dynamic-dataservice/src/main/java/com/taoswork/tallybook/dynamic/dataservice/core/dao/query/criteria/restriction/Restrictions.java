@@ -13,8 +13,10 @@ public class Restrictions {
         public static final FilterValueConverter StringLikeConverter = new StringLikeFilterValueConverter();
         public static final FilterValueConverter EnumConverter = new EnumFilterValueConverter();
         public static final FilterValueConverter BooleanConverter = new BooleanFilterValueConverter();
-        public static final FilterValueConverter LongConverter = new LongFilterValueConverter();
+        public static final FilterValueConverter IntRConverter = new IntRFilterValueConverter();
+        public static final FilterValueConverter LongRConverter = new LongRFilterValueConverter();
         public static final FilterValueConverter ForeignKeyConverter = new ForeignKeyFilterValueConverter();
+        public static final FilterValueConverter DateRConverter = LongRConverter;
     }
 
     private static class Predicates{
@@ -22,6 +24,9 @@ public class Restrictions {
         public static final PredicateProvider StringEqualProvider = new StringEqualPredicateProvider();
         public static final PredicateProvider EnumEqualProvider = new EnumEqualPredicateProvider();
         public static final PredicateProvider BooleanEqualProvider = new BooleanEqualPredicateProvider();
+        public static final PredicateProvider IntRProvider = new IntRPredicateProvider();
+        public static final PredicateProvider LongRProvider = new LongRPredicateProvider();
+        public static final PredicateProvider DateRProvider = new DateRPredicateProvider();
         public static final PredicateProvider CommonEqualProvider = new CommonEqualPredicateProvider();
         public static final PredicateProvider ForeignKeyEqualProvider = new ForeignKeyEqualPredicateProvider();
         public static final PredicateProvider ExternalForeignKeyEqualProvider = new ExternalForeignKeyEqualPredicateProvider();
@@ -44,8 +49,12 @@ public class Restrictions {
         Predicates.BooleanEqualProvider);
 
     public static final Restriction LongRestriction = new Restriction(
-        Converters.LongConverter,
-        Predicates.CommonEqualProvider);
+        Converters.LongRConverter,
+        Predicates.LongRProvider);
+
+    public static final Restriction IntRestriction = new Restriction(
+        Converters.IntRConverter,
+        Predicates.IntRProvider);
 
     public static final Restriction ForeignKeyRestriction = new Restriction(
         Converters.ForeignKeyConverter,
@@ -55,5 +64,8 @@ public class Restrictions {
         Converters.ForeignKeyConverter,
         Predicates.ExternalForeignKeyEqualProvider);
 
+    public static final Restriction DateRangeRestriction = new Restriction(
+        Converters.DateRConverter,
+        Predicates.DateRProvider);
 
 }

@@ -68,21 +68,28 @@ public class PersonImpl
     @Convert(converter = GenderToStringConverter.class)
     protected Gender gender = Gender.unknown;
 
+    @Column(name = "BIRTH")
+    @Temporal(TemporalType.TIMESTAMP)
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationField(order = 4)
+    @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
+    public Date birth = new Date();
+
     @Column(name = "EMAIL", length = 120)
     @PersistField(fieldType = FieldType.EMAIL)
-    @PresentationField(group = "General", order = 4)
+    @PresentationField(group = "General", order = 5)
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
     @PersistField(fieldType = FieldType.PHONE)
-    @PresentationField(group = "General", order = 5)
+    @PresentationField(group = "General", order = 6)
     protected String mobile;
 
     @Column(name = "ACTIVE", nullable = false, length = 2,
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
     @PersistField(fieldType = FieldType.BOOLEAN)
-    @PresentationField(order = 6)
+    @PresentationField(order = 7)
     @PresentationBoolean(model = BooleanModel.YesNo)
     protected Boolean active = true;
 
