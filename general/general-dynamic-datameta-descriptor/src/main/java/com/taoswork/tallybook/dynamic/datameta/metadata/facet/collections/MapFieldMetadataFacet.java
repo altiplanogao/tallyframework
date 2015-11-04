@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 
 /**
@@ -11,8 +11,8 @@ public class MapFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
     private final Class _keyType;
     private final Class _valueType;
 
-    private final ElementTypeUnion keyType;
-    private final ElementTypeUnion valueType;
+    private final EntryTypeUnion keyType;
+    private final EntryTypeUnion valueType;
 
     private final Class mapType;
 
@@ -25,8 +25,8 @@ public class MapFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
         this._keyType = keyType;
         this._valueType = valueType;
 
-        this.keyType = new ElementTypeUnion(keyType, keyEmbeddedClassMetadata);
-        this.valueType = new ElementTypeUnion(valueType, valueEmbeddedClassMetadata);
+        this.keyType = new EntryTypeUnion(keyType, keyEmbeddedClassMetadata);
+        this.valueType = new EntryTypeUnion(valueType, valueEmbeddedClassMetadata);
     }
 
     @Override
@@ -34,11 +34,11 @@ public class MapFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
         return FieldFacetType.Map;
     }
 
-    public ElementTypeUnion getKeyType() {
+    public EntryTypeUnion getKeyType() {
         return this.keyType;
     }
 
-    public ElementTypeUnion getValueType() {
+    public EntryTypeUnion getValueType() {
         return this.valueType;
     }
 

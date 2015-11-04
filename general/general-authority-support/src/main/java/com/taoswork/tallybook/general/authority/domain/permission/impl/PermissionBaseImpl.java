@@ -46,7 +46,7 @@ public abstract class PermissionBaseImpl<PS extends PermissionEntry>
 
     @Column(name = "DESCRIPTION")
     @PersistField(fieldType = FieldType.STRING)
-    @PresentationField(order = 3, visibility = Visibility.GRID_HIDE)
+    @PresentationField(order = 3)
     protected String description;
 
 //    @FieldRelation(RelationType.TwoWay_ManyToOneBelonging)

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
@@ -13,13 +13,13 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class _targetElementType;
 
     private final Class collectionType;
-    private final ElementTypeUnion elementType;
+    private final EntryTypeUnion elementType;
 
     public CollectionFieldMetadataFacet(Class collectionType, Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
         this._targetElementType = targetElementType;
         this._elementType = elementType;
         this.collectionType = collectionType;
-        this.elementType = new ElementTypeUnion(targetElementType, embeddedClassMetadata);
+        this.elementType = new EntryTypeUnion(targetElementType, embeddedClassMetadata);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
         return collectionType;
     }
 
-    public ElementTypeUnion getElementType() {
+    public EntryTypeUnion getElementType() {
         return elementType;
     }
 }

@@ -1,32 +1,37 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.EntryType;
 
 import java.io.Serializable;
 
-public class ElementTypeUnion implements Serializable {
-    private final Class basicType;
+public class EntryTypeUnion implements Serializable {
+    private final EntryType entryType;
+    private final Class simpleType;
     private final ClassMetadata asEmbeddedClassMetadata;
     private final Class entityType;
 
-    public ElementTypeUnion(Class eleType, ClassMetadata asEmbeddedClassMetadata) {
+    public EntryTypeUnion(Class eleType, ClassMetadata asEmbeddedClassMetadata) {
         if (FieldMetadataHelper.isEmbeddable(eleType)) {
-            this.basicType = null;
+            this.simpleType = null;
             this.asEmbeddedClassMetadata = asEmbeddedClassMetadata;
             this.entityType = null;
+            this.entryType = EntryType.Embeddable;
         } else if (FieldMetadataHelper.isEntity(eleType)) {
-            this.basicType = null;
+            this.simpleType = null;
             this.asEmbeddedClassMetadata = null;
             this.entityType = eleType;
+            this.entryType = EntryType.Entity;
         } else {
-            this.basicType = eleType;
+            this.simpleType = eleType;
             this.asEmbeddedClassMetadata = null;
             this.entityType = null;
+            this.entryType = EntryType.Simple;
         }
     }
 
-    public Class getBasicType() {
-        return basicType;
+    public Class getSimpleType() {
+        return simpleType;
     }
 
     public ClassMetadata getAsEmbeddedClassMetadata() {
@@ -37,15 +42,19 @@ public class ElementTypeUnion implements Serializable {
         return entityType;
     }
 
-    public boolean isBasic() {
-        return null != basicType;
+    public boolean isSimple() {
+        return EntryType.Simple.equals(entryType);
     }
 
     public boolean isEmbedded() {
-        return null != asEmbeddedClassMetadata;
+        return EntryType.Embeddable.equals(entryType);
     }
 
     public boolean isEntity() {
-        return null != entityType;
+        return EntryType.Entity.equals(entryType);
+    }
+
+    public EntryType getEntryType() {
+        return entryType;
     }
 }

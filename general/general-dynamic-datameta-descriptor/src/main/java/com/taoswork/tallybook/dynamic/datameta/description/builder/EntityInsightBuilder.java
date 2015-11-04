@@ -40,8 +40,9 @@ final class EntityInsightBuilder {
         return entityInsight;
     }
 
-    private static void entityInsightAppendMetadata(RawEntityInsightRW entityInsight, ClassMetadata classMetadata) {
+    private static void entityInsightAppendMetadata(RawEntityInsightRW entityInsight, final ClassMetadata classMetadata) {
 
+        final ClassMetadata topClassMetadata = classMetadata;
         //add tabs
         Map<String, TabMetadata> tabMetadataMap = classMetadata.getReadonlyTabMetadataMap();
         for (Map.Entry<String, TabMetadata> tabMetadataEntry : tabMetadataMap.entrySet()) {
@@ -68,7 +69,7 @@ final class EntityInsightBuilder {
                 }
             }
 
-            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(fieldMetadata);
+            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata);
             for(IFieldInfo fi : fieldInfos){
                 entityInsight.addField(fi);
                 String fieldName = fi.getName();

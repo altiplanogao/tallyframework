@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class CrossEntityManagerPersistableCopier {
     private class TtFieldCopier {
         final ClassMetadata topClassMetadata;
-        final ElementTypeUnion elementType;
+        final EntryTypeUnion elementType;
         final ClassMetadata entityClassMetadata;
         final int model;
 
@@ -33,10 +33,10 @@ public class CrossEntityManagerPersistableCopier {
         private final static int MODEL_ENTITY = 3;
         private final static int MODEL_UNKNOWN = 4;
 
-        public TtFieldCopier(final ClassMetadata topClassMetadata, ElementTypeUnion elementType) {
+        public TtFieldCopier(final ClassMetadata topClassMetadata, EntryTypeUnion elementType) {
             this.topClassMetadata = topClassMetadata;
             this.elementType = elementType;
-            if (elementType.isBasic()) {
+            if (elementType.isSimple()) {
                 entityClassMetadata = null;
                 model = MODEL_BASIC;
             } else if (elementType.isEmbedded()) {
@@ -106,7 +106,7 @@ public class CrossEntityManagerPersistableCopier {
 
         TtFieldCopier copier = new TtFieldCopier(topClassMetadata, collectionFieldMetadata);
         Collection target = (Collection) collectionFieldMetadata.getCollectionImplementType().newInstance();
-//        if (collectionFieldMetadata.getBasicType() != null) {
+//        if (collectionFieldMetadata.getSimpleType() != null) {
 //            if (source instanceof Serializable) {
 //                return (Collection) SerializationUtils.clone((Serializable) source);
 //            }

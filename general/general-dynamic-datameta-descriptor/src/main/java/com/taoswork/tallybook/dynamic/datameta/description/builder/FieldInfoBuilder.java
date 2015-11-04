@@ -30,7 +30,7 @@ public class FieldInfoBuilder {
         return name;
     }
 
-    private static IFieldInfo createFieldInfo(String prefix, IFieldMetadata fieldMetadata) {
+    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata) {
         String name = prepend(prefix, fieldMetadata.getName());
         String friendlyName = fieldMetadata.getFriendlyName();
         boolean editable = fieldMetadata.isEditable();
@@ -66,10 +66,13 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable);
+            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
+                ((CollectionFieldMetadata) fieldMetadata).getElementType());
             result = collectionFieldInfo;
         } else if (fieldMetadata instanceof MapFieldMetadata) {
-            MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable);
+            MapFieldMetadata mapFieldMetadata = (MapFieldMetadata) fieldMetadata;
+            MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable,
+                mapFieldMetadata.getKeyType(), mapFieldMetadata.getValueType());
             result = mapFieldInfo;
         } else {
             throw new IllegalArgumentException();
@@ -84,7 +87,7 @@ public class FieldInfoBuilder {
         return result;
     }
 
-    public static int createFieldInfos(String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos) {
+    public static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos) {
         int counter = 0;
         if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             EmbeddedFieldMetadata embeddedFieldMetadata = (EmbeddedFieldMetadata) fieldMetadata;
@@ -96,7 +99,7 @@ public class FieldInfoBuilder {
             List<IFieldInfo> subFieldInfos = new ArrayList<IFieldInfo>();
             for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
                 IFieldMetadata subFieldMetadata = fieldMetadataEntry.getValue();
-                createFieldInfos(subPrefix, subFieldMetadata, subFieldInfos);
+                createFieldInfos(topClassMetadata, subPrefix, subFieldMetadata, subFieldInfos);
             }
             for (IFieldInfo subFi : subFieldInfos) {
                 if (subFi instanceof IFieldInfoRW) {
@@ -107,16 +110,16 @@ public class FieldInfoBuilder {
             fieldInfos.addAll(subFieldInfos);
             counter += subFieldInfos.size();
         } else {
-            IFieldInfo fieldInfo = createFieldInfo(prefix, fieldMetadata);
+            IFieldInfo fieldInfo = createFieldInfo(topClassMetadata, prefix, fieldMetadata);
             fieldInfos.add(fieldInfo);
             counter++;
         }
         return counter;
     }
 
-    public static Collection<IFieldInfo> createFieldInfos(IFieldMetadata fieldMetadata){
+    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata){
         List<IFieldInfo> result = new ArrayList<IFieldInfo>();
-        createFieldInfos("", fieldMetadata, result);
+        createFieldInfos(topClassMetadata, "", fieldMetadata, result);
         return result;
     }
 }

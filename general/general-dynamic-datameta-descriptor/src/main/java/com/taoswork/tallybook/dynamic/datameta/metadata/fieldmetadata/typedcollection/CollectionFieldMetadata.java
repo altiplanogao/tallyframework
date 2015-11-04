@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
@@ -13,7 +13,7 @@ import java.util.*;
 public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
     private final Class collectionImplementType;
 
-    private final ElementTypeUnion elementType;
+    private final EntryTypeUnion elementType;
 
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
@@ -33,7 +33,7 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         return collectionImplementType;
     }
 
-    public ElementTypeUnion getElementType() {
+    public EntryTypeUnion getElementType() {
         return elementType;
     }
 

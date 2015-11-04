@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ElementTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
@@ -14,8 +14,8 @@ import java.util.Map;
 public class MapFieldMetadata extends BaseCollectionFieldMetadata {
     private final Class mapImplementType;
 
-    private final ElementTypeUnion keyType;
-    private final ElementTypeUnion valueType;
+    private final EntryTypeUnion keyType;
+    private final EntryTypeUnion valueType;
 
     public MapFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
@@ -33,11 +33,11 @@ public class MapFieldMetadata extends BaseCollectionFieldMetadata {
         return FieldType.MAP;
     }
 
-    public ElementTypeUnion getKeyType() {
+    public EntryTypeUnion getKeyType() {
         return keyType;
     }
 
-    public ElementTypeUnion getValueType() {
+    public EntryTypeUnion getValueType() {
         return valueType;
     }
 
