@@ -36,7 +36,7 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
         return collectionType;
     }
 
-    public EntryTypeUnion getElementType() {
+    public EntryTypeUnion getEntryType() {
         return elementType;
     }
 }

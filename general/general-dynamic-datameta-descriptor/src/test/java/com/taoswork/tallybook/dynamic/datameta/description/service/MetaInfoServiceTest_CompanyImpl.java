@@ -36,64 +36,9 @@ public class MetaInfoServiceTest_CompanyImpl {
 
     @After
     public void teardown() {
+        metadataService = null;
         metaInfoService = null;
     }
 
-    @Test
-    public void testEntityInfo() {
-        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
-        EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
-        Assert.assertNotNull(entityInfo);
 
-        Assert.assertEquals(classMetadata.getReadonlyFieldMetadataMap().size(), 16);
-        Assert.assertEquals(entityInfo.getFields().size(), 19); //Address expanded
-
-        if (entityInfo != null) {
-            Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
-
-            Assert.assertNotNull(entityInfo);
-            ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
-            Assert.assertEquals(tabInsights.length, 3);
-
-            ITabInfo generalTab = tabInsights[0];
-            Assert.assertEquals(generalTab.getName(), "General");
-            Assert.assertEquals(generalTab.getGroups().size(), 3);
-
-            ITabInfo marketingTab = tabInsights[1];
-            Assert.assertEquals(marketingTab.getName(), "Marketing");
-            Assert.assertEquals(marketingTab.getGroups().size(), 2);
-
-            ITabInfo contactTab = tabInsights[2];
-            Assert.assertEquals(contactTab.getName(), "Contact");
-            Assert.assertEquals(contactTab.getGroups().size(), 1);
-            IGroupInfo generalGp = contactTab.getGroups().get(0);
-            Assert.assertNotNull(generalGp);
-            Collection<String> contactGeneralFields = generalGp.getFields();
-            Assert.assertEquals(contactGeneralFields.size(), 6);
-            CollectionAssert.ensureFullyCover(contactGeneralFields,
-                "email", "phone",
-                "address.street","address.city","address.state","address.zip");
-
-            Assert.assertEquals(entityInfo.getGridFields().size(), 14);
-        }
-
-        IEntityInfo entityGridInfo = metaInfoService.generateEntityInfo(classMetadata, EntityInfoType.Grid);
-        Assert.assertNotNull(entityGridInfo);
-        if (entityGridInfo != null) {
-            Assert.assertEquals(((EntityGridInfo)entityGridInfo).fields.size(), 14);
-        }
-    }
-
-    @Test
-    public void testEntityInfoEnum() {
-        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
-        EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
-        Assert.assertNotNull(entityInfo);
-        if (entityInfo != null) {
-            IFieldInfo fieldInfo = entityInfo.getField("companyType");
-            EnumFieldInfo enumFieldInfo = (EnumFieldInfo)fieldInfo;
-            Assert.assertNotNull(enumFieldInfo);
-            Assert.assertEquals(enumFieldInfo.getOptions().size(), 4);
-        }
-    }
 }

@@ -13,14 +13,14 @@ import java.util.*;
 public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
     private final Class collectionImplementType;
 
-    private final EntryTypeUnion elementType;
+    private final EntryTypeUnion entryType;
 
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
 
         CollectionFieldMetadataFacet facet = (CollectionFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Collection);
 
-        this.elementType = facet.getElementType();
+        this.entryType = facet.getEntryType();
         this.collectionImplementType = workOutCollectionImplementType(facet.getCollectionType());
     }
 
@@ -33,8 +33,8 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         return collectionImplementType;
     }
 
-    public EntryTypeUnion getElementType() {
-        return elementType;
+    public EntryTypeUnion getEntryType() {
+        return entryType;
     }
 
     private Class workOutCollectionImplementType(Class collectionType) {

@@ -13,8 +13,9 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/10/24.
  */
 public class BooleanFieldInfo extends BasicFieldInfoBase {
-    private final static String TRUE = "t";
-    private final static String FALSE = "f";
+    public final static String TRUE = "t";
+    public final static String FALSE = "f";
+
     private final Map<String, String> options = new HashMap<String, String>();
 
     public BooleanFieldInfo(String name, String friendlyName, boolean editable, BooleanModel booleanModel) {

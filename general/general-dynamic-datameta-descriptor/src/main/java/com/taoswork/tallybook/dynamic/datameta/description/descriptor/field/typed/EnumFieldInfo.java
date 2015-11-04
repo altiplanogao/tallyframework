@@ -66,7 +66,7 @@ public class EnumFieldInfo extends BasicFieldInfoBase {
     }
 
     public Map<String, String> getOptionsFriendly() {
-        return optionsFriendly;
+        return Collections.unmodifiableMap(optionsFriendly);
     }
 
 }

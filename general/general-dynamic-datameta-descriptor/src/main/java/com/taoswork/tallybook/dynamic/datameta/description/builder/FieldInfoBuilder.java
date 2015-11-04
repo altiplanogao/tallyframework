@@ -9,6 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.ArrayFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -65,9 +66,15 @@ public class FieldInfoBuilder {
             result = fkFieldInfo;
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
+        } else if (fieldMetadata instanceof ArrayFieldMetadata) {
+            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
+            result = stringFieldInfo;
+//            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
+//                ((ArrayFieldMetadata) fieldMetadata).getEntryType());
+//            result = collectionFieldInfo;
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
             CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-                ((CollectionFieldMetadata) fieldMetadata).getElementType());
+                ((CollectionFieldMetadata) fieldMetadata).getEntryType());
             result = collectionFieldInfo;
         } else if (fieldMetadata instanceof MapFieldMetadata) {
             MapFieldMetadata mapFieldMetadata = (MapFieldMetadata) fieldMetadata;

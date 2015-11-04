@@ -47,7 +47,8 @@ public class MetadataServiceTest_Fields {
         metadatas = new ClassMetadata[]{
             companyMetadata,
             departmentMetadata,
-            employeeMetadata};
+            employeeMetadata,
+            parkSpaceMetadata};
     }
 
     @After
@@ -75,6 +76,10 @@ public class MetadataServiceTest_Fields {
     public void testNameField() {
         for (ClassMetadata classMetadata : metadatas) {
             Field nameField = classMetadata.getNameField();
+            if(parkSpaceMetadata == classMetadata){
+                Assert.assertNull(nameField);
+                continue;
+            }
             Assert.assertNotNull(nameField);
 
             IFieldMetadata nameFieldMetadata = classMetadata.getFieldMetadata(nameField.getName());
@@ -196,9 +201,9 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(nickFmInList.isCollectionField());
         Assert.assertTrue(nickFmInArray.isCollectionField());
 
-        Assert.assertEquals(String.class, nickFmInTypedSet.getElementType().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInSet.getElementType().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInList.getElementType().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInTypedSet.getEntryType().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInSet.getEntryType().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInList.getEntryType().getSimpleType());
     }
 
     @Test
@@ -217,9 +222,9 @@ public class MetadataServiceTest_Fields {
         CollectionFieldMetadata vacationBookingsFm = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("vacationBookings");
         Assert.assertNotNull(vacationBookingsFm);
         Assert.assertTrue(vacationBookingsFm.isCollectionField());
-        Assert.assertNull(vacationBookingsFm.getElementType().getSimpleType());
-        Assert.assertNotNull(vacationBookingsFm.getElementType().getAsEmbeddedClassMetadata());
-        Assert.assertNull(vacationBookingsFm.getElementType().getEntityType());
+        Assert.assertNull(vacationBookingsFm.getEntryType().getSimpleType());
+        Assert.assertNotNull(vacationBookingsFm.getEntryType().getAsEmbeddedClassMetadata());
+        Assert.assertNull(vacationBookingsFm.getEntryType().getEntityType());
     }
 
     @Test
@@ -241,8 +246,8 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(departmentEmployeeFm.isCollectionField());
         Assert.assertTrue(departmentEmployeeListFm.isCollectionField());
 
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getElementType().getEntityType());
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getElementType().getEntityType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryType().getEntityType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryType().getEntityType());
     }
 
     @Test

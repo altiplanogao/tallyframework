@@ -70,10 +70,17 @@ public class MetadataServiceTest {
     @Test
     public void testScanFieldsHierarchy() {
         Class<AAA> clz = AAA.class;
-        Field[] fields = clz.getDeclaredFields();
-        ClassMetadata classMetadata = metadataService.generateMetadata(clz);
-
-        int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
-        Assert.assertEquals(fieldCount, 1);
+        {
+            Field[] fields = clz.getDeclaredFields();
+            ClassMetadata classMetadata = metadataService.generateMetadata(clz);
+            int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
+            Assert.assertEquals(fieldCount, 1);
+        }
+        {
+            Field[] fields = clz.getDeclaredFields();
+            ClassMetadata classMetadata = metadataService.generateMetadata(clz, true);
+            int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
+            Assert.assertEquals(fieldCount, 3);
+        }
     }
 }
