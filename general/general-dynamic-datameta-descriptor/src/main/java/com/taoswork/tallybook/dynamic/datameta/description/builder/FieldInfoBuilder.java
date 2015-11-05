@@ -97,6 +97,7 @@ public class FieldInfoBuilder {
         result.setRequired(fieldMetadata.isRequired());
         result.setVisibility(fieldMetadata.getVisibility());
         result.setFieldType(fieldMetadata.getFieldType());
+        result.setIgnored(fieldMetadata.getIgnored());
 
         return result;
     }

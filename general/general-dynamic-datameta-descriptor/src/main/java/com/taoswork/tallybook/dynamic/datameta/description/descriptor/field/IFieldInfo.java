@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
@@ -18,4 +20,6 @@ public interface IFieldInfo extends NamedOrderedInfo {
     boolean isFormVisible();
 
     boolean isCollection();
+
+    boolean ignored();
 }

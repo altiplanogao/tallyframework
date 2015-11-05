@@ -71,6 +71,8 @@ final class RawEntityInfoBuilder {
 
             Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata);
             for(IFieldInfo fi : fieldInfos){
+                if(fi.ignored())
+                    continue;
                 rawEntityInfo.addField(fi);
                 String fieldName = fi.getName();
                 if(fi instanceof IBasicFieldInfo){

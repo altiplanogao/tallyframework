@@ -94,6 +94,11 @@ abstract class BaseFieldMetadata implements IFieldMetadata, Serializable {
     }
 
     @Override
+    public boolean getIgnored() {
+        return basicFieldMetadataObject.getIgnored();
+    }
+
+    @Override
     public Class<? extends IFieldValueGate> getFieldValueGateOverride() {
         return basicFieldMetadataObject.getFieldValueGateOverride();
     }

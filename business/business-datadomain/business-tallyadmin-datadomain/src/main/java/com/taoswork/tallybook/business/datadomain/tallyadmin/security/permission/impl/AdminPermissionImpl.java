@@ -43,7 +43,7 @@ public class AdminPermissionImpl
 //    @JoinTable(name = AdminEmployeeImpl.OWN_M2M_EMPLOYEE_PERMS_XTABLE,
 //        joinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_PERMS__PERM_COL),
 //        inverseJoinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_PERMS__EMPLOYEE_COL))
-    @PresentationField(visibility = Visibility.HIDDEN_ALL)
+    @PresentationField(visibility = Visibility.HIDDEN_ALL, ignore = true)
     protected Set<AdminEmployee> allEmployees = new HashSet<AdminEmployee>();
 
     @Override

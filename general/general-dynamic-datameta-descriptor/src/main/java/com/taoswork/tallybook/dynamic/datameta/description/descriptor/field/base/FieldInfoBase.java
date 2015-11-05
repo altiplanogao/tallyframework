@@ -14,6 +14,7 @@ abstract class FieldInfoBase
     private final boolean editable;
     public int visibility = Visibility.DEFAULT;
     public boolean required = false;
+    private boolean _ignored = false;
 
     private FieldType fieldType = FieldType.UNKNOWN;
 
@@ -51,6 +52,16 @@ abstract class FieldInfoBase
     @Override
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    @Override
+    public boolean ignored() {
+        return _ignored;
+    }
+
+    @Override
+    public void setIgnored(boolean ignored) {
+        this._ignored = ignored;
     }
 
     @Override

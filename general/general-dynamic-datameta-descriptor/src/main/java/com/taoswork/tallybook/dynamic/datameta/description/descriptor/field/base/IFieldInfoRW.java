@@ -13,4 +13,6 @@ public interface IFieldInfoRW extends NamedOrderedInfoRW, IFieldInfo {
     void setRequired(boolean required);
 
     void setFieldType(FieldType fieldType);
+
+    void setIgnored(boolean ignored);
 }

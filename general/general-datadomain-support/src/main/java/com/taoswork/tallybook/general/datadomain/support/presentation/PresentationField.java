@@ -16,7 +16,7 @@ public @interface PresentationField {
 
     /**
      * Optional - only required if you want to order the appearance of this field in the UI
-     *
+     * <p>
      * The order in which this field will appear in a GUI relative to other fields from the same class
      *
      * @return the display order
@@ -29,10 +29,17 @@ public @interface PresentationField {
 
     /**
      * Optional - only required if you want to restrict the visibility of this field in the admin tool
-     *
+     * <p>
      * Describes how the field is shown in admin GUI.
      *
      * @return whether or not to hide the form field.
      */
     int visibility() default Visibility.VISIBLE_ALL;
+
+    /**
+     * Ignore the field to noticed by user,
+     * which means the field won't be sent to the front-end
+     * @return
+     */
+    boolean ignore() default false;
 }

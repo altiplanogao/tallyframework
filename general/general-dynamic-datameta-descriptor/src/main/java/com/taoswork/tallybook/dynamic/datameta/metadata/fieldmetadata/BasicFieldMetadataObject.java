@@ -14,6 +14,7 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
     private final int originalOrder;
     private boolean editable = true;
     protected boolean required = false;
+    protected boolean ignored = false;
 
     private final String declaringClassName;
     private final Class fieldClass;
@@ -159,5 +160,13 @@ public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements
 
     public boolean isSkipDefaultFieldValueGate() {
         return skipDefaultFieldValueGate;
+    }
+
+    public boolean getIgnored() {
+        return ignored;
+    }
+
+    public void setIgnored(boolean ignored) {
+        this.ignored = ignored;
     }
 }

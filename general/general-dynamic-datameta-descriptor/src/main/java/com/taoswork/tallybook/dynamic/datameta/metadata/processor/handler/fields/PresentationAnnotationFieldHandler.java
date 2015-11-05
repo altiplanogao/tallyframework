@@ -31,6 +31,7 @@ public class PresentationAnnotationFieldHandler implements IFieldHandler {
                 bfmo.setOrder(presentationField.order());
             }
             bfmo.setVisibility(presentationField.visibility());
+            bfmo.setIgnored(presentationField.ignore());
         }
         return ProcessResult.HANDLED;
     }

@@ -41,4 +41,6 @@ public interface IFieldMetadata extends IFriendlyOrdered {
     Class<? extends IFieldValueGate> getFieldValueGateOverride();
 
     boolean getSkipDefaultFieldValueGate();
+
+    boolean getIgnored();
 }
