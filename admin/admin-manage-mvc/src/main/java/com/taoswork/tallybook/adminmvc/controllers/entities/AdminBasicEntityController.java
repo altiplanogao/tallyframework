@@ -110,7 +110,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
-        infoRequest.addEntityInfoType(EntityInfoType.PageGrid);
+        infoRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityInfoResponse entityResponse = frontEndEntityService.getInfoResponse(infoRequest, locale);
         return this.makeDataView(model, entityResponse);
@@ -150,7 +150,7 @@ public class AdminBasicEntityController extends BaseController {
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
             request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
-        entityRequest.addEntityInfoType(EntityInfoType.PageGrid);
+        entityRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
         if (isAjaxDataRequest(request)) {

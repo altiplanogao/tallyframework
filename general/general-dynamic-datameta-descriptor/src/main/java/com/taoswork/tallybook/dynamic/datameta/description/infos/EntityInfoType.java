@@ -3,7 +3,6 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFormInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFullInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityPageGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,14 +18,10 @@ public class EntityInfoType {
     public final static String NAME_OF_GRID = "grid";
     public final static String NAME_OF_FORM = "form";
 
-    public final static String NAME_OF_PAGE_GRID = "pageGrid";
-
     public final static EntityInfoType Main = EntityInfoType.instance(NAME_OF_MAIN);
     public final static EntityInfoType Full = EntityInfoType.instance(NAME_OF_FULL);
     public final static EntityInfoType Grid = EntityInfoType.instance(NAME_OF_GRID);
     public final static EntityInfoType Form = EntityInfoType.instance(NAME_OF_FORM);
-
-    public final static EntityInfoType PageGrid = EntityInfoType.instance(NAME_OF_PAGE_GRID);
 
     public final static Set<String> PageSupportedType;
     public final static Set<String> ApiSupportedType;
@@ -39,7 +34,6 @@ public class EntityInfoType {
             pageSupportedType.add(EntityInfoType.NAME_OF_FULL);
             pageSupportedType.add(EntityInfoType.NAME_OF_FORM);
             pageSupportedType.add(EntityInfoType.NAME_OF_GRID);
-            pageSupportedType.add(EntityInfoType.NAME_OF_PAGE_GRID);
             PageSupportedType = Collections.unmodifiableSet(pageSupportedType);
         }
         {
@@ -53,7 +47,6 @@ public class EntityInfoType {
             Set<String> defaultHierarchyIncludedType = new HashSet<String>();
             defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_FULL);
             defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_GRID);
-            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_PAGE_GRID);
             DefaultHierarchyIncludedType = Collections.unmodifiableSet(defaultHierarchyIncludedType);
         }
         {
@@ -62,7 +55,6 @@ public class EntityInfoType {
             entityTypeMapping.put(NAME_OF_FULL, EntityFullInfo.class);
             entityTypeMapping.put(NAME_OF_FORM, EntityFormInfo.class);
             entityTypeMapping.put(NAME_OF_GRID, EntityGridInfo.class);
-            entityTypeMapping.put(NAME_OF_PAGE_GRID, EntityPageGridInfo.class);
             EntityTypeMapping = Collections.unmodifiableMap(entityTypeMapping);
         }
     }
