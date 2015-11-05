@@ -39,7 +39,10 @@ public class FieldInfoBuilder {
         boolean editable = fieldMetadata.isEditable();
 
         IFieldInfoRW result = null;
-        if (fieldMetadata instanceof EnumFieldMetadata) {
+        if (fieldMetadata instanceof StringFieldMetadata) {
+            StringFieldInfo stringFieldInfo = new StringFieldInfo(name, friendlyName, editable, ((StringFieldMetadata) fieldMetadata).getLength());
+            result = stringFieldInfo;
+        } else if (fieldMetadata instanceof EnumFieldMetadata) {
             EnumFieldInfo enumFieldInfo = new EnumFieldInfo(name, friendlyName, editable, ((EnumFieldMetadata) fieldMetadata).getEnumerationType());
             result = enumFieldInfo;
         } else if (fieldMetadata instanceof BooleanFieldMetadata) {
@@ -49,13 +52,6 @@ public class FieldInfoBuilder {
             DateFieldMetadata dfm = (DateFieldMetadata)fieldMetadata;
             DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, editable, dfm.getModel(), dfm.getCellModel());
             result = dateFieldInfo;
-        } else if (fieldMetadata instanceof StringFieldMetadata) {
-            StringFieldInfo stringFieldInfo = new StringFieldInfo(name, friendlyName, editable, ((StringFieldMetadata) fieldMetadata).getLength());
-//            stringFieldInfo.setNameField(fieldMetadata.isNameField());
-            result = stringFieldInfo;
-        } else if (fieldMetadata instanceof PaleFieldMetadata) {
-            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
-            result = stringFieldInfo;
         } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata feFm = (ForeignEntityFieldMetadata) fieldMetadata;
             ForeignKeyFieldInfo fkFieldInfo = new ForeignKeyFieldInfo(name, friendlyName, editable,
@@ -66,6 +62,9 @@ public class FieldInfoBuilder {
             ExternalForeignKeyFieldInfo fkFieldInfo = new ExternalForeignKeyFieldInfo(name, friendlyName, editable,
                 feFm.getEntityType().getName(), feFm.getEntityFieldName(), feFm.getEntityIdProperty(), feFm.getEntityDisplayProperty());
             result = fkFieldInfo;
+        } else if (fieldMetadata instanceof PaleFieldMetadata) {
+            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
+            result = stringFieldInfo;
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof ArrayFieldMetadata) {

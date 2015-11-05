@@ -22,10 +22,10 @@ public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
     @Column(name = "ID")
     protected Long id;
 
-    @Column(name = "SCREEN_NAME", nullable = false)
+    @Column(name = "NAME", nullable = false)
     @PersistField(fieldType = FieldType.NAME)
     @PresentationField(order = 2)
-    protected String screenName;
+    protected String name;
 
     @Column(name = "INSIDE_NAME", nullable = false)
     @PresentationField(visibility = Visibility.HIDDEN_ALL)
@@ -56,13 +56,13 @@ public abstract class RoleBaseImpl<P extends Permission> implements Role<P> {
     }
 
     @Override
-    public String getScreenName() {
-        return screenName;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeI
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.RoleBaseImpl;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
 import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
 
@@ -36,6 +37,7 @@ public class AdminRoleImpl
     @FieldRelation(RelationType.TwoWay_ManyToManyBelonging)
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = AdminEmployeeImpl.class,
         mappedBy = AdminEmployeeImpl.OWN_M2M_ALL_ROLES)
+    @PresentationField(ignore = true)
 //    @JoinTable(name = AdminEmployeeImpl.OWN_M2M_EMPLOYEE_ROLES_XTABLE,
 //        joinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_ROLES__ROLE_COL),
 //        inverseJoinColumns = @JoinColumn(name = AdminEmployeeImpl.XTABLE_EMPLOYEE_ROLES__EMPLOYEE_COL))

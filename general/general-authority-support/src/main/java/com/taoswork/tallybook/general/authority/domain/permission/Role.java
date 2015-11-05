@@ -14,9 +14,9 @@ public interface Role<P extends Permission>
 
     void setId(Long id);
 
-    String getScreenName();
+    String getName();
 
-    void setScreenName(String screenName);
+    void setName(String screenName);
 
     String getInsideName();
 
