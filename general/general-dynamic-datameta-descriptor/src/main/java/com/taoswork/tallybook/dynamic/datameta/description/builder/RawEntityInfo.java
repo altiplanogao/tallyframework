@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 
 import java.io.Serializable;
@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * RawEntityInsight represent for a class information, but having no direct relationship with a specified class/class-tree
+ * RawEntityInfo represent for a class information, but having no direct relationship with a specified class/class-tree
  * thus, it can contain information of multiple classes or just a part of a class.
  *
- * RawEntityInsight stores information in following structure:
+ * RawEntityInfo stores information in following structure:
  *
- *.RawEntityInsight{
+ *.RawEntityInfo{
  *     basic info
  *     tab info map: {
  *          tab_1: groups {
@@ -37,22 +37,40 @@ import java.util.Map;
  * }
  *
  */
-interface RawEntityInsight
-    extends NamedInfo, Serializable {
+interface RawEntityInfo
+    extends NamedInfoRW, Serializable {
+
+    //special fields
+    String getIdField();
+
+    void setIdField(String idField);
+
+    String getNameField();
+
+    void setNameField(String nameField);
+
+    String getPrimarySearchField();
+
+    //field
+    void addField(IFieldInfo fieldInfo);
 
     IFieldInfo getField(String fieldName);
 
     Map<String, IFieldInfo> getFields();
 
-    RawTabInsight getTab(String tabName);
+    //Tab
+    void addTab(RawTabInfo tabInfo);
 
-    Collection<? extends RawTabInsight> getTabs();
+    RawTabInfo getTab(String tabName);
+
+    Collection<? extends RawTabInfo> getTabs();
+
+    //grid
+    void addGridField(String fieldName);
 
     Collection<String> getGridFields();
 
-    String getIdField();
+    //main
+    void finishWriting();
 
-    String getNameField();
-
-    String getPrimarySearchField();
 }

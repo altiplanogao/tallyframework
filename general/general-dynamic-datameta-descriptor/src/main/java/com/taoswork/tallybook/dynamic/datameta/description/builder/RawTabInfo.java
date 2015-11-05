@@ -2,15 +2,17 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-interface RawGroupInsightRW extends NamedOrderedInfoRW, RawGroupInsight {
-    void clearFields();
+interface RawTabInfo extends NamedOrderedInfoRW, Serializable {
 
-    void addField(String field);
+    void addGroup(RawGroupInfo groupInfoByComp);
 
-    void setFields(Collection<String> fields);
+    RawGroupInfo getGroup(String groupName);
+
+    Collection<? extends RawGroupInfo> getGroups();
 }

@@ -6,8 +6,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFie
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.IFieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.BooleanFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.EnumFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;

@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.datameta.description.infos.base;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.group;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
 

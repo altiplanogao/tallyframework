@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 
 import java.util.ArrayList;

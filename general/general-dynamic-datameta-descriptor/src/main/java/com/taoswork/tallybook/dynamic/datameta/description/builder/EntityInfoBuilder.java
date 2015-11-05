@@ -2,10 +2,10 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.GroupInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl.TabInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.GroupInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
@@ -25,56 +25,56 @@ public final class EntityInfoBuilder {
     }
 
     public static EntityInfo build(ClassMetadata classMetadata) {
-        RawEntityInsight rawEntityInsight = EntityInsightBuilder.buildEntityInsight(classMetadata);
+        RawEntityInfo rawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(classMetadata);
 
         Class entityType = classMetadata.getEntityClz();
         boolean withHierarchy = false;
         if (classMetadata instanceof ClassTreeMetadata) {
             withHierarchy = true;
         }
-        return build(entityType, rawEntityInsight, withHierarchy);
+        return build(entityType, rawEntityInfo, withHierarchy);
     }
 
-    private static EntityInfo build(Class entityType, RawEntityInsight rawEntityInsight, boolean withHierarchy) {
-        Map<String, IFieldInfo> fields = rawEntityInsight.getFields();
+    private static EntityInfo build(Class entityType, RawEntityInfo rawEntityInfo, boolean withHierarchy) {
+        Map<String, IFieldInfo> fields = rawEntityInfo.getFields();
         EntityInfoImpl entityInfo = null;
         {//make tabs
             List<ITabInfo> tabTemp = new ArrayList<ITabInfo>();
-            for (RawTabInsight rawTabInsight : rawEntityInsight.getTabs()) {
+            for (RawTabInfo rawTabInfo : rawEntityInfo.getTabs()) {
                 List<IGroupInfo> groupTemp = new ArrayList<IGroupInfo>();
-                for (RawGroupInsight rawGroupInsight : rawTabInsight.getGroups()) {
-                    List<String> groupFieldsOrdered = NamedOrderedInfo.NameSorter.makeNamesOrdered(rawGroupInsight.getFields(), fields);
-                    IGroupInfo groupInfo = InfoCreator.createGroupFormInfo(rawGroupInsight, groupFieldsOrdered);
+                for (RawGroupInfo rawGroupInfo : rawTabInfo.getGroups()) {
+                    List<String> groupFieldsOrdered = NamedOrderedInfo.NameSorter.makeNamesOrdered(rawGroupInfo.getFields(), fields);
+                    IGroupInfo groupInfo = InfoCreator.createGroupFormInfo(rawGroupInfo, groupFieldsOrdered);
                     groupTemp.add(groupInfo);
                 }
-                ITabInfo tabInfo = InfoCreator.createTabFormInfo(rawTabInsight, groupTemp);
+                ITabInfo tabInfo = InfoCreator.createTabFormInfo(rawTabInfo, groupTemp);
                 tabTemp.add(tabInfo);
             }
             List<ITabInfo> tabs = NamedOrderedInfo.NameSorter.makeObjectOrdered(tabTemp);
-            entityInfo = new EntityInfoImpl(entityType, withHierarchy, tabs, rawEntityInsight.getFields());
+            entityInfo = new EntityInfoImpl(entityType, withHierarchy, tabs, rawEntityInfo.getFields());
         }
 
         {// make grid field list
-            List<String> orderedGridNameList = NamedOrderedInfo.NameSorter.makeNamesOrdered(rawEntityInsight.getGridFields(), fields);
+            List<String> orderedGridNameList = NamedOrderedInfo.NameSorter.makeNamesOrdered(rawEntityInfo.getGridFields(), fields);
             entityInfo.setGridFields(orderedGridNameList);
         }
 
-        entityInfo.copyNamedInfo(rawEntityInsight);
+        entityInfo.copyNamedInfo(rawEntityInfo);
 
-        entityInfo.setIdField(rawEntityInsight.getIdField());
-        entityInfo.setNameField(rawEntityInsight.getNameField());
-        entityInfo.setPrimarySearchField(rawEntityInsight.getPrimarySearchField());
+        entityInfo.setIdField(rawEntityInfo.getIdField());
+        entityInfo.setNameField(rawEntityInfo.getNameField());
+        entityInfo.setPrimarySearchField(rawEntityInfo.getPrimarySearchField());
         return entityInfo;
     }
 
     private static class InfoCreator {
-        static ITabInfo createTabFormInfo(RawTabInsight rawTabInsight, List<IGroupInfo> groups) {
+        static ITabInfo createTabFormInfo(RawTabInfo rawTabInfo, List<IGroupInfo> groups) {
             TabInfoImpl tabFormInfo = new TabInfoImpl(groups);
-            tabFormInfo.copyNamedInfo(rawTabInsight);
+            tabFormInfo.copyNamedInfo(rawTabInfo);
             return tabFormInfo;
         }
 
-        static IGroupInfo createGroupFormInfo(RawGroupInsight groupInfo, List<String> fields) {
+        static IGroupInfo createGroupFormInfo(RawGroupInfo groupInfo, List<String> fields) {
             GroupInfoImpl groupFormInfo = new GroupInfoImpl(fields);
             groupFormInfo.copyNamedInfo(groupInfo);
             return groupFormInfo;

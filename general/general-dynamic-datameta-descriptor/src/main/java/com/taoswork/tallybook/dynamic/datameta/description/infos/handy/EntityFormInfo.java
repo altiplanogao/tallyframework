@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.handy;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 

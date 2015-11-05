@@ -1,9 +1,8 @@
-package com.taoswork.tallybook.dynamic.datameta.description.infos.base.impl;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedOrderedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 
 import java.util.List;
 

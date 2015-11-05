@@ -8,8 +8,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.type
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.IGroupInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.base.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
@@ -99,18 +99,18 @@ public class MetaInfoServiceTest_Fields {
             Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
 
             Assert.assertNotNull(entityInfo);
-            ITabInfo[] tabInsights = entityInfo.getTabs().toArray(new ITabInfo[]{});
-            Assert.assertEquals(tabInsights.length, 3);
+            ITabInfo[] tabInfos = entityInfo.getTabs().toArray(new ITabInfo[]{});
+            Assert.assertEquals(tabInfos.length, 3);
 
-            ITabInfo generalTab = tabInsights[0];
+            ITabInfo generalTab = tabInfos[0];
             Assert.assertEquals(generalTab.getName(), "General");
             Assert.assertEquals(generalTab.getGroups().size(), 3);
 
-            ITabInfo marketingTab = tabInsights[1];
+            ITabInfo marketingTab = tabInfos[1];
             Assert.assertEquals(marketingTab.getName(), "Marketing");
             Assert.assertEquals(marketingTab.getGroups().size(), 2);
 
-            ITabInfo contactTab = tabInsights[2];
+            ITabInfo contactTab = tabInfos[2];
             Assert.assertEquals(contactTab.getName(), "Contact");
             Assert.assertEquals(contactTab.getGroups().size(), 1);
             IGroupInfo generalGp = contactTab.getGroups().get(0);

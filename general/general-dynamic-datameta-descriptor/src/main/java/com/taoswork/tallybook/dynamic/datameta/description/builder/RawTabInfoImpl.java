@@ -10,32 +10,27 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-final class RawTabInsightImpl
+final class RawTabInfoImpl
     extends NamedOrderedInfoImpl
-    implements RawTabInsightRW {
+    implements RawTabInfo {
 
     /**
      * groups are not ordered
      */
-    private final Map<String, RawGroupInsightRW> groups = new HashMap<String, RawGroupInsightRW>();
+    private final Map<String, RawGroupInfo> groups = new HashMap<String, RawGroupInfo>();
 
     @Override
-    public void addGroup(RawGroupInsightRW groupInfo) {
+    public void addGroup(RawGroupInfo groupInfo) {
         groups.put(groupInfo.getName(), groupInfo);
     }
 
     @Override
-    public RawGroupInsightRW getGroupRW(String groupName) {
+    public RawGroupInfo getGroup(final String groupName) {
         return groups.get(groupName);
     }
 
     @Override
-    public RawGroupInsight getGroup(final String groupName) {
-        return groups.get(groupName);
-    }
-
-    @Override
-    public Collection<? extends RawGroupInsight> getGroups() {
+    public Collection<? extends RawGroupInfo> getGroups() {
         return Collections.unmodifiableCollection(groups.values());
     }
 }

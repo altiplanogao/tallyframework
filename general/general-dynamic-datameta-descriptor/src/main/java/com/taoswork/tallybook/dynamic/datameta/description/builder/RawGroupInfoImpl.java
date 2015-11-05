@@ -10,9 +10,9 @@ import java.util.Set;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-final class RawGroupInsightImpl
+final class RawGroupInfoImpl
     extends NamedOrderedInfoImpl
-    implements RawGroupInsightRW {
+    implements RawGroupInfo {
 
     /**
      * fields are not ordered
@@ -25,8 +25,11 @@ final class RawGroupInsightImpl
     }
 
     @Override
-    public void clearFields() {
-        fields.clear();
+    public void setFields(Collection<String> fields) {
+        this.fields.clear();
+        for (String field : fields) {
+            this.fields.add(field);
+        }
     }
 
     @Override
@@ -35,11 +38,8 @@ final class RawGroupInsightImpl
     }
 
     @Override
-    public void setFields(Collection<String> fields) {
-        this.fields.clear();
-        for (String field : fields) {
-            this.fields.add(field);
-        }
+    public void clearFields() {
+        fields.clear();
     }
 
 }

@@ -20,94 +20,94 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/6/25.
  */
-final class EntityInsightBuilder {
-    private static Logger LOGGER = LoggerFactory.getLogger(EntityInsightBuilder.class);
+final class RawEntityInfoBuilder {
+    private static Logger LOGGER = LoggerFactory.getLogger(RawEntityInfoBuilder.class);
 
-    private EntityInsightBuilder() throws IllegalAccessException {
-        throw new IllegalAccessException("EntityInsightBuilder: Not instance-able object");
+    private RawEntityInfoBuilder() throws IllegalAccessException {
+        throw new IllegalAccessException("RawEntityInfoBuilder: Not instance-able object");
     }
 
     /**
-     * Convert ClassMetadata object to RawEntityInsight object,
+     * Convert ClassMetadata object to RawEntityInfo object,
      * It is the first step of entity information sorting.
      *
      * @param classMetadata
      * @return
      */
-    public static RawEntityInsight buildEntityInsight(ClassMetadata classMetadata) {
-        final RawEntityInsightRW entityInsight = InfoCreator.createEntityInsight(classMetadata);
-        entityInsightAppendMetadata(entityInsight, classMetadata);
-        return entityInsight;
+    public static RawEntityInfo buildRawEntityInfo(ClassMetadata classMetadata) {
+        final RawEntityInfo rawEntityInfo = RawInfoCreator.createRawEntityInfo(classMetadata);
+        rawEntityInfoAppendMetadata(rawEntityInfo, classMetadata);
+        return rawEntityInfo;
     }
 
-    private static void entityInsightAppendMetadata(RawEntityInsightRW entityInsight, final ClassMetadata classMetadata) {
+    private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final ClassMetadata classMetadata) {
 
         final ClassMetadata topClassMetadata = classMetadata;
         //add tabs
         Map<String, TabMetadata> tabMetadataMap = classMetadata.getReadonlyTabMetadataMap();
         for (Map.Entry<String, TabMetadata> tabMetadataEntry : tabMetadataMap.entrySet()) {
             TabMetadata tabMetadata = tabMetadataEntry.getValue();
-            RawTabInsightRW tabInsight = InfoCreator.createTabInsight(tabMetadata);
-            entityInsight.addTab(tabInsight);
+            RawTabInfo rawTabInfo = RawInfoCreator.createRawTabInfo(tabMetadata);
+            rawEntityInfo.addTab(rawTabInfo);
         }
 
         //add fields
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
-            RawGroupInsightRW groupInsight = null;
+            RawGroupInfo rawGroupInfo = null;
             {
                 //handle groups
                 String tabName = fieldMetadata.getTabName();
                 String groupName = fieldMetadata.getGroupName();
 
-                RawTabInsightRW tabInsight = entityInsight.getTabRW(tabName);
-                groupInsight = tabInsight.getGroupRW(groupName);
-                if (groupInsight == null) {
-                    groupInsight = InfoCreator.createGroupInsight(classMetadata.getReadonlyGroupMetadataMap().get(groupName));
-                    tabInsight.addGroup(groupInsight);
+                RawTabInfo rawTabInfo = rawEntityInfo.getTab(tabName);
+                rawGroupInfo = rawTabInfo.getGroup(groupName);
+                if (rawGroupInfo == null) {
+                    rawGroupInfo = RawInfoCreator.createRawGroupInfo(classMetadata.getReadonlyGroupMetadataMap().get(groupName));
+                    rawTabInfo.addGroup(rawGroupInfo);
                 }
             }
 
             Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata);
             for(IFieldInfo fi : fieldInfos){
-                entityInsight.addField(fi);
+                rawEntityInfo.addField(fi);
                 String fieldName = fi.getName();
                 if(fi instanceof IBasicFieldInfo){
                     IBasicFieldInfo bfi = (IBasicFieldInfo) fi;
                     if(bfi.isGridVisible()){
-                        entityInsight.addGridField(fieldName);
+                        rawEntityInfo.addGridField(fieldName);
                     }
                 }
-                groupInsight.addField(fieldName);
+                rawGroupInfo.addField(fieldName);
             }
         }
         String idFieldName = classMetadata.getIdFieldName();
         if(StringUtils.isNotEmpty(idFieldName)){
-            entityInsight.addGridField(idFieldName);
-            entityInsight.setIdField(idFieldName);
+            rawEntityInfo.addGridField(idFieldName);
+            rawEntityInfo.setIdField(idFieldName);
         }
-        entityInsight.setNameField(classMetadata.getNameFieldName());
-        entityInsight.finishWriting();
+        rawEntityInfo.setNameField(classMetadata.getNameFieldName());
+        rawEntityInfo.finishWriting();
     }
 
-    private static class InfoCreator {
-        static RawEntityInsightRW createEntityInsight(ClassMetadata classMetadata) {
-            RawEntityInsightRW entityInsight = new RawEntityInsightImpl();
-            copyFriendlyMetadata(classMetadata, entityInsight);
-            return entityInsight;
+    private static class RawInfoCreator {
+        static RawEntityInfo createRawEntityInfo(ClassMetadata classMetadata) {
+            RawEntityInfo rawEntityInfo = new RawEntityInfoImpl();
+            copyFriendlyMetadata(classMetadata, rawEntityInfo);
+            return rawEntityInfo;
         }
 
-        static RawGroupInsightRW createGroupInsight(GroupMetadata groupMetadata) {
-            RawGroupInsightRW groupInsight = new RawGroupInsightImpl();
-            copyOrderedFriendlyMetadata(groupMetadata, groupInsight);
-            return groupInsight;
+        static RawGroupInfo createRawGroupInfo(GroupMetadata groupMetadata) {
+            RawGroupInfo rawGroupInfo = new RawGroupInfoImpl();
+            copyOrderedFriendlyMetadata(groupMetadata, rawGroupInfo);
+            return rawGroupInfo;
         }
 
-        static RawTabInsightRW createTabInsight(TabMetadata tabMetadata) {
-            RawTabInsightRW tabInsight = new RawTabInsightImpl();
-            copyOrderedFriendlyMetadata(tabMetadata, tabInsight);
-            return tabInsight;
+        static RawTabInfo createRawTabInfo(TabMetadata tabMetadata) {
+            RawTabInfo rawTabInfo = new RawTabInfoImpl();
+            copyOrderedFriendlyMetadata(tabMetadata, rawTabInfo);
+            return rawTabInfo;
         }
 
         static void copyOrderedFriendlyMetadata(IFriendlyOrdered source, NamedOrderedInfoRW target) {
