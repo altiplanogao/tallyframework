@@ -2,11 +2,12 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacetMergeable;
 
 /**
  * Created by Gao Yuan on 2015/9/28.
  */
-public class StringFieldMetadataFacet implements IFieldMetadataFacet {
+public class StringFieldMetadataFacet implements IFieldMetadataFacet, IFieldMetadataFacetMergeable {
     protected int length = -1;
 
     @Override

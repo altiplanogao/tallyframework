@@ -18,9 +18,4 @@ public class EmbeddedFieldMetadataFacet implements IFieldMetadataFacet {
     public FieldFacetType getType() {
         return FieldFacetType.Embedded;
     }
-
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }

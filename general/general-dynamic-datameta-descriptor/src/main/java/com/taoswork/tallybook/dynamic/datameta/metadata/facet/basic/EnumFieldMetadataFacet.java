@@ -22,8 +22,4 @@ public class EnumFieldMetadataFacet implements IFieldMetadataFacet {
         return FieldFacetType.Enum;
     }
 
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }

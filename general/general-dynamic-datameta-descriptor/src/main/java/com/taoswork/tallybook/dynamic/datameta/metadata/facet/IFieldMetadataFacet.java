@@ -9,6 +9,4 @@ import java.io.Serializable;
  */
 public interface IFieldMetadataFacet extends Serializable {
     FieldFacetType getType();
-
-    void merge(IFieldMetadataFacet facet);
 }

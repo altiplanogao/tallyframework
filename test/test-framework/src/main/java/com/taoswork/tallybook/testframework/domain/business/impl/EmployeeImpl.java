@@ -4,6 +4,8 @@ import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.SimpleEntry;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.IDepartment;
 import com.taoswork.tallybook.testframework.domain.business.IEmployee;
@@ -57,6 +59,7 @@ public class EmployeeImpl implements IEmployee{
     //in blob
     @Column(name = "NICKNAME_ARRAY")
     @Lob
+    @PresentationCollection(entry = @SimpleEntry(name = "nickname"))
     protected String[] nickNameArray;
 
     private long salary;

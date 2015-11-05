@@ -53,7 +53,7 @@ public class CrossEntityManagerPersistableCopier {
         }
 
         public TtFieldCopier(final ClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
-            this(topClassMetadata, fieldMetadata.getEntryType());
+            this(topClassMetadata, fieldMetadata.getEntryTypeUnion());
         }
 
         public TtFieldCopier(final ClassMetadata topClassMetadata, MapFieldMetadata fieldMetadata, boolean asKey, boolean asValue) {

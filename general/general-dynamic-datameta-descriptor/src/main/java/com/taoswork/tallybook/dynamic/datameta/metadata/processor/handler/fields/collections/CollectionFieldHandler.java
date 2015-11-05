@@ -12,7 +12,7 @@ public class CollectionFieldHandler
     implements IFieldHandler {
 
     public CollectionFieldHandler(ClassProcessor classProcessor) {
-        metaHandlers.add(new _ArrayFieldHandler());
+        metaHandlers.add(new _ArrayFieldHandler(classProcessor));
         metaHandlers.add(new _MapFieldHandler(classProcessor));
         metaHandlers.add(new _CollectionFieldHandler(classProcessor));
     }

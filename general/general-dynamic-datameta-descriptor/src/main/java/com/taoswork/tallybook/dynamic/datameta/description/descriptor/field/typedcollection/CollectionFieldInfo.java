@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection;
 
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.CollectionFieldInfoBase;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 
@@ -8,6 +9,10 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
  */
 public class CollectionFieldInfo extends CollectionFieldInfoBase {
     public CollectionFieldInfo(String name, String friendlyName, boolean editable, EntryTypeUnion elementType) {
+        super(name, friendlyName, editable);
+    }
+
+    public CollectionFieldInfo(String name, String friendlyName, boolean editable, IFieldInfo simpleFieldInfo) {
         super(name, friendlyName, editable);
     }
 }

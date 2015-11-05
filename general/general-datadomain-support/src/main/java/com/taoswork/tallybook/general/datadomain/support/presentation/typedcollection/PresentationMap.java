@@ -8,4 +8,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface PresentationMap {
+    EntryType keyEntryType () default EntryType.Unknown;
+
+    SimpleEntry keyEntry() default @SimpleEntry(name = "Key");
+
+    EntryType valueEntryType () default EntryType.Unknown;
+
+    SimpleEntry valueEntry() default @SimpleEntry(name = "Value");
 }

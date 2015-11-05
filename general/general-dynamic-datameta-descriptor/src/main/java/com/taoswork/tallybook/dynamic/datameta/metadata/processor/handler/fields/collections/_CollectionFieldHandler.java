@@ -19,7 +19,7 @@ import java.util.Collection;
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-class _CollectionFieldHandler extends __BaseCollectionFieldHandler {
+class _CollectionFieldHandler extends _1DCollectionFieldHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(_CollectionFieldHandler.class);
     private final ClassProcessor classProcessor;
 
@@ -29,50 +29,54 @@ class _CollectionFieldHandler extends __BaseCollectionFieldHandler {
 
     @Override
     public ProcessResult processCollectionField(Field field, FieldMetadataIntermediate fieldMetadata) {
-        Class clazz = field.getType();
-        if (Collection.class.isAssignableFrom(clazz)) {
+        Class collectionType = field.getType();
+        if (Collection.class.isAssignableFrom(collectionType)) {
             Type genericType = field.getGenericType();
 
             if (GenericTypeUtility.isTypeArgumentMissing(genericType)) {
                 LOGGER.info("Field '{}.{}' having Type '{}' -> '{}' ",
                     field.getDeclaringClass().getSimpleName(), field.getName(),
-                    clazz, genericType);
+                    collectionType, genericType);
                 LOGGER.warn("Field '{}.{}' having type '{}' should specify its type argument.",
-                    field.getDeclaringClass().getSimpleName(), field.getName(), clazz);
+                    field.getDeclaringClass().getSimpleName(), field.getName(), collectionType);
             }
 
-            Class elementType = Object.class;
-            if (genericType instanceof ParameterizedType) {
-                Type[] typeArgs = ((ParameterizedType) genericType).getActualTypeArguments();
-                if (typeArgs != null && typeArgs.length > 0) {
-                    if (typeArgs[0] instanceof Class) {
-                        elementType = (Class) typeArgs[0];
-                    } else {
-                        elementType = Object.class;
-                    }
-                }
-            } else {
-                elementType = Object.class;
-            }
-
-            Class targetElementType = void.class;
-            Class specifiedTarget = FieldMetadataHelper.getCollectionTargetType(field, true, true, true);
-            if (specifiedTarget != null) {
-                targetElementType = specifiedTarget;
-            } else {
-                targetElementType = elementType;
-            }
-
-            ClassMetadata embeddedCm = null;
-            if (FieldMetadataHelper.isEmbeddable(targetElementType)) {
-                embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetElementType);
-            }
-
-            CollectionFieldMetadataFacet facet = new CollectionFieldMetadataFacet(clazz, elementType, targetElementType, embeddedCm);
+            CollectionFieldMetadataFacet facet = getCollectionFieldMetadataFacet(field, collectionType, genericType);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(CollectionFieldMetadata.class);
             return ProcessResult.HANDLED;
         }
         return ProcessResult.INAPPLICABLE;
+    }
+
+    private CollectionFieldMetadataFacet getCollectionFieldMetadataFacet(Field field, Class collectionType, Type genericType) {
+        Class entryType = Object.class;
+        if (genericType instanceof ParameterizedType) {
+            Type[] typeArgs = ((ParameterizedType) genericType).getActualTypeArguments();
+            if (typeArgs != null && typeArgs.length > 0) {
+                if (typeArgs[0] instanceof Class) {
+                    entryType = (Class) typeArgs[0];
+                } else {
+                    entryType = Object.class;
+                }
+            }
+        } else {
+            entryType = Object.class;
+        }
+
+        Class targetEntryType = void.class;
+        Class specifiedTarget = FieldMetadataHelper.getCollectionTargetType(field, true, true, true);
+        if (specifiedTarget != null) {
+            targetEntryType = specifiedTarget;
+        } else {
+            targetEntryType = entryType;
+        }
+
+        ClassMetadata embeddedCm = null;
+        if (FieldMetadataHelper.isEmbeddable(targetEntryType)) {
+            embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetEntryType);
+        }
+
+        return new CollectionFieldMetadataFacet(collectionType, entryType, targetEntryType, embeddedCm);
     }
 }

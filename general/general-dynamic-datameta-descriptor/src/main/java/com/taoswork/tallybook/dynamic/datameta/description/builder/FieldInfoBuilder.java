@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.type
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.CollectionFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
@@ -15,6 +16,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -67,31 +69,40 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof ArrayFieldMetadata) {
-            PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
-            result = stringFieldInfo;
-//            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-//                ((ArrayFieldMetadata) fieldMetadata).getEntryType());
-//            result = collectionFieldInfo;
-        } else if (fieldMetadata instanceof CollectionFieldMetadata) {
+            ArrayFieldMetadata typedFieldMetadata = (ArrayFieldMetadata) fieldMetadata;
+            EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+
             CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-                ((CollectionFieldMetadata) fieldMetadata).getEntryType());
+                entryTypeUnion);
+            result = collectionFieldInfo;
+        } else if (fieldMetadata instanceof CollectionFieldMetadata) {
+            CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
+            EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+
+            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
+                entryTypeUnion);
             result = collectionFieldInfo;
         } else if (fieldMetadata instanceof MapFieldMetadata) {
-            MapFieldMetadata mapFieldMetadata = (MapFieldMetadata) fieldMetadata;
+            MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
+            EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();
+            EntryTypeUnion valueEntryTypeUnion = typedFieldMetadata.getValueType();
+
             MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable,
-                mapFieldMetadata.getKeyType(), mapFieldMetadata.getValueType());
+                keyEntryTypeUnion, valueEntryTypeUnion);
             result = mapFieldInfo;
         } else {
             throw new IllegalArgumentException();
         }
-//        result.setName(fieldMetadata.getName());
-//        result.setFriendlyName(fieldMetadata.getFriendlyName());
         result.setOrder(fieldMetadata.getOrder());
         result.setRequired(fieldMetadata.isRequired());
         result.setVisibility(fieldMetadata.getVisibility());
         result.setFieldType(fieldMetadata.getFieldType());
 
         return result;
+    }
+
+    private static IFieldInfo generateCollectionEntryFieldInfo(final ClassMetadata topClassMetadata, String prefix, Field collectionField){
+        return null;
     }
 
     public static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos) {

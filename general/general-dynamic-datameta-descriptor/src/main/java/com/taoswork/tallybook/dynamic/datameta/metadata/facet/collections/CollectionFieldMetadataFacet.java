@@ -8,18 +8,13 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFace
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
-    private final Class _elementType;
-    private final Class _targetElementType;
+public class CollectionFieldMetadataFacet extends _1DCollectionFieldMetadataFacet {
 
     private final Class collectionType;
-    private final EntryTypeUnion elementType;
 
-    public CollectionFieldMetadataFacet(Class collectionType, Class elementType, Class targetElementType, ClassMetadata embeddedClassMetadata) {
-        this._targetElementType = targetElementType;
-        this._elementType = elementType;
+    public CollectionFieldMetadataFacet(Class collectionType, Class entryType, Class targetEntryType, ClassMetadata embeddedClassMetadata) {
+        super(entryType, targetEntryType, embeddedClassMetadata);
         this.collectionType = collectionType;
-        this.elementType = new EntryTypeUnion(targetElementType, embeddedClassMetadata);
     }
 
     @Override
@@ -27,16 +22,7 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
         return FieldFacetType.Collection;
     }
 
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
-
     public Class getCollectionType() {
         return collectionType;
-    }
-
-    public EntryTypeUnion getEntryType() {
-        return elementType;
     }
 }

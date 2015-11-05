@@ -3,11 +3,12 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
  */
-public class MapFieldMetadataFacet extends CollectionFieldMetadataFacetBase {
+public class MapFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class _keyType;
     private final Class _valueType;
 

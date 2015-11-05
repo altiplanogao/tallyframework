@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
+import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacetMergeable;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,11 @@ public class FieldMetadataIntermediate implements Serializable {
         if (existingFacet == null) {
             facets.put(facet.getType(), facet);
         } else {
-            existingFacet.merge(facet);
+            if(existingFacet instanceof IFieldMetadataFacetMergeable){
+                ((IFieldMetadataFacetMergeable)existingFacet).merge(facet);
+            }else {
+                facets.put(facet.getType(), facet);
+            }
         }
     }
 

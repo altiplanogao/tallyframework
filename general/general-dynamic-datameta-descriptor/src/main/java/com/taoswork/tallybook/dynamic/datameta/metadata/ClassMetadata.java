@@ -236,8 +236,8 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
                 //add or not?
                 entities.add(((ExternalForeignEntityFieldMetadata) fieldMetadata).getEntityType());
             } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-                if (((CollectionFieldMetadata) fieldMetadata).getEntryType().isEntity()) {
-                    entities.add(((CollectionFieldMetadata) fieldMetadata).getEntryType().getEntityType());
+                if (((CollectionFieldMetadata) fieldMetadata).getEntryTypeUnion().isEntity()) {
+                    entities.add(((CollectionFieldMetadata) fieldMetadata).getEntryTypeUnion().getEntityType());
                 }
             } else if (fieldMetadata instanceof MapFieldMetadata) {
                 if (((MapFieldMetadata) fieldMetadata).getKeyType().isEntity()) {

@@ -201,9 +201,9 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(nickFmInList.isCollectionField());
         Assert.assertTrue(nickFmInArray.isCollectionField());
 
-        Assert.assertEquals(String.class, nickFmInTypedSet.getEntryType().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInSet.getEntryType().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInList.getEntryType().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInTypedSet.getEntryTypeUnion().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInSet.getEntryTypeUnion().getSimpleType());
+        Assert.assertEquals(String.class, nickFmInList.getEntryTypeUnion().getSimpleType());
     }
 
     @Test
@@ -222,9 +222,9 @@ public class MetadataServiceTest_Fields {
         CollectionFieldMetadata vacationBookingsFm = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("vacationBookings");
         Assert.assertNotNull(vacationBookingsFm);
         Assert.assertTrue(vacationBookingsFm.isCollectionField());
-        Assert.assertNull(vacationBookingsFm.getEntryType().getSimpleType());
-        Assert.assertNotNull(vacationBookingsFm.getEntryType().getAsEmbeddedClassMetadata());
-        Assert.assertNull(vacationBookingsFm.getEntryType().getEntityType());
+        Assert.assertNull(vacationBookingsFm.getEntryTypeUnion().getSimpleType());
+        Assert.assertNotNull(vacationBookingsFm.getEntryTypeUnion().getAsEmbeddedClassMetadata());
+        Assert.assertNull(vacationBookingsFm.getEntryTypeUnion().getEntityType());
     }
 
     @Test
@@ -246,8 +246,8 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(departmentEmployeeFm.isCollectionField());
         Assert.assertTrue(departmentEmployeeListFm.isCollectionField());
 
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryType().getEntityType());
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryType().getEntityType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryTypeUnion().getEntityType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryTypeUnion().getEntityType());
     }
 
     @Test

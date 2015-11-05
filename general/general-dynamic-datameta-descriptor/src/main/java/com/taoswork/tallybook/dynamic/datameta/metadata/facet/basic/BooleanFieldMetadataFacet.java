@@ -20,8 +20,4 @@ public class BooleanFieldMetadataFacet implements IFieldMetadataFacet {
         return FieldFacetType.Boolean;
     }
 
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }

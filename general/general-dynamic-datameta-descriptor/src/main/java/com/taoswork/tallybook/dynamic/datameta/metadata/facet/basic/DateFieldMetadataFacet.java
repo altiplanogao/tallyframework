@@ -27,8 +27,4 @@ public class DateFieldMetadataFacet implements IFieldMetadataFacet {
         return FieldFacetType.Date;
     }
 
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }

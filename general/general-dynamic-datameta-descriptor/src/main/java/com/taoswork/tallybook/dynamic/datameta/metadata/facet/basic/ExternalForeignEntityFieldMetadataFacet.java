@@ -21,8 +21,4 @@ public class ExternalForeignEntityFieldMetadataFacet implements IFieldMetadataFa
         return FieldFacetType.ExternalForeignEntity;
     }
 
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }

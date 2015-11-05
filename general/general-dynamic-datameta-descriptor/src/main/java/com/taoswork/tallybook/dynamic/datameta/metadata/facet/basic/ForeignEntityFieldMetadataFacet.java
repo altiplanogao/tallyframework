@@ -20,9 +20,4 @@ public class ForeignEntityFieldMetadataFacet implements IFieldMetadataFacet {
     public FieldFacetType getType() {
         return FieldFacetType.ForeignEntity;
     }
-
-    @Override
-    public void merge(IFieldMetadataFacet facet) {
-
-    }
 }
