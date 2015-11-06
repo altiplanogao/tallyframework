@@ -72,18 +72,10 @@ class _MapFieldHandler extends __BaseCollectionFieldHandler {
             } else {
                 targetValueType = valueType;
             }
-            ClassMetadata embeddedKeyCm = null;
-            if (FieldMetadataHelper.isEmbeddable(keyType)) {
-                embeddedKeyCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, keyType);
-            }
-            ClassMetadata embeddedValueCm = null;
-            if (FieldMetadataHelper.isEmbeddable(targetValueType)) {
-                embeddedValueCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetValueType);
-            }
 
             MapFieldMetadataFacet facet = new MapFieldMetadataFacet(clazz,
-                keyType, embeddedKeyCm,
-                targetValueType, embeddedValueCm);
+                keyType,
+                targetValueType);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(MapFieldMetadata.class);
             return ProcessResult.HANDLED;

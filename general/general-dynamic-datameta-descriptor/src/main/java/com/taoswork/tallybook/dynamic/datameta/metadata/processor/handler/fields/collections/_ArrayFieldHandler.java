@@ -34,11 +34,7 @@ class _ArrayFieldHandler extends _1DCollectionFieldHandler {
             }
             Class entryType = type.getComponentType();
 
-            ClassMetadata embeddedCm = null;
-            if (FieldMetadataHelper.isEmbeddable(entryType)) {
-                embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, entryType);
-            }
-            ArrayFieldMetadataFacet facet = new ArrayFieldMetadataFacet(entryType, embeddedCm);
+            ArrayFieldMetadataFacet facet = new ArrayFieldMetadataFacet(entryType);
 
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(ArrayFieldMetadata.class);

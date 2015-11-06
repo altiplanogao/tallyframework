@@ -160,14 +160,14 @@ public class MetadataServiceImpl implements MetadataService {
     }
 
     private void publishReferencedEntityMetadataIfNot(ClassMetadata classMetadata){
-        if(!classMetadata.isReferencedEntityMetadataPublished()){
-            Collection<Class> entities = classMetadata.getReferencedEntities();
+        if(!classMetadata.isReferencingClassMetadataPublished()){
+            Collection<Class> entities = classMetadata.getReferencedTypes();
             Set<ClassMetadata> classMetadatas = new HashSet<ClassMetadata>();
             for (Class entity : entities){
                 ClassMetadata metadata = this.innerGenerateMetadata(entity, true);
                 classMetadatas.add(metadata);
             }
-            classMetadata.publishReferencedEntityMetadatas(classMetadatas);
+            classMetadata.publishReferencingClassMetadatas(classMetadatas);
         }
     }
 }

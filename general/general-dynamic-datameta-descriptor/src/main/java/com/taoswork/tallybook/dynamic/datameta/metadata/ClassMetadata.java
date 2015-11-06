@@ -27,7 +27,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private final Map<String, TabMetadata> tabMetadataMap = new HashMap<String, TabMetadata>();
     private final Map<String, GroupMetadata> groupMetadataMap = new HashMap<String, GroupMetadata>();
     private final Map<String, IFieldMetadata> fieldMetadataMap = new HashMap<String, IFieldMetadata>();
-    private final Map<String, ClassMetadata> referencedEntityMetadata = new HashMap<String, ClassMetadata>();
+    private final Map<String, ClassMetadata> referencingClassMetadata = new HashMap<String, ClassMetadata>();
     private final Set<String> nonCollectionFields = new HashSet<String>();
     private final Set<String> validators = new HashSet();
     private final Set<String> valueGates = new HashSet();
@@ -37,7 +37,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
     private String nameFieldName;
     private transient Field idField;
     private transient Field nameField;
-    private boolean referencedEntityMetadataPublished = false;
+    private boolean referencingClassMetadataPublished = false;
 
     public ClassMetadata() {
         this(null);
@@ -184,12 +184,12 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetadataMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetadataMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetadataMap(), getRWFieldMetadataMap());
-        MapUtility.putIfAbsent(thatMeta.referencedEntityMetadata, referencedEntityMetadata);
+        MapUtility.putIfAbsent(thatMeta.referencingClassMetadata, referencingClassMetadata);
 
         this.nonCollectionFields.addAll(thatMeta.nonCollectionFields);
         this.validators.addAll(thatMeta.getValidators());
         this.valueGates.addAll(thatMeta.getValueGates());
-        this.referencedEntityMetadataPublished &= thatMeta.referencedEntityMetadataPublished;
+        this.referencingClassMetadataPublished &= thatMeta.referencingClassMetadataPublished;
     }
 
     public void finishBuilding() {
@@ -209,24 +209,24 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
         return Collections.unmodifiableCollection(nonCollectionFields);
     }
 
-    public boolean isReferencedEntityMetadataPublished() {
-        return referencedEntityMetadataPublished;
+    public boolean isReferencingClassMetadataPublished() {
+        return referencingClassMetadataPublished;
     }
 
-    public void publishReferencedEntityMetadatas(Collection<ClassMetadata> cms) {
-        if(null != cms) {
+    public void publishReferencingClassMetadatas(Collection<ClassMetadata> cms) {
+        if(null != cms && !cms.isEmpty()) {
             for (ClassMetadata cm : cms) {
-                this.referencedEntityMetadata.put(cm.getEntityClz().getName(), cm);
+                this.referencingClassMetadata.put(cm.getEntityClz().getName(), cm);
             }
         }
-        referencedEntityMetadataPublished = true;
+        referencingClassMetadataPublished = true;
     }
 
-    public ClassMetadata getReferencedEntityMetadata(String entity) {
-        return this.referencedEntityMetadata.get(entity);
+    public ClassMetadata getReferencingClassMetadata(String entity) {
+        return this.referencingClassMetadata.get(entity);
     }
 
-    public Collection<Class> getReferencedEntities() {
+    public Collection<Class> getReferencedTypes() {
         Set<Class> entities = new HashSet<Class>();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
@@ -236,15 +236,23 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
                 //add or not?
                 entities.add(((ExternalForeignEntityFieldMetadata) fieldMetadata).getEntityType());
             } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-                if (((CollectionFieldMetadata) fieldMetadata).getEntryTypeUnion().isEntity()) {
-                    entities.add(((CollectionFieldMetadata) fieldMetadata).getEntryTypeUnion().getEntityType());
+                EntryTypeUnion entryTypeUnion = ((CollectionFieldMetadata) fieldMetadata).getEntryTypeUnion();
+                if (entryTypeUnion.isEmbeddableOrEntity()) {
+                    entities.add(entryTypeUnion.getEntryClass());
                 }
             } else if (fieldMetadata instanceof MapFieldMetadata) {
-                if (((MapFieldMetadata) fieldMetadata).getKeyType().isEntity()) {
-                    entities.add(((MapFieldMetadata) fieldMetadata).getKeyType().getEntityType());
+                MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
+                {
+                    EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();
+                    if (keyEntryTypeUnion.isEmbeddableOrEntity()) {
+                        entities.add(keyEntryTypeUnion.getEntryClass());
+                    }
                 }
-                if (((MapFieldMetadata) fieldMetadata).getValueType().isEntity()) {
-                    entities.add(((MapFieldMetadata) fieldMetadata).getValueType().getEntityType());
+                {
+                    EntryTypeUnion valueEntryTypeUnion = typedFieldMetadata.getValueType();
+                    if (valueEntryTypeUnion.isEmbeddableOrEntity()) {
+                        entities.add(valueEntryTypeUnion.getEntryClass());
+                    }
                 }
             }
         }
@@ -302,7 +310,7 @@ public class ClassMetadata extends FriendlyMetadata implements Cloneable, Serial
          if(fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
             String entityTypeName = foreignEntityFieldMetadata.getEntityType().getName();
-            ClassMetadata subCm = classMetadata.getReferencedEntityMetadata(entityTypeName);
+            ClassMetadata subCm = classMetadata.getReferencingClassMetadata(entityTypeName);
              return getRoutedFieldMetadata(subCm, remainPiece);
         }else if(fieldMetadata instanceof EmbeddedFieldMetadata){
              EmbeddedFieldMetadata embeddedFieldMetadata = (EmbeddedFieldMetadata) fieldMetadata;

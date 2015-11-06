@@ -7,46 +7,32 @@ import java.io.Serializable;
 
 public class EntryTypeUnion implements Serializable {
     private final EntryType entryType;
-    private final Class simpleType;
-    private final ClassMetadata asEmbeddedClassMetadata;
-    private final Class entityType;
+    private final Class entryClass;
 
-    public EntryTypeUnion(Class eleType, ClassMetadata asEmbeddedClassMetadata) {
+    public EntryTypeUnion(Class eleType) {
+        entryClass = eleType;
         if (FieldMetadataHelper.isEmbeddable(eleType)) {
-            this.simpleType = null;
-            this.asEmbeddedClassMetadata = asEmbeddedClassMetadata;
-            this.entityType = null;
             this.entryType = EntryType.Embeddable;
         } else if (FieldMetadataHelper.isEntity(eleType)) {
-            this.simpleType = null;
-            this.asEmbeddedClassMetadata = null;
-            this.entityType = eleType;
             this.entryType = EntryType.Entity;
         } else {
-            this.simpleType = eleType;
-            this.asEmbeddedClassMetadata = null;
-            this.entityType = null;
             this.entryType = EntryType.Simple;
         }
     }
 
-    public Class getSimpleType() {
-        return simpleType;
+    public EntryType getEntryType() {
+        return entryType;
     }
 
-    public ClassMetadata getAsEmbeddedClassMetadata() {
-        return asEmbeddedClassMetadata;
-    }
-
-    public Class getEntityType() {
-        return entityType;
+    public Class getEntryClass() {
+        return entryClass;
     }
 
     public boolean isSimple() {
         return EntryType.Simple.equals(entryType);
     }
 
-    public boolean isEmbedded() {
+    public boolean isEmbeddable() {
         return EntryType.Embeddable.equals(entryType);
     }
 
@@ -54,7 +40,26 @@ public class EntryTypeUnion implements Serializable {
         return EntryType.Entity.equals(entryType);
     }
 
-    public EntryType getEntryType() {
-        return entryType;
+    public boolean isEmbeddableOrEntity(){
+        return EntryType.Embeddable.equals(entryType) || EntryType.Entity.equals(entryType);
+    }
+
+    public Class getAsSimpleClass() {
+        if(isSimple()){
+            return entryClass;
+        }
+        return null;
+    }
+    public Class getAsEmbeddableClass() {
+        if(isEmbeddable()){
+            return entryClass;
+        }
+        return null;
+    }
+    public Class getAsEntityClass() {
+        if(isEntity()){
+            return entryClass;
+        }
+        return null;
     }
 }

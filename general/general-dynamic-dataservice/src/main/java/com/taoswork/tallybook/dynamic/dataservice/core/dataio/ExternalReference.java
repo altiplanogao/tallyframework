@@ -7,19 +7,15 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class ExternalReference {
-    private static class ReferencingSlot{
-        final Object holder;
-        final Field holdingField;
-        private final EntityReference entityReference;
 
-        public ReferencingSlot(Object holder, Field holdingField, EntityReference entityReference) {
-            this.holder = holder;
-            this.holdingField = holdingField;
-            this.entityReference = entityReference;
-        }
-    }
-
+    /**
+     * Entity references grouped by entity-types
+     * Map key is entity-type
+     */
     private final Map<Class, EntityReferences> referencesByType = new HashMap();
+    /**
+     * Slots referencing other entities
+     */
     private final List<ReferencingSlot> referencingSlots = new ArrayList<ReferencingSlot>();
 
     public void publishReference(Object holder, Field holdingField, Class entityType, Object id){
@@ -63,7 +59,7 @@ public class ExternalReference {
     public void fillReferencingSlots(Map<String, EntityRecords> records) throws ServiceException{
         try {
             for (ReferencingSlot slot : referencingSlots) {
-                EntityReference reference = slot.entityReference;
+                EntityReference reference = slot.getEntityReference();
                 String entityType = reference.getEntityType();
                 Object entityId = reference.getEntityId();
                 Object entityRecord = null;
@@ -72,7 +68,7 @@ public class ExternalReference {
                     entityRecord = typedRecords.getRecord(entityId);
                 }
                 if (entityRecord != null) {
-                    slot.holdingField.set(slot.holder, entityRecord);
+                    slot.setRecord(entityRecord);
                 }
             }
         } catch (IllegalAccessException e) {

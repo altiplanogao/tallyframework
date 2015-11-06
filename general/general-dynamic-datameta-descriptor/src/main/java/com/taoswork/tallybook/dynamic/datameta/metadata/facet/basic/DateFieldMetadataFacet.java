@@ -5,8 +5,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFace
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
 
-import javax.persistence.Temporal;
-
 /**
  * Created by Gao Yuan on 2015/10/30.
  */

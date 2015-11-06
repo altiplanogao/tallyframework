@@ -3,6 +3,9 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Single Entity reference by entityType and id
+ */
 public class EntityReference {
     private final String entityType;
     private final Object entityId;

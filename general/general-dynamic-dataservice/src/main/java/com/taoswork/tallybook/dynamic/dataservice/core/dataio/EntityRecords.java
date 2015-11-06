@@ -2,8 +2,18 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
 
 import java.util.*;
 
+/**
+ * Entity records for a particular entity type
+ * Having id-value pairs
+ */
 public class EntityRecords {
+    /**
+     * The entities' type
+     */
     private final String entityType;
+    /**
+     * Records with id as key
+     */
     private final Map<Object, Object> entities = new HashMap<Object, Object>();
 
     public EntityRecords(String entityType) {

@@ -1,9 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
-import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
@@ -12,8 +9,8 @@ public class CollectionFieldMetadataFacet extends _1DCollectionFieldMetadataFace
 
     private final Class collectionType;
 
-    public CollectionFieldMetadataFacet(Class collectionType, Class entryType, Class targetEntryType, ClassMetadata embeddedClassMetadata) {
-        super(entryType, targetEntryType, embeddedClassMetadata);
+    public CollectionFieldMetadataFacet(Class collectionType, Class entryType, Class targetEntryType) {
+        super(entryType, targetEntryType);
         this.collectionType = collectionType;
     }
 

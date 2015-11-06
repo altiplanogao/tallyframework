@@ -72,11 +72,6 @@ class _CollectionFieldHandler extends _1DCollectionFieldHandler {
             targetEntryType = entryType;
         }
 
-        ClassMetadata embeddedCm = null;
-        if (FieldMetadataHelper.isEmbeddable(targetEntryType)) {
-            embeddedCm = FieldMetadataHelper.generateEmbeddedClassMetadata(classProcessor, targetEntryType);
-        }
-
-        return new CollectionFieldMetadataFacet(collectionType, entryType, targetEntryType, embeddedCm);
+        return new CollectionFieldMetadataFacet(collectionType, entryType, targetEntryType);
     }
 }

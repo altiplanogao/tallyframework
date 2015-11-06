@@ -2,6 +2,9 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
 
 import java.util.*;
 
+/**
+ * Multiple Entity references by entityType and ids
+ */
 public class EntityReferences {
     private final String entityType;
     private final Set<Object> entityIds = new HashSet<Object>();

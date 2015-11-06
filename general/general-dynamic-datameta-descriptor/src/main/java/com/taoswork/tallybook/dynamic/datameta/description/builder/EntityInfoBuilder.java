@@ -11,9 +11,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.Entit
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/6/25.

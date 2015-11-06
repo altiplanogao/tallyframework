@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
@@ -10,6 +11,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.EntryType;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeNameX;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.CompanyType;
 import com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl;
@@ -201,9 +203,13 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(nickFmInList.isCollectionField());
         Assert.assertTrue(nickFmInArray.isCollectionField());
 
-        Assert.assertEquals(String.class, nickFmInTypedSet.getEntryTypeUnion().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInSet.getEntryTypeUnion().getSimpleType());
-        Assert.assertEquals(String.class, nickFmInList.getEntryTypeUnion().getSimpleType());
+        Assert.assertEquals(EntryType.Simple, nickFmInTypedSet.getEntryTypeUnion().getEntryType());
+        Assert.assertEquals(EntryType.Simple, nickFmInSet.getEntryTypeUnion().getEntryType());
+        Assert.assertEquals(EntryType.Simple, nickFmInList.getEntryTypeUnion().getEntryType());
+
+        Assert.assertEquals(String.class, nickFmInTypedSet.getEntryTypeUnion().getAsSimpleClass());
+        Assert.assertEquals(String.class, nickFmInSet.getEntryTypeUnion().getAsSimpleClass());
+        Assert.assertEquals(String.class, nickFmInList.getEntryTypeUnion().getAsSimpleClass());
     }
 
     @Test
@@ -213,8 +219,11 @@ public class MetadataServiceTest_Fields {
         Assert.assertNotNull(phoneNumbersFm);
         Assert.assertTrue(phoneNumbersFm.isCollectionField());
 
-        Assert.assertEquals(phoneNumbersFm.getKeyType().getSimpleType(), PhoneType.class);
-        Assert.assertEquals(phoneNumbersFm.getValueType().getSimpleType(), String.class);
+        Assert.assertEquals(EntryType.Simple, phoneNumbersFm.getKeyType().getEntryType());
+        Assert.assertEquals(EntryType.Simple, phoneNumbersFm.getValueType().getEntryType());
+
+        Assert.assertEquals(phoneNumbersFm.getKeyType().getAsSimpleClass(), PhoneType.class);
+        Assert.assertEquals(phoneNumbersFm.getValueType().getAsSimpleClass(), String.class);
     }
 
     @Test
@@ -222,9 +231,15 @@ public class MetadataServiceTest_Fields {
         CollectionFieldMetadata vacationBookingsFm = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("vacationBookings");
         Assert.assertNotNull(vacationBookingsFm);
         Assert.assertTrue(vacationBookingsFm.isCollectionField());
-        Assert.assertNull(vacationBookingsFm.getEntryTypeUnion().getSimpleType());
-        Assert.assertNotNull(vacationBookingsFm.getEntryTypeUnion().getAsEmbeddedClassMetadata());
-        Assert.assertNull(vacationBookingsFm.getEntryTypeUnion().getEntityType());
+        EntryTypeUnion entryTypeUnion =vacationBookingsFm.getEntryTypeUnion();
+        Class entryClass = entryTypeUnion.getEntryClass();
+        Assert.assertEquals(EntryType.Embeddable, entryTypeUnion.getEntryType());
+        Assert.assertNull(entryTypeUnion.getAsSimpleClass());
+        Assert.assertNotNull(entryTypeUnion.getAsEmbeddableClass());
+        Assert.assertNull(entryTypeUnion.getAsEntityClass());
+
+        ClassMetadata classMetadata = employeeMetadata.getReferencingClassMetadata(entryClass.getName());
+        Assert.assertNotNull(classMetadata);
     }
 
     @Test
@@ -232,9 +247,22 @@ public class MetadataServiceTest_Fields {
         MapFieldMetadata employeesByNameXFm = (MapFieldMetadata) departmentMetadata.getFieldMetadata("employeesByNameX");
         Assert.assertNotNull(employeesByNameXFm);
         Assert.assertTrue(employeesByNameXFm.isCollectionField());
-        Assert.assertNull(employeesByNameXFm.getKeyType().getSimpleType());
-        Assert.assertNotNull(employeesByNameXFm.getKeyType().getAsEmbeddedClassMetadata());
-        Assert.assertNull(employeesByNameXFm.getKeyType().getEntityType());
+
+        EntryTypeUnion keyTypeUnion =employeesByNameXFm.getKeyType();
+        Class keyEntryClass = keyTypeUnion.getEntryClass();
+        Assert.assertEquals(keyEntryClass, EmployeeNameX.class);
+        EntryTypeUnion valueTypeUnion =employeesByNameXFm.getValueType();
+        Class valueEntryClass = valueTypeUnion.getEntryClass();
+        Assert.assertEquals(valueEntryClass, EmployeeImpl.class);
+
+        Assert.assertNull(keyTypeUnion.getAsSimpleClass());
+        Assert.assertNotNull(keyTypeUnion.getAsEmbeddableClass());
+        Assert.assertNull(keyTypeUnion.getAsEntityClass());
+
+        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(keyEntryClass.getName());
+        Assert.assertNotNull(classMetadata);
+        ClassMetadata classMetadata2 = departmentMetadata.getReferencingClassMetadata(valueEntryClass.getName());
+        Assert.assertNotNull(classMetadata2);
     }
 
     @Test
@@ -246,8 +274,11 @@ public class MetadataServiceTest_Fields {
         Assert.assertTrue(departmentEmployeeFm.isCollectionField());
         Assert.assertTrue(departmentEmployeeListFm.isCollectionField());
 
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryTypeUnion().getEntityType());
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryTypeUnion().getEntityType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryTypeUnion().getAsEntityClass());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryTypeUnion().getAsEntityClass());
+
+        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class.getName());
+        Assert.assertNotNull(classMetadata);
     }
 
     @Test
@@ -256,34 +287,30 @@ public class MetadataServiceTest_Fields {
             MapFieldMetadata employeesByNameFm = (MapFieldMetadata) departmentMetadata.getFieldMetadata("employeesByName");
             Assert.assertNotNull(employeesByNameFm);
             Assert.assertTrue(employeesByNameFm.isCollectionField());
-            Assert.assertNull(employeesByNameFm.getValueType().getSimpleType());
-            Assert.assertNull(employeesByNameFm.getValueType().getAsEmbeddedClassMetadata());
-            Assert.assertEquals(EmployeeImpl.class, employeesByNameFm.getValueType().getEntityType());
+            EntryTypeUnion valueTypeU = employeesByNameFm.getValueType();
+            Assert.assertNull(valueTypeU.getAsSimpleClass());
+            Assert.assertNull(valueTypeU.getAsEmbeddableClass());
+            Assert.assertEquals(EmployeeImpl.class, valueTypeU.getAsEntityClass());
+            ClassMetadata refCm = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class.getName());
+            Assert.assertNotNull(refCm);
         }
         {
             MapFieldMetadata employeesFm = (MapFieldMetadata) departmentMetadata.getFieldMetadata("employeesByUnTypedId");
             Assert.assertNotNull(employeesFm);
             Assert.assertTrue(employeesFm.isCollectionField());
-            Assert.assertNull(employeesFm.getValueType().getSimpleType());
-            Assert.assertNull(employeesFm.getValueType().getAsEmbeddedClassMetadata());
-            Assert.assertEquals(EmployeeImpl.class, employeesFm.getValueType().getEntityType());
+            EntryTypeUnion valueTypeU = employeesFm.getValueType();
+            Assert.assertNull(valueTypeU.getAsSimpleClass());
+            Assert.assertNull(valueTypeU.getAsEmbeddableClass());
+            Assert.assertEquals(EmployeeImpl.class, valueTypeU.getAsEntityClass());
         }
         {
             MapFieldMetadata employeesFm = (MapFieldMetadata) departmentMetadata.getFieldMetadata("employeesByUnTypedName");
             Assert.assertNotNull(employeesFm);
             Assert.assertTrue(employeesFm.isCollectionField());
-            Assert.assertNull(employeesFm.getValueType().getSimpleType());
-            Assert.assertNull(employeesFm.getValueType().getAsEmbeddedClassMetadata());
-            Assert.assertEquals(EmployeeImpl.class, employeesFm.getValueType().getEntityType());
+            EntryTypeUnion valueTypeU = employeesFm.getValueType();
+            Assert.assertNull(employeesFm.getValueType().getAsSimpleClass());
+            Assert.assertNull(employeesFm.getValueType().getAsEmbeddableClass());
+            Assert.assertEquals(EmployeeImpl.class, employeesFm.getValueType().getAsEntityClass());
         }
-//        CollectionFieldMetadata departmentEmployeeFm = (CollectionFieldMetadata) departmentMetadata.getFieldMetadata("employees");
-//        CollectionFieldMetadata departmentEmployeeListFm = (CollectionFieldMetadata) departmentMetadata.getFieldMetadata("employeesList");
-//        Assert.assertNotNull(departmentEmployeeFm);
-//        Assert.assertNotNull(departmentEmployeeListFm);
-//        Assert.assertTrue(departmentEmployeeFm.isCollectionField());
-//        Assert.assertTrue(departmentEmployeeListFm.isCollectionField());
-//
-//        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntityType());
-//        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntityType());
     }
 }

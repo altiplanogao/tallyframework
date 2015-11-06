@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -41,6 +42,7 @@ final class RawEntityInfoBuilder {
     }
 
     private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final ClassMetadata classMetadata) {
+        Collection<String> collectionTypeReferenced = new HashSet<String>();
 
         final ClassMetadata topClassMetadata = classMetadata;
         //add tabs
@@ -69,7 +71,7 @@ final class RawEntityInfoBuilder {
                 }
             }
 
-            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata);
+            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata, collectionTypeReferenced);
             for(IFieldInfo fi : fieldInfos){
                 if(fi.ignored())
                     continue;
@@ -90,6 +92,7 @@ final class RawEntityInfoBuilder {
             rawEntityInfo.setIdField(idFieldName);
         }
         rawEntityInfo.setNameField(classMetadata.getNameFieldName());
+        rawEntityInfo.addReferencingEntries(collectionTypeReferenced);
         rawEntityInfo.finishWriting();
     }
 

@@ -1,7 +1,5 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.property.Property;
-
 public abstract class BaseCollectionFieldMetadata extends BaseFieldMetadata {
     public BaseCollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
@@ -35,10 +33,5 @@ public abstract class BaseCollectionFieldMetadata extends BaseFieldMetadata {
     @Override
     final public boolean isId() {
         return false;
-    }
-
-    @Override
-    public Property[] getProperties(Object obj) throws IllegalAccessException {
-        return new Property[0];
     }
 }

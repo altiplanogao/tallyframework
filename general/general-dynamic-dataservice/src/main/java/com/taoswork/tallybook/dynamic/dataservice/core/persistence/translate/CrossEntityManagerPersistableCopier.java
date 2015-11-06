@@ -25,6 +25,7 @@ public class CrossEntityManagerPersistableCopier {
     private class TtFieldCopier {
         final ClassMetadata topClassMetadata;
         final EntryTypeUnion elementType;
+        final ClassMetadata embeddableClassMetadata;
         final ClassMetadata entityClassMetadata;
         final int model;
 
@@ -37,16 +38,21 @@ public class CrossEntityManagerPersistableCopier {
             this.topClassMetadata = topClassMetadata;
             this.elementType = elementType;
             if (elementType.isSimple()) {
+                embeddableClassMetadata = null;
                 entityClassMetadata = null;
                 model = MODEL_BASIC;
-            } else if (elementType.isEmbedded()) {
+            } else if (elementType.isEmbeddable()) {
+                Class entryCls = elementType.getEntryClass();
+                embeddableClassMetadata = topClassMetadata.getReferencingClassMetadata(entryCls.getName());
                 entityClassMetadata = null;
                 model = MODEL_EMBEDDED;
             } else if (elementType.isEntity()) {
-                Class entityCls = elementType.getEntityType();
-                entityClassMetadata = topClassMetadata.getReferencedEntityMetadata(entityCls.getName());
+                embeddableClassMetadata = null;
+                Class entryCls = elementType.getEntryClass();
+                entityClassMetadata = topClassMetadata.getReferencingClassMetadata(entryCls.getName());
                 model = MODEL_ENTITY;
             } else {
+                embeddableClassMetadata = null;
                 entityClassMetadata = null;
                 model = MODEL_UNKNOWN;
             }
@@ -67,7 +73,7 @@ public class CrossEntityManagerPersistableCopier {
                 case MODEL_BASIC:
                     return source;
                 case MODEL_EMBEDDED:
-                    return makeCopyForEmbeddable(topClassMetadata, source, elementType.getAsEmbeddedClassMetadata(), currentLevel, levelLimit);
+                    return makeCopyForEmbeddable(topClassMetadata, source, embeddableClassMetadata, currentLevel, levelLimit);
                 case MODEL_ENTITY:
                     return makeCopyForEntity(topClassMetadata, source, entityClassMetadata, currentLevel, levelLimit);
                 default:
@@ -180,7 +186,7 @@ public class CrossEntityManagerPersistableCopier {
                 field.set(target, fn);
             } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
                 Class entityType = ((ForeignEntityFieldMetadata) fieldMetadata).getEntityType();
-                ClassMetadata foreignClassMetadata = topClassMetadata.getReferencedEntityMetadata(entityType.getName());
+                ClassMetadata foreignClassMetadata = topClassMetadata.getReferencingClassMetadata(entityType.getName());
                 Field field = fieldMetadata.getField();
                 Object fo = field.get(source);
                 Object fn = walkFieldsAndCopy(topClassMetadata, foreignClassMetadata, fo, currentLevel, levelLimit);

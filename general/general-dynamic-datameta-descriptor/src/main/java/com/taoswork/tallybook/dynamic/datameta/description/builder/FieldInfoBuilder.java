@@ -33,7 +33,7 @@ public class FieldInfoBuilder {
         return name;
     }
 
-    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata) {
+    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<String> collectionTypeReferenced) {
         String name = prepend(prefix, fieldMetadata.getName());
         String friendlyName = fieldMetadata.getFriendlyName();
         boolean editable = fieldMetadata.isEditable();
@@ -66,6 +66,7 @@ public class FieldInfoBuilder {
             PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);
             result = stringFieldInfo;
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
+            //handled in createFieldInfos()
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof ArrayFieldMetadata) {
             ArrayFieldMetadata typedFieldMetadata = (ArrayFieldMetadata) fieldMetadata;
@@ -77,6 +78,9 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
             CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
             EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+            if(entryTypeUnion.isEmbeddableOrEntity()){
+                collectionTypeReferenced.add(entryTypeUnion.getEntryClass().getName());
+            }
 
             CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
                 entryTypeUnion);
@@ -85,6 +89,12 @@ public class FieldInfoBuilder {
             MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
             EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();
             EntryTypeUnion valueEntryTypeUnion = typedFieldMetadata.getValueType();
+            if(keyEntryTypeUnion.isEmbeddableOrEntity()){
+                collectionTypeReferenced.add(keyEntryTypeUnion.getEntryClass().getName());
+            }
+            if(valueEntryTypeUnion.isEmbeddableOrEntity()){
+                collectionTypeReferenced.add(valueEntryTypeUnion.getEntryClass().getName());
+            }
 
             MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable,
                 keyEntryTypeUnion, valueEntryTypeUnion);
@@ -101,11 +111,13 @@ public class FieldInfoBuilder {
         return result;
     }
 
-    private static IFieldInfo generateCollectionEntryFieldInfo(final ClassMetadata topClassMetadata, String prefix, Field collectionField){
-        return null;
+    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata, Collection<String> collectionTypeReferenced){
+        List<IFieldInfo> result = new ArrayList<IFieldInfo>();
+        createFieldInfos(topClassMetadata, "", fieldMetadata, result, collectionTypeReferenced);
+        return result;
     }
 
-    public static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos) {
+    private static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos, Collection<String> collectionTypeReferenced) {
         int counter = 0;
         if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             EmbeddedFieldMetadata embeddedFieldMetadata = (EmbeddedFieldMetadata) fieldMetadata;
@@ -117,7 +129,7 @@ public class FieldInfoBuilder {
             List<IFieldInfo> subFieldInfos = new ArrayList<IFieldInfo>();
             for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
                 IFieldMetadata subFieldMetadata = fieldMetadataEntry.getValue();
-                createFieldInfos(topClassMetadata, subPrefix, subFieldMetadata, subFieldInfos);
+                createFieldInfos(topClassMetadata, subPrefix, subFieldMetadata, subFieldInfos, collectionTypeReferenced);
             }
             for (IFieldInfo subFi : subFieldInfos) {
                 if (subFi instanceof IFieldInfoRW) {
@@ -128,16 +140,10 @@ public class FieldInfoBuilder {
             fieldInfos.addAll(subFieldInfos);
             counter += subFieldInfos.size();
         } else {
-            IFieldInfo fieldInfo = createFieldInfo(topClassMetadata, prefix, fieldMetadata);
+            IFieldInfo fieldInfo = createFieldInfo(topClassMetadata, prefix, fieldMetadata, collectionTypeReferenced);
             fieldInfos.add(fieldInfo);
             counter++;
         }
         return counter;
-    }
-
-    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata){
-        List<IFieldInfo> result = new ArrayList<IFieldInfo>();
-        createFieldInfos(topClassMetadata, "", fieldMetadata, result);
-        return result;
     }
 }

@@ -11,8 +11,4 @@ public class CollectionFieldInfo extends CollectionFieldInfoBase {
     public CollectionFieldInfo(String name, String friendlyName, boolean editable, EntryTypeUnion elementType) {
         super(name, friendlyName, editable);
     }
-
-    public CollectionFieldInfo(String name, String friendlyName, boolean editable, IFieldInfo simpleFieldInfo) {
-        super(name, friendlyName, editable);
-    }
 }

@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
@@ -18,16 +17,16 @@ public class MapFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class mapType;
 
     public MapFieldMetadataFacet(Class mapType,
-                                 Class keyType, ClassMetadata keyEmbeddedClassMetadata,
-                                 Class valueType, ClassMetadata valueEmbeddedClassMetadata) {
+                                 Class keyType,
+                                 Class valueType) {
         super();
         this.mapType = mapType;
 
         this._keyType = keyType;
         this._valueType = valueType;
 
-        this.keyType = new EntryTypeUnion(keyType, keyEmbeddedClassMetadata);
-        this.valueType = new EntryTypeUnion(valueType, valueEmbeddedClassMetadata);
+        this.keyType = new EntryTypeUnion(keyType);
+        this.valueType = new EntryTypeUnion(valueType);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -69,6 +70,11 @@ interface RawEntityInfo
     void addGridField(String fieldName);
 
     Collection<String> getGridFields();
+
+    //referencing
+    void addReferencingEntries(Collection<String> entries);
+
+    Collection<String> getReferencingEntries();
 
     //main
     void finishWriting();

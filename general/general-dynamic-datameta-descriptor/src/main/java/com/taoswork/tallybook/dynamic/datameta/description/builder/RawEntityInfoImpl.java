@@ -4,6 +4,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.Order
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import java.util.*;
 
@@ -17,6 +19,7 @@ class RawEntityInfoImpl
     private final Map<String, IFieldInfo> fields = new HashMap<String, IFieldInfo>();
     private final Map<String, RawTabInfo> tabs = new HashMap<String, RawTabInfo>();
     private final Set<String> gridFields = new HashSet<String>();
+    private final Set<String> referencingEntries = new HashSet<String>();
     private String idField;
     private String nameField;
     private String primarySearchField;
@@ -94,46 +97,59 @@ class RawEntityInfoImpl
         return Collections.unmodifiableCollection(gridFields);
     }
 
+    //referencing
+
+    @Override
+    public void addReferencingEntries(Collection<String> entries) {
+        referencingEntries.addAll(entries);
+    }
+
+    @Override
+    public Collection<String> getReferencingEntries(){
+        return Collections.unmodifiableCollection(referencingEntries);
+    }
+
     //main
     @Override
     public void finishWriting() {
         if (dirty) {
             Map<OrderedName, IFieldInfo> fieldsOrdered = new TreeMap<OrderedName, IFieldInfo>(new OrderedName.OrderedComparator());
             for (Map.Entry<String, IFieldInfo> entry : fields.entrySet()) {
-                IFieldInfo IFieldInfo = entry.getValue();
-                fieldsOrdered.put(new OrderedName(entry.getKey(), IFieldInfo.getOrder()), IFieldInfo);
+                IFieldInfo fieldInfo = entry.getValue();
+                fieldsOrdered.put(new OrderedName(entry.getKey(), fieldInfo.getOrder()), fieldInfo);
             }
-            {
-                IFieldInfo firstFieldInfo = null;
-                for (Map.Entry<OrderedName, IFieldInfo> fieldInfoEntry : fieldsOrdered.entrySet()) {
-                    IFieldInfo fieldInfo = fieldInfoEntry.getValue();
-                    if (fieldInfo == null) {
-                        continue;
+            IFieldInfo firstFieldInfo = null;
+            for (Map.Entry<OrderedName, IFieldInfo> fieldInfoEntry : fieldsOrdered.entrySet()) {
+                IFieldInfo fieldInfo = fieldInfoEntry.getValue();
+                if (fieldInfo == null) {
+                    continue;
+                }
+                if (fieldInfo instanceof IBasicFieldInfo) {
+                    IBasicFieldInfo basicFieldInfo = (IBasicFieldInfo) fieldInfo;
+                    if (firstFieldInfo == null) {
+                        firstFieldInfo = fieldInfo;
                     }
-                    if(fieldInfo instanceof IBasicFieldInfo){
-                        IBasicFieldInfo basicFieldInfo = (IBasicFieldInfo) fieldInfo;
-                        if (firstFieldInfo == null) {
-                            firstFieldInfo = fieldInfo;
+                    if (FieldType.NAME.equals(basicFieldInfo.getFieldType())) {
+                        this.nameField = fieldInfo.getName();
+                    }
+                    if (basicFieldInfo.getName().toLowerCase().equals("id")) {
+                        if (this.idField == null) {
+                            this.idField = fieldInfo.getName();
                         }
-                        if (basicFieldInfo.getName().toLowerCase().equals("id")) {
-                            if (this.idField == null) {
-                                this.idField = fieldInfo.getName();
-                            }
-                        }
-                        if (basicFieldInfo.getName().toLowerCase().equals("name")) {
-                            if (this.nameField == null) {
-                                this.nameField = fieldInfo.getName();
-                            }
+                    }
+                    if (basicFieldInfo.getName().toLowerCase().equals("name")) {
+                        if (this.nameField == null) {
+                            this.nameField = fieldInfo.getName();
                         }
                     }
                 }
-                if (null != this.nameField) {
-                    primarySearchField = this.nameField;
-                } else if (null != firstFieldInfo) {
-                    primarySearchField = firstFieldInfo.getName();
-                } else {
-                    primarySearchField = null;
-                }
+            }
+            if (null != this.nameField) {
+                primarySearchField = this.nameField;
+            } else if (null != firstFieldInfo) {
+                primarySearchField = firstFieldInfo.getName();
+            } else {
+                primarySearchField = null;
             }
         }
         dirty = false;
