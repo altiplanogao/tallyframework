@@ -1,12 +1,13 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
 import com.taoswork.tallybook.general.solution.reflect.GenericTypeUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +73,15 @@ class _CollectionFieldHandler extends _1DCollectionFieldHandler {
             targetEntryType = entryType;
         }
 
-        return new CollectionFieldMetadataFacet(collectionType, entryType, targetEntryType);
+        Class<? extends ISimpleEntryDelegate> simpleEntryDelegate = null;
+        PresentationCollection presentationCollection = field.getAnnotation(PresentationCollection.class);
+        if(presentationCollection != null){
+            Class<? extends ISimpleEntryDelegate> marked = presentationCollection.simpleEntryDelegate();
+            if (!ISimpleEntryDelegate.class.equals(marked)){
+                simpleEntryDelegate = marked;
+            }
+        }
+
+        return new CollectionFieldMetadataFacet(collectionType, entryType, targetEntryType, simpleEntryDelegate);
     }
 }

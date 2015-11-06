@@ -19,7 +19,7 @@ class RawEntityInfoImpl
     private final Map<String, IFieldInfo> fields = new HashMap<String, IFieldInfo>();
     private final Map<String, RawTabInfo> tabs = new HashMap<String, RawTabInfo>();
     private final Set<String> gridFields = new HashSet<String>();
-    private final Set<String> referencingEntries = new HashSet<String>();
+    private final Set<Class> referencingEntries = new HashSet<Class>();
     private String idField;
     private String nameField;
     private String primarySearchField;
@@ -100,12 +100,12 @@ class RawEntityInfoImpl
     //referencing
 
     @Override
-    public void addReferencingEntries(Collection<String> entries) {
+    public void addReferencingEntries(Collection<Class> entries) {
         referencingEntries.addAll(entries);
     }
 
     @Override
-    public Collection<String> getReferencingEntries(){
+    public Collection<Class> getReferencingEntries(){
         return Collections.unmodifiableCollection(referencingEntries);
     }
 

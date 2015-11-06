@@ -9,6 +9,8 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Vis
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.ICompany;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.CompanyType;
@@ -148,6 +150,7 @@ public class CompanyImpl implements ICompany {
         tab = Presentation.Tab.Marketing,
         group = Presentation.Group.Public
     )
+    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
     protected List<String> publicProducts = new ArrayList<String>();
 
     @ElementCollection(fetch = FetchType.LAZY)

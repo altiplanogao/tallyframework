@@ -72,9 +72,9 @@ interface RawEntityInfo
     Collection<String> getGridFields();
 
     //referencing
-    void addReferencingEntries(Collection<String> entries);
+    void addReferencingEntries(Collection<Class> entries);
 
-    Collection<String> getReferencingEntries();
+    Collection<Class> getReferencingEntries();
 
     //main
     void finishWriting();

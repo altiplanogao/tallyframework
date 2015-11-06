@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection;
 
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,9 +12,10 @@ import java.lang.annotation.Target;
 public @interface PresentationMap {
     EntryType keyEntryType () default EntryType.Unknown;
 
-    SimpleEntry keyEntry() default @SimpleEntry(name = "Key");
+    Class<? extends ISimpleEntryDelegate> simpleKeyEntryDelegate() default ISimpleEntryDelegate.class;
 
     EntryType valueEntryType () default EntryType.Unknown;
 
-    SimpleEntry valueEntry() default @SimpleEntry(name = "Value");
+    Class<? extends ISimpleEntryDelegate> simpleValueEntryDelegate() default ISimpleEntryDelegate.class;
+
 }

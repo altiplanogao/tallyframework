@@ -33,7 +33,8 @@ public class FieldInfoBuilder {
         return name;
     }
 
-    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<String> collectionTypeReferenced) {
+    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
+                                              Collection<Class> collectionTypeReferenced) {
         String name = prepend(prefix, fieldMetadata.getName());
         String friendlyName = fieldMetadata.getFriendlyName();
         boolean editable = fieldMetadata.isEditable();
@@ -68,32 +69,35 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             //handled in createFieldInfos()
             throw new IllegalArgumentException();
-        } else if (fieldMetadata instanceof ArrayFieldMetadata) {
-            ArrayFieldMetadata typedFieldMetadata = (ArrayFieldMetadata) fieldMetadata;
-            EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+        } else if (fieldMetadata instanceof ArrayFieldMetadata || fieldMetadata instanceof CollectionFieldMetadata) {
+            EntryTypeUnion entryTypeUnion = null;
+            if (fieldMetadata instanceof ArrayFieldMetadata) {
+                ArrayFieldMetadata typedFieldMetadata = (ArrayFieldMetadata) fieldMetadata;
+                entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+            }else {
+                CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
+                entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
+            }
 
-            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-                entryTypeUnion);
-            result = collectionFieldInfo;
-        } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-            CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
-            EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
-            if(entryTypeUnion.isEmbeddableOrEntity()){
-                collectionTypeReferenced.add(entryTypeUnion.getEntryClass().getName());
+            Class referencingCollectionEntryCls = entryTypeUnion.getPresentationClass();
+            if(referencingCollectionEntryCls != null){
+                collectionTypeReferenced.add(referencingCollectionEntryCls);
             }
 
             CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-                entryTypeUnion);
+                (referencingCollectionEntryCls != null)? referencingCollectionEntryCls.getName() : "");
             result = collectionFieldInfo;
         } else if (fieldMetadata instanceof MapFieldMetadata) {
             MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
             EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();
             EntryTypeUnion valueEntryTypeUnion = typedFieldMetadata.getValueType();
-            if(keyEntryTypeUnion.isEmbeddableOrEntity()){
-                collectionTypeReferenced.add(keyEntryTypeUnion.getEntryClass().getName());
+            Class keyReferencingCollectionEntryCls = keyEntryTypeUnion.getPresentationClass();
+            if(keyReferencingCollectionEntryCls != null){
+                collectionTypeReferenced.add(keyReferencingCollectionEntryCls);
             }
-            if(valueEntryTypeUnion.isEmbeddableOrEntity()){
-                collectionTypeReferenced.add(valueEntryTypeUnion.getEntryClass().getName());
+            Class valReferencingCollectionEntryCls = valueEntryTypeUnion.getPresentationClass();
+            if(valReferencingCollectionEntryCls != null){
+                collectionTypeReferenced.add(valReferencingCollectionEntryCls);
             }
 
             MapFieldInfo mapFieldInfo = new MapFieldInfo(name, friendlyName, editable,
@@ -111,13 +115,14 @@ public class FieldInfoBuilder {
         return result;
     }
 
-    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata, Collection<String> collectionTypeReferenced){
+    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata, Collection<Class> collectionTypeReferenced){
         List<IFieldInfo> result = new ArrayList<IFieldInfo>();
         createFieldInfos(topClassMetadata, "", fieldMetadata, result, collectionTypeReferenced);
         return result;
     }
 
-    private static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata, Collection<IFieldInfo> fieldInfos, Collection<String> collectionTypeReferenced) {
+    private static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
+                                        Collection<IFieldInfo> fieldInfos, Collection<Class> collectionTypeReferenced) {
         int counter = 0;
         if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             EmbeddedFieldMetadata embeddedFieldMetadata = (EmbeddedFieldMetadata) fieldMetadata;

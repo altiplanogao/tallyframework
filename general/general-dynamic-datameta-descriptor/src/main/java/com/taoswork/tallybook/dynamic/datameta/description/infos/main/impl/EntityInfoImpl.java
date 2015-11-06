@@ -4,12 +4,10 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gao Yuan on 2015/8/9.
@@ -29,6 +27,7 @@ public class EntityInfoImpl
     private List<ITabInfo> tabs = new ArrayList<ITabInfo>();
 
     private List<String> gridFields = new ArrayList<String>();
+    private final Map<String, IEntityInfo> referencingEntryInfos = new HashMap<String, IEntityInfo>();
 
     public EntityInfoImpl(Class entityType, boolean containsHierarchy, List<ITabInfo> tabs, Map<String, IFieldInfo> fields) {
         this.containsHierarchy = containsHierarchy;
@@ -120,5 +119,16 @@ public class EntityInfoImpl
         if (entityType != null)
             return entityType.getName();
         return null;
+    }
+
+    public void addReferencingEntryInfo(String entryName, IEntityInfo entityInfo){
+        referencingEntryInfos.put(entryName, entityInfo);
+    }
+
+    @Override
+    public Map<String, IEntityInfo> getEntryInfos() {
+        if(referencingEntryInfos.isEmpty())
+            return null;
+        return Collections.unmodifiableMap(referencingEntryInfos);
     }
 }

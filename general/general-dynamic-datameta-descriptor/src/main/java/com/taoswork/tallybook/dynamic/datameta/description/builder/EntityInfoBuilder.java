@@ -6,6 +6,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.Grou
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInfoImpl;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
@@ -30,10 +32,22 @@ public final class EntityInfoBuilder {
         if (classMetadata instanceof ClassTreeMetadata) {
             withHierarchy = true;
         }
-        return build(entityType, rawEntityInfo, withHierarchy);
+        Collection<Class> refEntries = rawEntityInfo.getReferencingEntries();
+        Map<String, IEntityInfo> childInfoMap = new HashMap<String, IEntityInfo>();
+        if(refEntries != null && !refEntries.isEmpty()){
+            for (Class entry : refEntries){
+                ClassMetadata entryCm = classMetadata.getReferencingClassMetadata(entry);
+                RawEntityInfo entryRawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(entryCm);
+                EntityInfo entryEntityInfo = build(entry, entryRawEntityInfo, false, null);
+                IEntityInfo childInfo = new EntityGridInfo(entryEntityInfo);
+                childInfoMap.put(entry.getName(), childInfo);
+            }
+        }
+        EntityInfo entityInfo = build(entityType, rawEntityInfo, withHierarchy, childInfoMap);
+        return entityInfo;
     }
 
-    private static EntityInfo build(Class entityType, RawEntityInfo rawEntityInfo, boolean withHierarchy) {
+    private static EntityInfo build(Class entityType, RawEntityInfo rawEntityInfo, boolean withHierarchy, Map<String, IEntityInfo> childInfoMap) {
         Map<String, IFieldInfo> fields = rawEntityInfo.getFields();
         EntityInfoImpl entityInfo = null;
         {//make tabs
@@ -62,6 +76,11 @@ public final class EntityInfoBuilder {
         entityInfo.setIdField(rawEntityInfo.getIdField());
         entityInfo.setNameField(rawEntityInfo.getNameField());
         entityInfo.setPrimarySearchField(rawEntityInfo.getPrimarySearchField());
+        if(childInfoMap != null){
+            for(Map.Entry<String, IEntityInfo> entry : childInfoMap.entrySet()){
+                entityInfo.addReferencingEntryInfo(entry.getKey(), entry.getValue());
+            }
+        }
         return entityInfo;
     }
 

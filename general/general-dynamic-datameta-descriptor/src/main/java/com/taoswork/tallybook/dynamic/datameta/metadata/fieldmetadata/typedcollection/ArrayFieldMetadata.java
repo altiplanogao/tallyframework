@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollec
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public class ArrayFieldMetadata extends BaseCollectionFieldMetadata {
+public class ArrayFieldMetadata extends CollectionLikeFieldMetadata {
 
     private final EntryTypeUnion entryTypeUnion;
 
@@ -19,9 +19,10 @@ public class ArrayFieldMetadata extends BaseCollectionFieldMetadata {
 
     @Override
     protected FieldType overrideUnknownFieldType() {
-        return FieldType.UNKNOWN;
+        return FieldType.COLLECTION;
     }
 
+    @Override
     public EntryTypeUnion getEntryTypeUnion() {
         return entryTypeUnion;
     }

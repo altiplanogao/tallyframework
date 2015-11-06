@@ -36,4 +36,8 @@ public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo 
         return EntityInfoType.Grid.getName();
     }
 
+    @Override
+    public Map<String, IEntityInfo> getEntryInfos() {
+        return null;
+    }
 }

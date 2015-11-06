@@ -20,6 +20,7 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     public final Map<String, IFieldInfo> fields;
     public final List<ITabInfo> tabs;
     public final List<String> gridFields;
+    public final Map<String, IEntityInfo> referencingEntryInfos;
 
     public EntityFullInfo(EntityInfo entityInfo) {
         super(entityInfo);
@@ -29,10 +30,16 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
         this.fields = CloneUtility.makeClone(entityInfo.getFields());
         this.tabs = CloneUtility.makeClone(entityInfo.getTabs());
         this.gridFields = CloneUtility.makeClone(entityInfo.getGridFields());
+        this.referencingEntryInfos = CloneUtility.makeClone(entityInfo.getEntryInfos());
     }
 
     @Override
     public String getType() {
         return EntityInfoType.Full.getName();
+    }
+
+    @Override
+    public Map<String, IEntityInfo> getEntryInfos() {
+        return referencingEntryInfos;
     }
 }

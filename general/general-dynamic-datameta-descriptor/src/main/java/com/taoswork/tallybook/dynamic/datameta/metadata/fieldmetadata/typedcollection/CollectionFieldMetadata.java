@@ -10,7 +10,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
+public class CollectionFieldMetadata extends CollectionLikeFieldMetadata {
     private final Class collectionImplementType;
 
     private final EntryTypeUnion entryTypeUnion;
@@ -33,6 +33,7 @@ public class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         return collectionImplementType;
     }
 
+    @Override
     public EntryTypeUnion getEntryTypeUnion() {
         return entryTypeUnion;
     }

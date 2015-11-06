@@ -5,7 +5,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.SimpleEntry;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationMap;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.IDepartment;
 import com.taoswork.tallybook.testframework.domain.business.IEmployee;
@@ -16,6 +16,7 @@ import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.EmployeeType;
 import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
+import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntryDelegate;
 import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
 import com.taoswork.tallybook.testframework.domain.nature.ICitizen;
 
@@ -59,7 +60,7 @@ public class EmployeeImpl implements IEmployee{
     //in blob
     @Column(name = "NICKNAME_ARRAY")
     @Lob
-    @PresentationCollection(entry = @SimpleEntry(name = "nickname"))
+    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
     protected String[] nickNameArray;
 
     private long salary;
@@ -118,6 +119,7 @@ public class EmployeeImpl implements IEmployee{
     @CollectionTable(name="EMP_PHONE")
     @MapKeyColumn(name="PHONE_TYPE")
     @Column(name="PHONE_NUM")
+    @PresentationMap(simpleKeyEntryDelegate = PhoneTypeEntryDelegate.class)
     private Map<PhoneType, String> phoneNumbers;
 // ...
 

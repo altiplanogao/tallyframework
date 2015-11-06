@@ -238,7 +238,7 @@ public class MetadataServiceTest_Fields {
         Assert.assertNotNull(entryTypeUnion.getAsEmbeddableClass());
         Assert.assertNull(entryTypeUnion.getAsEntityClass());
 
-        ClassMetadata classMetadata = employeeMetadata.getReferencingClassMetadata(entryClass.getName());
+        ClassMetadata classMetadata = employeeMetadata.getReferencingClassMetadata(entryClass);
         Assert.assertNotNull(classMetadata);
     }
 
@@ -259,9 +259,9 @@ public class MetadataServiceTest_Fields {
         Assert.assertNotNull(keyTypeUnion.getAsEmbeddableClass());
         Assert.assertNull(keyTypeUnion.getAsEntityClass());
 
-        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(keyEntryClass.getName());
+        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(keyEntryClass);
         Assert.assertNotNull(classMetadata);
-        ClassMetadata classMetadata2 = departmentMetadata.getReferencingClassMetadata(valueEntryClass.getName());
+        ClassMetadata classMetadata2 = departmentMetadata.getReferencingClassMetadata(valueEntryClass);
         Assert.assertNotNull(classMetadata2);
     }
 
@@ -277,7 +277,7 @@ public class MetadataServiceTest_Fields {
         Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryTypeUnion().getAsEntityClass());
         Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryTypeUnion().getAsEntityClass());
 
-        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class.getName());
+        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
         Assert.assertNotNull(classMetadata);
     }
 
@@ -291,7 +291,7 @@ public class MetadataServiceTest_Fields {
             Assert.assertNull(valueTypeU.getAsSimpleClass());
             Assert.assertNull(valueTypeU.getAsEmbeddableClass());
             Assert.assertEquals(EmployeeImpl.class, valueTypeU.getAsEntityClass());
-            ClassMetadata refCm = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class.getName());
+            ClassMetadata refCm = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
             Assert.assertNotNull(refCm);
         }
         {

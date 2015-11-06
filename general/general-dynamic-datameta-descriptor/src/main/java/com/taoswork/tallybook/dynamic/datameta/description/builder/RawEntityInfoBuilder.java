@@ -42,7 +42,7 @@ final class RawEntityInfoBuilder {
     }
 
     private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final ClassMetadata classMetadata) {
-        Collection<String> collectionTypeReferenced = new HashSet<String>();
+        Collection<Class> collectionTypeReferenced = new HashSet<Class>();
 
         final ClassMetadata topClassMetadata = classMetadata;
         //add tabs
@@ -57,6 +57,8 @@ final class RawEntityInfoBuilder {
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+            if(fieldMetadata.getIgnored())
+                continue;
             RawGroupInfo rawGroupInfo = null;
             {
                 //handle groups

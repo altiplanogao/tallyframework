@@ -1,12 +1,13 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationMap;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
 import com.taoswork.tallybook.general.solution.reflect.GenericTypeUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,9 +74,23 @@ class _MapFieldHandler extends __BaseCollectionFieldHandler {
                 targetValueType = valueType;
             }
 
+            Class<? extends ISimpleEntryDelegate> simpleKeyEntryDelegate = null;
+            Class<? extends ISimpleEntryDelegate> simpleValEntryDelegate = null;
+            PresentationMap presentationMap = field.getAnnotation(PresentationMap.class);
+            if (presentationMap != null) {
+                Class<? extends ISimpleEntryDelegate> keyMarked = presentationMap.simpleKeyEntryDelegate();
+                if (!ISimpleEntryDelegate.class.equals(keyMarked)) {
+                    simpleKeyEntryDelegate = keyMarked;
+                }
+                Class<? extends ISimpleEntryDelegate> valMarked = presentationMap.simpleValueEntryDelegate();
+                if (!ISimpleEntryDelegate.class.equals(valMarked)) {
+                    simpleValEntryDelegate = valMarked;
+                }
+            }
+
             MapFieldMetadataFacet facet = new MapFieldMetadataFacet(clazz,
-                keyType,
-                targetValueType);
+                keyType, simpleKeyEntryDelegate,
+                targetValueType, simpleValEntryDelegate);
             fieldMetadata.addFacet(facet);
             fieldMetadata.setTargetMetadataType(MapFieldMetadata.class);
             return ProcessResult.HANDLED;

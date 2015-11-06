@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.dynamic.datameta.description.infos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
+
+import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/8/9.
@@ -11,6 +14,9 @@ public interface IEntityInfo extends NamedInfo {
     boolean isContainsHierarchy();
 
     String getEntityType();
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Map<String, IEntityInfo> getEntryInfos();
 }
 /*
 public enum EntityInfoType {
