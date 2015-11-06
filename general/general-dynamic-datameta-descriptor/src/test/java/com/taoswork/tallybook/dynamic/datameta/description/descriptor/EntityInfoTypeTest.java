@@ -10,8 +10,8 @@ import org.junit.Test;
 public class EntityInfoTypeTest {
     @Test
     public void typeToName(){
-        Assert.assertEquals(EntityInfoType.Full, EntityInfoType.instance(EntityInfoType.NAME_OF_FULL));
-        Assert.assertEquals(EntityInfoType.Form, EntityInfoType.instance(EntityInfoType.NAME_OF_FORM));
-        Assert.assertEquals(EntityInfoType.Grid, EntityInfoType.instance(EntityInfoType.NAME_OF_GRID));
+        Assert.assertEquals(EntityInfoType.Full, EntityInfoType.instance(EntityInfoType.Names.FULL));
+        Assert.assertEquals(EntityInfoType.Form, EntityInfoType.instance(EntityInfoType.Names.FORM));
+        Assert.assertEquals(EntityInfoType.Grid, EntityInfoType.instance(EntityInfoType.Names.GRID));
     }
 }

@@ -9,6 +9,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.type
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.EntityIn;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
@@ -17,7 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/7/5.
@@ -32,15 +37,31 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
     @Override
     public EntityInfo makeFriendly(EntityInfo rawEntityInfo, Locale locale) {
         EntityInfo freshEntityInfo = CloneUtility.makeClone(rawEntityInfo);
-        if (freshEntityInfo instanceof NamedInfoRW) {
-            makeNamedInfoFriendly(freshEntityInfo, (NamedInfoRW) freshEntityInfo, locale);
-        } else {
-            LOGGER.error("new EntityInfo by Clone has un-writeable IEntityInfo {}", freshEntityInfo);
+        Set<EntityInfo> entityInfoList = new HashSet<EntityInfo>();
+        entityInfoList.add(freshEntityInfo);
+        Map<String, EntityInfo> entryInfos = freshEntityInfo.getReferencingInfos();
+        if(entryInfos != null){
+            for (Map.Entry<String, EntityInfo> entry : entryInfos.entrySet()){
+                entityInfoList.add(entry.getValue());
+            }
         }
-        for (IFieldInfo fieldInfo : freshEntityInfo.getFields().values()) {
+
+        for(EntityInfo entityInfo : entityInfoList) {
+            makeEntityInfoFriendly(entityInfo, locale);
+        }
+        return freshEntityInfo;
+    }
+
+    private void makeEntityInfoFriendly(EntityInfo entityInfo, Locale locale) {
+        if (entityInfo instanceof NamedInfoRW) {
+            makeNamedInfoFriendly(entityInfo, (NamedInfoRW) entityInfo, locale);
+        } else {
+            LOGGER.error("new EntityInfo by Clone has un-writeable IEntityInfo {}", entityInfo);
+        }
+        for (IFieldInfo fieldInfo : entityInfo.getFields().values()) {
             makeFieldInfoFriendly(fieldInfo, locale);
         }
-        for (ITabInfo tabInfo : freshEntityInfo.getTabs()) {
+        for (ITabInfo tabInfo : entityInfo.getTabs()) {
             if (tabInfo instanceof NamedInfoRW) {
                 makeNamedInfoFriendly(tabInfo, (NamedInfoRW) tabInfo, locale);
             } else {
@@ -54,7 +75,6 @@ public class FriendlyMetaInfoServiceImpl implements FriendlyMetaInfoService {
                 }
             }
         }
-        return freshEntityInfo;
     }
 
     private void makeNamedInfoFriendly(NamedInfo source, NamedInfoRW target, Locale locale) {

@@ -33,7 +33,7 @@ public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo 
 
     @Override
     public String getType() {
-        return EntityInfoType.Grid.getName();
+        return EntityInfoType.Grid.getType();
     }
 
     @Override

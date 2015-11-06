@@ -2,6 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.infos.main;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.NamedInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 
@@ -26,4 +27,8 @@ public interface EntityInfo extends NamedInfo, IEntityInfo {
     List<ITabInfo> getTabs();
 
     List<String> getGridFields();
+
+    Map<String, EntityInfo> getReferencingInfos();
+
+    Map<String, IEntityInfo> getReferencingInfosAsType(EntityInfoType entityInfoType);
 }

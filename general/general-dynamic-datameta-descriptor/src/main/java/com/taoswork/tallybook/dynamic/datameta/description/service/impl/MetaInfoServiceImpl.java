@@ -34,7 +34,7 @@ public class MetaInfoServiceImpl implements
 
     @Override
     public IEntityInfo convert(EntityInfo entityInfo, EntityInfoType type) {
-        Class<? extends IEntityInfo> cls = type.infoClass();
+        Class<? extends IEntityInfo> cls = type.getEntityInfoClass();
         if (cls != null) {
             try {
                 Constructor cons = cls.getConstructor(new Class[]{EntityInfo.class});

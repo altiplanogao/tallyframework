@@ -4,106 +4,77 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFor
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityFullInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 
 /**
- * Created by Gao Yuan on 2015/7/4.
+ * Created by Gao Yuan on 2015/11/6.
  */
-public class EntityInfoType {
-    public final static String NAME_OF_MAIN = "main";
-    public final static String NAME_OF_FULL = "full";
-    public final static String NAME_OF_GRID = "grid";
-    public final static String NAME_OF_FORM = "form";
+public enum EntityInfoType {
+    Main(Names.MAIN, EntityInfoImpl.class),
+    Full(Names.FULL, EntityFullInfo.class),
+    Grid(Names.GRID, EntityGridInfo.class),
+    Form(Names.FORM, EntityFormInfo.class);
 
-    public final static EntityInfoType Main = EntityInfoType.instance(NAME_OF_MAIN);
-    public final static EntityInfoType Full = EntityInfoType.instance(NAME_OF_FULL);
-    public final static EntityInfoType Grid = EntityInfoType.instance(NAME_OF_GRID);
-    public final static EntityInfoType Form = EntityInfoType.instance(NAME_OF_FORM);
+    public static class Names {
+        public final static String MAIN = "main";
+        public final static String FULL = "full";
+        public final static String GRID = "grid";
+        public final static String FORM = "form";
+    }
 
     public final static Set<String> PageSupportedType;
     public final static Set<String> ApiSupportedType;
-    public final static Map<String, Class<? extends IEntityInfo>> EntityTypeMapping;
+    private static final Map<String, EntityInfoType> typeToEnum = new HashMap<String, EntityInfoType>();
     private final static Set<String> DefaultHierarchyIncludedType;
 
     static {
         {
             Set<String> pageSupportedType = new HashSet<String>();
-            pageSupportedType.add(EntityInfoType.NAME_OF_FULL);
-            pageSupportedType.add(EntityInfoType.NAME_OF_FORM);
-            pageSupportedType.add(EntityInfoType.NAME_OF_GRID);
+            pageSupportedType.add(Names.FULL);
+            pageSupportedType.add(Names.FORM);
+            pageSupportedType.add(Names.GRID);
             PageSupportedType = Collections.unmodifiableSet(pageSupportedType);
         }
         {
             Set<String> apiSupportedType = new HashSet<String>();
-            apiSupportedType.add(EntityInfoType.NAME_OF_FULL);
-            apiSupportedType.add(EntityInfoType.NAME_OF_FORM);
-            apiSupportedType.add(EntityInfoType.NAME_OF_GRID);
+            apiSupportedType.add(Names.FULL);
+            apiSupportedType.add(Names.FORM);
+            apiSupportedType.add(Names.GRID);
             ApiSupportedType = Collections.unmodifiableSet(apiSupportedType);
         }
         {
             Set<String> defaultHierarchyIncludedType = new HashSet<String>();
-            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_FULL);
-            defaultHierarchyIncludedType.add(EntityInfoType.NAME_OF_GRID);
+            defaultHierarchyIncludedType.add(Names.FULL);
+            defaultHierarchyIncludedType.add(Names.GRID);
             DefaultHierarchyIncludedType = Collections.unmodifiableSet(defaultHierarchyIncludedType);
         }
-        {
-            Map<String, Class<? extends IEntityInfo>> entityTypeMapping = new HashMap<String, Class<? extends IEntityInfo>>();
-            entityTypeMapping.put(NAME_OF_MAIN, EntityInfoImpl.class);
-            entityTypeMapping.put(NAME_OF_FULL, EntityFullInfo.class);
-            entityTypeMapping.put(NAME_OF_FORM, EntityFormInfo.class);
-            entityTypeMapping.put(NAME_OF_GRID, EntityGridInfo.class);
-            EntityTypeMapping = Collections.unmodifiableMap(entityTypeMapping);
+        for (EntityInfoType _enum : values()) {
+            typeToEnum.put(_enum.type, _enum);
         }
     }
 
-    private final String name;
+    private final String type;
+    private final Class<? extends IEntityInfo> entityInfoClass;
 
-
-    private EntityInfoType(String name) {
-        this.name = name;
+    EntityInfoType(String type, Class<? extends IEntityInfo> entityInfoClass) {
+        this.type = type;
+        this.entityInfoClass = entityInfoClass;
     }
 
     public static boolean isIncludeHierarchyByDefault(EntityInfoType infoType) {
-        return DefaultHierarchyIncludedType.contains(infoType.getName());
+        return DefaultHierarchyIncludedType.contains(infoType.getType());
     }
 
-    public static EntityInfoType instance(String name) {
-        return new EntityInfoType(name);
+    public static EntityInfoType instance(String character) {
+        return typeToEnum.get(character);
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public Class<? extends IEntityInfo> infoClass() {
-        return EntityTypeMapping.get(name);
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (!(o instanceof EntityInfoType)) return false;
-
-        EntityInfoType that = (EntityInfoType) o;
-
-        return new EqualsBuilder()
-            .append(name, that.name)
-            .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-            .append(name)
-            .toHashCode();
+    public Class<? extends IEntityInfo> getEntityInfoClass() {
+        return entityInfoClass;
     }
 }

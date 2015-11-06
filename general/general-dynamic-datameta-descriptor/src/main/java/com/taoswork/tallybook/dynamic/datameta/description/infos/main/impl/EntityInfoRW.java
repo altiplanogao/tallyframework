@@ -23,4 +23,6 @@ public interface EntityInfoRW extends EntityInfo, NamedInfoRW {
     void setTabs(List<ITabInfo> tabs);
 
     void setGridFields(List<String> gridFields);
+
+    void addReferencingInfo(String entityName, EntityInfo info);
 }

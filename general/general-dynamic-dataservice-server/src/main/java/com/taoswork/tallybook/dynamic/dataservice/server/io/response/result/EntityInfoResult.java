@@ -90,7 +90,7 @@ public class EntityInfoResult {
     }
 
     public <T extends IEntityInfo> T getDetail(EntityInfoType infoType){
-        return (T) details.get(infoType.getName());
+        return (T) details.get(infoType.getType());
     }
 
 }

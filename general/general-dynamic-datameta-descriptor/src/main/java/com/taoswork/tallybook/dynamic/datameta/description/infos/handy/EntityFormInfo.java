@@ -18,7 +18,7 @@ public class EntityFormInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     public final String nameField;
     public final Map<String, IFieldInfo> fields;
     public final List<ITabInfo> tabs;
-    public final Map<String, IEntityInfo> referencingEntryInfos;
+    private final Map<String, IEntityInfo> referencingEntryInfos;
 
     public EntityFormInfo(EntityInfo entityInfo) {
         super(entityInfo);
@@ -26,12 +26,12 @@ public class EntityFormInfo extends _BaseEntityHandyInfo implements IEntityInfo 
         this.nameField = entityInfo.getNameField();
         this.fields = CloneUtility.makeClone(entityInfo.getFields());
         this.tabs = CloneUtility.makeClone(entityInfo.getTabs());
-        this.referencingEntryInfos = CloneUtility.makeClone(entityInfo.getEntryInfos());
+        this.referencingEntryInfos = CloneUtility.makeClone(entityInfo.getReferencingInfosAsType(EntityInfoType.Grid));
     }
 
     @Override
     public String getType() {
-        return EntityInfoType.Form.getName();
+        return EntityInfoType.Form.getType();
     }
 
     @Override
