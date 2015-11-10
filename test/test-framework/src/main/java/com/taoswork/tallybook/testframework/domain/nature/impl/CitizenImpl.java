@@ -1,21 +1,11 @@
 package com.taoswork.tallybook.testframework.domain.nature.impl;
 
-import com.taoswork.tallybook.testframework.domain.business.IDepartment;
-import com.taoswork.tallybook.testframework.domain.business.IEmployee;
-import com.taoswork.tallybook.testframework.domain.business.IParkingSpace;
-import com.taoswork.tallybook.testframework.domain.business.IProject;
-import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeNameX;
-import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
-import com.taoswork.tallybook.testframework.domain.business.enumtype.EmployeeType;
-import com.taoswork.tallybook.testframework.domain.business.impl.DepartmentImpl;
-import com.taoswork.tallybook.testframework.domain.business.impl.ParkingSpaceImpl;
-import com.taoswork.tallybook.testframework.domain.business.impl.ProjectImpl;
-import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
 import com.taoswork.tallybook.testframework.domain.nature.ICitizen;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Map;
 
 @Entity
 @Table(name="CITIZEN")

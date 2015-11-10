@@ -1,6 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ImmutableClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.MutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 
@@ -73,12 +75,13 @@ public class FieldMetadataHelper {
         return cls.isAnnotationPresent(Entity.class);
     }
 
-    public static ClassMetadata generateEmbeddedClassMetadata(ClassProcessor classProcessor, Class embeddableClass) {
+    public static IClassMetadata generateEmbeddedClassMetadataWithoutReferencing(ClassProcessor classProcessor, Class embeddableClass) {
         if (embeddableClass.isAnnotationPresent(Embeddable.class)) {
-            ClassMetadata embeddedMetadata = new ClassMetadata();
+            MutableClassMetadata embeddedMetadata = new MutableClassMetadata(embeddableClass);
+            embeddedMetadata.publishReferencingClassMetadatas(null);
             ProcessResult innerResult = classProcessor.process(embeddableClass, embeddedMetadata);
             if (innerResult == ProcessResult.HANDLED) {
-                return embeddedMetadata;
+                return new ImmutableClassMetadata(embeddedMetadata);
             } else {
                 return null;
             }

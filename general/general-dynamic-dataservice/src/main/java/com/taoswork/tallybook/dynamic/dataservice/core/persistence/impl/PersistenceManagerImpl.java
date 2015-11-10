@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
@@ -129,7 +129,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
             try {
                 Class ceilingClz = ceilingType;
                 Class<T> entityRootClz = dynamicEntityMetadataAccess.getRootInstantiableEntityType(ceilingClz);
-                ClassMetadata rootClzMeta = dynamicEntityMetadataAccess.getClassMetadata(entityRootClz, false);
+                IClassMetadata rootClzMeta = dynamicEntityMetadataAccess.getClassMetadata(entityRootClz, false);
                 Field idField = rootClzMeta.getIdField();
 
                 Object id = idField.get(entity);
@@ -152,7 +152,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
                 return null;
             PersistableResult<T> persistableResult = new PersistableResult<T>();
             Class clz = entity.getClass();
-            ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
+            IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
             Field idField = classMetadata.getIdField();
             Field nameField = classMetadata.getNameField();
             try {

@@ -3,7 +3,6 @@ package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.conve
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

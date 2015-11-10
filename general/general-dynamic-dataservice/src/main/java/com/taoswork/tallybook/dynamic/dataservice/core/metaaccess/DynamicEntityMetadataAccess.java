@@ -2,8 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
 import java.util.Collection;
@@ -58,14 +57,14 @@ public interface DynamicEntityMetadataAccess {
     EntityClassTree getEntityClassTree(Class<?> entityCeilingType);
 
     /**
-     * Get ClassMetadata of a specified entityType
+     * Get IClassMetadata of a specified entityType
      *
-     * @param entityType, the entity-type of required ClassMetadata
+     * @param entityType, the entity-type of required IClassMetadata
      * @return
      */
-    ClassMetadata getClassMetadata(Class<?> entityType, boolean withHierarchy);
+    IClassMetadata getClassMetadata(Class<?> entityType, boolean withHierarchy);
 
-    ClassTreeMetadata getClassTreeMetadata(Class<?> entityCeilingType);
+    IClassMetadata getClassTreeMetadata(Class<?> entityCeilingType);
 
     /**
      * Get the entityInfo for a specified entityType

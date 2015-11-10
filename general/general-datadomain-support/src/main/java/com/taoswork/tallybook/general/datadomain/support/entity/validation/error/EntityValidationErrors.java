@@ -2,7 +2,10 @@ package com.taoswork.tallybook.general.datadomain.support.entity.validation.erro
 
 import com.taoswork.tallybook.general.extension.collections.StringChain;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2015/10/4.

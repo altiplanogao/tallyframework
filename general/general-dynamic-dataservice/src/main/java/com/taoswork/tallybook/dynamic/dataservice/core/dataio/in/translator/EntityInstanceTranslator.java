@@ -1,9 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.translator;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.DateFieldMetadata;
@@ -17,7 +15,6 @@ import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValue;
 
@@ -85,7 +82,7 @@ public abstract class EntityInstanceTranslator {
         try {
             Class entityClass = (source.getEntityType());
             final Persistable tempInstance = (Persistable) entityClass.newInstance();
-            ClassMetadata classMetadata = entityMetadataAccess.getClassMetadata(entityClass, false);
+            IClassMetadata classMetadata = entityMetadataAccess.getClassMetadata(entityClass, false);
 
             Map<String, String> entityAsMap = source.getEntity();
             Map<String, Object> entityAsTree = buildEntityPropertyTree(entityAsMap);
@@ -107,7 +104,7 @@ public abstract class EntityInstanceTranslator {
         return instance;
     }
 
-    private void fillEntity(Object instance, ClassMetadata classMetadata, Map<String, Object> entityAsTree) throws IOException, IllegalAccessException, InstantiationException {
+    private void fillEntity(Object instance, IClassMetadata classMetadata, Map<String, Object> entityAsTree) throws IOException, IllegalAccessException, InstantiationException {
         BeanWrapperImpl instanceBean = new BeanWrapperImpl();
         instanceBean.setWrappedInstance(instance);
         for (Map.Entry<String, Object> entry : entityAsTree.entrySet()) {
@@ -181,7 +178,7 @@ public abstract class EntityInstanceTranslator {
 //                    tempEntity.setEntityCeilingType(ceilingType);
 //                }
 //            }
-//            ClassMetadata classMetadata = entityMetadataAccess.getClassMetadata(entityClass, false);
+//            IClassMetadata classMetadata = entityMetadataAccess.getMutableClassMetadata(entityClass, false);
 //            for(classMetadata.getReadonlyFieldMetadataMap())
 //            entity = tempEntity;
 //        }catch (Exception e){

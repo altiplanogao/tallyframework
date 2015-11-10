@@ -4,7 +4,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.Order
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import java.util.*;

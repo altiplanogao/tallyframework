@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Entity records for a particular entity type

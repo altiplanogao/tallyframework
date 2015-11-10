@@ -12,9 +12,9 @@ import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityM
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
-import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
+import com.taoswork.tallybook.general.solution.time.TimeCounter;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +46,7 @@ public abstract class DataServiceBase implements IDataService {
             IDbSetting dbSetting,
             Class<? extends ADataServiceBeanConfiguration> dataServiceConf,
             List<Class> annotatedClasses) {
+        TimeCounter counter = new TimeCounter();
         this.dataServiceDefinition = dataServiceDefinition;
         setDbSetting(dbSetting);
 
@@ -58,16 +59,8 @@ public abstract class DataServiceBase implements IDataService {
         }
 
         load(annotatedClassesList);
-    }
-
-    public DataServiceBase(
-            IDataServiceDefinition dataServiceDefinition,
-            IDbSetting dbSetting,
-            List<Class> annotatedClasses) {
-        this.dataServiceDefinition = dataServiceDefinition;
-        setDbSetting(dbSetting);
-
-        load(annotatedClasses);
+        double passedSeconds = counter.getPassedInSeconds();
+        LOGGER.info("Load DataService {} cost {} seconds.", dataServiceDefinition.getDataServiceName(), passedSeconds);
     }
 
     private void setDbSetting(IDbSetting dbSetting){

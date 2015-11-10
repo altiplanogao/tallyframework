@@ -1,21 +1,24 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.*;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
 import com.taoswork.tallybook.testframework.domain.business.ICompany;
 import com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl;
-import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -23,9 +26,9 @@ import java.util.Random;
  * Created by Gao Yuan on 2015/6/26.
  */
 public class DynamicEntityServiceCompanyTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicEntityServiceCompanyTest.class);
 
     private IDataService dataService = null;
-    private Random random = new Random();
 
     @Before
     public void setup() {
@@ -39,6 +42,7 @@ public class DynamicEntityServiceCompanyTest {
 
     @Test
     public void testDynamicEntityService() {
+        MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
         for (int i = 0; i < 10; ++i) {
             try {
                 DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
@@ -91,5 +95,6 @@ public class DynamicEntityServiceCompanyTest {
                 Assert.fail();
             }
         }
+        methodTimeCounter.noticeOnExit();
     }
 }

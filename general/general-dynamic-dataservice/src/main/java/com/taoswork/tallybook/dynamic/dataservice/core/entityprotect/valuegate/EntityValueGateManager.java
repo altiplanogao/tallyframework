@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
@@ -35,8 +35,8 @@ public class EntityValueGateManager
     }
 
     @Override
-    public void store(ClassMetadata classMetadata, Persistable entity, Persistable oldEntity) throws ServiceException {
-        Collection<String> gateNames = classMetadata.getValueGates();
+    public void store(IClassMetadata classMetadata, Persistable entity, Persistable oldEntity) throws ServiceException {
+        Collection<String> gateNames = classMetadata.getReadonlyValueGates();
         for (String gateName : gateNames) {
             IEntityValueGate gate = getValueGate(gateName);
             gate.store(entity, oldEntity);
@@ -44,8 +44,8 @@ public class EntityValueGateManager
     }
 
     @Override
-    public void fetch(ClassMetadata classMetadata, Persistable entity) {
-        Collection<String> gateNames = classMetadata.getValueGates();
+    public void fetch(IClassMetadata classMetadata, Persistable entity) {
+        Collection<String> gateNames = classMetadata.getReadonlyValueGates();
         for (String gateName : gateNames) {
             IEntityValueGate gate = getValueGate(gateName);
             gate.fetch(entity);

@@ -4,7 +4,6 @@ import com.taoswork.tallybook.general.extension.utils.TPredicate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 
-
 import java.util.Collection;
 
 public class CollectionUtility {

@@ -5,8 +5,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.CollectionFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
@@ -16,7 +16,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +32,7 @@ public class FieldInfoBuilder {
         return name;
     }
 
-    private static IFieldInfo createFieldInfo(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
+    private static IFieldInfo createFieldInfo(final IClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
                                               Collection<Class> collectionTypeReferenced) {
         String name = prepend(prefix, fieldMetadata.getName());
         String friendlyName = fieldMetadata.getFriendlyName();
@@ -115,13 +114,13 @@ public class FieldInfoBuilder {
         return result;
     }
 
-    public static Collection<IFieldInfo> createFieldInfos(ClassMetadata topClassMetadata, IFieldMetadata fieldMetadata, Collection<Class> collectionTypeReferenced){
+    public static Collection<IFieldInfo> createFieldInfos(IClassMetadata topClassMetadata, IFieldMetadata fieldMetadata, Collection<Class> collectionTypeReferenced){
         List<IFieldInfo> result = new ArrayList<IFieldInfo>();
         createFieldInfos(topClassMetadata, "", fieldMetadata, result, collectionTypeReferenced);
         return result;
     }
 
-    private static int createFieldInfos(final ClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
+    private static int createFieldInfos(final IClassMetadata topClassMetadata, String prefix, IFieldMetadata fieldMetadata,
                                         Collection<IFieldInfo> fieldInfos, Collection<Class> collectionTypeReferenced) {
         int counter = 0;
         if (fieldMetadata instanceof EmbeddedFieldMetadata) {
@@ -129,7 +128,7 @@ public class FieldInfoBuilder {
             int baseOrder = fieldMetadata.getOrder();
             int baseVisibility = fieldMetadata.getVisibility();
             String subPrefix = prepend(prefix, fieldMetadata.getName());
-            ClassMetadata emCm = ((EmbeddedFieldMetadata) fieldMetadata).getClassMetadata();
+            IClassMetadata emCm = ((EmbeddedFieldMetadata) fieldMetadata).getClassMetadata();
             Map<String, IFieldMetadata> fieldMetadataMap = emCm.getReadonlyFieldMetadataMap();
             List<IFieldInfo> subFieldInfos = new ArrayList<IFieldInfo>();
             for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {

@@ -1,8 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.utils;
 
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AAA;
-import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
-import com.taoswork.tallybook.general.extension.utils.TPredicate;
 import com.taoswork.tallybook.testframework.general.CollectionAssert;
 import com.taoswork.tallybook.testframework.general.Converter;
 import org.junit.Assert;
@@ -10,9 +8,7 @@ import org.junit.Test;
 
 import javax.persistence.Id;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Gao Yuan on 2015/6/26.

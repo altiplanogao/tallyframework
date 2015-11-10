@@ -6,8 +6,6 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 import org.hibernate.dialect.Dialect;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Gao Yuan on 2015/5/13.

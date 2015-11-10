@@ -1,7 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.desc;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Created by Gao Yuan on 2015/11/3.
  */

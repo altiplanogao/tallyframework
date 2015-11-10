@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.general.authority.core.engine;
 
 import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
+import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
-import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtectionManager;
-import com.taoswork.tallybook.general.authority.core.resource.impl.ResourceProtection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

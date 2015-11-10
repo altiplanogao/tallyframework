@@ -2,8 +2,10 @@ package com.taoswork.tallybook.dynamic.dataservice.server.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.EntityRecords;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
@@ -11,8 +13,6 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dataio.IEntityRecordsFetc
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
@@ -226,7 +226,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
                         IDataService externalUsingDataService = dataServiceManager.getDataService(entityTypeName);
                         DynamicEntityService externalUsingEntityService = externalUsingDataService.getService(DynamicEntityService.COMPONENT_NAME);
                         DynamicEntityMetadataAccess externalUsingMetadataAccess = externalUsingDataService.getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
-                        ClassMetadata classMetadata = externalUsingMetadataAccess.getClassMetadata(entityType, false);
+                        IClassMetadata classMetadata = externalUsingMetadataAccess.getClassMetadata(entityType, false);
                         Field idField = classMetadata.getIdField();
                         CriteriaTransferObject cto = new CriteriaTransferObject();
                         cto.setPageSize(ids.size());

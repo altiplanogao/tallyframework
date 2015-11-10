@@ -1,10 +1,6 @@
 package com.taoswork.tallybook.testframework.domain.business.dataprotect;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.EntityValueGateBase;
-import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.testframework.domain.business.ICompany;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.TypedFieldHandlerManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.TypedFieldValidator;
@@ -22,7 +22,7 @@ public class EntityValidatorOnFields extends TypedFieldHandlerManager<TypedField
     implements EntityValidator {
 
     @Override
-    public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityErrors) throws IllegalAccessException {
+    public void validate(Persistable entity, IClassMetadata classMetadata, EntityValidationErrors entityErrors) throws IllegalAccessException {
         List<String> fieldFriendlyNames = new ArrayList<String>();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()) {
             String fieldName = fieldMetadataEntry.getKey();

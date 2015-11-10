@@ -3,11 +3,10 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcoll
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.ArrayFieldMetadataFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public class ArrayFieldMetadata extends CollectionLikeFieldMetadata {
+public final class ArrayFieldMetadata extends CollectionLikeFieldMetadata {
 
     private final EntryTypeUnion entryTypeUnion;
 

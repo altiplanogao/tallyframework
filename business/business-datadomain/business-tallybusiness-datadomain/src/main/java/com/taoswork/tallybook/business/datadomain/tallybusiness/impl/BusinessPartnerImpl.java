@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
-import com.taoswork.tallybook.business.datadomain.tallybusiness.*;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessPartner;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessPartnerType;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.TallyBusinessDataDomain;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.convert.BusinessPartnerTypeToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;

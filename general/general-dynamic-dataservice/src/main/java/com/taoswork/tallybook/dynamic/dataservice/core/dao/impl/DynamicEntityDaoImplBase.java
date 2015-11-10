@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -92,7 +91,7 @@ public abstract class DynamicEntityDaoImplBase implements DynamicEntityDao {
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query) {
         EntityManager em = getEntityManager();
-        ClassTreeMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityType);
+        IClassMetadata classTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(entityType);
         TypedQuery<T> listQuery = cto2QueryTranslator.constructListQuery(em, entityType, classTreeMetadata, query);
         TypedQuery<Long> countQuery = cto2QueryTranslator.constructCountQuery(em, entityType, classTreeMetadata, query);
 

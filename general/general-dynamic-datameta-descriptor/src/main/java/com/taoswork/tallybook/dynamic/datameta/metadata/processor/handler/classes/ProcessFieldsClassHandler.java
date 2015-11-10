@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.classes;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.MutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataCreator;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
@@ -25,7 +25,7 @@ public class ProcessFieldsClassHandler implements IClassHandler {
     }
 
     @Override
-    public ProcessResult process(Class clz, ClassMetadata classMetadata) {
+    public ProcessResult process(Class clz, MutableClassMetadata mutableClassMetadata) {
         int failed = 0;
         int handled = 0;
         int totalfields = 0;
@@ -40,11 +40,11 @@ public class ProcessFieldsClassHandler implements IClassHandler {
 
             FieldMetadataIntermediate fieldMetadataIntermediate = new FieldMetadataIntermediate(fieldOrigIndex, field);
             ProcessResult pr = fieldHandler.process(field, fieldMetadataIntermediate);
-            if (classMetadata.getRWFieldMetadataMap().containsKey(fieldName)) {
+            if (mutableClassMetadata.getRWFieldMetadataMap().containsKey(fieldName)) {
                 LOGGER.error("FieldMetadata with name '{}' already exist.", fieldName);
             }
             IFieldMetadata fieldMetadata = FieldMetadataCreator.create(fieldMetadataIntermediate);
-            classMetadata.getRWFieldMetadataMap().put(fieldName, fieldMetadata);
+            mutableClassMetadata.getRWFieldMetadataMap().put(fieldName, fieldMetadata);
             if (ProcessResult.FAILED.equals(pr)) {
                 failed++;
                 LOGGER.error("FAILURE happened on field '{}' processing of class '{}'", field.getName(), clz.getSimpleName());

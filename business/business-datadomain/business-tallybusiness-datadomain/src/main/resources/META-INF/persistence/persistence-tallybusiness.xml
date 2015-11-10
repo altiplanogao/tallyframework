@@ -8,6 +8,8 @@
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.BusinessUnitImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.BusinessPartnerImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.EmployeeImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.EmployeeImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.EmployeeOwnedSettingImpl</class>
 
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceSpecialImpl</class>

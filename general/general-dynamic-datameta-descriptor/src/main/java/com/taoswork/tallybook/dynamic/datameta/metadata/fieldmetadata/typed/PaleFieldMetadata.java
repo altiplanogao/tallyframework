@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCol
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public class PaleFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+public final class PaleFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     public PaleFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
     }

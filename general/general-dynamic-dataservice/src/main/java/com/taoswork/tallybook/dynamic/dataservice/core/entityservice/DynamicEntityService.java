@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
@@ -66,7 +66,7 @@ public interface DynamicEntityService {
 
     Class<?> getRootInstantiableEntityClass(Class<?> entityType);
 
-    <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy);
+    <T extends Persistable> IClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy);
 
     <T extends Persistable> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
 

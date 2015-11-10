@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.classes;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.MutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -21,7 +21,7 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistableAnnotationClassHandler.class);
 
     @Override
-    public ProcessResult process(Class<?> clzz, ClassMetadata classMetadata) {
+    public ProcessResult process(Class<?> clzz, MutableClassMetadata mutableClassMetadata) {
         Set<Class> clzes = new HashSet<Class>();
         clzes.add(clzz);
         ClassUtility.getAllSupers(Persistable.class, clzz, true, true, clzes);
@@ -30,10 +30,10 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
             PersistEntity persistEntity = oneClz.getAnnotation(PersistEntity.class);
             if (persistEntity != null) {
                 for (Class<? extends IEntityValidator> validator : persistEntity.validators()) {
-                    classMetadata.addValidator(validator);
+                    mutableClassMetadata.addValidator(validator);
                 }
                 for (Class<? extends IEntityValueGate> valueGate : persistEntity.valueGates()) {
-                    classMetadata.addValueGate(valueGate);
+                    mutableClassMetadata.addValueGate(valueGate);
                 }
                 handled = true;
             }

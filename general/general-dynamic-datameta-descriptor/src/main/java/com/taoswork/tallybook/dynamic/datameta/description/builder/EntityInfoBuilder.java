@@ -8,8 +8,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabIn
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ClassTreeMetadata;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ public final class EntityInfoBuilder {
         throw new IllegalAccessException("EntityInfoBuilder: Not instance-able object");
     }
 
-    public static EntityInfo build(ClassMetadata classMetadata) {
+    public static EntityInfo build(IClassMetadata classMetadata) {
         RawEntityInfo rawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(classMetadata);
 
         Class entityType = classMetadata.getEntityClz();
@@ -34,7 +34,7 @@ public final class EntityInfoBuilder {
         Map<String, EntityInfo> childInfoMap = new HashMap<String, EntityInfo>();
         if(refEntries != null && !refEntries.isEmpty()){
             for (Class entry : refEntries){
-                ClassMetadata entryCm = classMetadata.getReferencingClassMetadata(entry);
+                IClassMetadata entryCm = classMetadata.getReferencingClassMetadata(entry);
                 RawEntityInfo entryRawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(entryCm);
                 EntityInfo entryEntityInfo = build(entry, entryRawEntityInfo, false, null);
                 childInfoMap.put(entry.getName(), entryEntityInfo);

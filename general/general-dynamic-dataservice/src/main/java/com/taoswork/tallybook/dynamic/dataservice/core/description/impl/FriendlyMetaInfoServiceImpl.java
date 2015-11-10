@@ -9,8 +9,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.type
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.EntityIn;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;

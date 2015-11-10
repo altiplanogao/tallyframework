@@ -2,7 +2,7 @@ package com.taoswork.tallybook.general.extension.utils;
 
 import org.apache.commons.lang3.SerializationUtils;
 
-import java.io.*;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**

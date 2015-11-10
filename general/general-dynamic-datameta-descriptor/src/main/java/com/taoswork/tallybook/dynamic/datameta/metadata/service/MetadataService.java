@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
 /**
@@ -10,11 +9,11 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTre
 public interface MetadataService {
     public static final String SERVICE_NAME = "MetadataAnalyzeService";
 
-    ClassTreeMetadata generateMetadata(EntityClassTree entityClassTree, boolean includeSuper);
+    IClassMetadata generateMetadata(EntityClassTree entityClassTree, String idFieldName, boolean includeSuper);
 
-    ClassMetadata generateMetadata(Class clz);
+    IClassMetadata generateMetadata(Class clz, String idFieldName);
 
-    ClassMetadata generateMetadata(Class clz, boolean handleSuper);
+    IClassMetadata generateMetadata(Class clz, String idFieldName, boolean handleSuper);
 
     boolean isMetadataCached(Class clz);
 

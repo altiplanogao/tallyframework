@@ -6,8 +6,6 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permiss
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionImpl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuRoleImpl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.general.authority.domain.permission.Permission;
-import com.taoswork.tallybook.general.authority.domain.permission.Role;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
@@ -61,7 +59,8 @@ public class EmployeeImpl implements Employee {
     @PresentationField(order = 2)
     protected String title;
 
-    @Embedded
+    @OneToOne(targetEntity = EmployeeOwnedSettingImpl.class)
+    @JoinColumn(name = "OWN_SET_ID")
     protected EmployeeOwnedSetting setting;
 
     /** All roles that this user has */
@@ -114,8 +113,8 @@ public class EmployeeImpl implements Employee {
     }
 
     @Override
-    public Employee setUserId(Long userId) {
-        this.personId = this.personId;
+    public Employee setUserId(Long personId) {
+        this.personId = personId;
         return this;
     }
 

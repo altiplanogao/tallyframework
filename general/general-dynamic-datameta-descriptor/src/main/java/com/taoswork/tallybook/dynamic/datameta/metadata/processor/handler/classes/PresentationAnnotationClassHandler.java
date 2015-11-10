@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.classes;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.GroupMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.MutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
@@ -18,19 +18,19 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(PresentationAnnotationClassHandler.class);
 
     @Override
-    public ProcessResult process(Class<?> clz, ClassMetadata classMetadata) {
+    public ProcessResult process(Class<?> clz, MutableClassMetadata mutableClassMetadata) {
         PresentationClass presentationClass = clz.getAnnotation(PresentationClass.class);
         if (presentationClass == null) {
             presentationClass = Mork.class.getAnnotation(PresentationClass.class);
         }
-        handleAnnotationPresentationClassTabs(presentationClass, classMetadata);
-        handleAnnotationPresentationClassGroups(presentationClass, classMetadata);
+        handleAnnotationPresentationClassTabs(presentationClass, mutableClassMetadata);
+        handleAnnotationPresentationClassGroups(presentationClass, mutableClassMetadata);
         return ProcessResult.HANDLED;
     }
 
-    private void handleAnnotationPresentationClassTabs(PresentationClass presentationClass, ClassMetadata classMetadata) {
-        Map<String, TabMetadata> tabMetadataMap = classMetadata.getRWTabMetadataMap();
-        Class<?> entityClz = classMetadata.getEntityClz();
+    private void handleAnnotationPresentationClassTabs(PresentationClass presentationClass, MutableClassMetadata mutableClassMetadata) {
+        Map<String, TabMetadata> tabMetadataMap = mutableClassMetadata.getRWTabMetadataMap();
+        Class<?> entityClz = mutableClassMetadata.getEntityClz();
         PresentationClass.Tab[] tabs = presentationClass.tabs();
         for (PresentationClass.Tab tab : tabs) {
             TabMetadata tabMetadata = new TabMetadata();
@@ -44,9 +44,9 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
         }
     }
 
-    private void handleAnnotationPresentationClassGroups(PresentationClass presentationClass, ClassMetadata classMetadata) {
-        Map<String, GroupMetadata> groupMetadataMap = classMetadata.getRWGroupMetadataMap();
-        Class<?> entityClz = classMetadata.getEntityClz();
+    private void handleAnnotationPresentationClassGroups(PresentationClass presentationClass, MutableClassMetadata mutableClassMetadata) {
+        Map<String, GroupMetadata> groupMetadataMap = mutableClassMetadata.getRWGroupMetadataMap();
+        Class<?> entityClz = mutableClassMetadata.getEntityClz();
         PresentationClass.Group[] groups = presentationClass.groups();
         for (PresentationClass.Group group : groups) {
             GroupMetadata groupMetadata = new GroupMetadata();

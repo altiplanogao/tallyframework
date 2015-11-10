@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.general.datadomain.support.presentation;
 
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 import java.lang.annotation.ElementType;

@@ -4,8 +4,8 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.base.impl.NamedOrderedInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.GroupMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendly;
@@ -35,16 +35,16 @@ final class RawEntityInfoBuilder {
      * @param classMetadata
      * @return
      */
-    public static RawEntityInfo buildRawEntityInfo(ClassMetadata classMetadata) {
+    public static RawEntityInfo buildRawEntityInfo(IClassMetadata classMetadata) {
         final RawEntityInfo rawEntityInfo = RawInfoCreator.createRawEntityInfo(classMetadata);
         rawEntityInfoAppendMetadata(rawEntityInfo, classMetadata);
         return rawEntityInfo;
     }
 
-    private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final ClassMetadata classMetadata) {
+    private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final IClassMetadata classMetadata) {
         Collection<Class> collectionTypeReferenced = new HashSet<Class>();
 
-        final ClassMetadata topClassMetadata = classMetadata;
+        final IClassMetadata topClassMetadata = classMetadata;
         //add tabs
         Map<String, TabMetadata> tabMetadataMap = classMetadata.getReadonlyTabMetadataMap();
         for (Map.Entry<String, TabMetadata> tabMetadataEntry : tabMetadataMap.entrySet()) {
@@ -99,7 +99,7 @@ final class RawEntityInfoBuilder {
     }
 
     private static class RawInfoCreator {
-        static RawEntityInfo createRawEntityInfo(ClassMetadata classMetadata) {
+        static RawEntityInfo createRawEntityInfo(IClassMetadata classMetadata) {
             RawEntityInfo rawEntityInfo = new RawEntityInfoImpl();
             copyFriendlyMetadata(classMetadata, rawEntityInfo);
             return rawEntityInfo;

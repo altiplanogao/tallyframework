@@ -12,7 +12,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.typed.Date
 /**
  * Created by Gao Yuan on 2015/10/30.
  */
-public class DateFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+public final class DateFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final DateModel model;
     private final DateCellModel cellModel;
     private final boolean useJavaDate;

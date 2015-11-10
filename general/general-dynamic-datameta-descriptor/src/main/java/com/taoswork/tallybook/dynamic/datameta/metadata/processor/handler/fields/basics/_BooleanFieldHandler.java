@@ -7,7 +7,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 
-import javax.persistence.Convert;
 import java.lang.reflect.Field;
 
 /**

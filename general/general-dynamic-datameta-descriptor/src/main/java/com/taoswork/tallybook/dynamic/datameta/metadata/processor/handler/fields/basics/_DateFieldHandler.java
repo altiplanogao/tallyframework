@@ -10,7 +10,6 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.typed.Date
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationDate;
 
-import javax.persistence.Temporal;
 import java.lang.reflect.Field;
 import java.util.Date;
 

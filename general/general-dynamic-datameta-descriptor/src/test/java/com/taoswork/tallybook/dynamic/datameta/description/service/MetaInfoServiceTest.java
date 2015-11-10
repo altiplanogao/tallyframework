@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.datameta.description.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTreeAccessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
@@ -43,7 +43,7 @@ public class MetaInfoServiceTest {
         accessor.add(classTree, AA.class);
         accessor.add(classTree, AAA.class);
 
-        ClassMetadata classMetadata = metadataService.generateMetadata(classTree, true);
+        IClassMetadata classMetadata = metadataService.generateMetadata(classTree, null, true);
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
         Assert.assertEquals(entityInfo.getEntityType(), A.class.getName());

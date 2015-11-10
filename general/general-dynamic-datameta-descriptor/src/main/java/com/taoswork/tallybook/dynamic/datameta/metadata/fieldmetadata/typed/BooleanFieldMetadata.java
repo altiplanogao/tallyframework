@@ -8,7 +8,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetad
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 
-public class BooleanFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+public final class BooleanFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final BooleanModel model;
 
     public BooleanFieldMetadata(FieldMetadataIntermediate intermediate) {

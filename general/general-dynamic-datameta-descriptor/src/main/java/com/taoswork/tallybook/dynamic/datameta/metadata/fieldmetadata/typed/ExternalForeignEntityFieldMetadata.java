@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
-public class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+public final class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final static Logger LOGGER = LoggerFactory.getLogger(ExternalForeignEntityFieldMetadata.class);
 
     private final Class entityType;

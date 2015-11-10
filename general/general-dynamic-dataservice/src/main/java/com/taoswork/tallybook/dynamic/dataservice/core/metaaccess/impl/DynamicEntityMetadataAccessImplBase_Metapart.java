@@ -1,7 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ImmutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClass;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassGenealogy;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
@@ -61,7 +62,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     private Map<Class, List<Class>> ceiling2Instantiables = null;
 
     @GuardedBy(value = "self", lockOrder = 4)
-    private Map<ClassScope, ClassMetadata> classMetadataMap = null;
+    private Map<ClassScope, IClassMetadata> classMetadataMap = null;
 
     private Map<Class, Class> entityType2GuardianType;
 
@@ -94,6 +95,7 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
         ceiling2Instantiables = new LRUMap();
         classMetadataMap = new LRUMap();
 
+        calcAllEntityMetadata();
         calcEntityTypeGuardians();
     }
 
@@ -211,17 +213,14 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
     }
 
     @Override
-    public ClassMetadata getClassMetadata(Class<?> entityType, boolean withHierarchy) {
+    public IClassMetadata getClassMetadata(Class<?> entityType, boolean withHierarchy) {
         return calcClassMetadata(entityType, withHierarchy);
     }
 
     @Override
-    public ClassTreeMetadata getClassTreeMetadata(Class<?> entityCeilingType) {
-        ClassMetadata classMetadata = calcClassMetadata(entityCeilingType, true);
-        if(classMetadata instanceof ClassTreeMetadata){
-            return (ClassTreeMetadata)classMetadata;
-        }
-        return null;
+    public IClassMetadata getClassTreeMetadata(Class<?> entityCeilingType) {
+        IClassMetadata classMetadata = calcClassMetadata(entityCeilingType, true);
+        return classMetadata;
     }
 
     /**
@@ -251,24 +250,43 @@ public abstract class DynamicEntityMetadataAccessImplBase_Metapart implements Dy
         return root;
     }
 
-    private ClassMetadata calcClassMetadata(Class<?> entityType, boolean withHierarchy) {
-        ClassMetadata classMetadata = null;
+    private IClassMetadata calcClassMetadata(Class<?> entityType, boolean withHierarchy) {
+        IClassMetadata classMetadata = null;
         synchronized (classMetadataMap) {
             ClassScope classScope = new ClassScope(entityType, true, withHierarchy);
             classMetadata = classMetadataMap.get(classScope);
             if (null == classMetadata) {
+                String idFieldName = null;
+                try {
+                    Field idField = entityMetaRawAccess.getIdField(entityType);
+                    if (idField != null) {
+                        idFieldName = idField.getName();
+                    }
+                }catch (IllegalArgumentException e){
+
+                }
+
                 if (withHierarchy) {
                     EntityClassTree entityClassTree = getEntityClassTree(entityType);
-                    classMetadata = metadataService.generateMetadata(entityClassTree, true);
+                    classMetadata = metadataService.generateMetadata(entityClassTree, idFieldName, true);
                 } else {
-                    classMetadata = metadataService.generateMetadata(entityType, true);
-                    Field idField = entityMetaRawAccess.getIdField(entityType);
-                    classMetadata.setIdField(idField);
+                    classMetadata = metadataService.generateMetadata(entityType, idFieldName, true);
+                }
+                if(!(classMetadata instanceof ImmutableClassMetadata)){
+                    LOGGER.error("NOT A FINAL CLASS METADATA, PERHAPS LOW PERFORMANCE.");
                 }
                 classMetadataMap.put(classScope, classMetadata);
             }
         }
         return classMetadata;
+    }
+
+    private void calcAllEntityMetadata() {
+        Class[] allEntities = entityMetaRawAccess.getAllEntities();
+        for (Class<?> entity : allEntities) {
+            calcClassMetadata(entity, true);
+            calcClassMetadata(entity, false);
+        }
     }
 
     private void calcEntityTypeGuardians(){

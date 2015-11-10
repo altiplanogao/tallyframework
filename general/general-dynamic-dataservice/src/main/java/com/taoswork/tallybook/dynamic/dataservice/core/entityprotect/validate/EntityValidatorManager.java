@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
@@ -33,8 +33,8 @@ public class EntityValidatorManager implements EntityValidator {
     }
 
     @Override
-    public void validate(Persistable entity, ClassMetadata classMetadata, EntityValidationErrors entityValidationErrors) {
-        Collection<String> validatorNames = classMetadata.getValidators();
+    public void validate(Persistable entity, IClassMetadata classMetadata, EntityValidationErrors entityValidationErrors) {
+        Collection<String> validatorNames = classMetadata.getReadonlyValidators();
         for (String validatorName : validatorNames) {
             IEntityValidator validator = getValidator(validatorName);
             if (validator != null) {

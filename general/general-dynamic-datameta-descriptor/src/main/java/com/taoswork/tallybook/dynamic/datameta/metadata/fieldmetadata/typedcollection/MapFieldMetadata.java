@@ -11,7 +11,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapFieldMetadata extends BaseCollectionFieldMetadata {
+public final class MapFieldMetadata extends BaseCollectionFieldMetadata {
     private final Class mapImplementType;
 
     private final EntryTypeUnion keyType;

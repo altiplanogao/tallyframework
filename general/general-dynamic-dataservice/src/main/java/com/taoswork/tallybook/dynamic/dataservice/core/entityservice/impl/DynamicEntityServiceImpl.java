@@ -2,7 +2,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
@@ -159,7 +159,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
             Persistable entity = (Persistable) rootable.newInstance();
             PersistableResult<T> persistableResult = new PersistableResult<T>();
             Class clz = entity.getClass();
-            ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
+            IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
             Field idField = classMetadata.getIdField();
             Object id = idField.get(entity);
             persistableResult.setIdKey(idField.getName())
@@ -183,7 +183,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> ClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy) {
+    public <T extends Persistable> IClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy) {
         return dynamicEntityMetadataAccess.getClassMetadata(entityType, withHierarchy);
     }
 

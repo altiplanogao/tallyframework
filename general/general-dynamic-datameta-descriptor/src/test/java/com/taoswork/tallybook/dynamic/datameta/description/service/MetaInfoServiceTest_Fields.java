@@ -6,14 +6,14 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFie
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.CollectionFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
-import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
+import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
@@ -38,11 +38,10 @@ public class MetaInfoServiceTest_Fields {
     private final MetadataService metadataService;
     private final MetaInfoService metaInfoService;
 
-    private final ClassMetadata companyMetadata;
-    private final ClassMetadata departmentMetadata;
-    private final ClassMetadata employeeMetadata;
-    private final ClassMetadata parkSpaceMetadata;
-    private final ClassMetadata[] metadatas;
+    private final IClassMetadata companyMetadata;
+    private final IClassMetadata departmentMetadata;
+    private final IClassMetadata employeeMetadata;
+    private final IClassMetadata parkSpaceMetadata;
 
     private final EntityInfo companyInfo;
     private final EntityInfo departmentInfo;
@@ -54,15 +53,10 @@ public class MetaInfoServiceTest_Fields {
         metadataService = new MetadataServiceImpl();
         metaInfoService = new MetaInfoServiceImpl();
 
-        companyMetadata = metadataService.generateMetadata(CompanyImpl.class);
-        departmentMetadata = metadataService.generateMetadata(DepartmentImpl.class);
-        employeeMetadata = metadataService.generateMetadata(EmployeeImpl.class);
-        parkSpaceMetadata = metadataService.generateMetadata(ParkingSpaceImpl.class);
-        metadatas = new ClassMetadata[]{
-            companyMetadata,
-            departmentMetadata,
-            employeeMetadata,
-            parkSpaceMetadata};
+        companyMetadata = metadataService.generateMetadata(CompanyImpl.class, null);
+        departmentMetadata = metadataService.generateMetadata(DepartmentImpl.class, null);
+        employeeMetadata = metadataService.generateMetadata(EmployeeImpl.class, null);
+        parkSpaceMetadata = metadataService.generateMetadata(ParkingSpaceImpl.class, null);
 
         companyInfo = metaInfoService.generateEntityMainInfo(companyMetadata);
         departmentInfo = metaInfoService.generateEntityMainInfo(departmentMetadata);
@@ -78,7 +72,7 @@ public class MetaInfoServiceTest_Fields {
 
     @Test
     public void testEntityInfoTabs() {
-        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
+        IClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class, null);
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
 
@@ -224,7 +218,7 @@ public class MetaInfoServiceTest_Fields {
             Assert.assertTrue(lastNameFieldInfo instanceof StringFieldInfo);
             Assert.assertTrue(firstNameFieldInfo instanceof StringFieldInfo);
 
-            ClassMetadata nameXCm = metadataService.generateMetadata(EmployeeNameX.class);
+            IClassMetadata nameXCm = metadataService.generateMetadata(EmployeeNameX.class, null);
             Assert.assertNotNull(nameXCm);
             {
                 EntityInfo ei = metaInfoService.generateEntityMainInfo(nameXCm);

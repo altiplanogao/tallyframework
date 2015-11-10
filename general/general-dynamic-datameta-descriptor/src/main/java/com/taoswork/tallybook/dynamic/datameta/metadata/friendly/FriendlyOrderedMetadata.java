@@ -20,7 +20,6 @@ public abstract class FriendlyOrderedMetadata extends FriendlyMetadata implement
         return order;
     }
 
-    @Override
     public FriendlyOrderedMetadata setOrder(int order) {
         this.order = order;
         return this;

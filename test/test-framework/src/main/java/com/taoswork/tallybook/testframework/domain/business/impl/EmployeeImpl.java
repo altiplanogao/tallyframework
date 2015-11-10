@@ -17,8 +17,8 @@ import com.taoswork.tallybook.testframework.domain.business.enumtype.EmployeeTyp
 import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
 import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntryDelegate;
-import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
 import com.taoswork.tallybook.testframework.domain.nature.ICitizen;
+import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
 
 import javax.persistence.*;
 import java.util.*;

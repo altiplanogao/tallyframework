@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.general.solution.threading.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +21,13 @@ public class MetaInfoServiceImpl implements
     private static Logger LOGGER = LoggerFactory.getLogger(MetaInfoServiceImpl.class);
 
     @Override
-    public IEntityInfo generateEntityInfo(ClassMetadata classMetadata, EntityInfoType infoType) {
+    public IEntityInfo generateEntityInfo(IClassMetadata classMetadata, EntityInfoType infoType) {
         EntityInfo entityInfo = generateEntityMainInfo(classMetadata);
         return convert(entityInfo, infoType);
     }
 
     @Override
-    public EntityInfo generateEntityMainInfo(ClassMetadata classMetadata) {
+    public EntityInfo generateEntityMainInfo(IClassMetadata classMetadata) {
         EntityInfo entityInfo = EntityInfoBuilder.build(classMetadata);
         return entityInfo;
     }

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.FieldsZoo;
@@ -38,7 +38,7 @@ public class MetadataServiceTest {
     public void testGenericFields() {
         Class<FieldsZoo> fieldsZooClz = FieldsZoo.class;
         Field[] fields = fieldsZooClz.getDeclaredFields();
-        ClassMetadata classMetadata = metadataService.generateMetadata(fieldsZooClz);
+        IClassMetadata classMetadata = metadataService.generateMetadata(fieldsZooClz, null);
 
         for (Field field : fields) {
             Class type = field.getType();
@@ -72,13 +72,13 @@ public class MetadataServiceTest {
         Class<AAA> clz = AAA.class;
         {
             Field[] fields = clz.getDeclaredFields();
-            ClassMetadata classMetadata = metadataService.generateMetadata(clz);
+            IClassMetadata classMetadata = metadataService.generateMetadata(clz, null);
             int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
             Assert.assertEquals(fieldCount, 1);
         }
         {
             Field[] fields = clz.getDeclaredFields();
-            ClassMetadata classMetadata = metadataService.generateMetadata(clz, true);
+            IClassMetadata classMetadata = metadataService.generateMetadata(clz, null, true);
             int fieldCount = classMetadata.getReadonlyFieldMetadataMap().size();
             Assert.assertEquals(fieldCount, 3);
         }

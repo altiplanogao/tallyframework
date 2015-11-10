@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
@@ -33,7 +33,7 @@ public class MetadataServiceTest_NoMissing {
 
     @Test
     public void testClassMetadata_CompanyImpl(){
-        ClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class);
+        IClassMetadata classMetadata = metadataService.generateMetadata(CompanyImpl.class, null);
 
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         Assert.assertTrue(fieldMetadataMap.size() == NativeClassHelper.getFields(CompanyImpl.class,
@@ -65,7 +65,7 @@ public class MetadataServiceTest_NoMissing {
 
     @Test
     public void testClassMetadata_DepartmentImpl(){
-        ClassMetadata classMetadata = metadataService.generateMetadata(DepartmentImpl.class);
+        IClassMetadata classMetadata = metadataService.generateMetadata(DepartmentImpl.class, null);
 
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         Assert.assertTrue(fieldMetadataMap.size() == NativeClassHelper.getFields(DepartmentImpl.class,
@@ -89,7 +89,7 @@ public class MetadataServiceTest_NoMissing {
 
     @Test
     public void testClassMetadata_EmployeeImpl(){
-        ClassMetadata classMetadata = metadataService.generateMetadata(EmployeeImpl.class);
+        IClassMetadata classMetadata = metadataService.generateMetadata(EmployeeImpl.class, null);
 
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         Assert.assertTrue(fieldMetadataMap.size() == NativeClassHelper.getFields(EmployeeImpl.class,

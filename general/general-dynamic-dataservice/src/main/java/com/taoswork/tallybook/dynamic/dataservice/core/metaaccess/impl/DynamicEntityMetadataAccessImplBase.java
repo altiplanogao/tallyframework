@@ -4,7 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
@@ -103,7 +103,7 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
         entityInfoMapWithLocaleType.clear();
     }
 
-    private EntityInfo calcEntityInfo(ClassMetadata classMetadata) {
+    private EntityInfo calcEntityInfo(IClassMetadata classMetadata) {
         return metaInfoService.generateEntityMainInfo(classMetadata);
     }
 
@@ -166,7 +166,7 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
     }
 
     private EntityInfo calcEntityInfo(Class<?> entityType, ClassScope classScope) {
-        ClassMetadata metadata = this.getClassMetadata(entityType, classScope.isWithHierarchy());
+        IClassMetadata metadata = this.getClassMetadata(entityType, classScope.isWithHierarchy());
         EntityInfo entityInfo = calcEntityInfo(metadata);
         return entityInfo;
     }

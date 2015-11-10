@@ -2,9 +2,9 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
-import com.taoswork.tallybook.business.datadomain.tallyuser.convert.GenderToStringConverter;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
+import com.taoswork.tallybook.business.datadomain.tallyuser.convert.GenderToStringConverter;
 import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.entity.handyprotect.valuegate.FieldCreateDateValueGate;

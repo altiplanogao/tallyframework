@@ -2,9 +2,6 @@ package com.taoswork.tallybook.general.authority.core;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Gao Yuan on 2015/6/4.
  */

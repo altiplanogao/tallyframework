@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.classes;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.MutableClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +10,11 @@ public class EndClassMetadataClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(EndClassMetadataClassHandler.class);
 
     @Override
-    public ProcessResult process(Class clz, ClassMetadata classMetadata) {
+    public ProcessResult process(Class clz, MutableClassMetadata mutableClassMetadata) {
         IFieldMetadata rawNameFieldMetadata = null;
         IFieldMetadata nameFieldMetadata = null;
         IFieldMetadata idFieldMetadata = null;
-        for (IFieldMetadata fm : classMetadata.getReadonlyFieldMetadataMap().values()) {
+        for (IFieldMetadata fm : mutableClassMetadata.getReadonlyFieldMetadataMap().values()) {
             if (fm.getName().toLowerCase().equals("name")) {
                 rawNameFieldMetadata = fm;
             }
@@ -35,13 +35,13 @@ public class EndClassMetadataClassHandler implements IClassHandler {
         }
 
         if (nameFieldMetadata != null) {
-            classMetadata.setNameField(nameFieldMetadata.getField());
+            mutableClassMetadata.setNameField(nameFieldMetadata.getField());
         }
         if (idFieldMetadata != null) {
-            classMetadata.setIdField(idFieldMetadata.getField());
+            mutableClassMetadata.setIdField(idFieldMetadata.getField());
         }
 
-        classMetadata.finishBuilding();
+        mutableClassMetadata.finishBuilding();
 
         return ProcessResult.PASSING_THROUGH;
     }

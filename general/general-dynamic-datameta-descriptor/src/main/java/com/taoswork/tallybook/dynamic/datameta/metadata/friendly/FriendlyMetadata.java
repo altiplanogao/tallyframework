@@ -24,7 +24,6 @@ public abstract class FriendlyMetadata implements IFriendly, Cloneable, Serializ
         return name;
     }
 
-    @Override
     public FriendlyMetadata setName(String name) {
         this.name = name;
         return this;
@@ -35,7 +34,6 @@ public abstract class FriendlyMetadata implements IFriendly, Cloneable, Serializ
         return friendlyName;
     }
 
-    @Override
     public FriendlyMetadata setFriendlyName(String friendlyName) {
         this.friendlyName = friendlyName;
         return this;

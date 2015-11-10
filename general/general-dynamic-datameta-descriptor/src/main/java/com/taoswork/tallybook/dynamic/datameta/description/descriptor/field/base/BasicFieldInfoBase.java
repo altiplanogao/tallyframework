@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IBasicFieldInfo;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 
 /**

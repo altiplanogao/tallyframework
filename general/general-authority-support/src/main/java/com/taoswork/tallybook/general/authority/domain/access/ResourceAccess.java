@@ -7,7 +7,6 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Vis
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;

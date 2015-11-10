@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-public class EntryTypeUnion implements Serializable {
+public final class EntryTypeUnion implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntryTypeUnion.class);
 
     private final EntryType entryType;

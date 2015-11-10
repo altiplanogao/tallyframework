@@ -1,8 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.CollectionFieldInfoBase;
-import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 
 /**
  * Created by Gao Yuan on 2015/10/24.

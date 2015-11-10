@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.dao.query.translator.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ClassMetadataUtils;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.Restriction;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.criteria.restriction.RestrictionFactory;
@@ -30,7 +30,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
     public <T> TypedQuery<T> constructListQuery(
             EntityManager entityManager,
             Class<T> entityClz,
-            ClassTreeMetadata classTreeMetadata,
+            IClassMetadata classTreeMetadata,
             CriteriaTransferObject cto) {
         return constructGeneralQuery(entityManager,
                 entityClz,
@@ -42,7 +42,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
     public <T> TypedQuery<Long> constructCountQuery(
             EntityManager entityManager,
             Class<T> entityClz,
-            ClassTreeMetadata classTreeMetadata,
+            IClassMetadata classTreeMetadata,
             CriteriaTransferObject cto) {
         return constructGeneralQuery(entityManager,
                 entityClz,
@@ -53,7 +53,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
     private <T> TypedQuery constructGeneralQuery(
             EntityManager entityManager,
             Class<T> entityClz,
-            ClassTreeMetadata classTreeMetadata,
+            IClassMetadata classTreeMetadata,
             CriteriaTransferObject cto, boolean isCount) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -76,7 +76,7 @@ public class Cto2QueryTranslatorImpl implements Cto2QueryTranslator {
             if (!CollectionUtility.isEmpty(values)) {
                 FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
                 //IFieldMetadata fieldMetadata = classTreeMetadata.getFieldMetadata(propertyName);
-                IFieldMetadata fieldMetadata = ClassMetadata.getRoutedFieldMetadata(classTreeMetadata, propertyName);
+                IFieldMetadata fieldMetadata = ClassMetadataUtils.getRoutedFieldMetadata(classTreeMetadata, propertyName);
                 if(fieldMetadata == null){
                     continue;
                 }

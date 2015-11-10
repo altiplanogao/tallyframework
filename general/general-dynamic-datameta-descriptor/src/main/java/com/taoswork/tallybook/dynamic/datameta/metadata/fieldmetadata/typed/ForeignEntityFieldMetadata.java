@@ -9,10 +9,10 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 
 import static com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType.FOREIGN_KEY;
 
-public class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
-    private Class entityType;
-    private String idField;
-    private String displayField;
+public final class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+    private final Class entityType;
+    private final String idField;
+    private final String displayField;
 
     public ForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);

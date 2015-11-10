@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
@@ -23,10 +23,10 @@ import java.util.Map;
  */
 public class CrossEntityManagerPersistableCopier {
     private class TtFieldCopier {
-        final ClassMetadata topClassMetadata;
+        final IClassMetadata topClassMetadata;
         final EntryTypeUnion elementType;
-        final ClassMetadata embeddableClassMetadata;
-        final ClassMetadata entityClassMetadata;
+        final IClassMetadata embeddableClassMetadata;
+        final IClassMetadata entityClassMetadata;
         final int model;
 
         private final static int MODEL_BASIC = 1;
@@ -34,7 +34,7 @@ public class CrossEntityManagerPersistableCopier {
         private final static int MODEL_ENTITY = 3;
         private final static int MODEL_UNKNOWN = 4;
 
-        public TtFieldCopier(final ClassMetadata topClassMetadata, EntryTypeUnion elementType) {
+        public TtFieldCopier(final IClassMetadata topClassMetadata, EntryTypeUnion elementType) {
             this.topClassMetadata = topClassMetadata;
             this.elementType = elementType;
             if (elementType.isSimple()) {
@@ -58,11 +58,11 @@ public class CrossEntityManagerPersistableCopier {
             }
         }
 
-        public TtFieldCopier(final ClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
+        public TtFieldCopier(final IClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
             this(topClassMetadata, fieldMetadata.getEntryTypeUnion());
         }
 
-        public TtFieldCopier(final ClassMetadata topClassMetadata, MapFieldMetadata fieldMetadata, boolean asKey, boolean asValue) {
+        public TtFieldCopier(final IClassMetadata topClassMetadata, MapFieldMetadata fieldMetadata, boolean asKey, boolean asValue) {
             this(topClassMetadata, asKey ? fieldMetadata.getKeyType() : fieldMetadata.getValueType());
             if (!(asKey ^ asValue))
                 throw new IllegalArgumentException();
@@ -90,19 +90,19 @@ public class CrossEntityManagerPersistableCopier {
         this.externalReference = externalReference;
     }
 
-    private <T> T makeCopyForEmbeddable(final ClassMetadata topClassMetadata, T embeddable, ClassMetadata embedCm,
+    private <T> T makeCopyForEmbeddable(final IClassMetadata topClassMetadata, T embeddable, IClassMetadata embedCm,
                                         final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
         T emptyCopy = walkFieldsAndCopy(topClassMetadata, embedCm, embeddable, currentLevel, levelLimit);
         return emptyCopy;
     }
 
-    private <T> T makeCopyForEntity(final ClassMetadata topClassMetadata, T entity, ClassMetadata entityCm,
+    private <T> T makeCopyForEntity(final IClassMetadata topClassMetadata, T entity, IClassMetadata entityCm,
                                     final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
         T emptyCopy = walkFieldsAndCopy(topClassMetadata, entityCm, entity, currentLevel, levelLimit);
         return emptyCopy;
     }
 
-    private Collection makeCopyForCollection(final ClassMetadata topClassMetadata, Collection source, CollectionFieldMetadata collectionFieldMetadata,
+    private Collection makeCopyForCollection(final IClassMetadata topClassMetadata, Collection source, CollectionFieldMetadata collectionFieldMetadata,
                                              final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
         if (source == null)
             return null;
@@ -127,7 +127,7 @@ public class CrossEntityManagerPersistableCopier {
         return target;
     }
 
-    private Map makeCopyForMap(final ClassMetadata topClassMetadata, Map source, MapFieldMetadata mapFieldMetadata,
+    private Map makeCopyForMap(final IClassMetadata topClassMetadata, Map source, MapFieldMetadata mapFieldMetadata,
                                final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
         if (source == null)
             return null;
@@ -159,7 +159,7 @@ public class CrossEntityManagerPersistableCopier {
         return target;
     }
 
-    private <T> T walkFieldsAndCopy(final ClassMetadata topClassMetadata, ClassMetadata classMetadata, T source,
+    private <T> T walkFieldsAndCopy(final IClassMetadata topClassMetadata, IClassMetadata classMetadata, T source,
                                     final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
         if (source == null)
             return null;
@@ -180,13 +180,13 @@ public class CrossEntityManagerPersistableCopier {
 
             if (fieldMetadata instanceof EmbeddedFieldMetadata) {
                 Field field = fieldMetadata.getField();
-                ClassMetadata embeddedClassMetadata = ((EmbeddedFieldMetadata) fieldMetadata).getClassMetadata();
+                IClassMetadata embeddedClassMetadata = ((EmbeddedFieldMetadata) fieldMetadata).getClassMetadata();
                 Object fo = field.get(source);
                 Object fn = this.makeCopyForEmbeddable(topClassMetadata, fo, embeddedClassMetadata, currentLevel, levelLimit);
                 field.set(target, fn);
             } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
                 Class entityType = ((ForeignEntityFieldMetadata) fieldMetadata).getEntityType();
-                ClassMetadata foreignClassMetadata = topClassMetadata.getReferencingClassMetadata(entityType);
+                IClassMetadata foreignClassMetadata = topClassMetadata.getReferencingClassMetadata(entityType);
                 Field field = fieldMetadata.getField();
                 Object fo = field.get(source);
                 Object fn = walkFieldsAndCopy(topClassMetadata, foreignClassMetadata, fo, currentLevel, levelLimit);
@@ -240,7 +240,7 @@ public class CrossEntityManagerPersistableCopier {
         if (levelLimit < 1)
             levelLimit = 1;
         try {
-            ClassMetadata topClassMetadata = this.dynamicEntityMetadataAccess.getClassMetadata(rec.getClass(), false);
+            IClassMetadata topClassMetadata = this.dynamicEntityMetadataAccess.getClassMetadata(rec.getClass(), false);
             return this.walkFieldsAndCopy(topClassMetadata, null, rec, 0, levelLimit);
         } catch (IllegalAccessException e) {
             e.printStackTrace();

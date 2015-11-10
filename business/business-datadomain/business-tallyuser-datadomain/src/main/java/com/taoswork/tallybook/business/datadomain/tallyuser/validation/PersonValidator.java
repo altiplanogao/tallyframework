@@ -3,7 +3,6 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.validation;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.EntityValidatorBase;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
-import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.ValidationErrors;
 import org.apache.commons.lang3.StringUtils;
 
 /**

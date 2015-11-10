@@ -1,12 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IFieldValueGate;
 
-import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;

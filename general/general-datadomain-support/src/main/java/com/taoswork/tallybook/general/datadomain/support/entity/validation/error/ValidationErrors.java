@@ -1,7 +1,5 @@
 package com.taoswork.tallybook.general.datadomain.support.entity.validation.error;
 
-import com.taoswork.tallybook.general.extension.utils.StringUtility;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

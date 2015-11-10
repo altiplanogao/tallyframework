@@ -6,7 +6,6 @@ import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

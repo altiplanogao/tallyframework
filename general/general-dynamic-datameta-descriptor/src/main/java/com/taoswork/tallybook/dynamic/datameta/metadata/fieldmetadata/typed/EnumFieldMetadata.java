@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCol
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
-public class EnumFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
+public final class EnumFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final Class enumerationType;
 
     public EnumFieldMetadata(FieldMetadataIntermediate intermediate) {

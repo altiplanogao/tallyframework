@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.BasicFieldInfoBase;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.BooleanFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
 import org.apache.commons.collections4.MapUtils;
 

@@ -3,14 +3,13 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcoll
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldMetadataFacet;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class CollectionFieldMetadata extends CollectionLikeFieldMetadata {
+public final class CollectionFieldMetadata extends CollectionLikeFieldMetadata {
     private final Class collectionImplementType;
 
     private final EntryTypeUnion entryTypeUnion;

@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
@@ -33,20 +33,20 @@ import java.lang.reflect.Field;
  */
 public class MetadataServiceTest_Fields {
     private MetadataService metadataService;
-    private ClassMetadata companyMetadata;
-    private ClassMetadata departmentMetadata;
-    private ClassMetadata employeeMetadata;
-    private ClassMetadata parkSpaceMetadata;
-    private ClassMetadata[] metadatas;
+    private IClassMetadata companyMetadata;
+    private IClassMetadata departmentMetadata;
+    private IClassMetadata employeeMetadata;
+    private IClassMetadata parkSpaceMetadata;
+    private IClassMetadata[] metadatas;
 
     @Before
     public void setup() {
         metadataService = new MetadataServiceImpl();
-        companyMetadata = metadataService.generateMetadata(CompanyImpl.class);
-        departmentMetadata = metadataService.generateMetadata(DepartmentImpl.class);
-        employeeMetadata = metadataService.generateMetadata(EmployeeImpl.class);
-        parkSpaceMetadata = metadataService.generateMetadata(ParkingSpaceImpl.class);
-        metadatas = new ClassMetadata[]{
+        companyMetadata = metadataService.generateMetadata(CompanyImpl.class, null);
+        departmentMetadata = metadataService.generateMetadata(DepartmentImpl.class, null);
+        employeeMetadata = metadataService.generateMetadata(EmployeeImpl.class, null);
+        parkSpaceMetadata = metadataService.generateMetadata(ParkingSpaceImpl.class, null);
+        metadatas = new IClassMetadata[]{
             companyMetadata,
             departmentMetadata,
             employeeMetadata,
@@ -65,7 +65,7 @@ public class MetadataServiceTest_Fields {
 
     @Test
     public void testIdField() {
-        for (ClassMetadata classMetadata : metadatas) {
+        for (IClassMetadata classMetadata : metadatas) {
             Field idField = classMetadata.getIdField();
             Assert.assertNotNull(idField);
 
@@ -76,7 +76,7 @@ public class MetadataServiceTest_Fields {
 
     @Test
     public void testNameField() {
-        for (ClassMetadata classMetadata : metadatas) {
+        for (IClassMetadata classMetadata : metadatas) {
             Field nameField = classMetadata.getNameField();
             if(parkSpaceMetadata == classMetadata){
                 Assert.assertNull(nameField);
@@ -132,10 +132,10 @@ public class MetadataServiceTest_Fields {
         {
             EmbeddedFieldMetadata addressFieldMeta = (EmbeddedFieldMetadata) companyMetadata.getFieldMetadata("address");
             Assert.assertNotNull(addressFieldMeta);
-            ClassMetadata embeddedAddressClassMetadata = addressFieldMeta.getClassMetadata();
+            IClassMetadata embeddedAddressClassMetadata = addressFieldMeta.getClassMetadata();
             Assert.assertNotNull(embeddedAddressClassMetadata);
 
-            ClassMetadata addressCm = metadataService.generateMetadata(Address.class);
+            IClassMetadata addressCm = metadataService.generateMetadata(Address.class, null);
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String ref = objectMapper.writeValueAsString(addressCm);
@@ -149,10 +149,10 @@ public class MetadataServiceTest_Fields {
         {
             EmbeddedFieldMetadata nameXFieldMeta = (EmbeddedFieldMetadata) employeeMetadata.getFieldMetadata("nameX");
             Assert.assertNotNull(nameXFieldMeta);
-            ClassMetadata embeddedNameXClassMetadata = nameXFieldMeta.getClassMetadata();
+            IClassMetadata embeddedNameXClassMetadata = nameXFieldMeta.getClassMetadata();
             Assert.assertNotNull(embeddedNameXClassMetadata);
 
-            ClassMetadata nameXCm = metadataService.generateMetadata(EmployeeNameX.class);
+            IClassMetadata nameXCm = metadataService.generateMetadata(EmployeeNameX.class, null);
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String ref = objectMapper.writeValueAsString(nameXCm);
@@ -238,7 +238,7 @@ public class MetadataServiceTest_Fields {
         Assert.assertNotNull(entryTypeUnion.getAsEmbeddableClass());
         Assert.assertNull(entryTypeUnion.getAsEntityClass());
 
-        ClassMetadata classMetadata = employeeMetadata.getReferencingClassMetadata(entryClass);
+        IClassMetadata classMetadata = employeeMetadata.getReferencingClassMetadata(entryClass);
         Assert.assertNotNull(classMetadata);
     }
 
@@ -259,9 +259,9 @@ public class MetadataServiceTest_Fields {
         Assert.assertNotNull(keyTypeUnion.getAsEmbeddableClass());
         Assert.assertNull(keyTypeUnion.getAsEntityClass());
 
-        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(keyEntryClass);
+        IClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(keyEntryClass);
         Assert.assertNotNull(classMetadata);
-        ClassMetadata classMetadata2 = departmentMetadata.getReferencingClassMetadata(valueEntryClass);
+        IClassMetadata classMetadata2 = departmentMetadata.getReferencingClassMetadata(valueEntryClass);
         Assert.assertNotNull(classMetadata2);
     }
 
@@ -277,7 +277,7 @@ public class MetadataServiceTest_Fields {
         Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getEntryTypeUnion().getAsEntityClass());
         Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getEntryTypeUnion().getAsEntityClass());
 
-        ClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
+        IClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
         Assert.assertNotNull(classMetadata);
     }
 
@@ -291,7 +291,7 @@ public class MetadataServiceTest_Fields {
             Assert.assertNull(valueTypeU.getAsSimpleClass());
             Assert.assertNull(valueTypeU.getAsEmbeddableClass());
             Assert.assertEquals(EmployeeImpl.class, valueTypeU.getAsEntityClass());
-            ClassMetadata refCm = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
+            IClassMetadata refCm = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
             Assert.assertNotNull(refCm);
         }
         {

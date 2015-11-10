@@ -4,7 +4,6 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;

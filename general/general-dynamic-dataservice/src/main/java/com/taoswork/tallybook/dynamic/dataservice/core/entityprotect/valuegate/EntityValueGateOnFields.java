@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.handler.TypedFieldHandlerManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.valuegate.TypedFieldValueGate;
@@ -21,7 +21,7 @@ public class EntityValueGateOnFields
     private final FieldValueGateManager fieldValueGateManager = new FieldValueGateManager();
 
     @Override
-    public void store(ClassMetadata classMetadata, Persistable entity, Persistable oldEntity) throws ServiceException {
+    public void store(IClassMetadata classMetadata, Persistable entity, Persistable oldEntity) throws ServiceException {
         List<String> fieldFriendlyNames = new ArrayList<String>();
         try {
             for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : classMetadata.getReadonlyFieldMetadataMap().entrySet()) {
@@ -42,7 +42,7 @@ public class EntityValueGateOnFields
     }
 
     @Override
-    public void fetch(ClassMetadata classMetadata, Persistable entity) {
+    public void fetch(IClassMetadata classMetadata, Persistable entity) {
 
     }
 

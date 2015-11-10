@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.impl;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidator;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorOnFields;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.field.validate.validator.*;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidator;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorManager;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidatorOnFields;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
@@ -42,7 +42,7 @@ public class EntityValidationServiceImpl implements EntityValidationService {
     public void validate(PersistableResult persistableResult) throws ServiceException {
         Persistable entity = persistableResult.getEntity();
         Class entityType = entity.getClass();
-        ClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
+        IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
 
         try {
             EntityValidationErrors entityErrors = new EntityValidationErrors();

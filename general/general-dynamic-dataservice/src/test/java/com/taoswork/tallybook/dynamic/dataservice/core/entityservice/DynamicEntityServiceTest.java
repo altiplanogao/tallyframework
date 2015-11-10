@@ -1,15 +1,18 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.*;
+import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
+import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
 import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
  * Created by Gao Yuan on 2015/6/26.
  */
 public class DynamicEntityServiceTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicEntityServiceTest.class);
 
     private IDataService dataService = null;
 
@@ -33,6 +37,7 @@ public class DynamicEntityServiceTest {
 
     @Test
     public void testDynamicEntityService() throws ServiceException{
+        MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
@@ -74,9 +79,11 @@ public class DynamicEntityServiceTest {
                 Assert.assertEquals(persons.getStartIndex(), skipLeading);
             }
         }
+        methodTimeCounter.noticeOnExit();
     }
     @Test
     public void testDynamicEntityService_1()  throws ServiceException{
+        MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
 
@@ -258,5 +265,6 @@ public class DynamicEntityServiceTest {
                 Assert.assertEquals(persons.getTotalCount().intValue(), createAttemptA);
             }
         }
+        methodTimeCounter.noticeOnExit();
     }
 }

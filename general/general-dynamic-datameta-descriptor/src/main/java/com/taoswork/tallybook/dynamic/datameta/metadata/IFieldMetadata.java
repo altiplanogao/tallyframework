@@ -4,9 +4,10 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdere
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IFieldValueGate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
-public interface IFieldMetadata extends IFriendlyOrdered {
+public interface IFieldMetadata extends IFriendlyOrdered, Serializable {
     String getTabName();
 
     String getGroupName();

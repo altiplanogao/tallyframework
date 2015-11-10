@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.ClassTreeMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
@@ -63,7 +63,7 @@ public class DynamicEntityMetadataAccessTest {
         EntityClassTree entityClassTree = dynamicEntityMetadataAccess.getEntityClassTree(ZooKeeper.class);
         Assert.assertEquals(ZooKeeper.class.getName(), entityClassTree.getData().clz.getName());
 
-        ClassTreeMetadata entityClassTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(ZooKeeper.class);
+        IClassMetadata entityClassTreeMetadata = dynamicEntityMetadataAccess.getClassTreeMetadata(ZooKeeper.class);
         Assert.assertEquals(ZooKeeper.class.getName(), entityClassTreeMetadata.getName());
     }
 
