@@ -12,6 +12,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.FriendlyMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.utils.NativeClassHelper;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.extension.collections.MapUtility;
 import org.apache.commons.lang3.SerializationUtils;
@@ -32,9 +33,11 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
     private final Map<String, IFieldMetadata> fieldMetadataMap = new HashMap<String, IFieldMetadata>();
     private final Map<String, IClassMetadata> referencingClassMetadata = new HashMap<String, IClassMetadata>();
     private boolean referencingClassMetadataPublished = false;
+    private final Set<String> collectionFields = new HashSet<String>();
     private final Set<String> nonCollectionFields = new HashSet<String>();
     private final Set<String> validators = new HashSet();
     private final Set<String> valueGates = new HashSet();
+    private String valueCopier = null;
     public final Class<?> entityClz;
     public boolean containsSuper = false;
     private String idFieldName;
@@ -162,13 +165,37 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
     }
 
     public void addValidator(Class<? extends IEntityValidator> validator) {
+        if(IEntityValidator.class.equals(validator))
+            return;
         if (validator != null)
             validators.add(validator.getName());
     }
 
     public void addValueGate(Class<? extends IEntityValueGate> valueGate) {
+        if(IEntityValueGate.class.equals(valueGate))
+            return;
         if (valueGate != null)
             valueGates.add(valueGate.getName());
+    }
+
+    public void setValueCopierIfNotSet(Class<? extends IEntityValueCopier> valueCopier){
+        if(StringUtils.isEmpty(this.valueCopier)){
+            setValueCopier(valueCopier);
+        }
+    }
+
+    public void setValueCopier(Class<? extends IEntityValueCopier> valueCopier){
+        if(IEntityValueCopier.class.equals(valueCopier))
+            return;
+        if(valueCopier != null){
+            this.valueCopier = valueCopier.getName();
+        }
+    }
+
+    protected void setValueCopierIfNotSet(String valueCopier){
+        if(StringUtils.isEmpty(this.valueCopier) && StringUtils.isNotEmpty(valueCopier)){
+            this.valueCopier = valueCopier;
+        }
     }
 
     @Override
@@ -179,6 +206,11 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
     @Override
     public Collection<String> getReadonlyValueGates() {
         return Collections.unmodifiableCollection(this.valueGates);
+    }
+
+    @Override
+    public String getValueCopier() {
+        return valueCopier;
     }
 
     public void absorbSuper(IClassMetadata superMeta) {
@@ -203,11 +235,14 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
         this.nonCollectionFields.addAll(thatMeta.getNonCollectionFields());
         this.validators.addAll(thatMeta.getReadonlyValidators());
         this.valueGates.addAll(thatMeta.getReadonlyValueGates());
+        this.setValueCopierIfNotSet(thatMeta.getValueCopier());
         this.referencingClassMetadataPublished &= thatMeta.isReferencingClassMetadataPublished();
     }
 
     public void finishBuilding() {
         if (this.nonCollectionFields.size() == 0) {
+            nonCollectionFields.clear();
+            collectionFields.clear();
             List<String> nonCollection = new ArrayList<String>();
             List<String> collection = new ArrayList<String>();
             for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
@@ -216,7 +251,13 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
                 (fieldMetadata.isCollectionField() ? collection : nonCollection).add(fieldName);
             }
             this.nonCollectionFields.addAll(nonCollection);
+            this.collectionFields.addAll(collection);
         }
+    }
+
+    @Override
+    public Collection<String> getCollectionFields() {
+        return Collections.unmodifiableCollection(collectionFields);
     }
 
     @Override

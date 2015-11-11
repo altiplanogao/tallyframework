@@ -12,8 +12,10 @@ import com.taoswork.tallybook.dynamic.dataservice.config.helper.DataServiceBeanC
 import com.taoswork.tallybook.dynamic.dataservice.core.description.FriendlyMetaInfoService;
 import com.taoswork.tallybook.dynamic.dataservice.core.description.impl.FriendlyMetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.impl.EntityValidationServiceImpl;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper.impl.EntityValueCopierServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuegate.impl.EntityValueGateServiceImpl;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
@@ -162,6 +164,12 @@ public abstract class ADataServiceBeanConfiguration
     @Bean(name = EntityValueGateService.COMPONENT_NAME)
     public EntityValueGateService entityValueGateService() {
         return new EntityValueGateServiceImpl();
+    }
+
+    @Override
+    @Bean(name = EntityValueCopierService.COMPONENT_NAME)
+    public EntityValueCopierService entityValueCopierService() {
+        return new EntityValueCopierServiceImpl();
     }
 
     @Override

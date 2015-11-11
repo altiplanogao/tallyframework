@@ -26,17 +26,17 @@ public class DynamicEntityServiceTest {
     private IDataService dataService = null;
 
     @Before
-    public void setup(){
+    public void setup() {
         dataService = new TallyMockupDataService();
     }
 
     @After
-    public void teardown(){
+    public void teardown() {
         dataService = null;
     }
 
     @Test
-    public void testDynamicEntityService() throws ServiceException{
+    public void testDynamicEntityService() throws ServiceException {
         MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
@@ -70,7 +70,7 @@ public class DynamicEntityServiceTest {
             Assert.assertEquals(persons.getTotalCount(), Long.valueOf(created));
             Assert.assertEquals(persons.getStartIndex(), 0);
 
-            for(int skipLeading = 2 ; skipLeading < createAttemptA ; skipLeading ++) {
+            for (int skipLeading = 2; skipLeading < createAttemptA; skipLeading++) {
                 ctoFetchAll.setFirstResult(skipLeading);
                 persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchAll);
 
@@ -81,8 +81,9 @@ public class DynamicEntityServiceTest {
         }
         methodTimeCounter.noticeOnExit();
     }
+
     @Test
-    public void testDynamicEntityService_1()  throws ServiceException{
+    public void testDynamicEntityService_1() throws ServiceException {
         MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
         DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         Assert.assertNotNull(dynamicEntityService);
@@ -146,8 +147,8 @@ public class DynamicEntityServiceTest {
             // start = 0
             {
                 CriteriaTransferObject ctoFetchFirst25AAA = new CriteriaTransferObject()
-                        .setPageSize(requestCount)
-                        .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
+                    .setPageSize(requestCount)
+                    .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
                     CriteriaQueryResult<ZooKeeper> personsAAA = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25AAA);
 
@@ -163,9 +164,9 @@ public class DynamicEntityServiceTest {
                 int startIndex = createAttemptA;
                 //After index 100, result should be BBB
                 CriteriaTransferObject ctoFetchFirst25AfterAAA = new CriteriaTransferObject()
-                        .setPageSize(requestCount)
-                        .setFirstResult(startIndex)
-                        .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
+                    .setPageSize(requestCount)
+                    .setFirstResult(startIndex)
+                    .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.ASCENDING));
                 {
                     CriteriaQueryResult<ZooKeeper> personsAAA = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25AfterAAA);
 
@@ -184,7 +185,7 @@ public class DynamicEntityServiceTest {
             {
                 // start = 0
                 CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject().setPageSize(requestCount)
-                        .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
+                    .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
                     CriteriaQueryResult<ZooKeeper> personsBBB = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25BBB);
 
@@ -199,9 +200,9 @@ public class DynamicEntityServiceTest {
                 // start = createAttemptB
                 int startIndex = createAttemptB;
                 CriteriaTransferObject ctoFetchFirst25BBB = new CriteriaTransferObject()
-                        .setPageSize(requestCount)
-                        .setFirstResult(startIndex)
-                        .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
+                    .setPageSize(requestCount)
+                    .setFirstResult(startIndex)
+                    .addSortCriteria(new PropertySortCriteria(nameFieldName, SortDirection.DESCENDING));
                 {
                     CriteriaQueryResult<ZooKeeper> personsBBB = dynamicEntityService.query(ZooKeeper.class, ctoFetchFirst25BBB);
 
@@ -222,29 +223,29 @@ public class DynamicEntityServiceTest {
             int fullPageCount = 0;
             int returned = 0;
             List<ZooKeeper> cache = new ArrayList<ZooKeeper>();
-            do{
+            do {
                 CriteriaTransferObject ctoFetchB = new CriteriaTransferObject().setFirstResult(startIndex).setPageSize(eachQuerySize);
                 ctoFetchB.addFilterCriteria(new PropertyFilterCriteria(nameFieldName).addFilterValue(nameBBB));
                 CriteriaQueryResult<ZooKeeper> persons = dynamicEntityService.query(ZooKeeper.class, ctoFetchB);
 
-                if(persons.fetchedCount() == eachQuerySize){
-                    fullPageCount ++;
+                if (persons.fetchedCount() == eachQuerySize) {
+                    fullPageCount++;
                 }
-                returned+= persons.fetchedCount();
+                returned += persons.fetchedCount();
                 startIndex = returned;
 
                 cache.addAll(persons.getEntityCollection());
 
                 Assert.assertTrue(returned <= createAttemptB);
-                if(returned >= createAttemptB){
+                if (returned >= createAttemptB) {
                     break;
                 }
-            }while (true);
+            } while (true);
 
             Assert.assertTrue(fullPageCount == (createAttemptB / eachQuerySize));
             Assert.assertTrue(returned == createAttemptB);
 
-            for(ZooKeeper p : cache){
+            for (ZooKeeper p : cache) {
                 Entity entity = new Entity().setEntityCeilingType(ZooKeeper.class).setEntityType(p.getClass());
                 dynamicEntityService.delete(entity, p.getId().toString());
             }

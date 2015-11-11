@@ -8,19 +8,15 @@ import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 /**
  * Created by Gao Yuan on 2015/6/26.
  */
-@PersistEntity(
-    validators = {AAAValueValidator.class},
-    valueGates = {AAAValueGate.class},
-    copier = AAAValueCopier.class
-)
-public class AAA extends AA{
-    public String aaa;
+@PersistEntity
+public class AAB extends AA{
+    public String aab;
 
-    public String getAaa() {
-        return aaa;
+    public String getAab() {
+        return aab;
     }
 
-    public void setAaa(String aaa) {
-        this.aaa = aaa;
+    public void setAab(String aaa) {
+        this.aab = aaa;
     }
 }

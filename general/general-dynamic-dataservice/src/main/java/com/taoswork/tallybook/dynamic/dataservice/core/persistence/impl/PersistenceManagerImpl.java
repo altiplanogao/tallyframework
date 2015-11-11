@@ -9,7 +9,9 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.translator.EntityInstanceTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper.CopierContext;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
@@ -48,6 +50,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     @Resource(name = EntityValueGateService.COMPONENT_NAME)
     protected EntityValueGateService entityValueGateService;
+
+    @Resource(name = EntityValueCopierService.COMPONENT_NAME)
+    protected EntityValueCopierService entityValueCopierService;
 
     protected class UnsafePersistence{
         public <T extends Persistable> T doCreate(Class<T> ceilingType, T entity) throws ServiceException {
@@ -198,8 +203,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key, ExternalReference externalReference) throws ServiceException {
         T result = unsafePm.doRead(entityType, key);
-        CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess, externalReference);
-        T safeResult = copier.makeSafeCopyForRead(result);
+
+        CopierContext copierContext = new CopierContext(this.dynamicEntityMetadataAccess, externalReference);
+        T safeResult= this.entityValueCopierService.makeSafeCopyForRead(copierContext, result);
 
         return unsafePm.makePersistableResult(safeResult);
     }
@@ -240,9 +246,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
         List<T> records = criteriaQueryResult.getEntityCollection();
         if(records != null){
             List<T> entities = new ArrayList();
-            CrossEntityManagerPersistableCopier copier = new CrossEntityManagerPersistableCopier(this.dynamicEntityMetadataAccess, externalReference);
+            CopierContext copierContext = new CopierContext(this.dynamicEntityMetadataAccess, externalReference);
             for(T rec : records){
-                T shallowCopy = copier.makeSafeCopyForQuery(rec);
+                T shallowCopy = this.entityValueCopierService.makeSafeCopyForQuery(copierContext, rec);
                 entities.add(shallowCopy);
             }
             safeResult.setEntityCollection(entities);

@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
                 for (Class<? extends IEntityValueGate> valueGate : persistEntity.valueGates()) {
                     mutableClassMetadata.addValueGate(valueGate);
                 }
+                Class<? extends IEntityValueCopier> copier = persistEntity.copier();
+                mutableClassMetadata.setValueCopier(copier);
                 handled = true;
             }
         }

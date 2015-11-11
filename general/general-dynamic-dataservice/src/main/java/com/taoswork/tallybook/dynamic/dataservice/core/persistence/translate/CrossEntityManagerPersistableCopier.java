@@ -9,9 +9,11 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.Fore
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper.EntityValueCopierManager;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -84,79 +86,37 @@ public class CrossEntityManagerPersistableCopier {
 
     private final DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
     private final ExternalReference externalReference;
+    private final EntityValueCopierManager entityValueCopierManager;
 
-    public CrossEntityManagerPersistableCopier(DynamicEntityMetadataAccess dynamicEntityMetadataAccess, ExternalReference externalReference) {
+    public CrossEntityManagerPersistableCopier(DynamicEntityMetadataAccess dynamicEntityMetadataAccess, ExternalReference externalReference, EntityValueCopierManager entityValueCopierManager) {
         this.dynamicEntityMetadataAccess = dynamicEntityMetadataAccess;
         this.externalReference = externalReference;
+        this.entityValueCopierManager = entityValueCopierManager;
     }
 
-    private <T> T makeCopyForEmbeddable(final IClassMetadata topClassMetadata, T embeddable, IClassMetadata embedCm,
-                                        final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
-        T emptyCopy = walkFieldsAndCopy(topClassMetadata, embedCm, embeddable, currentLevel, levelLimit);
-        return emptyCopy;
+    public <T extends Persistable> T makeSafeCopyForQuery(T rec) throws ServiceException {
+        return this.makeSafeCopy(rec, 1);
     }
 
-    private <T> T makeCopyForEntity(final IClassMetadata topClassMetadata, T entity, IClassMetadata entityCm,
-                                    final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
-        T emptyCopy = walkFieldsAndCopy(topClassMetadata, entityCm, entity, currentLevel, levelLimit);
-        return emptyCopy;
+    public <T extends Persistable> T makeSafeCopyForRead(T rec) throws ServiceException {
+        return this.makeSafeCopy(rec, 2);
     }
 
-    private Collection makeCopyForCollection(final IClassMetadata topClassMetadata, Collection source, CollectionFieldMetadata collectionFieldMetadata,
-                                             final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
-        if (source == null)
+    private <T extends Persistable> T makeSafeCopy(T rec, int levelLimit) throws ServiceException {
+        if (rec == null)
             return null;
-        final int nextLevel = currentLevel + 1;
-        if (nextLevel >= levelLimit)
-            return null;
-
-        TtFieldCopier copier = new TtFieldCopier(topClassMetadata, collectionFieldMetadata);
-        Collection target = (Collection) collectionFieldMetadata.getCollectionImplementType().newInstance();
-//        if (collectionFieldMetadata.getSimpleType() != null) {
-//            if (source instanceof Serializable) {
-//                return (Collection) SerializationUtils.clone((Serializable) source);
-//            }
-//        }
-//
-//        Collection target = source.getClass().newInstance();
-        for (Object ele : source) {
-            Object eleCpy = copier.doCopy(ele, nextLevel, levelLimit);
-            target.add(eleCpy);
+        if (levelLimit < 1)
+            levelLimit = 1;
+        try {
+            IClassMetadata topClassMetadata = this.dynamicEntityMetadataAccess.getClassMetadata(rec.getClass(), false);
+            return this.walkFieldsAndCopy(topClassMetadata, null, rec, 0, levelLimit);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new ServiceException(e);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new ServiceException(e);
         }
-
-        return target;
-    }
-
-    private Map makeCopyForMap(final IClassMetadata topClassMetadata, Map source, MapFieldMetadata mapFieldMetadata,
-                               final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
-        if (source == null)
-            return null;
-        final int nextLevel = currentLevel + 1;
-        if (nextLevel >= levelLimit)
-            return null;
-//        if (mapFieldMetadata.getKeyBasicType() != null) {
-//            if (mapFieldMetadata.getValueBasicType() != null) {
-//                if (source instanceof Serializable) {
-//                    return (Map) SerializationUtils.clone((Serializable) source);
-//                } else {
-//                    Map target = source.getClass().newInstance();
-//                    target.putAll(source);
-//                    return target;
-//                }
-//            }
-//        }
-        Map target = (Map) mapFieldMetadata.getMapImplementType().newInstance();
-        final TtFieldCopier keyCopier = new TtFieldCopier(topClassMetadata, mapFieldMetadata, true, false);
-        final TtFieldCopier valueCopier = new TtFieldCopier(topClassMetadata, mapFieldMetadata, false, true);
-        for (Object entryInObj : source.entrySet()) {
-            Map.Entry entry = (Map.Entry) entryInObj;
-            Object key = entry.getKey();
-            Object value = entry.getValue();
-            Object keyCpy = keyCopier.doCopy(key, nextLevel, levelLimit);
-            Object valueCpy = valueCopier.doCopy(value, nextLevel, levelLimit);
-            target.put(keyCpy, valueCpy);
-        }
-        return target;
     }
 
     private <T> T walkFieldsAndCopy(final IClassMetadata topClassMetadata, IClassMetadata classMetadata, T source,
@@ -168,9 +128,25 @@ public class CrossEntityManagerPersistableCopier {
         if(classMetadata == null)
             classMetadata = topClassMetadata;
 
+        final Collection<String> handledFields;
+        String valueCopierName = classMetadata.getValueCopier();
+        IEntityValueCopier valueCopier = this.entityValueCopierManager.getValueCopier(valueCopierName);
+        if(valueCopier != null){
+            valueCopier.copy(source, target);
+            handledFields = valueCopier.handledFields();
+            if (valueCopier.allHandled()){
+                return target;
+            }
+        } else {
+            handledFields = null;
+        }
+
         Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetaEntry : fieldMetadataMap.entrySet()) {
             String fieldName = fieldMetaEntry.getKey();
+            if(handledFields != null && handledFields.contains(fieldName)){
+                continue;
+            }
             IFieldMetadata fieldMetadata = fieldMetaEntry.getValue();
             if (fieldMetadata.isPrimitiveField()) {
                 Field field = fieldMetadata.getField();
@@ -226,28 +202,60 @@ public class CrossEntityManagerPersistableCopier {
         return target;
     }
 
-    public <T extends Persistable> T makeSafeCopyForQuery(T rec) throws ServiceException {
-        return this.makeSafeCopy(rec, 1);
+    private <T> T makeCopyForEmbeddable(final IClassMetadata topClassMetadata, T embeddable, IClassMetadata embedCm,
+                                        final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
+        T emptyCopy = walkFieldsAndCopy(topClassMetadata, embedCm, embeddable, currentLevel, levelLimit);
+        return emptyCopy;
     }
 
-    public <T extends Persistable> T makeSafeCopyForRead(T rec) throws ServiceException {
-        return this.makeSafeCopy(rec, 2);
+    private <T> T makeCopyForEntity(final IClassMetadata topClassMetadata, T entity, IClassMetadata entityCm,
+                                    final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
+        T emptyCopy = walkFieldsAndCopy(topClassMetadata, entityCm, entity, currentLevel, levelLimit);
+        return emptyCopy;
     }
 
-    private <T extends Persistable> T makeSafeCopy(T rec, int levelLimit) throws ServiceException {
-        if (rec == null)
+    private Collection makeCopyForCollection(final IClassMetadata topClassMetadata, Collection source, CollectionFieldMetadata collectionFieldMetadata,
+                                             final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
+        if (source == null)
             return null;
-        if (levelLimit < 1)
-            levelLimit = 1;
-        try {
-            IClassMetadata topClassMetadata = this.dynamicEntityMetadataAccess.getClassMetadata(rec.getClass(), false);
-            return this.walkFieldsAndCopy(topClassMetadata, null, rec, 0, levelLimit);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            throw new ServiceException(e);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            throw new ServiceException(e);
+        final int nextLevel = currentLevel + 1;
+        if (nextLevel >= levelLimit)
+            return null;
+
+        //The 'source' could be in jpa-type (like org.hibernate.collection.internal.PersistentBag)
+        //So we cannot use direct copy: (Collection) SerializationUtils.clone((Serializable) source);
+        TtFieldCopier copier = new TtFieldCopier(topClassMetadata, collectionFieldMetadata);
+        Collection target = (Collection) collectionFieldMetadata.getCollectionImplementType().newInstance();
+        for (Object ele : source) {
+            Object eleCpy = copier.doCopy(ele, nextLevel, levelLimit);
+            target.add(eleCpy);
         }
+
+        return target;
     }
+
+    private Map makeCopyForMap(final IClassMetadata topClassMetadata, Map source, MapFieldMetadata mapFieldMetadata,
+                               final int currentLevel, final int levelLimit) throws IllegalAccessException, InstantiationException {
+        if (source == null)
+            return null;
+        final int nextLevel = currentLevel + 1;
+        if (nextLevel >= levelLimit)
+            return null;
+
+        //The 'source' could be in jpa-type (like org.hibernate.collection.internal.PersistentMap)
+        //So we cannot use direct copy: (Map) SerializationUtils.clone((Serializable) source);
+        Map target = (Map) mapFieldMetadata.getMapImplementType().newInstance();
+        final TtFieldCopier keyCopier = new TtFieldCopier(topClassMetadata, mapFieldMetadata, true, false);
+        final TtFieldCopier valueCopier = new TtFieldCopier(topClassMetadata, mapFieldMetadata, false, true);
+        for (Object entryInObj : source.entrySet()) {
+            Map.Entry entry = (Map.Entry) entryInObj;
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            Object keyCpy = keyCopier.doCopy(key, nextLevel, levelLimit);
+            Object valueCpy = valueCopier.doCopy(value, nextLevel, levelLimit);
+            target.put(keyCpy, valueCpy);
+        }
+        return target;
+    }
+
 }

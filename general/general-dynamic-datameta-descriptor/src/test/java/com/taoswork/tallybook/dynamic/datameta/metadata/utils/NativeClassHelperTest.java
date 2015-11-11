@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.utils;
 
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.A;
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AA;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AAA;
 import com.taoswork.tallybook.testframework.general.CollectionAssert;
 import com.taoswork.tallybook.testframework.general.Converter;
@@ -102,5 +104,37 @@ public class NativeClassHelperTest {
         Assert.assertTrue("a".equals(_3Fields.get(0).getName()));
         Assert.assertTrue("aa".equals(_3Fields.get(1).getName()));
         Assert.assertTrue("aaa".equals(_3Fields.get(2).getName()));
+    }
+
+    @Test
+    public void testGetSuperClasses(){
+        {
+            Class[] AAAsSuper = NativeClassHelper.getSuperClasses(AAA.class, false);
+            Class[] AAAsSuperR = NativeClassHelper.getSuperClasses(AAA.class, true);
+
+            Assert.assertArrayEquals(new Class[]{AA.class, A.class}, AAAsSuper);
+            Assert.assertArrayEquals(new Class[]{A.class, AA.class}, AAAsSuperR);
+        }
+        {
+            Class[] AAAOsSuper = NativeClassHelper.getSuperClasses(AAA.class, false, true);
+            Class[] AAAOsSuperR = NativeClassHelper.getSuperClasses(AAA.class, true, true);
+
+            Assert.assertArrayEquals(new Class[]{AA.class, A.class, Object.class}, AAAOsSuper);
+            Assert.assertArrayEquals(new Class[]{Object.class, A.class, AA.class}, AAAOsSuperR);
+        }
+        {
+            Class[] AsSuper = NativeClassHelper.getSuperClasses(A.class, false);
+            Class[] AsSuperR = NativeClassHelper.getSuperClasses(A.class, true);
+
+            Assert.assertArrayEquals(new Class[]{}, AsSuper);
+            Assert.assertArrayEquals(new Class[]{}, AsSuperR);
+        }
+        {
+            Class[] AOsSuper = NativeClassHelper.getSuperClasses(A.class, false, true);
+            Class[] AOsSuperR = NativeClassHelper.getSuperClasses(A.class, true, true);
+
+            Assert.assertArrayEquals(new Class[]{Object.class}, AOsSuper);
+            Assert.assertArrayEquals(new Class[]{Object.class}, AOsSuperR);
+        }
     }
 }

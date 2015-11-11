@@ -164,7 +164,7 @@ public class MetadataServiceImpl implements MetadataService {
     private void innerAbsorbSuper(Class clz, MutableClassMetadata mergedMetadata, String idFieldName) {
         final List<IClassMetadata> tobeMerged = new ArrayList<IClassMetadata>();
 
-        Class[] superClasses = NativeClassHelper.getSuperClasses(clz, true);
+        Class[] superClasses = NativeClassHelper.getSuperClasses(clz, false);
         for (Class superClz : superClasses) {
             IClassMetadata mutableClassMetadata = innerGenerateMetadata(superClz, idFieldName);
             tobeMerged.add(mutableClassMetadata);

@@ -35,6 +35,8 @@ public interface IClassMetadata extends IFriendly, Cloneable, Serializable {
 
     boolean hasField(String fieldName);
 
+    Collection<String> getCollectionFields();
+
     Collection<String> getNonCollectionFields();
 
     //Referencing
@@ -44,10 +46,12 @@ public interface IClassMetadata extends IFriendly, Cloneable, Serializable {
 
     IClassMetadata getReferencingClassMetadata(Class entity);
 
-    //Validator and Gate
+    //Validator ,Gate and Copier
     Collection<String> getReadonlyValidators();
 
     Collection<String> getReadonlyValueGates();
+
+    String getValueCopier();
 
     //Clone
     IClassMetadata clone();

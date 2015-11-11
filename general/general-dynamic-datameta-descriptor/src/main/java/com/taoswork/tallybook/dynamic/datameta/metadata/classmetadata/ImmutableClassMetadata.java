@@ -35,6 +35,7 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     private final Map<String, TabMetadata> tabMetadataMap;
     private final Map<String, GroupMetadata> groupMetadataMap;
     private final Map<String, IFieldMetadata> fieldMetadataMap;
+    private final Collection<String> collectionFields;
     private final Collection<String> nonCollectionFields;
 
     //Referencing
@@ -44,6 +45,7 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     //Validator and Gate
     private final Collection<String> validators;
     private final Collection<String> valueGates;
+    private final String valueCopier;
 
     public ImmutableClassMetadata(IClassMetadata classMetadata) {
         this.name = classMetadata.getName();
@@ -58,12 +60,15 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
         this.tabMetadataMap = CloneUtility.makeClone(classMetadata.getReadonlyTabMetadataMap());
         this.groupMetadataMap = CloneUtility.makeClone(classMetadata.getReadonlyGroupMetadataMap());
         this.fieldMetadataMap = CloneUtility.makeClone(classMetadata.getReadonlyFieldMetadataMap());
+        this.collectionFields = CloneUtility.makeClone(classMetadata.getCollectionFields());
+        this.nonCollectionFields = CloneUtility.makeClone(classMetadata.getNonCollectionFields());
+
         this.referencingClassMetadata = CloneUtility.makeClone(classMetadata.getReadonlyReferencingClassMetadataMap());
         this.referencingClassMetadataPublished = classMetadata.isReferencingClassMetadataPublished();
 
         this.validators = CloneUtility.makeClone(classMetadata.getReadonlyValidators());
         this.valueGates = CloneUtility.makeClone(classMetadata.getReadonlyValueGates());
-        this.nonCollectionFields = CloneUtility.makeClone(classMetadata.getNonCollectionFields());
+        this.valueCopier = classMetadata.getValueCopier();
     }
 
     //Main
@@ -150,6 +155,11 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     }
 
     @Override
+    public Collection<String> getCollectionFields() {
+        return collectionFields;
+    }
+
+    @Override
     public Collection<String> getNonCollectionFields() {
         return nonCollectionFields;
     }
@@ -179,6 +189,11 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     @Override
     public Collection<String> getReadonlyValueGates() {
         return valueGates;
+    }
+
+    @Override
+    public String getValueCopier() {
+        return valueCopier;
     }
 
     //Clone

@@ -17,10 +17,17 @@ public class NativeClassHelper {
         .setScanSuper(false).setIncludeId(true).setIncludeStatic(false).setIncludeTransient(false);
 
     public static Class[] getSuperClasses(Class clz, boolean reverseOrder) {
+        return getSuperClasses(clz, reverseOrder, false);
+    }
+
+    public static Class[] getSuperClasses(Class clz, boolean reverseOrder, boolean includeObject) {
+        boolean skipObject = !includeObject;
         List<Class> classes = new ArrayList<Class>();
         if (clz != null) {
             do {
                 clz = clz.getSuperclass();
+                if(Object.class.equals(clz) && skipObject)
+                    continue;
                 if (clz != null) {
                     if (reverseOrder) {
                         classes.add(0, clz);

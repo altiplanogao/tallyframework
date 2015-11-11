@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.general.datadomain.support.entity;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.IEntityValidator;
+import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuegate.IEntityValueGate;
 
 import java.lang.annotation.ElementType;
@@ -23,4 +24,6 @@ public @interface PersistEntity {
     Class<? extends IEntityValidator>[] validators() default {};
 
     Class<? extends IEntityValueGate>[] valueGates() default {};
+
+    Class<? extends IEntityValueCopier> copier() default IEntityValueCopier.class;
 }
