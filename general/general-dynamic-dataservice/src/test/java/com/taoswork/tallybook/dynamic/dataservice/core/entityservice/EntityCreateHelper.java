@@ -7,8 +7,6 @@ import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
 import com.taoswork.tallybook.testframework.domain.zoo.impl.ZooKeeperImpl;
 import org.junit.Assert;
 
-import java.util.UUID;
-
 /**
  * Created by Gao Yuan on 2015/9/23.
  */
@@ -25,8 +23,7 @@ public class EntityCreateHelper {
                 adminEntity
                     .setEntityType(ZooKeeperImpl.class)
                     .setEntityCeilingType(ZooKeeper.class)
-                    .setProperty("name", name)
-                    .setProperty("uuid", UUID.randomUUID().toString());
+                    .setProperty("name", name);
                 PersistableResult<ZooKeeper> adminRes = dynamicEntityService.create(adminEntity);
                 ZooKeeper admin = adminRes.getEntity();
 
