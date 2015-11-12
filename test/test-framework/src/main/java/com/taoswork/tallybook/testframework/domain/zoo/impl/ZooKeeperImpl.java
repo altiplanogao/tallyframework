@@ -17,7 +17,9 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/4/15.
  */
 @Entity
-@Table(name = "ZOOKEEPER")
+@Table(name = "ZOOKEEPER",
+    indexes = {
+        @Index(name = "idx_uuid", columnList = "UUID")})
 @NamedQueries({
         @NamedQuery(name="Person.ReadPersonByName",
                 query="SELECT person FROM com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper person" +

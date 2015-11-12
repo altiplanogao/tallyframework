@@ -18,7 +18,12 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "TB_PERSON")
+@Table(name = "TB_PERSON",
+    indexes = {
+        @Index(name = "idx_birth", columnList = "BIRTH"),
+        @Index(name = "idx_email", columnList = "EMAIL"),
+        @Index(name = "idx_mobile", columnList = "MOBILE"),
+        @Index(name = "idx_uuid", columnList = "UUID")})
 @NamedQueries({
         @NamedQuery(name="Person.ReadPersonByName",
                 query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
