@@ -10,7 +10,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.ArrayFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
@@ -68,15 +67,11 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
             //handled in createFieldInfos()
             throw new IllegalArgumentException();
-        } else if (fieldMetadata instanceof ArrayFieldMetadata || fieldMetadata instanceof CollectionFieldMetadata) {
+        } else if (fieldMetadata instanceof CollectionFieldMetadata) {
             EntryTypeUnion entryTypeUnion = null;
-            if (fieldMetadata instanceof ArrayFieldMetadata) {
-                ArrayFieldMetadata typedFieldMetadata = (ArrayFieldMetadata) fieldMetadata;
-                entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
-            }else {
-                CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
-                entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
-            }
+
+            CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
+            entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
 
             Class referencingCollectionEntryCls = entryTypeUnion.getPresentationClass();
             if(referencingCollectionEntryCls != null){

@@ -50,9 +50,9 @@ public interface IEmployee extends Persistable {
 
     void setNickNameList(List<String> nickNameList);
 
-    String[] getNickNameArray();
-
-    void setNickNameArray(String[] nickNameArray);
+//    String[] getNickNameArray();
+//
+//    void setNickNameArray(String[] nickNameArray);
 
     long getSalary();
 

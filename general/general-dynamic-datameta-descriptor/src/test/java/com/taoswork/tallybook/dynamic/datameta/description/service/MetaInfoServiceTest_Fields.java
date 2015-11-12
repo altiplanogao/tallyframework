@@ -274,24 +274,24 @@ public class MetaInfoServiceTest_Fields {
         CollectionFieldInfo nickFmInTypedSet = (CollectionFieldInfo) employeeInfo.getField("nickNameSet");
         CollectionFieldInfo nickFmInSet = (CollectionFieldInfo) employeeInfo.getField("nickNameSetNonType");
         CollectionFieldInfo nickFmInList = (CollectionFieldInfo) employeeInfo.getField("nickNameList");
-        CollectionFieldInfo nickFmInArray = (CollectionFieldInfo) employeeInfo.getField("nickNameArray");
+//        CollectionFieldInfo nickFmInArray = (CollectionFieldInfo) employeeInfo.getField("nickNameArray");
 
         assertValidCollectionFieldInfo(nickFmInTypedSet, employeeInfo, StringEntryDelegate.class);
         assertValidCollectionFieldInfo(nickFmInSet, employeeInfo, StringEntryDelegate.class);
         assertValidCollectionFieldInfo(nickFmInList, employeeInfo, StringEntryDelegate.class);
-        assertValidCollectionFieldInfo(nickFmInArray, employeeInfo, NicknameEntryDelegate.class);
+//        assertValidCollectionFieldInfo(nickFmInArray, employeeInfo, NicknameEntryDelegate.class);
 
         try {
             ObjectMapper om = new ObjectMapper();
             String st1 = om.writeValueAsString(nickFmInTypedSet).replaceAll("nickNameSet", "--").replaceAll(""+nickFmInTypedSet.order, "");
             String st2 = om.writeValueAsString(nickFmInSet).replaceAll("nickNameSetNonType", "--").replaceAll(""+nickFmInSet.order, "");
             String st3 = om.writeValueAsString(nickFmInList).replaceAll("nickNameList", "--").replaceAll(""+nickFmInList.order, "");
-            String st4 = om.writeValueAsString(nickFmInArray).replaceAll("nickNameArray", "--").replaceAll(""+nickFmInArray.order, "");
-            String st4s = st4.replace(NicknameEntryDelegate.class.getName(), StringEntryDelegate.class.getName());
+//            String st4 = om.writeValueAsString(nickFmInArray).replaceAll("nickNameArray", "--").replaceAll(""+nickFmInArray.order, "");
+//            String st4s = st4.replace(NicknameEntryDelegate.class.getName(), StringEntryDelegate.class.getName());
             Assert.assertEquals(st1, st2);
             Assert.assertEquals(st1, st3);
-            Assert.assertNotEquals(st1, st4);
-            Assert.assertEquals(st1, st4s);
+//            Assert.assertNotEquals(st1, st4);
+//            Assert.assertEquals(st1, st4s);
         } catch (JsonProcessingException e) {
             Assert.fail();
         }

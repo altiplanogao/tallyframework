@@ -58,10 +58,10 @@ public class EmployeeImpl implements IEmployee{
     protected List<String> nickNameList;
 
     //in blob
-    @Column(name = "NICKNAME_ARRAY")
-    @Lob
-    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
-    protected String[] nickNameArray;
+//    @Column(name = "NICKNAME_ARRAY")
+//    @Lob
+//    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
+//    protected String[] nickNameArray;
 
     private long salary;
 
@@ -223,16 +223,16 @@ public class EmployeeImpl implements IEmployee{
         this.nickNameList = nickNameList;
     }
 
-    @Override
-    public String[] getNickNameArray() {
-        return nickNameArray;
-    }
-
-    @Override
-    public void setNickNameArray(String[] nickNameArray) {
-        this.nickNameArray = nickNameArray;
-    }
-
+//    @Override
+//    public String[] getNickNameArray() {
+//        return nickNameArray;
+//    }
+//
+//    @Override
+//    public void setNickNameArray(String[] nickNameArray) {
+//        this.nickNameArray = nickNameArray;
+//    }
+//
     @Override
     public long getSalary() {
         return salary;

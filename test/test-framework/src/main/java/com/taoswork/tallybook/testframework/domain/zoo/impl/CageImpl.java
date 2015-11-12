@@ -29,7 +29,7 @@ public class CageImpl implements Cage {
     private Date createDate;
 
 
-    private Animal[] currentTenants;
+//    private Animal[] currentTenants;
 
 //    private List<>
 

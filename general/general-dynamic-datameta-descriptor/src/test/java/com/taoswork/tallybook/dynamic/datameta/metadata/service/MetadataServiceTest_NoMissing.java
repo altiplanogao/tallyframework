@@ -105,7 +105,7 @@ public class MetadataServiceTest_NoMissing {
         callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameSet",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameSetNonType",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameList",  null, null, callCounter);
-        callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameArray",  null, null, callCounter);
+//        callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNameArray",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "salary",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "type",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "citizenId",  null, null, callCounter);

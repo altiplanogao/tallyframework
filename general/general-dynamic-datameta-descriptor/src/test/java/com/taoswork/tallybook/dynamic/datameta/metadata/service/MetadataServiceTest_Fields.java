@@ -6,7 +6,6 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.ArrayFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
@@ -191,17 +190,17 @@ public class MetadataServiceTest_Fields {
         CollectionFieldMetadata nickFmInTypedSet = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("nickNameSet");
         CollectionFieldMetadata nickFmInSet = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("nickNameSetNonType");
         CollectionFieldMetadata nickFmInList = (CollectionFieldMetadata) employeeMetadata.getFieldMetadata("nickNameList");
-        ArrayFieldMetadata nickFmInArray = (ArrayFieldMetadata) employeeMetadata.getFieldMetadata("nickNameArray");
+//        ArrayFieldMetadata nickFmInArray = (ArrayFieldMetadata) employeeMetadata.getFieldMetadata("nickNameArray");
 
         Assert.assertNotNull(nickFmInTypedSet);
         Assert.assertNotNull(nickFmInSet);
         Assert.assertNotNull(nickFmInList);
-        Assert.assertNotNull(nickFmInArray);
+//        Assert.assertNotNull(nickFmInArray);
 
         Assert.assertTrue(nickFmInTypedSet.isCollectionField());
         Assert.assertTrue(nickFmInSet.isCollectionField());
         Assert.assertTrue(nickFmInList.isCollectionField());
-        Assert.assertTrue(nickFmInArray.isCollectionField());
+//        Assert.assertTrue(nickFmInArray.isCollectionField());
 
         Assert.assertEquals(EntryType.Simple, nickFmInTypedSet.getEntryTypeUnion().getEntryType());
         Assert.assertEquals(EntryType.Simple, nickFmInSet.getEntryTypeUnion().getEntryType());

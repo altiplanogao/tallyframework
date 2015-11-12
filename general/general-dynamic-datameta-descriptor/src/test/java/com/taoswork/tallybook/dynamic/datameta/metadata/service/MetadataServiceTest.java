@@ -4,6 +4,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.FieldsZoo;
+import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.FieldsZooWithArray;
 import com.taoswork.tallybook.dynamic.datameta.testdata.clazzes.meta.AAA;
 import org.junit.After;
 import org.junit.Assert;
@@ -65,6 +66,17 @@ public class MetadataServiceTest {
             IFieldMetadata fieldMetadata = classMetadata.getReadonlyFieldMetadataMap().get(field.getName());
             Assert.assertNotNull(fieldMetadata);
         }
+    }
+
+    @Test
+    public void testGenericFieldsWithArray() {
+        Class<FieldsZooWithArray> fieldsZooClz = FieldsZooWithArray.class;
+        try {
+            IClassMetadata classMetadata = metadataService.generateMetadata(fieldsZooClz, null);
+        } catch (IllegalAccessError e) {
+            return;
+        }
+        Assert.fail();
     }
 
     @Test

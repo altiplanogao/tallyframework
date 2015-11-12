@@ -5,10 +5,14 @@ import java.util.*;
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
-public class FieldsZoo {
+public class FieldsZooWithArray {
     public int _int;
     public Integer _Integer;
     public String _String;
+
+    public int[] _intArray;
+    public Integer[] _IntegerArray;
+    public String[] _StringArray;
 
     public Set _Set;
     public Set<Integer> _IntegerSet;

@@ -32,10 +32,10 @@ public abstract class AnimalImpl implements Animal {
     @ElementCollection
     protected List<String> nickNameList;
 
-    //in blob
-    @Column(name = "NICKNAME_ARRAY")
-    @Lob
-    protected String[] nickNameArray;
+//    //in blob
+//    @Column(name = "NICKNAME_ARRAY")
+//    @Lob
+//    protected String[] nickNameArray;
 
     @Embedded
     @AttributeOverrides({
