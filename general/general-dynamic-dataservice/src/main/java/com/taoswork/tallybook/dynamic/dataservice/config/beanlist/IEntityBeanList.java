@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.config.beanlist;
 
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
@@ -15,7 +15,7 @@ public interface IEntityBeanList {
 
     EntityValueGateService entityValueGateService();
 
-    EntityValueCopierService entityValueCopierService();
+    EntityCopierService entityValueCopierService();
 
     DynamicEntityPersistenceService dynamicEntityPersistenceService();
 

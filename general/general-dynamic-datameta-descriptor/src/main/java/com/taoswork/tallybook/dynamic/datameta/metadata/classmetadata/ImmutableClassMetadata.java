@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -63,7 +65,15 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
         this.collectionFields = CloneUtility.makeClone(classMetadata.getCollectionFields());
         this.nonCollectionFields = CloneUtility.makeClone(classMetadata.getNonCollectionFields());
 
-        this.referencingClassMetadata = CloneUtility.makeClone(classMetadata.getReadonlyReferencingClassMetadataMap());
+        Map<String, IClassMetadata> referencingClassMetadataLocal = new HashMap<String, IClassMetadata>();
+        for(Map.Entry<String, IClassMetadata> entry : classMetadata.getReadonlyReferencingClassMetadataMap().entrySet()){
+            IClassMetadata cm = entry.getValue();
+            if(!(cm instanceof ImmutableClassMetadata)){
+                cm = new ImmutableClassMetadata(cm);
+            }
+            referencingClassMetadataLocal.put(entry.getKey(), cm);
+        }
+        this.referencingClassMetadata = Collections.unmodifiableMap(referencingClassMetadataLocal);
         this.referencingClassMetadataPublished = classMetadata.isReferencingClassMetadataPublished();
 
         this.validators = CloneUtility.makeClone(classMetadata.getReadonlyValidators());

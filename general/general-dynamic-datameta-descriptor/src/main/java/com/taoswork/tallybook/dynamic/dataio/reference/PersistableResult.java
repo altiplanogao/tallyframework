@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
+package com.taoswork.tallybook.dynamic.dataio.reference;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 

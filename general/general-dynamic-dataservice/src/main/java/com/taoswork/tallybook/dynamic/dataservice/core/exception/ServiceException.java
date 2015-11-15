@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.exception;
 /**
  * Created by Gao Yuan on 2015/8/16.
  */
-public class ServiceException extends Exception{
+public class ServiceException extends Exception {
     public ServiceException() {
     }
 
@@ -17,5 +17,18 @@ public class ServiceException extends Exception{
 
     public ServiceException(Throwable cause) {
         super(cause);
+    }
+
+    public static ServiceException treatAsServiceException(Throwable e) {
+        if (e instanceof ServiceException) {
+            return (ServiceException) e;
+        } else {
+            Throwable cause = e.getCause();
+            if (cause instanceof ServiceException) {
+                return (ServiceException) cause;
+            } else {
+                return new ServiceException(e);
+            }
+        }
     }
 }

@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDepartment extends Persistable {
-    int getId();
+    Long getId();
 
-    void setId(int id);
+    void setId(Long id);
 
     String getName();
 

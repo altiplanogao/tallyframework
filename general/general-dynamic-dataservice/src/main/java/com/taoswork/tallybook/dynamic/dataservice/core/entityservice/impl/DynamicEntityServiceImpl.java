@@ -6,9 +6,9 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataio.reference.ExternalReference;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
@@ -49,9 +49,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     private void entityAccessExceptionHandler(Exception e) throws ServiceException {
-        if (e instanceof ServiceException)
-            throw (ServiceException) e;
-        throw new ServiceException(e);
+        throw ServiceException.treatAsServiceException(e);
     }
 
     @Override

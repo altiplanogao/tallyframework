@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;

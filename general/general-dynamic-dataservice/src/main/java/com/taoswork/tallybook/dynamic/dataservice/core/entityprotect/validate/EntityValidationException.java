@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.general.datadomain.support.entity.validation.error.EntityValidationErrors;
 

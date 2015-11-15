@@ -1,22 +1,21 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.persistence.impl;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.translator.EntityInstanceTranslator;
+import com.taoswork.tallybook.dynamic.dataio.reference.ExternalReference;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValidationService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueCopierService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.EntityValueGateService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper.CopierContext;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.NoSuchRecordException;
 import com.taoswork.tallybook.dynamic.dataservice.core.persistence.PersistenceManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate.CrossEntityManagerPersistableCopier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
@@ -51,8 +50,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
     @Resource(name = EntityValueGateService.COMPONENT_NAME)
     protected EntityValueGateService entityValueGateService;
 
-    @Resource(name = EntityValueCopierService.COMPONENT_NAME)
-    protected EntityValueCopierService entityValueCopierService;
+    @Resource(name = EntityCopierService.COMPONENT_NAME)
+    protected EntityCopierService entityCopierService;
 
     protected class UnsafePersistence{
         public <T extends Persistable> T doCreate(Class<T> ceilingType, T entity) throws ServiceException {
@@ -180,9 +179,9 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
     private final UnsafePersistence unsafePm = new UnsafePersistence();
 
-    protected EntityInstanceTranslator converter = new EntityInstanceTranslator() {
+    protected EntityTranslatorOnDynamicMetadataAccess converter = new EntityTranslatorOnDynamicMetadataAccess() {
         @Override
-        protected DynamicEntityMetadataAccess getDynamicEntityMetadataAccess() {
+        protected IClassMetadataAccess getClassMetadataAccess() {
             return dynamicEntityMetadataAccess;
         }
     };
@@ -205,7 +204,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
         T result = unsafePm.doRead(entityType, key);
 
         CopierContext copierContext = new CopierContext(this.dynamicEntityMetadataAccess, externalReference);
-        T safeResult= this.entityValueCopierService.makeSafeCopyForRead(copierContext, result);
+        T safeResult= this.entityCopierService.makeSafeCopyForRead(copierContext, result);
 
         return unsafePm.makePersistableResult(safeResult);
     }
@@ -248,7 +247,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
             List<T> entities = new ArrayList();
             CopierContext copierContext = new CopierContext(this.dynamicEntityMetadataAccess, externalReference);
             for(T rec : records){
-                T shallowCopy = this.entityValueCopierService.makeSafeCopyForQuery(copierContext, rec);
+                T shallowCopy = this.entityCopierService.makeSafeCopyForQuery(copierContext, rec);
                 entities.add(shallowCopy);
             }
             safeResult.setEntityCollection(entities);

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 
 /**

@@ -7,8 +7,8 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 /**
  * Created by Gao Yuan on 2015/10/5.
  */
-public interface EntityValueCopierService {
-    public final static String COMPONENT_NAME = "EntityValueCopierService";
+public interface EntityCopierService {
+    public final static String COMPONENT_NAME = "EntityCopierService";
 
     <T extends Persistable> T makeSafeCopyForQuery(CopierContext copierContext, T rec) throws ServiceException;
 

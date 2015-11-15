@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
+package com.taoswork.tallybook.dynamic.dataio.reference;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

@@ -85,9 +85,7 @@ public class OpenEntityManagerAop implements ApplicationContextAware {
 
             return result;
         } catch (Throwable e) {
-            if (e instanceof ServiceException)
-                throw (ServiceException) e;
-            throw new ServiceException(e);
+            throw ServiceException.treatAsServiceException(e);
         }
     }
 }

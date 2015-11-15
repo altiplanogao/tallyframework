@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.general.extension.utils.CloneUtility;
 
 public abstract class EntityInstancePostRequest extends EntityRequest{

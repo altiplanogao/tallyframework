@@ -4,7 +4,7 @@ import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.PersistableResult;
+import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
 import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
@@ -18,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Gao Yuan on 2015/6/26.

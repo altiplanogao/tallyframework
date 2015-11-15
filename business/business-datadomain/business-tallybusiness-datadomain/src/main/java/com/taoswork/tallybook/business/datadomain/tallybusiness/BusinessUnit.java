@@ -3,6 +3,8 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 
+import java.util.List;
+
 /**
  * Created by Gao Yuan on 2015/4/16.
  */
@@ -19,4 +21,8 @@ public interface BusinessUnit extends Persistable {
     String getDescription();
 
     BusinessUnit setDescription(String description);
+
+    List<String> getTags();
+
+    void setTags(List<String> tags);
 }

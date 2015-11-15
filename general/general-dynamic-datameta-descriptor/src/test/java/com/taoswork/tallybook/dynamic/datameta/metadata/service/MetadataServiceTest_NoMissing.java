@@ -120,6 +120,7 @@ public class MetadataServiceTest_NoMissing {
         callCounter = assertFieldTabGroup(fieldMetadataMap, "vacationBookings",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "nickNames",  null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "address",  null, null, callCounter);
+        callCounter = assertFieldTabGroup(fieldMetadataMap, "addresses", null, null, callCounter);
         callCounter = assertFieldTabGroup(fieldMetadataMap, "phoneNumbers",  null, null, callCounter);
         Assert.assertEquals(fieldMetadataMap.size(), callCounter);
 

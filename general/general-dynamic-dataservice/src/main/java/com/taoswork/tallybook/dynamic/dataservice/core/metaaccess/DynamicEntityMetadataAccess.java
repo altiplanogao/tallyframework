@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.core.metaaccess;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadataAccess;
 import com.taoswork.tallybook.dynamic.datameta.metadata.classtree.EntityClassTree;
 
 import java.util.Collection;
@@ -20,7 +21,7 @@ import java.util.Locale;
  * 2. entityClass, means the input should be Person, Male or Female
  * 3. entityType, means the input could be entityInterface or entityClass
  */
-public interface DynamicEntityMetadataAccess {
+public interface DynamicEntityMetadataAccess extends IClassMetadataAccess {
     public static final String COMPONENT_NAME = "DynamicEntityMetadataAccess";
 
     /**
@@ -55,16 +56,6 @@ public interface DynamicEntityMetadataAccess {
      * @return
      */
     EntityClassTree getEntityClassTree(Class<?> entityCeilingType);
-
-    /**
-     * Get IClassMetadata of a specified entityType
-     *
-     * @param entityType, the entity-type of required IClassMetadata
-     * @return
-     */
-    IClassMetadata getClassMetadata(Class<?> entityType, boolean withHierarchy);
-
-    IClassMetadata getClassTreeMetadata(Class<?> entityCeilingType);
 
     /**
      * Get the entityInfo for a specified entityType

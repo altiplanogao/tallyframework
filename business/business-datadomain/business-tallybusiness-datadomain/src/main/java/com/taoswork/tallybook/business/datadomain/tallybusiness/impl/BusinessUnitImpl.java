@@ -6,8 +6,10 @@ import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_BU")
@@ -37,6 +39,9 @@ public class BusinessUnitImpl implements BusinessUnit {
     @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
     protected String description;
 
+    @ElementCollection
+    @PresentationCollection()
+    protected List<String> tags;
 
 /*  Hide for prototype
     protected List<Employee> employees;
@@ -78,5 +83,15 @@ public class BusinessUnitImpl implements BusinessUnit {
     public BusinessUnitImpl setDescription(String description) {
         this.description = description;
         return this;
+    }
+
+    @Override
+    public List<String> getTags() {
+        return tags;
+    }
+
+    @Override
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

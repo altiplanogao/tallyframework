@@ -1,6 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
-
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
+package com.taoswork.tallybook.dynamic.dataio.reference;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -32,7 +30,7 @@ public class ExternalReference {
         return !referencingSlots.isEmpty();
     }
 
-    public Map<String, EntityRecords> calcReferenceValue(IEntityRecordsFetcher fetcher) throws ServiceException {
+    public Map<String, EntityRecords> calcReferenceValue(IEntityRecordsFetcher fetcher) throws EntityFetchException {
         Map<String, EntityRecords> result = new HashMap<String, EntityRecords>();
         for(Map.Entry<Class, EntityReferences> entry : referencesByType.entrySet()){
             Class entityType = entry.getKey();
@@ -56,7 +54,7 @@ public class ExternalReference {
         return result;
     }
 
-    public void fillReferencingSlots(Map<String, EntityRecords> records) throws ServiceException{
+    public void fillReferencingSlots(Map<String, EntityRecords> records) throws EntityFetchException{
         try {
             for (ReferencingSlot slot : referencingSlots) {
                 EntityReference reference = slot.getEntityReference();
@@ -73,7 +71,7 @@ public class ExternalReference {
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new ServiceException(e);
+            throw new EntityFetchException(e);
         }
     }
 

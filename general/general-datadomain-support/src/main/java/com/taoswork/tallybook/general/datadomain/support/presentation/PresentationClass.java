@@ -21,18 +21,20 @@ public @interface PresentationClass {
     @Target({})
     public @interface Tab {
         public static final String DEFAULT_NAME = "General";
+        public static final int DEFAULT_ORDER = 9999;
 
         String name() default DEFAULT_NAME;
-        int order() default 9999;
+        int order() default DEFAULT_ORDER;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({})
     public @interface Group {
         public static final String DEFAULT_NAME = "General";
+        public static final int DEFAULT_ORDER = 9999;
 
         String name() default DEFAULT_NAME;
-        int order() default 9999;
+        int order() default DEFAULT_ORDER;
         boolean collapsed() default false;
     }
 }

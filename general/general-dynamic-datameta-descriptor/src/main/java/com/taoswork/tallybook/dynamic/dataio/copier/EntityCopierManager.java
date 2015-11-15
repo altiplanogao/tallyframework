@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper;
+package com.taoswork.tallybook.dynamic.dataio.copier;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +11,7 @@ import java.util.function.Function;
 /**
  * Created by Gao Yuan on 2015/11/11.
  */
-public class EntityValueCopierManager {
+public class EntityCopierManager {
 
     private final static FakeValueCopier FAKE_VALUE_COPIER = new FakeValueCopier();
     private final ConcurrentMap<String, IEntityValueCopier> valueGateCache = new ConcurrentHashMap<String, IEntityValueCopier>();

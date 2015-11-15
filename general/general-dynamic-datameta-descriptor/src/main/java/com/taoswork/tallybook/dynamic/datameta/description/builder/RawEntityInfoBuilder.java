@@ -10,6 +10,8 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.TabMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendly;
 import com.taoswork.tallybook.dynamic.datameta.metadata.friendly.IFriendlyOrdered;
+import com.taoswork.tallybook.dynamic.datameta.metadata.utils.FriendlyNameHelper;
+import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,33 +47,50 @@ final class RawEntityInfoBuilder {
         Collection<Class> collectionTypeReferenced = new HashSet<Class>();
 
         final IClassMetadata topClassMetadata = classMetadata;
-        //add tabs
-        Map<String, TabMetadata> tabMetadataMap = classMetadata.getReadonlyTabMetadataMap();
-        for (Map.Entry<String, TabMetadata> tabMetadataEntry : tabMetadataMap.entrySet()) {
-            TabMetadata tabMetadata = tabMetadataEntry.getValue();
-            RawTabInfo rawTabInfo = RawInfoCreator.createRawTabInfo(tabMetadata);
-            rawEntityInfo.addTab(rawTabInfo);
-        }
+        final Class<?> entityClass = classMetadata.getEntityClz();
 
-        //add fields
-        Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
+        //gather tab/group info
+        final Map<String, IFieldMetadata> fieldMetadataMap = classMetadata.getReadonlyFieldMetadataMap();
+        final Map<String, TabMetadata> tabMetadataMap = classMetadata.getReadonlyTabMetadataMap();
+        final Map<String, GroupMetadata> groupMetadataMap = classMetadata.getReadonlyGroupMetadataMap();
         for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
             IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
             if(fieldMetadata.getIgnored())
                 continue;
-            RawGroupInfo rawGroupInfo = null;
-            {
-                //handle groups
-                String tabName = fieldMetadata.getTabName();
-                String groupName = fieldMetadata.getGroupName();
-
-                RawTabInfo rawTabInfo = rawEntityInfo.getTab(tabName);
-                rawGroupInfo = rawTabInfo.getGroup(groupName);
-                if (rawGroupInfo == null) {
-                    rawGroupInfo = RawInfoCreator.createRawGroupInfo(classMetadata.getReadonlyGroupMetadataMap().get(groupName));
-                    rawTabInfo.addGroup(rawGroupInfo);
+            String tabName = fieldMetadata.getTabName();
+            RawTabInfo rawTabInfo = rawEntityInfo.getTab(tabName);
+            if(rawTabInfo == null){
+                TabMetadata tabMetadata = tabMetadataMap.get(tabName);
+                if(tabMetadata != null){
+                    rawTabInfo = RawInfoCreator.createRawTabInfo(tabMetadata);
+                }else {
+                    rawTabInfo = RawInfoCreator.createRawTabInfo(entityClass, tabName);
                 }
+                rawEntityInfo.addTab(rawTabInfo);
             }
+
+            String groupName = fieldMetadata.getGroupName();
+            RawGroupInfo rawGroupInfo = rawTabInfo.getGroup(groupName);
+            if(rawGroupInfo == null){
+                GroupMetadata groupMetadata = groupMetadataMap.get(groupName);
+                if(groupMetadata != null){
+                    rawGroupInfo = RawInfoCreator.createRawGroupInfo(groupMetadata);
+                }else {
+                    rawGroupInfo = RawInfoCreator.createRawGroupInfo(entityClass, groupName);
+                }
+                rawTabInfo.addGroup(rawGroupInfo);
+            }
+        }
+
+        //add fields
+        for (Map.Entry<String, IFieldMetadata> fieldMetadataEntry : fieldMetadataMap.entrySet()) {
+            IFieldMetadata fieldMetadata = fieldMetadataEntry.getValue();
+            if(fieldMetadata.getIgnored())
+                continue;
+            String tabName = fieldMetadata.getTabName();
+            String groupName = fieldMetadata.getGroupName();
+            RawTabInfo rawTabInfo = rawEntityInfo.getTab(tabName);
+            RawGroupInfo rawGroupInfo = rawTabInfo.getGroup(groupName);
 
             Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topClassMetadata, fieldMetadata, collectionTypeReferenced);
             for(IFieldInfo fi : fieldInfos){
@@ -111,9 +130,25 @@ final class RawEntityInfoBuilder {
             return rawGroupInfo;
         }
 
+        static RawGroupInfo createRawGroupInfo(Class entityCls, String groupName) {
+            RawGroupInfo rawGrpInfo = new RawGroupInfoImpl();
+            rawGrpInfo.setName(groupName)
+                .setFriendlyName(FriendlyNameHelper.makeFriendlyName4ClassGroup(entityCls, groupName));
+            rawGrpInfo.setOrder(PresentationClass.Group.DEFAULT_ORDER);
+            return rawGrpInfo;
+        }
+
         static RawTabInfo createRawTabInfo(TabMetadata tabMetadata) {
             RawTabInfo rawTabInfo = new RawTabInfoImpl();
             copyOrderedFriendlyMetadata(tabMetadata, rawTabInfo);
+            return rawTabInfo;
+        }
+
+        static RawTabInfo createRawTabInfo(Class entityCls, String tabName) {
+            RawTabInfo rawTabInfo = new RawTabInfoImpl();
+            rawTabInfo.setName(tabName)
+                .setFriendlyName(FriendlyNameHelper.makeFriendlyName4ClassTab(entityCls, tabName));
+            rawTabInfo.setOrder(PresentationClass.Tab.DEFAULT_ORDER);
             return rawTabInfo;
         }
 

@@ -116,6 +116,9 @@ public class EmployeeImpl implements IEmployee{
     @Embedded private Address address;
 
     @ElementCollection
+    private List<Address> addresses;
+
+    @ElementCollection
     @CollectionTable(name="EMP_PHONE")
     @MapKeyColumn(name="PHONE_TYPE")
     @Column(name="PHONE_NUM")

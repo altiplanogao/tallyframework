@@ -23,7 +23,7 @@ public class DepartmentImpl implements IDepartment {
         table = TallyMockupDataDomain.ID_GENERATOR_TABLE_NAME,
         initialValue = 0)
     @Column(name = "ID")
-    private int id;
+    private Long id;
 
     private String name;
 
@@ -62,12 +62,12 @@ public class DepartmentImpl implements IDepartment {
     private Map employeesByUnTypedName;
 
     @Override
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

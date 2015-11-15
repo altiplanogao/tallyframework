@@ -1,4 +1,6 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.dataio;
+package com.taoswork.tallybook.dynamic.dataio.reference;
+
+import com.taoswork.tallybook.dynamic.dataio.reference.EntityReference;
 
 import java.lang.reflect.Field;
 

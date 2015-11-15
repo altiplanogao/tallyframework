@@ -1,17 +1,15 @@
-package com.taoswork.tallybook.dynamic.dataservice.core.persistence.translate;
+package com.taoswork.tallybook.dynamic.dataio.copier;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadataAccess;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
-import com.taoswork.tallybook.dynamic.dataservice.core.dataio.ExternalReference;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.valuecoper.EntityValueCopierManager;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
+import com.taoswork.tallybook.dynamic.dataio.reference.ExternalReference;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
 
@@ -23,7 +21,7 @@ import java.util.Map;
  * Copy level start from 0
  * If the level limit is 1, there is only 1 level copied
  */
-public class CrossEntityManagerPersistableCopier {
+public class EntityCopier {
     private class TtFieldCopier {
         final IClassMetadata topClassMetadata;
         final EntryTypeUnion elementType;
@@ -84,38 +82,38 @@ public class CrossEntityManagerPersistableCopier {
         }
     }
 
-    private final DynamicEntityMetadataAccess dynamicEntityMetadataAccess;
+    private final IClassMetadataAccess classMetadataAccess;
     private final ExternalReference externalReference;
-    private final EntityValueCopierManager entityValueCopierManager;
+    private final EntityCopierManager entityCopierManager;
 
-    public CrossEntityManagerPersistableCopier(DynamicEntityMetadataAccess dynamicEntityMetadataAccess, ExternalReference externalReference, EntityValueCopierManager entityValueCopierManager) {
-        this.dynamicEntityMetadataAccess = dynamicEntityMetadataAccess;
+    public EntityCopier(IClassMetadataAccess classMetadataAccess, ExternalReference externalReference, EntityCopierManager entityCopierManager) {
+        this.classMetadataAccess = classMetadataAccess;
         this.externalReference = externalReference;
-        this.entityValueCopierManager = entityValueCopierManager;
+        this.entityCopierManager = entityCopierManager;
     }
 
-    public <T extends Persistable> T makeSafeCopyForQuery(T rec) throws ServiceException {
+    public <T extends Persistable> T makeSafeCopyForQuery(T rec) throws CopyException {
         return this.makeSafeCopy(rec, 1);
     }
 
-    public <T extends Persistable> T makeSafeCopyForRead(T rec) throws ServiceException {
+    public <T extends Persistable> T makeSafeCopyForRead(T rec) throws CopyException {
         return this.makeSafeCopy(rec, 2);
     }
 
-    private <T extends Persistable> T makeSafeCopy(T rec, int levelLimit) throws ServiceException {
+    private <T extends Persistable> T makeSafeCopy(T rec, int levelLimit) throws CopyException {
         if (rec == null)
             return null;
         if (levelLimit < 1)
             levelLimit = 1;
         try {
-            IClassMetadata topClassMetadata = this.dynamicEntityMetadataAccess.getClassMetadata(rec.getClass(), false);
+            IClassMetadata topClassMetadata = this.classMetadataAccess.getClassMetadata(rec.getClass(), false);
             return this.walkFieldsAndCopy(topClassMetadata, null, rec, 0, levelLimit);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new ServiceException(e);
+            throw new CopyException(e);
         } catch (InstantiationException e) {
             e.printStackTrace();
-            throw new ServiceException(e);
+            throw new CopyException(e);
         }
     }
 
@@ -130,7 +128,7 @@ public class CrossEntityManagerPersistableCopier {
 
         final Collection<String> handledFields;
         String valueCopierName = classMetadata.getValueCopier();
-        IEntityValueCopier valueCopier = this.entityValueCopierManager.getValueCopier(valueCopierName);
+        IEntityValueCopier valueCopier = this.entityCopierManager.getValueCopier(valueCopierName);
         if(valueCopier != null){
             valueCopier.copy(source, target);
             handledFields = valueCopier.handledFields();
