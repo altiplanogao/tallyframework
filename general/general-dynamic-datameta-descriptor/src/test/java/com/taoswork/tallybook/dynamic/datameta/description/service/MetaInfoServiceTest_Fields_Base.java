@@ -60,13 +60,13 @@ public class MetaInfoServiceTest_Fields_Base {
         Assert.assertNotNull(collectionFieldInfo);
         String entryType = collectionFieldInfo.getInstanceType();
         Assert.assertEquals(entryClass.getName(), entryType);
-        Map<String, IEntityInfo> referencingEntryInfos = holder.getEntryInfos();
+        Map<String, IEntityInfo> referencingEntryInfos = holder.getReferencing();
         IEntityInfo entryInfo = referencingEntryInfos.get(collectionFieldInfo.getInstanceType());
         Assert.assertNotNull(entryInfo);
     }
 
     protected static void assertValidMapFieldInfo(MapFieldInfo mapFieldInfo, EntityInfo holder, Class keyClass, Class valueClass){
-        Map<String, IEntityInfo> referencingEntryInfos = holder.getEntryInfos();
+        Map<String, IEntityInfo> referencingEntryInfos = holder.getReferencing();
         Assert.assertNotNull(mapFieldInfo);
 
         if(keyClass != null) {

@@ -142,7 +142,7 @@ public class EntityInfoImpl
 
     @Override
     @JsonIgnore
-    public Map<String, IEntityInfo> getEntryInfos() {
+    public Map<String, IEntityInfo> getReferencing() {
         if(entryInfos == null){
             synchronized (this){
                 if(entryInfos != null){

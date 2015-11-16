@@ -35,7 +35,7 @@ public class EntityFormInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     }
 
     @Override
-    public Map<String, IEntityInfo> getEntryInfos() {
+    public Map<String, IEntityInfo> getReferencing() {
         return referencingEntryInfos;
     }
 

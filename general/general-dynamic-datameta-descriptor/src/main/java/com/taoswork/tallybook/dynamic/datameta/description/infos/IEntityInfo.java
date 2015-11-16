@@ -16,7 +16,7 @@ public interface IEntityInfo extends NamedInfo {
     String getEntityType();
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    Map<String, IEntityInfo> getEntryInfos();
+    Map<String, IEntityInfo> getReferencing();
 }
 /*
 public enum EntityInfoType {
