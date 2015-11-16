@@ -4,24 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.*;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.CollectionFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.group.IGroupInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.ITabInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.handy.EntityGridInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.service.impl.MetaInfoServiceImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.service.MetadataService;
-import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
-import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeName;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeNameX;
-import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
-import com.taoswork.tallybook.testframework.domain.business.impl.*;
-import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntryDelegate;
+import com.taoswork.tallybook.testframework.domain.business.impl.CompanyImpl;
+import com.taoswork.tallybook.testframework.domain.business.impl.DepartmentImpl;
+import com.taoswork.tallybook.testframework.domain.business.impl.EmployeeImpl;
+import com.taoswork.tallybook.testframework.domain.business.impl.ParkingSpaceImpl;
 import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
 import com.taoswork.tallybook.testframework.general.CollectionAssert;
 import org.apache.commons.lang3.StringUtils;
@@ -34,41 +28,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/5/27.
  */
-public class MetaInfoServiceTest_Fields {
-    private final MetadataService metadataService;
-    private final MetaInfoService metaInfoService;
-
-    private final IClassMetadata companyMetadata;
-    private final IClassMetadata departmentMetadata;
-    private final IClassMetadata employeeMetadata;
-    private final IClassMetadata parkSpaceMetadata;
-
-    private final EntityInfo companyInfo;
-    private final EntityInfo departmentInfo;
-    private final EntityInfo employeeInfo;
-    private final EntityInfo parkSpaceInfo;
-    private final EntityInfo[] metainfos;
-
-    public MetaInfoServiceTest_Fields(){
-        metadataService = new MetadataServiceImpl();
-        metaInfoService = new MetaInfoServiceImpl();
-
-        companyMetadata = metadataService.generateMetadata(CompanyImpl.class, null);
-        departmentMetadata = metadataService.generateMetadata(DepartmentImpl.class, null);
-        employeeMetadata = metadataService.generateMetadata(EmployeeImpl.class, null);
-        parkSpaceMetadata = metadataService.generateMetadata(ParkingSpaceImpl.class, null);
-
-        companyInfo = metaInfoService.generateEntityMainInfo(companyMetadata);
-        departmentInfo = metaInfoService.generateEntityMainInfo(departmentMetadata);
-        employeeInfo = metaInfoService.generateEntityMainInfo(employeeMetadata);
-        parkSpaceInfo = metaInfoService.generateEntityMainInfo(parkSpaceMetadata);
-        metainfos = new EntityInfo[]{
-            companyInfo,
-            departmentInfo,
-            employeeInfo,
-            parkSpaceInfo
-        };
-    }
+public class MetaInfoServiceTest_Fields extends MetaInfoServiceTest_Fields_Base {
 
     @Test
     public void testEntityInfoTabs() {
@@ -269,102 +229,5 @@ public class MetaInfoServiceTest_Fields {
         Assert.assertEquals("citizen", citizenIdExternalForeignKeyFieldInfo.entityFieldName);
     }
 
-    @Test
-    public void testPrimitiveCollection() {
-        CollectionFieldInfo nickFmInTypedSet = (CollectionFieldInfo) employeeInfo.getField("nickNameSet");
-        CollectionFieldInfo nickFmInSet = (CollectionFieldInfo) employeeInfo.getField("nickNameSetNonType");
-        CollectionFieldInfo nickFmInList = (CollectionFieldInfo) employeeInfo.getField("nickNameList");
-//        CollectionFieldInfo nickFmInArray = (CollectionFieldInfo) employeeInfo.getField("nickNameArray");
 
-        assertValidCollectionFieldInfo(nickFmInTypedSet, employeeInfo, StringEntryDelegate.class);
-        assertValidCollectionFieldInfo(nickFmInSet, employeeInfo, StringEntryDelegate.class);
-        assertValidCollectionFieldInfo(nickFmInList, employeeInfo, StringEntryDelegate.class);
-//        assertValidCollectionFieldInfo(nickFmInArray, employeeInfo, NicknameEntryDelegate.class);
-
-        try {
-            ObjectMapper om = new ObjectMapper();
-            String st1 = om.writeValueAsString(nickFmInTypedSet).replaceAll("nickNameSet", "--").replaceAll(""+nickFmInTypedSet.order, "");
-            String st2 = om.writeValueAsString(nickFmInSet).replaceAll("nickNameSetNonType", "--").replaceAll(""+nickFmInSet.order, "");
-            String st3 = om.writeValueAsString(nickFmInList).replaceAll("nickNameList", "--").replaceAll(""+nickFmInList.order, "");
-//            String st4 = om.writeValueAsString(nickFmInArray).replaceAll("nickNameArray", "--").replaceAll(""+nickFmInArray.order, "");
-//            String st4s = st4.replace(NicknameEntryDelegate.class.getName(), StringEntryDelegate.class.getName());
-            Assert.assertEquals(st1, st2);
-            Assert.assertEquals(st1, st3);
-//            Assert.assertNotEquals(st1, st4);
-//            Assert.assertEquals(st1, st4s);
-        } catch (JsonProcessingException e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testPrimitiveMap() {
-        IFieldInfo fieldInfo = employeeInfo.getField("phoneNumbers");
-        Assert.assertNotNull(fieldInfo);
-        MapFieldInfo mapFieldInfo = (MapFieldInfo)fieldInfo;
-        assertValidMapFieldInfo(mapFieldInfo, employeeInfo, PhoneTypeEntryDelegate.class, StringEntryDelegate.class);
-    }
-
-    @Test
-    public void testEmbeddedCollection() {
-        CollectionFieldInfo vacationBookingsInfo = (CollectionFieldInfo) employeeInfo.getField("vacationBookings");
-        assertValidCollectionFieldInfo(vacationBookingsInfo, employeeInfo, VacationEntry.class);
-    }
-
-    @Test
-    public void testEmbeddedMap() {
-        MapFieldInfo employeesByNameXInfo = (MapFieldInfo) departmentInfo.getField("employeesByNameX");
-        assertValidMapFieldInfo(employeesByNameXInfo, departmentInfo, EmployeeNameX.class, EmployeeImpl.class);
-    }
-
-    @Test
-    public void testEntityCollection() {
-        CollectionFieldInfo departmentEmployeeFm = (CollectionFieldInfo) departmentInfo.getField("employees");
-        assertValidCollectionFieldInfo(departmentEmployeeFm,departmentInfo,EmployeeImpl.class );
-        CollectionFieldInfo departmentEmployeeListFm = (CollectionFieldInfo) departmentInfo.getField("employeesList");
-        assertValidCollectionFieldInfo(departmentEmployeeListFm,departmentInfo,EmployeeImpl.class );
-    }
-
-    @Test
-    public void testEntityMap() {
-        {
-            MapFieldInfo employeesByNameFm = (MapFieldInfo) departmentInfo.getField("employeesByName");
-            assertValidMapFieldInfo(employeesByNameFm, departmentInfo, EmployeeName.class, EmployeeImpl.class);
-        }
-        {
-            MapFieldInfo employeesFm = (MapFieldInfo) departmentInfo.getField("employeesByUnTypedId");
-            assertValidMapFieldInfo(employeesFm, departmentInfo, null, EmployeeImpl.class);
-        }
-        {
-            MapFieldInfo employeesFm = (MapFieldInfo) departmentInfo.getField("employeesByUnTypedName");
-            assertValidMapFieldInfo(employeesFm, departmentInfo, null, EmployeeImpl.class);
-        }
-    }
-
-    private static void assertValidCollectionFieldInfo(CollectionFieldInfo collectionFieldInfo, EntityInfo holder, Class entryClass){
-        Assert.assertNotNull(collectionFieldInfo);
-        String entryType = collectionFieldInfo.getEntryType();
-        Assert.assertEquals(entryClass.getName(), entryType);
-        Map<String, IEntityInfo> referencingEntryInfos = holder.getEntryInfos();
-        IEntityInfo entryInfo = referencingEntryInfos.get(collectionFieldInfo.getEntryType());
-        Assert.assertNotNull(entryInfo);
-    }
-
-    private static void assertValidMapFieldInfo(MapFieldInfo mapFieldInfo, EntityInfo holder, Class keyClass, Class valueClass){
-        Map<String, IEntityInfo> referencingEntryInfos = holder.getEntryInfos();
-        Assert.assertNotNull(mapFieldInfo);
-
-        if(keyClass != null) {
-            String keyEntryType = mapFieldInfo.getKeyEntryType();
-            Assert.assertEquals(keyClass.getName(), keyEntryType);
-            IEntityInfo keyEntityInfo = referencingEntryInfos.get(keyEntryType);
-            Assert.assertNotNull(keyEntityInfo);
-        }
-        if (valueClass != null) {
-            String valueEntryType = mapFieldInfo.getValueEntryType();
-            Assert.assertEquals(valueClass.getName(), valueEntryType);
-            IEntityInfo valueEntityInfo = referencingEntryInfos.get(valueEntryType);
-            Assert.assertNotNull(valueEntityInfo);
-        }
-    }
 }

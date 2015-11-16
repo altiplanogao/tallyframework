@@ -1,9 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataio.copier;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
-import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadataAccess;
-import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
@@ -12,6 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.dynamic.dataio.reference.ExternalReference;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -22,6 +20,29 @@ import java.util.Map;
  * If the level limit is 1, there is only 1 level copied
  */
 public class EntityCopier {
+    private class CollectionFieldCopier{
+        final IClassMetadata topClassMetadata;
+        private final boolean primitive;
+        private final IClassMetadata referencingClassMetadata;
+        public CollectionFieldCopier(final IClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
+            CollectionTypesUnion collectionTypesUnion = fieldMetadata.getCollectionTypesUnion();
+            this.topClassMetadata = topClassMetadata;
+            this.primitive = CollectionModel.Primitive.equals(collectionTypesUnion.getCollectionModel());
+            if(primitive){
+                referencingClassMetadata = topClassMetadata.getReferencingClassMetadata(collectionTypesUnion.getEntryTargetType());
+            }else {
+                referencingClassMetadata = null;
+            }
+        }
+
+        public Object doCopy(Object source, final int currentLevel, final int levelLimit) throws InstantiationException, IllegalAccessException {
+            if(primitive){
+                return source;
+            }else {
+                return makeCopyForEntity(topClassMetadata, source, referencingClassMetadata, currentLevel, levelLimit);
+            }
+        }
+    }
     private class TtFieldCopier {
         final IClassMetadata topClassMetadata;
         final EntryTypeUnion elementType;
@@ -56,10 +77,6 @@ public class EntityCopier {
                 entityClassMetadata = null;
                 model = MODEL_UNKNOWN;
             }
-        }
-
-        public TtFieldCopier(final IClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
-            this(topClassMetadata, fieldMetadata.getEntryTypeUnion());
         }
 
         public TtFieldCopier(final IClassMetadata topClassMetadata, MapFieldMetadata fieldMetadata, boolean asKey, boolean asValue) {
@@ -222,7 +239,7 @@ public class EntityCopier {
 
         //The 'source' could be in jpa-type (like org.hibernate.collection.internal.PersistentBag)
         //So we cannot use direct copy: (Collection) SerializationUtils.clone((Serializable) source);
-        TtFieldCopier copier = new TtFieldCopier(topClassMetadata, collectionFieldMetadata);
+        CollectionFieldCopier copier = new CollectionFieldCopier(topClassMetadata, collectionFieldMetadata);
         Collection target = (Collection) collectionFieldMetadata.getCollectionImplementType().newInstance();
         for (Object ele : source) {
             Object eleCpy = copier.doCopy(ele, nextLevel, levelLimit);

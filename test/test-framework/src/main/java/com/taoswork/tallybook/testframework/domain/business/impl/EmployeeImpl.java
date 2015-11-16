@@ -4,6 +4,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationMap;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
@@ -52,6 +53,7 @@ public class EmployeeImpl implements IEmployee{
     protected Set<String> nickNameSet;
 
     @ElementCollection(targetClass = String.class)
+    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
     protected Set nickNameSetNonType;
 
     @ElementCollection
@@ -104,6 +106,7 @@ public class EmployeeImpl implements IEmployee{
     private String cube;
 
     @ManyToMany(targetEntity = ProjectImpl.class)
+    @PresentationCollection(collectionModel = CollectionModel.Lookup)
     private Collection<IProject> projects;
 
     // ...

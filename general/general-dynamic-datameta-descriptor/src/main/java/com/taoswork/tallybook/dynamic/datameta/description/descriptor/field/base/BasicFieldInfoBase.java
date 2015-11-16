@@ -44,8 +44,4 @@ public abstract class BasicFieldInfoBase
         return Visibility.gridVisible(visibility);
     }
 
-    @Override
-    public boolean isCollection() {
-        return false;
-    }
 }

@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionLikeFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,8 +69,8 @@ public class ClassMetadataUtils {
             } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
                 EmbeddedFieldMetadata typedFieldMetadata = (EmbeddedFieldMetadata)fieldMetadata;
                 calcReferencedTypes(typedFieldMetadata.getClassMetadata(), entities);
-            } else if (fieldMetadata instanceof CollectionLikeFieldMetadata) {
-                Class entryType = ((CollectionLikeFieldMetadata) fieldMetadata).getEntryTypeUnion().getPresentationClass();
+            } else if (fieldMetadata instanceof CollectionFieldMetadata) {
+                Class entryType = ((CollectionFieldMetadata) fieldMetadata).getPresentationClass();
                 if (entryType != null) {
                     entities.add(entryType);
                 }

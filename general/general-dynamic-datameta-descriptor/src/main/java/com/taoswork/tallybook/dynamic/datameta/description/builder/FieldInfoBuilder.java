@@ -3,14 +3,16 @@ package com.taoswork.tallybook.dynamic.datameta.description.builder;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.IFieldInfoRW;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.*;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.CollectionFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.MapFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.*;
+import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedmap.MapFieldInfo;
+import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.apache.commons.lang3.StringUtils;
@@ -68,19 +70,37 @@ public class FieldInfoBuilder {
             //handled in createFieldInfos()
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
-            EntryTypeUnion entryTypeUnion = null;
+            final CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
+            CollectionTypesUnion collectionTypesUnion = typedFieldMetadata.getCollectionTypesUnion();
+//            final EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
 
-            CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
-            entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
-
-            Class referencingCollectionEntryCls = entryTypeUnion.getPresentationClass();
+            final Class referencingCollectionEntryCls = typedFieldMetadata.getPresentationClass();
             if(referencingCollectionEntryCls != null){
                 collectionTypeReferenced.add(referencingCollectionEntryCls);
             }
+            final String referencingCollectionEntryClsName = (referencingCollectionEntryCls != null)? referencingCollectionEntryCls.getName() : "";
 
-            CollectionFieldInfo collectionFieldInfo = new CollectionFieldInfo(name, friendlyName, editable,
-                (referencingCollectionEntryCls != null)? referencingCollectionEntryCls.getName() : "");
-            result = collectionFieldInfo;
+            final CollectionModel collectionModel = collectionTypesUnion.getCollectionModel();
+            switch (collectionModel){
+                case Primitive:
+                    result = new BasicCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    break;
+                case Embeddable:
+                    result = new BasicCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    break;
+                case Entity:
+                    result = new EntityEntryCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    break;
+                case Lookup:
+                    result = new EntityRefCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    break;
+                case AdornedLookup:
+                    result = new EntityRefAdornedCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    break;
+                default:
+                    throw new IllegalArgumentException("CollectionModel not supported: " + collectionModel);
+            }
+
         } else if (fieldMetadata instanceof MapFieldMetadata) {
             MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
             EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();

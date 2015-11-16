@@ -20,11 +20,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface PresentationCollection {
+
+    CollectionModel collectionModel() default CollectionModel.Unknown;
+
     /**
      * Optional, and only useful on 1.2.Case C
      * @return
-     Class joinEntity() default void.class;
      */
+    Class joinEntity() default void.class;
 
     Class<? extends ISimpleEntryDelegate> simpleEntryDelegate() default ISimpleEntryDelegate.class;
 }

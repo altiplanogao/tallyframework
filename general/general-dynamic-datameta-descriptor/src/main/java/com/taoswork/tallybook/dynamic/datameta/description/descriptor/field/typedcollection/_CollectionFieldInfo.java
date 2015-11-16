@@ -7,7 +7,7 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base
  *
  * See comments in PresentationCollection ({@link com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection})
  */
-public class CollectionFieldInfo extends CollectionFieldInfoBase {
+public abstract class _CollectionFieldInfo extends CollectionFieldInfoBase {
     /**
      * Collection entry types: simple(embeddable included), entity
      * Collection entry creation type: simple(embeddable included), entity, join-table-entry
@@ -20,14 +20,15 @@ public class CollectionFieldInfo extends CollectionFieldInfoBase {
      * The difference between the 4 types are handled in the metadata,
      */
 
-//    private final String keyType;
-    private final String entryType;
-    public CollectionFieldInfo(String name, String friendlyName, boolean editable, String entryType) {
+    private final String instanceType;
+    public _CollectionFieldInfo(String name, String friendlyName, boolean editable, String instanceType) {
         super(name, friendlyName, editable);
-        this.entryType = entryType;
+        this.instanceType = instanceType;
     }
 
-    public String getEntryType() {
-        return entryType;
+    public String getInstanceType() {
+        return instanceType;
     }
+
+    public abstract String getEntryType();
 }

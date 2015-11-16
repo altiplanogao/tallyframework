@@ -1,4 +1,4 @@
-package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection;
+package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedmap;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.CollectionFieldInfoBase;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;

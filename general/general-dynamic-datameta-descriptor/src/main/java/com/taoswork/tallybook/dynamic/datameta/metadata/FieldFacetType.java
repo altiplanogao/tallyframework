@@ -14,7 +14,6 @@ public enum FieldFacetType {
 
     Embedded,
 
-    Array,
     Collection,
     Map;
 }

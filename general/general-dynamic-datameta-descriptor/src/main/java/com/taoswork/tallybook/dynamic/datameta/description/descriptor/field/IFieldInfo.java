@@ -17,7 +17,5 @@ public interface IFieldInfo extends NamedOrderedInfo {
 
     boolean isFormVisible();
 
-    boolean isCollection();
-
     boolean ignored();
 }

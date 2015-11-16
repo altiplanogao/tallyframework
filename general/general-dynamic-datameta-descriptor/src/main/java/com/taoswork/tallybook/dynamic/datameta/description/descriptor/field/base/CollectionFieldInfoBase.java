@@ -9,7 +9,6 @@ public abstract class CollectionFieldInfoBase extends FieldInfoBase implements I
         super(name, friendlyName, editable);
     }
 
-    @Override
     public boolean isCollection() {
         return true;
     }
