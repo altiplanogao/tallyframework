@@ -59,4 +59,8 @@ public abstract class BaseCollectionFieldMetadata extends BaseFieldMetadata {
     final public boolean isId() {
         return false;
     }
+
+    public abstract Class getPresentationClass();
+
+    public abstract Class getPresentationCeilingClass();
 }

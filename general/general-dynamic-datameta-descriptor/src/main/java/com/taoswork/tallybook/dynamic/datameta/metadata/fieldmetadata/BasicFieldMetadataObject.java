@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-public class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements Serializable {
+public final class BasicFieldMetadataObject extends FriendlyOrderedMetadata implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(BasicFieldMetadataObject.class);
     private final int originalOrder;
     private boolean editable = true;

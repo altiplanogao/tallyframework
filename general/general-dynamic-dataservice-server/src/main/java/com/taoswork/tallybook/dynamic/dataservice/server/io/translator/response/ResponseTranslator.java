@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
+import com.taoswork.tallybook.dynamic.dataio.reference.ObjectResult;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dynamic.dataio.reference.PersistableResult;
 import com.taoswork.tallybook.dynamic.dataio.in.Entity;
@@ -47,8 +48,8 @@ public class ResponseTranslator {
         response.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(request.getEntityType())
-            .setBaseUrl(request.getBaseUri())
-            .setEntityUrl(request.getEntityUri());
+//            .setUri(request.getUri())
+            .setEntityUri(request.getEntityUri());
     }
 
     public void translateInfoResponse(EntityInfoRequest request,
@@ -121,6 +122,16 @@ public class ResponseTranslator {
                                         Locale locale) {
         translateInstanceRequest(request, response);
         response.setDeleted(deleted);
+        handleServiceException(e, response, locale);
+    }
+
+    public void translateCollectionEntryCreateFreshResponse(CollectionEntryCreateFreshRequest request,
+                                                            ObjectResult result,
+                                                            ServiceException e,
+                                                            CollectionEntryCreateFreshResponse response,
+                                                            Locale locale) {
+        translateRequest(request, response);
+ //       translateInstanceResponse(request, result, e, response);
         handleServiceException(e, response, locale);
     }
 

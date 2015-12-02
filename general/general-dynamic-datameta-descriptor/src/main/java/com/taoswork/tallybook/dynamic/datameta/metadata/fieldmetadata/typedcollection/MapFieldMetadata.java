@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.MapFie
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -57,5 +58,15 @@ public final class MapFieldMetadata extends BaseCollectionFieldMetadata {
 
     public Class getMapImplementType() {
         return mapImplementType;
+    }
+
+    @Override
+    public Class getPresentationClass() {
+        throw new NotImplementedException(this.getClass().getName());
+    }
+
+    @Override
+    public Class getPresentationCeilingClass() {
+        throw new NotImplementedException(this.getClass().getName());
     }
 }

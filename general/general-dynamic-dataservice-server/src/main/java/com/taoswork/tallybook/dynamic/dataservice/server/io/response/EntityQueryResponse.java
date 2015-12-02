@@ -8,8 +8,18 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.Enti
  * Created by Gao Yuan on 2015/6/1.
  */
 public class EntityQueryResponse extends EntityResponse{
+    private final String queryBaseUri;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     EntityQueryResult entities;
+
+    public EntityQueryResponse(String queryBaseUri) {
+        this.queryBaseUri = queryBaseUri;
+    }
+
+    public String getQueryBaseUri() {
+        return queryBaseUri;
+    }
 
     public EntityQueryResult getEntities() {
         return entities;

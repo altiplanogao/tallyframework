@@ -130,6 +130,7 @@ public class DataServiceBeanCreationHelper {
 
         List<String> basenameList = MessageUtility.getMessageBasenames(resolver, messageDirs, null);
         basenameList.add("classpath:/entity-messages/EntityGeneralMessages");
+        basenameList.add("classpath:/entity-messages/EntitySupportMessages");
         ms.setBasenames(basenameList.toArray(new String[basenameList.size()]));
 
         return ms;

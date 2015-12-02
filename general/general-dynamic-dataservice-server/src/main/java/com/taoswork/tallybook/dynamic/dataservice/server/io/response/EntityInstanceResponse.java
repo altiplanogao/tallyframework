@@ -18,12 +18,4 @@ public abstract class EntityInstanceResponse extends EntityResponse {
         this.entity = entity;
         return this;
     }
-
-    public Persistable getEntityObject(){
-        if(entity != null){
-            return entity.getData();
-        }
-        return null;
-    }
-
 }

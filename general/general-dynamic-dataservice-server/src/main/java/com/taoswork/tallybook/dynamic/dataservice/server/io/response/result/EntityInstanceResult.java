@@ -5,17 +5,17 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 /**
  */
 public class EntityInstanceResult {
-    Persistable data;
     String dataName;
     String idKey;
     String idValue;
+    Persistable bean;
 
-    public Persistable getData() {
-        return data;
+    public Persistable getBean() {
+        return bean;
     }
 
-    public EntityInstanceResult setData(Persistable data) {
-        this.data = data;
+    public EntityInstanceResult setBean(Persistable bean) {
+        this.bean = bean;
         return this;
     }
 

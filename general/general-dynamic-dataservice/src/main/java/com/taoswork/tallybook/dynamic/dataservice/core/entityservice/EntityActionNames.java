@@ -15,5 +15,4 @@ public final class EntityActionNames {
     public static final String INSPECT = "inspect";
 
     public static final String SAVE = "save";
-    public static final String REORDER = "reorder";
 }

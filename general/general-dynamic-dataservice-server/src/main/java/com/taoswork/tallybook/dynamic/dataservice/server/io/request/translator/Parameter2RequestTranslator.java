@@ -116,11 +116,11 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityQueryRequest makeQueryRequest(EntityTypeParameter entityTypeParam,
-                                                      String baseUri, String fullUrl,
+                                                      String uri, String fullUrl,
                                                       MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
         EntityQueryRequest request = new EntityQueryRequest();
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(baseUri);
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(uri);
         _queryRequestSetPropertyCriterias(request, requestParams);
         _fillInfoCriterias(request, requestParams, infoFilter);
 
@@ -128,29 +128,29 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityCreateFreshRequest makeCreateFreshRequest(EntityTypeParameter entityTypeParam,
-                                                                  String baseUri, String fullUrl) {
+                                                                  String uri, String fullUrl) {
         EntityCreateFreshRequest request = new EntityCreateFreshRequest();
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(baseUri));
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityCreateRequest makeCreateRequest(EntityTypeParameter entityTypeParam,
-                                                        String baseUri, String fullUrl, Entity entity) {
+                                                        String uri, String fullUrl, Entity entity) {
         EntityCreateRequest request = new EntityCreateRequest(entity);
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(baseUri));
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
         request.clearEntityInfoType();
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityReadRequest makeReadRequest(EntityTypeParameter entityTypeParam,
-                                                    String baseUri, String fullUrl, String id) {
+                                                    String uri, String fullUrl, String id) {
         EntityReadRequest request = new EntityReadRequest();
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(baseUri));
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
         request.setId(id);
         request.addEntityInfoType(EntityInfoType.Form);
 
@@ -158,20 +158,20 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityUpdateRequest makeUpdateRequest(EntityTypeParameter entityTypeParam,
-                                                        String baseUri, String fullUrl, Entity entity) {
+                                                        String uri, String fullUrl, Entity entity) {
         EntityUpdateRequest request = new EntityUpdateRequest(entity);
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(baseUri));
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
         request.clearEntityInfoType();
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityDeleteRequest makeDeleteRequest(EntityTypeParameter entityTypeParam,
-                                                        String baseUri, String fullUrl, String id, Entity entity) {
+                                                        String uri, String fullUrl, String id, Entity entity) {
         EntityDeleteRequest request = new EntityDeleteRequest(entity);
-        request.setEntityRequest(entityTypeParam, baseUri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(baseUri));
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
         request.setId(id);
         if (entity.getEntityType() == null) {
             entity.setEntityType(entityTypeParam.getType());
@@ -194,5 +194,14 @@ public class Parameter2RequestTranslator {
                 }
             }
         }
+    }
+
+    public static CollectionEntryCreateFreshRequest makeCollectionCreateFreshRequest(EntityTypeParameter entityTypeParam,
+                                                                            String collectionField, String uri, String fullUrl) {
+        CollectionEntryCreateFreshRequest request = new CollectionEntryCreateFreshRequest(collectionField);
+        request.setEntityRequest(entityTypeParam, uri, fullUrl);
+        request.setEntityUri(UriUtility.findParent(uri));
+        request.addEntityInfoType(EntityInfoType.Form);
+        return request;
     }
 }

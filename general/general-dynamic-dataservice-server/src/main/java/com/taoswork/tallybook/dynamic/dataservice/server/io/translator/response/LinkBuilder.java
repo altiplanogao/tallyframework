@@ -2,96 +2,97 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response
 
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.GeneralRequestParameter;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityCreateFreshResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
-import com.taoswork.tallybook.general.extension.utils.UriUtility;
 import gumi.builders.UrlBuilder;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.hateoas.Link;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by Gao Yuan on 2015/8/5.
  */
 public class LinkBuilder {
 
-    public static void buildLinkForInfoResults(String fullUrl, EntityResponse response) {
-        response.add(new Link(fullUrl));
+    public static void buildLinkForInfoResults(EntityInfoRequest request, EntityResponse response) {
+        response.add(new Link(request.getFullUri()));
     }
 
-    public static void buildLinkForQueryResults(String fullRequestUrl, EntityQueryResponse response){
-        appendEntityLinks(UrlBuilder.fromString(fullRequestUrl).withParameters(null).toString(), response);
-        if(response.getErrors().containsError())
-            return;;
+    public static void buildLinkForQueryResults(EntityQueryRequest request, EntityQueryResponse response) {
+        appendEntityActionUris(request.getResourceName(), response);
+        if (response.getErrors().containsError())
+            return;
+
         QueryResultRange currentRange = response.getEntities().makeRange();
         QueryResultRange next = currentRange.next();
         QueryResultRange pre = currentRange.pre();
-        response.add(new Link(fullRequestUrl));
-        if(pre.isValid()){
-            UrlBuilder urlBuilder = UrlBuilder.fromString(fullRequestUrl);
-            if(pre.getStart() != 0) {
-                urlBuilder = urlBuilder.setParameter(GeneralRequestParameter.REQUEST_START_INDEX, ""+pre.getStart());
-            }else{
+        response.add(new Link(request.getFullUri()));
+        if (pre.isValid()) {
+            UrlBuilder urlBuilder = UrlBuilder.fromString(request.getFullUri());
+            if (pre.getStart() != 0) {
+                urlBuilder = urlBuilder.setParameter(GeneralRequestParameter.REQUEST_START_INDEX, "" + pre.getStart());
+            } else {
                 urlBuilder = urlBuilder.removeParameters(GeneralRequestParameter.REQUEST_START_INDEX);
             }
             response.add(new Link(urlBuilder.toString()).withRel(Link.REL_PREVIOUS));
         }
-        if(next.isValid()){
-            UrlBuilder urlBuilder = UrlBuilder.fromString(fullRequestUrl);
-            if(next.getStart() != 0) {
-                urlBuilder = urlBuilder.setParameter(GeneralRequestParameter.REQUEST_START_INDEX, ""+next.getStart());
-            }else{
+        if (next.isValid()) {
+            UrlBuilder urlBuilder = UrlBuilder.fromString(request.getFullUri());
+            if (next.getStart() != 0) {
+                urlBuilder = urlBuilder.setParameter(GeneralRequestParameter.REQUEST_START_INDEX, "" + next.getStart());
+            } else {
                 urlBuilder = urlBuilder.removeParameters(GeneralRequestParameter.REQUEST_START_INDEX);
             }
             response.add(new Link(urlBuilder.toString()).withRel(Link.REL_NEXT));
         }
     }
 
-    public static void buildLinkForReadResults(String fullUrl, EntityReadResponse response) {
-        response.add(new Link(fullUrl));
-        String entityUrl = UriUtility.findParent(fullUrl);
-        entityUrl = (entityUrl.endsWith("/")? entityUrl.substring(0, entityUrl.length() - 1) : entityUrl);
-        appendEntityLinks(UrlBuilder.fromString(entityUrl).withParameters(null).toString(), response);
-        appendEntityInstanceLinks(fullUrl, response);
+    public static void buildLinkForReadResults(EntityReadRequest request, EntityReadResponse response) {
+        response.add(new Link(request.getFullUri()));
+        appendEntityActionUris(request.getResourceName(), response);
     }
 
-    public static void buildLinkForNewInstanceResults(String fullUrl, EntityCreateFreshResponse response) {
-        response.add(new Link(fullUrl));
+    public static void buildLinkForNewInstanceResults(EntityCreateFreshRequest request, EntityCreateFreshResponse response) {
+        response.add(new Link(request.getFullUri()));
+    }
+
+    public static String buildLinkForReadInstance(String entityName){
+        return EntityActionPaths.uriTemplateForRead(entityName);
     }
     /**
      *
-     * @param entityUrl, url with entitytype path, example: http://localhost:2222/xxx
+     * @param entityName, url with entitytype path, example: http://localhost:2222/{entityName}
      * @param response
      */
-    private static void appendEntityLinks (String entityUrl, EntityResponse response){
-        {   //search
-            response.add(new Link(entityUrl).withRel(EntityActionNames.QUERY));
-        }
-        {   //add
-            UrlBuilder urlBuilder = UrlBuilder.fromString(entityUrl).withParameters(null);
-            String path = urlBuilder.path + EntityActionPaths.CREATE;
-            urlBuilder.withPath(path).toString();
-            response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.CREATE));
-        }
+    private static void appendEntityActionUris (String entityName, EntityResponse response){
         {   //inspect
-            UrlBuilder urlBuilder = UrlBuilder.fromString(entityUrl).withParameters(null);
-            String path = urlBuilder.path + EntityActionPaths.INSPECT;
-            urlBuilder.withPath(path).toString();
-            response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.INSPECT));
+            String uri = EntityActionPaths.uriTemplateForInfo(entityName);
+            response.add(new Link(uri).withRel(EntityActionNames.INSPECT));
         }
-    }
-
-    private static void appendEntityInstanceLinks (String entityObjectUrl,  EntityResponse response){
+        {   //search
+            response.add(new Link(EntityActionPaths.uriTemplateForQuery(entityName)).withRel(EntityActionNames.QUERY));
+        }
+        {   //create
+            String uri = EntityActionPaths.uriTemplateForAdd(entityName);
+            response.add(new Link(uri).withRel(EntityActionNames.CREATE));
+        }
+        {   //read
+            String uri = EntityActionPaths.uriTemplateForRead(entityName);
+            response.add(new Link(uri).withRel(EntityActionNames.READ));
+        }
         {   //update
-            response.add(new Link(entityObjectUrl).withRel(EntityActionNames.UPDATE));
+            String uri = EntityActionPaths.uriTemplateForUpdate(entityName);
+            response.add(new Link(uri).withRel(EntityActionNames.UPDATE));
         }
         {   //delete
-            UrlBuilder urlBuilder = UrlBuilder.fromString(entityObjectUrl).withParameters(null);
-            String path = urlBuilder.path + EntityActionPaths.DELETE;
-            urlBuilder.withPath(path).toString();
-            response.add(new Link(urlBuilder.withPath(path).toString()).withRel(EntityActionNames.DELETE));
+            String uri = EntityActionPaths.uriTemplateForDelete(entityName);
+            response.add(new Link(uri).withRel(EntityActionNames.DELETE));
         }
     }
 

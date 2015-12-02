@@ -6,14 +6,23 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActio
  * Created by Gao Yuan on 2015/8/5.
  */
 public class EntityDeleteResponse extends EntityResponse {
+    private final String beanUri;
+
+    //TODO: use EntityDeleteResult instead
+    boolean deleted = false;
+
+    public EntityDeleteResponse(String beanUri) {
+        this.beanUri = beanUri;
+    }
+
+    public String getBeanUri() {
+        return beanUri;
+    }
 
     @Override
     public String getAction() {
         return EntityActionNames.DELETE;
     }
-
-    //TODO: use EntityDeleteResult instead
-    boolean deleted = false;
 
     public boolean isDeleted() {
         return deleted;

@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -93,4 +96,22 @@ public abstract class BaseController {
         return DataView;
     }
 
+    protected static String uriFromRequest(HttpServletRequest request){
+        try {
+            URI uriobj = new URI(null, null, request.getRequestURI(), request.getQueryString(), null);
+            return uriobj.toString();
+        } catch (URISyntaxException e) {
+            String query = request.getQueryString();
+            String uri = request.getRequestURI();
+            if(StringUtils.isEmpty(query)){
+                return uri;
+            }else {
+                return uri + "?" + query;
+            }
+        }
+    }
+
+    protected Locale getLocale(HttpServletRequest request){
+        return request.getLocale();
+    }
 }

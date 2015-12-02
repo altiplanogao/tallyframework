@@ -2,37 +2,29 @@ package com.taoswork.tallybook.adminmvc.controllers.entities;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
-import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ExternalForeignEntityFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
+import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataio.in.Entity;
+import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
-import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityErrors;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.solution.menu.IMenu;
 import com.taoswork.tallybook.general.solution.menu.MenuPath;
-import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
-import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
-import com.taoswork.tallybook.general.web.control.BaseController;
-import org.apache.commons.httpclient.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -43,7 +35,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -59,17 +50,9 @@ import java.util.Set;
  */
 @Controller(AdminBasicEntityController.CONTROLLER_NAME)
 @RequestMapping("/{entityTypeName:^[\\w|\\-|\\.]+$}")
-public class AdminBasicEntityController extends BaseController {
+public class AdminBasicEntityController extends _AdminBasicEntityControllerBase {
     private static Logger LOGGER = LoggerFactory.getLogger(AdminBasicEntityController.class);
-
     public static final String CONTROLLER_NAME = "AdminBasicEntityController";
-
-    private static class VIEWS {
-        static final String Redirect2Home = "redirect:/";
-        static final String Redirect2Failure = "redirect:failure";
-        static final String FramedView = "entity/content/framedView";
-        static final String SimpleView = "entity/content/simpleView";
-    }
 
     @Resource(name = AdminMenuService.SERVICE_NAME)
     protected AdminMenuService adminMenuService;
@@ -80,12 +63,6 @@ public class AdminBasicEntityController extends BaseController {
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE)
-    private CachedMessageLocalizedDictionary commonMessage;
-
-    private Map<String, String> getCommonMessage(Locale locale) {
-        return commonMessage.getTranslated(locale);
-    }
 
     private Helper helper = new Helper();
 
@@ -106,12 +83,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Home;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
+            request.getRequestURI(), uriFromRequest(request), requestParams, getParamInfoFilter());
         infoRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityInfoResponse entityResponse = frontEndEntityService.getInfoResponse(infoRequest, locale);
@@ -121,7 +98,6 @@ public class AdminBasicEntityController extends BaseController {
     //////////////////////////////////////////////////////////////////////////////////////
     /// CRUDQ                                                                       //////
     //////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Renders the main entity listing for the specified class, which is based on the current entityTypeName with some optional
      * criteria
@@ -138,7 +114,6 @@ public class AdminBasicEntityController extends BaseController {
                         Model model,
                         @PathVariable Map<String, String> pathVars,
                         @RequestParam MultiValueMap<String, String> requestParams) {
-
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
@@ -146,12 +121,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Home;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), requestParams, getParamInfoFilter());
+            request.getRequestURI(), uriFromRequest(request), requestParams, getParamInfoFilter());
         entityRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
@@ -207,7 +182,6 @@ public class AdminBasicEntityController extends BaseController {
     public String createFresh(HttpServletRequest request, HttpServletResponse response,
                               Model model,
                               @PathVariable Map<String, String> pathVars) {
-
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
@@ -215,12 +189,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Home;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request));
+            request.getRequestURI(), uriFromRequest(request));
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
         if (isAjaxDataRequest(request)) {
@@ -280,7 +254,6 @@ public class AdminBasicEntityController extends BaseController {
                          Model model,
                          @PathVariable Map<String, String> pathVars,
                          @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result) {
-
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName, entityForm);
         Class entityType = entityTypes.getType();
@@ -296,12 +269,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Failure;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
+            request.getRequestURI(), uriFromRequest(request), entityForm);
         EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
         boolean success = createResponse.success();
@@ -329,7 +302,6 @@ public class AdminBasicEntityController extends BaseController {
                        Model model,
                        @PathVariable Map<String, String> pathVars,
                        @PathVariable("id") String id) {
-
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
@@ -337,12 +309,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Home;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
+            request.getRequestURI(), uriFromRequest(request), id);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
         if (isAjaxDataRequest(request)) {
@@ -433,12 +405,12 @@ public class AdminBasicEntityController extends BaseController {
             return VIEWS.Redirect2Failure;
         }
 
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), entityForm);
+            request.getRequestURI(), uriFromRequest(request), entityForm);
         EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
         boolean success = updateResponse.success();
@@ -480,12 +452,12 @@ public class AdminBasicEntityController extends BaseController {
         if (!(isAjaxRequest(request))) {
             return VIEWS.Redirect2Failure;
         }
-        Locale locale = request.getLocale();
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id, entityForm);
+            request.getRequestURI(), uriFromRequest(request), id, entityForm);
 
         EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
         boolean success = deleteResponse.success();
@@ -501,368 +473,157 @@ public class AdminBasicEntityController extends BaseController {
     /// Methods by Collection Field                                                 //////
     //////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @param request
-     * @param response
-     * @param model
-     * @param pathVars
-     * @param fieldName
-     * @param ids
-     * @param requestParams
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/{field:.*}/details", method = RequestMethod.GET)
-    public @ResponseBody Map<String, String> getCollectionValueDetails(HttpServletRequest request, HttpServletResponse response, Model model,
-                                                                       @PathVariable Map<String, String> pathVars,
-                                                                       @PathVariable(value="field") String fieldName,
-                                                                       @RequestParam String ids,
-                                                                       @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
-        return null;
-    }
-
-    /**
-     * Shows the modal dialog that is used to select a "to-one" collection item. For example, this could be used to show
-     * a list of categories for the ManyToOne field "defaultCategory" in Product.
-     *
-     * @param request
-     * @param response
-     * @param model
-     * @param pathVars
-     * @param fieldName
-     * @return the return view path
-     * @throws Exception
-     */
-    @RequestMapping(value = "/{field:.*}/select", method = RequestMethod.GET)
-    public String select(HttpServletRequest request, HttpServletResponse response, Model model,
-                                           @PathVariable  Map<String, String> pathVars,
-                                           @PathVariable(value="field") String fieldName,
-                                           @RequestParam(required = false) String requestingEntityId, /* could be null for new entity*/
-                                           @RequestParam  MultiValueMap<String, String> requestParams) throws Exception {
+    @RequestMapping(value = "/{collectionField:.*}/add", method = RequestMethod.GET)
+    public String collectionCreateFresh(HttpServletRequest request, HttpServletResponse response,
+                                        Model model,
+                                        @PathVariable Map<String, String> pathVars,
+                                        @PathVariable(value = "collectionField") String collectionField){
         String entityTypeName = getEntityTypeName(pathVars);
-        EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = entityTypes.getCeilingType();
-        if (entityType == null) {
+        EntityTypeParameter holderEntityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
+        Class entityType = holderEntityTypes.getType();
+        Class entityCeilingType = holderEntityTypes.getCeilingType();
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
+        if (entityType == null) {
+            return VIEWS.Redirect2Failure;
+        }
+        Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        DynamicEntityMetadataAccess metadataAccess = dataService.getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
-        Class instantiable = metadataAccess.getRootInstantiableEntityType(entityType);
-        IClassMetadata cm = metadataAccess.getClassMetadata(instantiable, false);
-        IFieldMetadata fieldMetadata = cm.getFieldMetadata(fieldName);
+        final DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
+        IClassMetadata cm = dynamicEntityService.inspectMetadata(entityType, true);
+        IFieldMetadata fm = cm.getFieldMetadata(collectionField);
+        if(!(fm instanceof BaseCollectionFieldMetadata)){
+           return null;
+        }
+        BaseCollectionFieldMetadata cfm = (BaseCollectionFieldMetadata)fm;
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
-        if(fieldMetadata instanceof ForeignEntityFieldMetadata){
-            ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
-            String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
+        EntityTypeParameter entityTypes = new EntityTypeParameter();
+        entityTypes.setTypeName(cfm.getName())
+            .setCeilingType(cfm.getPresentationCeilingClass())
+            .setType(cfm.getPresentationClass());
+        CollectionEntryCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCollectionCreateFreshRequest(entityTypes, collectionField,
+            request.getRequestURI(), uriFromRequest(request));
 
-            String oldUri = request.getRequestURI();
-            URI uri = new URI(request.getRequestURI(), false);
-            uri.setPath(fieldEntityType);
-            return "forward:/" + uri.toString();
-        }else if(fieldMetadata instanceof ExternalForeignEntityFieldMetadata){
-            ExternalForeignEntityFieldMetadata foreignEntityFieldMetadata = (ExternalForeignEntityFieldMetadata) fieldMetadata;
-            String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
-
-            String oldUri = request.getRequestURI();
-            URI uri = new URI(request.getRequestURI(), false);
-            uri.setPath(fieldEntityType);
-            return "forward:/" + uri.toString();
+        CollectionEntryCreateFreshResponse addResponse = frontEndEntityService.collectionEntryCreateFresh(addRequest, locale);
+        if (isAjaxDataRequest(request)) {
+            return makeDataView(model, addResponse);
         }
 
+        model.addAttribute("currentAction", EntityActionNames.CREATE);
+        model.addAttribute("formAction", request.getRequestURL().toString());
 
-        return "";
+        Person person = adminCommonModelService.getPersistentPerson();
+        AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
+        IMenu menu = adminMenuService.buildMenu(employee);
+        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+
+        model.addAttribute("menu", menu);
+        model.addAttribute("current", currentPath);
+        model.addAttribute("person", person);
+
+        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
+        String entityResultInJson = getObjectInJson(addResponse);
+        model.addAttribute("addData", entityResultInJson);
+
+        model.addAttribute("viewType", "entityAdd");
+        setCommonModelAttributes(model, locale);
+
+        boolean success = addResponse.success();
+        if (!success) {
+            if (!addResponse.getErrors().isAuthorized()) {
+                model.addAttribute("viewType", "noPermission");
+            } else {
+                setErrorModelAttributes(model, addResponse);
+                model.addAttribute("viewType", "uncheckedError");
+            }
+        }
+        if (isSimpleViewRequest(request)) {
+            return VIEWS.SimpleView;
+        } else {
+            model.addAttribute("formScope", "main");
+            return VIEWS.FramedView;
+        }
     }
 
-    @RequestMapping(value = "/{field:.*}/typeahead", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String, String>> getTypeaheadResults(HttpServletRequest request,
-                                                                       HttpServletResponse response, Model model,
-                                                                       @PathVariable Map<String, String> pathVars,
-                                                                       @PathVariable(value="field") String fieldName,
-                                                                       @RequestParam(required = false) String query,
-                                                                       @RequestParam(required = false) String requestingEntityId,
-                                                                       @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
+    @RequestMapping(value = "/{id}/{collectionField:.*}", method = RequestMethod.GET)
+    public String collectionQuery(HttpServletRequest request, HttpServletResponse response,
+                                  Model model,
+                                  @PathVariable Map<String, String> pathVars,
+                                  @PathVariable(value = "id") String id,
+                                  @PathVariable(value = "collectionField") String collectionField,
+                                  @RequestParam MultiValueMap<String, String> requestParams){
         return null;
     }
 
+    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.GET)
+    public String collectionCreateFresh(HttpServletRequest request, HttpServletResponse response,
+                                        Model model,
+                                        @PathVariable Map<String, String> pathVars,
+                                        @PathVariable(value = "id") String id,
+                                        @PathVariable(value = "collectionField") String collectionField){
+        return null;
+    }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-    ///         Details                                                             //////
-    //////////////////////////////////////////////////////////////////////////////////////
-//
-//    /**
-//     * Shows the modal popup for the current selected "to-one" field. For instance, if you are viewing a list of products
-//     * then this method is invoked when a user clicks on the name of the default category field.
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param collectionField
-//     * @param id
-//     * @return
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{collectionField:.*}/{id}/view", method = RequestMethod.GET)
-//    public String viewCollectionItemDetails(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                            @PathVariable Map<String, String> pathVars,
-//                                            @PathVariable(value = "collectionField") String collectionField,
-//                                            @PathVariable(value = "id") String id) throws Exception {
-//        return "";
-//    }
-//
-//    /**
-//     * Returns the records for a given collectionField filtered by a particular criteria
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param collectionField
-//     * @param criteriaForm
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}", method = RequestMethod.GET)
-//    public String getCollectionFieldRecords(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                            @PathVariable Map<String, String> pathVars,
-//                                            @PathVariable(value = "id") String id,
-//                                            @PathVariable(value = "collectionField") String collectionField,
-//                                            @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
-//        return "";
-//    }
-//
-//    /**
-//     * Shows the modal dialog that is used to add an item to a given collection. There are several possible outcomes
-//     * of this call depending on the type of the specified collection field.
-//     * <p>
-//     * <ul>
-//     * <li>
-//     * <b>Basic Collection (Persist)</b> - Renders a blank form for the specified target entity so that the user may
-//     * enter information and associate the record with this collection. Used by fields such as ProductAttribute.
-//     * </li>
-//     * <li>
-//     * <b>Basic Collection (Lookup)</b> - Renders a list grid that allows the user to click on an entity and select it.
-//     * Used by fields such as "allParentCategories".
-//     * </li>
-//     * <li>
-//     * <b>Adorned Collection (without form)</b> - Renders a list grid that allows the user to click on an entity and
-//     * select it. The view rendered by this is identical to basic collection (lookup), but will perform the operation
-//     * on an adorned field, which may carry extra meta-information about the created relationship, such as order.
-//     * </li>
-//     * <li>
-//     * <b>Adorned Collection (with form)</b> - Renders a list grid that allows the user to click on an entity and
-//     * select it. Once the user selects the entity, he will be presented with an empty form based on the specified
-//     * "maintainedAdornedTargetFields" for this field. Used by fields such as "crossSellProducts", which in addition
-//     * to linking an entity, provide extra fields, such as a promotional message.
-//     * </li>
-//     * <li>
-//     * <b>Map Collection</b> - Renders a form for the target entity that has an additional key field. This field is
-//     * populated either from the configured map keys, or as a result of a lookup in the case of a key based on another
-//     * entity. Used by fields such as the mediaMap on a Sku.
-//     * </li>
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param sectionKey
-//     * @param id
-//     * @param collectionField
-//     * @param requestParams
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.GET)
-//    public String showAddCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                        @PathVariable Map<String, String> pathVars,
-//                                        @PathVariable(value = "id") String id,
-//                                        @PathVariable(value = "collectionField") String collectionField,
-//                                        @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
-//        return "";
-//    }
-//
-//    /**
-//     * Adds the requested collection item
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param entityForm
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.POST)
-//    public String addCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                    @PathVariable Map<String, String> pathVars,
-//                                    @PathVariable(value = "id") String id,
-//                                    @PathVariable(value = "collectionField") String collectionField,
-//                                    @ModelAttribute(value = "entityForm") EntityForm entityForm, BindingResult result) throws Exception {
-//        return "";
-//    }
-//
-//    /**
-//     * Shows the appropriate modal dialog to edit the selected collection item
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param collectionItemId
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.GET)
-//    public String showUpdateCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                           @PathVariable Map<String, String> pathVars,
-//                                           @PathVariable(value = "id") String id,
-//                                           @PathVariable(value = "collectionField") String collectionField,
-//                                           @PathVariable(value = "collectionItemId") String collectionItemId) throws Exception {
-////        return showViewUpdateCollection(request, model, pathVars, id, collectionField, collectionItemId,
-////            "updateCollectionItem");
-//        return "";
-//
-//    }
-//
-//    /**
-//     * Shows the appropriate modal dialog to view the selected collection item. This will display the modal as readonly
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param collectionItemId
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}/view", method = RequestMethod.GET)
-//    public String showViewCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                         @PathVariable Map<String, String> pathVars,
-//                                         @PathVariable(value = "id") String id,
-//                                         @PathVariable(value = "collectionField") String collectionField,
-//                                         @PathVariable(value = "collectionItemId") String collectionItemId) throws Exception {
-////        String returnPath = showViewUpdateCollection(request, model, pathVars, id, collectionField, collectionItemId,
-////            "viewCollectionItem");
-////
-////        // Since this is a read-only view, actions don't make sense in this context
-////        EntityForm ef = (EntityForm) model.asMap().get("entityForm");
-////        ef.removeAllActions();
-////
-////        return returnPath;
-//        return "";
-//    }
-//
-//    /**
-//     * Updates the specified collection item
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param entityForm
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.POST)
-//    public String updateCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                       @PathVariable Map<String, String> pathVars,
-//                                       @PathVariable(value = "id") String id,
-//                                       @PathVariable(value = "collectionField") String collectionField,
-//                                       @PathVariable(value = "collectionItemId") String collectionItemId,
-//                                       @ModelAttribute(value = "entityForm") EntityForm entityForm, BindingResult result) throws Exception {
-//        return "";
-//    }
-//
-//    /**
-//     * Updates the given colleciton item's sequence. This should only be triggered for adorned target collections
-//     * where a sort field is specified -- any other invocation is incorrect and will result in an exception.
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param collectionItemId
-//     * @return an object explaining the state of the operation
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}/sequence", method = RequestMethod.POST)
-//    public
-//    @ResponseBody
-//    Map<String, Object> updateCollectionItemSequence(HttpServletRequest request,
-//                                                     HttpServletResponse response, Model model,
-//                                                     @PathVariable Map<String, String> pathVars,
-//                                                     @PathVariable(value = "id") String id,
-//                                                     @PathVariable(value = "collectionField") String collectionField,
-//                                                     @PathVariable(value = "collectionItemId") String collectionItemId,
-//                                                     @RequestParam(value = "newSequence") String newSequence) throws Exception {
-//        return null;
-//    }
-//
-//    /**
-//     * Removes the requested collection item
-//     * <p>
-//     * Note that the request must contain a parameter called "key" when attempting to delete a collection item from a
-//     * map collection.
-//     *
-//     * @param request
-//     * @param response
-//     * @param model
-//     * @param pathVars
-//     * @param id
-//     * @param collectionField
-//     * @param collectionItemId
-//     * @return the return view path
-//     * @throws Exception
-//     */
-//    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}/delete", method = RequestMethod.POST)
-//    public String removeCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-//                                       @PathVariable Map<String, String> pathVars,
-//                                       @PathVariable(value = "id") String id,
-//                                       @PathVariable(value = "collectionField") String collectionField,
-//                                       @PathVariable(value = "collectionItemId") String collectionItemId) throws Exception {
-//        return null;
-//    }
+    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.POST)
+    public String collectionCreate(HttpServletRequest request, HttpServletResponse response,
+                                   Model model,
+                                   @PathVariable Map<String, String> pathVars,
+                                   @PathVariable(value = "id") String id,
+                                   @PathVariable(value = "collectionField") String collectionField,
+                                   @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result){
+        return null;
+    }
+
+    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.GET)
+    public String collectionRead(HttpServletRequest request, HttpServletResponse response,
+                       Model model,
+                       @PathVariable Map<String, String> pathVars,
+                       @PathVariable("id") String id,
+                       @PathVariable(value = "collectionField") String collectionField,
+                       @PathVariable(value = "collectionItemId") String collectionItemId){
+        return null;
+    }
+
+    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.POST)
+    public String collectionUpdate(HttpServletRequest request, HttpServletResponse response,
+                                   Model model,
+                                   @PathVariable Map<String, String> pathVars,
+                                   @PathVariable(value = "id") String id,
+                                   @PathVariable(value = "collectionField") String collectionField,
+                                   @PathVariable(value = "collectionItemId") String collectionItemId,
+                                   @ModelAttribute(value = "entityForm") Entity entityForm,
+                                   BindingResult result,
+                                   RedirectAttributes ra) {
+        return null;
+    }
+    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}/reorder", method = RequestMethod.POST)
+    public String collectionReorder(HttpServletRequest request, HttpServletResponse response,
+                                    Model model,
+                                    @PathVariable Map<String, String> pathVars,
+                                    @PathVariable(value = "id") String id,
+                                    @PathVariable(value = "collectionField") String collectionField,
+                                    @PathVariable(value = "collectionItemId") String collectionItemId,
+                                    @RequestParam(value="newOrder") String newOrder){
+        return null;
+    }
+
+    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}/delete", method = RequestMethod.POST)
+    public String collectionDelete(HttpServletRequest request, HttpServletResponse response,
+                                   Model model,
+                                   @PathVariable Map<String, String> pathVars,
+                                   @PathVariable(value = "id") String id,
+                                   @PathVariable(value = "collectionField") String collectionField,
+                                   @PathVariable(value = "collectionItemId") String collectionItemId,
+                                   @ModelAttribute(value = "entityForm") Entity entityForm, BindingResult result){
+        return null;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////////////
     ///         Helper                                                              //////
     //////////////////////////////////////////////////////////////////////////////////////
-    protected String getEntityTypeName(Map<String, String> pathVars) {
-        return super.getPathVariable(pathVars, "entityTypeName");
-    }
-
-
-    private void setCommonModelAttributes(Model model, Locale locale) {
-        boolean production = RuntimePropertiesPublisher.instance().getBoolean("tally.production", false);
-        Map<String, String> messageMap = getCommonMessage(locale);
-        String messageDict = getObjectInJson(messageMap);
-
-        model.addAttribute("messageDict", messageDict);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
-        model.addAttribute("production", production);
-    }
-
-    private void setErrorModelAttributes(Model model, EntityResponse entityResponse) {
-        EntityErrors errors = entityResponse.getErrors();
-        if (errors != null && errors.containsError()) {
-            model.addAttribute("errors", errors.getGlobal());
-        }
-    }
-
-    protected String makeDataView(Model model, EntityResponse data) {
-        model.addAttribute("data", data);
-        model.addAttribute("success", data.success());
-        return DataView;
-    }
-
     class Helper {
         private CurrentPath buildCurrentPath(String sectionName, HttpServletRequest request) {
             CurrentPath currentPath = new CurrentPath();

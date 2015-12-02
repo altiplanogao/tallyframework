@@ -14,8 +14,10 @@ import java.util.*;
 public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
     private final CollectionTypesUnion collectionTypesUnion;
 
+    private final Class presentationCeilingClass;
     private final Class presentationClass;
     private final Class collectionImplementType;
+
     public CollectionFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
 
@@ -26,18 +28,23 @@ public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         switch (collectionTypesUnion.getCollectionModel()) {
             case Primitive:
                 presentationClass = collectionTypesUnion.getEntrySimpleDelegateType();
+                presentationCeilingClass = presentationClass;
                 break;
             case Embeddable:
                 presentationClass = collectionTypesUnion.getEntryTargetType();
+                presentationCeilingClass = presentationClass;
                 break;
             case Entity:
                 presentationClass = collectionTypesUnion.getEntryTargetType();
+                presentationCeilingClass = collectionTypesUnion.getEntryType();
                 break;
             case Lookup:
                 presentationClass = collectionTypesUnion.getEntryTargetType();
+                presentationCeilingClass = collectionTypesUnion.getEntryType();
                 break;
             case AdornedLookup:
                 presentationClass = collectionTypesUnion.getEntryJoinEntityType();
+                presentationCeilingClass = collectionTypesUnion.getEntryType();
                 break;
             default:
                 throw new IllegalArgumentException("Collection Model not specified.");
@@ -56,8 +63,14 @@ public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         return collectionTypesUnion;
     }
 
+    @Override
     public Class getPresentationClass() {
         return presentationClass;
+    }
+
+    @Override
+    public Class getPresentationCeilingClass() {
+        return presentationCeilingClass;
     }
 
     public Class getCollectionImplementType() {

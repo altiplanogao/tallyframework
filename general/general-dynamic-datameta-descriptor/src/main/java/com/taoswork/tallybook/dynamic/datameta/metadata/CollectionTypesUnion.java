@@ -1,13 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.EntryType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.PaleEntryDelegate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 

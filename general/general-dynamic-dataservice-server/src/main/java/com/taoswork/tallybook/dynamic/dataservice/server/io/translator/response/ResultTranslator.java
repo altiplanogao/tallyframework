@@ -14,12 +14,13 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.Enti
  */
 public class ResultTranslator {
     public static EntityInfoResult convertInfoResult(EntityRequest request,
-                                                     EntityResponse response){
+                                                     EntityResponse response) {
         EntityInfoResult result = new EntityInfoResult();
         result.setResourceName(request.getResourceName())
             .setEntityCeilingType(request.getEntityType())
             .setEntityType(response.getEntityType())
-            .setEntityUrl(request.getEntityUri());
+            .setEntityUri(request.getEntityUri())
+            .setBeanUri(LinkBuilder.buildLinkForReadInstance(request.getResourceName()));
         return result;
     }
 
@@ -30,14 +31,14 @@ public class ResultTranslator {
             .setPageSize(request.getPageSize());
         if(criteriaResult != null) {
             result.setTotalCount(criteriaResult.getTotalCount())
-                .setRecords(criteriaResult.getEntityCollection());
+                .setBeans(criteriaResult.getEntityCollection());
         }
         return result;
     }
 
     public static EntityInstanceResult convertInstanceResult(PersistableResult er) {
         EntityInstanceResult result = new EntityInstanceResult();
-        result.setData(er.getEntity())
+        result.setBean(er.getEntity())
             .setIdKey(er.getIdKey())
             .setIdValue(er.getIdValue())
             .setDataName(er.getEntityName());

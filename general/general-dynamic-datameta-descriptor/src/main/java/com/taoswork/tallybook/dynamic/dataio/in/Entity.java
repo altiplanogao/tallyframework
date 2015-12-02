@@ -13,8 +13,8 @@ public class Entity implements Serializable{
     private Integer timezoneOffset;
     private Class<? extends Persistable> entityType;
     private Class<? extends Persistable> entityCeilingType;
-    private final Map<String, String> entity = new HashMap<String, String>();
-    public final static String ENTITY_PROPERTY_NAME = "entity";
+    private final Map<String, String> props = new HashMap<String, String>();
+    public final static String ENTITY_PROPERTY_NAME = "props";
 
     public Integer getTimezoneOffset() {
         return timezoneOffset;
@@ -42,12 +42,12 @@ public class Entity implements Serializable{
         return this;
     }
 
-    public Map<String, String> getEntity() {
-        return entity;
+    public Map<String, String> getProps() {
+        return props;
     }
 
     public Entity setProperty(String key, String value){
-        this.entity.put(key, value);
+        this.props.put(key, value);
         return this;
     }
 }

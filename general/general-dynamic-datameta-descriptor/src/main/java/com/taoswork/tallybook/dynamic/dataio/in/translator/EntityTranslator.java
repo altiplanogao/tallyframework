@@ -85,9 +85,9 @@ public abstract class EntityTranslator {
             final Persistable tempInstance = (Persistable) entityClass.newInstance();
             final IClassMetadata classMetadata = classMetadataAccess.getClassMetadata(entityClass, false);
 
-            final Map<String, String> entityAsMap = source.getEntity();
-            final Map<String, Object> entityAsTree = buildEntityPropertyTree(entityAsMap);
-            fillEntity(tempInstance, classMetadata, entityAsTree);
+            final Map<String, String> propsAsMap = source.getProps();
+            final Map<String, Object> propsAsTree = buildEntityPropertyTree(propsAsMap);
+            fillEntity(tempInstance, classMetadata, propsAsTree);
 
             if (StringUtils.isNotEmpty(id)) {
                 String idFieldName = classMetadata.getIdField().getName();

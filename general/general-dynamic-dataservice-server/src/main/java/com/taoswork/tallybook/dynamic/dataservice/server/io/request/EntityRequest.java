@@ -16,9 +16,9 @@ import java.util.Set;
 public abstract class EntityRequest {
     private String resourceName;
     private Class<? extends Persistable> entityType;
-    private String baseUri;
+    private String uri;
     private String entityUri;
-    private String fullUrl;
+    private String fullUri;
     private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
 
     public EntityRequest(){
@@ -27,26 +27,26 @@ public abstract class EntityRequest {
 
     public EntityRequest(String resourceName,
                          Class<? extends Persistable> entityType,
-                         String baseUri, String url){
+                         String uri){
         this.setResourceName(resourceName)
             .setEntityType(entityType)
-            .setBaseUri(baseUri);
+            .setUri(uri);
     }
 
     public EntityRequest(String resourceName,
                          String entityType,
-                         String baseUri){
+                         String uri){
         this.setResourceName(resourceName)
             .withEntityType(entityType)
-            .setBaseUri(baseUri);
+            .setUri(uri);
     }
 
-    public String getFullUrl() {
-        return fullUrl;
+    public String getFullUri() {
+        return fullUri;
     }
 
-    public EntityRequest setFullUrl(String fullUrl) {
-        this.fullUrl = fullUrl;
+    public EntityRequest setFullUri(String fullUri) {
+        this.fullUri = fullUri;
         return this;
     }
 
@@ -86,12 +86,12 @@ public abstract class EntityRequest {
         return this;
     }
 
-    public String getBaseUri() {
-        return baseUri;
+    public String getUri() {
+        return uri;
     }
 
-    public EntityRequest setBaseUri(String baseUri) {
-        this.baseUri = baseUri;
+    public EntityRequest setUri(String currentUri) {
+        this.uri = currentUri;
         return this;
     }
 
@@ -105,11 +105,11 @@ public abstract class EntityRequest {
     }
 
     public EntityRequest setEntityRequest(EntityTypeParameter entityTypeParam,
-                         String baseUri, String fullUrl){
+                         String uri, String fullUri){
         this.setResourceName(entityTypeParam.getTypeName())
             .setEntityType(entityTypeParam.getType())
-            .setBaseUri(baseUri)
-            .setFullUrl(fullUrl);
+            .setUri(uri)
+            .setFullUri(fullUri);
         return this;
     }
 

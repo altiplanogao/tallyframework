@@ -12,7 +12,7 @@ public class EntityQueryResult {
     private int pageSize;
     private Long totalCount;
 
-    private List<?> records;
+    private List<?> beans;
 
     public Long getStartIndex() {
         return startIndex;
@@ -46,12 +46,12 @@ public class EntityQueryResult {
             pageSize, totalCount);
     }
 
-    public List<?> getRecords() {
-        return records;
+    public List<?> getBeans() {
+        return beans;
     }
 
-    public EntityQueryResult setRecords(List<?> records) {
-        this.records = records;
+    public EntityQueryResult setBeans(List<?> beans) {
+        this.beans = beans;
         return this;
     }
 }

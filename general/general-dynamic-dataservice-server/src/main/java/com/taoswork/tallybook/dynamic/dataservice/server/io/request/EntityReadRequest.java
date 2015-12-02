@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 
-public class EntityReadRequest extends EntityRequest{
+public class EntityReadRequest extends EntityRequest {
 
     private long id;
 

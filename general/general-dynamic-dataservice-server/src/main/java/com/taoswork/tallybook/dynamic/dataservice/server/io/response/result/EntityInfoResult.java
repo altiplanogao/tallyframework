@@ -15,7 +15,8 @@ public class EntityInfoResult {
     private String resourceName;
     private Class<?> entityCeilingType;
     private Class<?> entityType;
-    private String entityUrl;
+    private String entityUri;
+    private String beanUri;
 
     private Map<String, IEntityInfo> details;
 
@@ -46,13 +47,21 @@ public class EntityInfoResult {
         return this;
     }
 
-    public String getEntityUrl() {
-        return entityUrl;
+    public String getEntityUri() {
+        return entityUri;
     }
 
-    public EntityInfoResult setEntityUrl(String entityUrl) {
-        this.entityUrl = entityUrl;
+    public EntityInfoResult setEntityUri(String entityUri) {
+        this.entityUri = entityUri;
         return this;
+    }
+
+    public String getBeanUri() {
+        return beanUri;
+    }
+
+    public void setBeanUri(String beanUri) {
+        this.beanUri = beanUri;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

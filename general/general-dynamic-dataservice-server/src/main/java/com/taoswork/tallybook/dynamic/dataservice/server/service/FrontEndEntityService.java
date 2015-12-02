@@ -12,6 +12,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEnti
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
@@ -22,9 +23,11 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.general.extension.collections.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.hateoas.UriTemplate;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -65,8 +68,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
         List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
         for (EntityInfoType infoType : request.getEntityInfoTypes()) {
-            IEntityInfo entityInfo = null;
-            entityInfo = dynamicEntityService.describe(entityType, infoType, locale);
+            IEntityInfo entityInfo = dynamicEntityService.describe(entityType, infoType, locale);
             entityInfos.add(entityInfo);
         }
 
@@ -93,14 +95,14 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         responseTranslator().translateInfoResponse(request, response, locale);
         this.appendInfoFields(request, response, locale);
         this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
-        LinkBuilder.buildLinkForInfoResults(request.getFullUrl(), response);
+        LinkBuilder.buildLinkForInfoResults(request, response);
         return response;
     }
 
     @Override
     public EntityQueryResponse query(EntityQueryRequest request, Locale locale) {
         Class<? extends Persistable> entityType = request.getEntityType();
-        EntityQueryResponse response = new EntityQueryResponse();
+        EntityQueryResponse response = new EntityQueryResponse(request.getUri());
         CriteriaQueryResult<? extends Persistable> result = null;
         ServiceException se = null;
         try {
@@ -116,37 +118,41 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             responseTranslator().translateQueryResponse(request, result, se, response, locale);
             this.appendInfoFields(request, response, locale);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
-            LinkBuilder.buildLinkForQueryResults(request.getFullUrl(), response);
+            LinkBuilder.buildLinkForQueryResults(request, response);
         }
         return response;
     }
 
     @Override
     public EntityCreateFreshResponse createFresh(EntityCreateFreshRequest request, Locale locale) {
-        EntityCreateFreshResponse response = new EntityCreateFreshResponse();
+        EntityCreateFreshResponse response = new EntityCreateFreshResponse(request.getUri());
         PersistableResult result = null;
         ServiceException se = null;
         try {
             Class<? extends Persistable> entityType = request.getEntityType();
-            result = dynamicEntityService.makeDissociatedObject(entityType);
+            result = dynamicEntityService.makeDissociatedPersistable(entityType);
         } catch (ServiceException e) {
             se = e;
         } finally {
             responseTranslator().translateCreateFreshResponse(request, result, se, response, locale);
             this.appendInfoFields(request, response, locale);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
-            LinkBuilder.buildLinkForNewInstanceResults(request.getFullUrl(), response);
+            LinkBuilder.buildLinkForNewInstanceResults(request, response);
         }
         return response;
     }
 
     @Override
     public EntityCreateResponse create(EntityCreateRequest request, Locale locale) {
-        EntityCreateResponse response = new EntityCreateResponse();
+        String beanUriTemplate =  LinkBuilder.buildLinkForReadInstance(request.getResourceName());
+        EntityCreateResponse response = new EntityCreateResponse(request.getUri(), beanUriTemplate);
         PersistableResult result = null;
         ServiceException se = null;
         try {
             result = dynamicEntityService.create(request.getEntity());
+            Map<String, Object> m = new MapBuilder<String, Object>().append(EntityActionPaths.ID_KEY, result.getIdValue());
+            String beanUri = (new UriTemplate(beanUriTemplate)).expand(m).toString();
+            response = new EntityCreateResponse(request.getUri(), beanUri);
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -160,7 +166,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     @Override
     public EntityReadResponse read(EntityReadRequest request, Locale locale) {
         Class<? extends Persistable> entityType = request.getEntityType();
-        EntityReadResponse response = new EntityReadResponse();
+        EntityReadResponse response = new EntityReadResponse(request.getUri());
         PersistableResult result = null;
         ServiceException se = null;
         try {
@@ -175,14 +181,14 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             responseTranslator().translateReadResponse(request, result, se, response, locale);
             this.appendInfoFields(request, response, locale);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
-            LinkBuilder.buildLinkForReadResults(request.getFullUrl(), response);
+            LinkBuilder.buildLinkForReadResults(request, response);
         }
         return response;
     }
 
     @Override
     public EntityUpdateResponse update(EntityUpdateRequest request, Locale locale) {
-        EntityUpdateResponse response = new EntityUpdateResponse();
+        EntityUpdateResponse response = new EntityUpdateResponse(request.getUri());
         PersistableResult result = null;
         ServiceException se = null;
         try {
@@ -199,7 +205,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
     @Override
     public EntityDeleteResponse delete(EntityDeleteRequest request, Locale locale) {
-        EntityDeleteResponse response = new EntityDeleteResponse();
+        EntityDeleteResponse response = new EntityDeleteResponse(request.getUri());
         boolean deleted = false;
         ServiceException se = null;
         try {
@@ -208,6 +214,24 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateDeleteResponse(request, deleted, se, response, locale);
+        }
+        return response;
+    }
+
+    @Override
+    public CollectionEntryCreateFreshResponse collectionEntryCreateFresh(CollectionEntryCreateFreshRequest request, Locale locale) {
+        CollectionEntryCreateFreshResponse response = new CollectionEntryCreateFreshResponse();
+        ObjectResult result = null;
+        ServiceException se = null;
+        try {
+            Class<?> entityType = request.getEntityType();
+            result = dynamicEntityService.makeDissociatedObject(entityType);
+        } catch (ServiceException e) {
+            se = e;
+        } finally {
+            responseTranslator().translateCollectionEntryCreateFreshResponse(request, result, se, response, locale);
+            this.appendInfoFields(request, response, locale);
+            this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
         }
         return response;
     }

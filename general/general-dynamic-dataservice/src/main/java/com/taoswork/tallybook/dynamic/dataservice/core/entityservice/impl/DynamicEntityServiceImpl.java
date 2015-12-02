@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl;
 
+import com.taoswork.tallybook.dynamic.dataio.reference.ObjectResult;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
@@ -151,7 +152,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     }
 
     @Override
-    public <T extends Persistable> PersistableResult<T> makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> makeDissociatedPersistable(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         try {
             Persistable entity = (Persistable) rootable.newInstance();
@@ -162,6 +163,27 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
             Object id = idField.get(entity);
             persistableResult.setIdKey(idField.getName())
                 .setIdValue((id == null) ? null : id.toString())
+                .setEntity(entity);
+
+            return persistableResult;
+        } catch (InstantiationException e) {
+            LOGGER.error(e.getMessage());
+            throw new ServiceException(e);
+        } catch (IllegalAccessException e) {
+            LOGGER.error(e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public <T> ObjectResult makeDissociatedObject(Class<T> entityClz) throws ServiceException {
+        Class rootable = (entityClz);
+        try {
+            Object entity = (Object) rootable.newInstance();
+            ObjectResult persistableResult = new ObjectResult();
+            Class clz = entity.getClass();
+            IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
+            persistableResult
                 .setEntity(entity);
 
             return persistableResult;
