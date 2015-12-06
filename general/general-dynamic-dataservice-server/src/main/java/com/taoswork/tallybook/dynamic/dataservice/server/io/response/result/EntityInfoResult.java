@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.response.result;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +18,8 @@ public class EntityInfoResult {
     private Class<?> entityType;
     private String entityUri;
     private String beanUri;
+    private String idField;
+    private String nameField;
 
     private Map<String, IEntityInfo> details;
 
@@ -62,6 +65,36 @@ public class EntityInfoResult {
 
     public void setBeanUri(String beanUri) {
         this.beanUri = beanUri;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getIdField() {
+        return idField;
+    }
+
+    public void setIdFieldIfEmpty(String idField) {
+        if(StringUtils.isEmpty(this.idField)){
+            setIdField(idField);
+        }
+    }
+
+    public void setIdField(String idField) {
+        this.idField = idField;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getNameField() {
+        return nameField;
+    }
+
+    public void setNameFieldIfEmpty(String nameField) {
+        if(StringUtils.isEmpty(this.nameField)){
+            setNameField(nameField);
+        }
+    }
+
+    public void setNameField(String nameField) {
+        this.nameField = nameField;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

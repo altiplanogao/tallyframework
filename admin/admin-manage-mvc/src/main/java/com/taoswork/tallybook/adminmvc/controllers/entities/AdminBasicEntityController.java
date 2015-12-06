@@ -213,7 +213,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
-        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
+        model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
         String entityResultInJson = getObjectInJson(addResponse);
         model.addAttribute("addData", entityResultInJson);
 
@@ -338,8 +338,8 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         model.addAttribute("person", person);
 
         IEntityInfo formInfo = null;
-        if (readResponse.getInfo() != null) {
-            formInfo = readResponse.getInfo().getDetail(EntityInfoType.Form);
+        if (readResponse.getInfos() != null) {
+            formInfo = readResponse.getInfos().getDetail(EntityInfoType.Form);
         }
         model.addAttribute("formInfo", formInfo);
         String entityResultInJson = getObjectInJson(readResponse);
@@ -523,7 +523,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
-        model.addAttribute("formInfo", addResponse.getInfo().getDetail(EntityInfoType.Form));
+        model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
         String entityResultInJson = getObjectInJson(addResponse);
         model.addAttribute("addData", entityResultInJson);
 

@@ -14,10 +14,6 @@ import java.util.Map;
  */
 public interface EntityInfo extends NamedInfo, IEntityInfo {
 
-    String getIdField();
-
-    String getNameField();
-
     String getPrimarySearchField();
 
     IFieldInfo getField(String fieldName);

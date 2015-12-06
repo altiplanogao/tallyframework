@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response.result;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -32,11 +33,17 @@ public class EntityErrors {
         this.authorized = authorized;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public List<String> getGlobal() {
+        if(global.isEmpty())
+            return null;
         return global;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public MultiValueMap<String, String> getFields() {
+        if(fields.isEmpty())
+            return null;
         return fields;
     }
 

@@ -14,8 +14,8 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/9.
  */
 public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo {
-    public final String idField;
-    public final String nameField;
+    private final String idField;
+    private final String nameField;
     public final String primarySearchField;
     public final Map<String, IFieldInfo> fields;
     public final List<ITabInfo> tabs;
@@ -36,6 +36,16 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     @Override
     public String getType() {
         return EntityInfoType.Full.getType();
+    }
+
+    @Override
+    public String getIdField() {
+        return idField;
+    }
+
+    @Override
+    public String getNameField() {
+        return nameField;
     }
 
     @Override

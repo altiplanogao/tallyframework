@@ -15,6 +15,10 @@ public interface IEntityInfo extends NamedInfo {
 
     String getEntityType();
 
+    String getIdField();
+
+    String getNameField();
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Map<String, IEntityInfo> getReferencing();
 }

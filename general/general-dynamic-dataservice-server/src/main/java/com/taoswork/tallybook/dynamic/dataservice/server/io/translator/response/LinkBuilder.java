@@ -9,11 +9,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadR
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.range.QueryResultRange;
 import gumi.builders.UrlBuilder;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.hateoas.Link;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Created by Gao Yuan on 2015/8/5.
@@ -63,7 +59,7 @@ public class LinkBuilder {
     }
 
     public static String buildLinkForReadInstance(String entityName){
-        return EntityActionPaths.uriTemplateForRead(entityName);
+        return EntityActionPaths.EntityUris.uriTemplateForRead(entityName);
     }
     /**
      *
@@ -72,26 +68,26 @@ public class LinkBuilder {
      */
     private static void appendEntityActionUris (String entityName, EntityResponse response){
         {   //inspect
-            String uri = EntityActionPaths.uriTemplateForInfo(entityName);
+            String uri = EntityActionPaths.EntityUris.uriTemplateForInfo(entityName);
             response.add(new Link(uri).withRel(EntityActionNames.INSPECT));
         }
         {   //search
-            response.add(new Link(EntityActionPaths.uriTemplateForQuery(entityName)).withRel(EntityActionNames.QUERY));
+            response.add(new Link(EntityActionPaths.EntityUris.uriTemplateForQuery(entityName)).withRel(EntityActionNames.QUERY));
         }
         {   //create
-            String uri = EntityActionPaths.uriTemplateForAdd(entityName);
+            String uri = EntityActionPaths.EntityUris.uriTemplateForCreate(entityName);
             response.add(new Link(uri).withRel(EntityActionNames.CREATE));
         }
         {   //read
-            String uri = EntityActionPaths.uriTemplateForRead(entityName);
+            String uri = EntityActionPaths.EntityUris.uriTemplateForRead(entityName);
             response.add(new Link(uri).withRel(EntityActionNames.READ));
         }
         {   //update
-            String uri = EntityActionPaths.uriTemplateForUpdate(entityName);
+            String uri = EntityActionPaths.EntityUris.uriTemplateForUpdate(entityName);
             response.add(new Link(uri).withRel(EntityActionNames.UPDATE));
         }
         {   //delete
-            String uri = EntityActionPaths.uriTemplateForDelete(entityName);
+            String uri = EntityActionPaths.EntityUris.uriTemplateForDelete(entityName);
             response.add(new Link(uri).withRel(EntityActionNames.DELETE));
         }
     }

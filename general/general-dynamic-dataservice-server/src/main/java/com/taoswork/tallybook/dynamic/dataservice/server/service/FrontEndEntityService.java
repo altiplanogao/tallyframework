@@ -78,11 +78,13 @@ public class FrontEndEntityService implements IFrontEndEntityService {
                 infoResult = ResultTranslator.convertInfoResult(request, response);
             }
             if (entityInfo != null) {
+                infoResult.setIdFieldIfEmpty(entityInfo.getIdField());
+                infoResult.setNameFieldIfEmpty(entityInfo.getNameField());
                 infoResult.addDetail(entityInfo.getType(), entityInfo);
             }
         }
 
-        response.setInfo(infoResult);
+        response.setInfos(infoResult);
     }
 
     private ResponseTranslator responseTranslator() {

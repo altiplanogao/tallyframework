@@ -13,8 +13,8 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/9.
  */
 public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo {
-    public final String idField;
-    public final String nameField;
+    private final String idField;
+    private final String nameField;
     public final String primarySearchField;
     public final List<IFieldInfo> fields;
 
@@ -34,6 +34,16 @@ public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     @Override
     public String getType() {
         return EntityInfoType.Grid.getType();
+    }
+
+    @Override
+    public String getIdField() {
+        return idField;
+    }
+
+    @Override
+    public String getNameField() {
+        return nameField;
     }
 
     @Override

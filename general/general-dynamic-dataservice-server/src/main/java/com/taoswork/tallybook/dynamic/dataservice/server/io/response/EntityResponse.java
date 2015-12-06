@@ -22,7 +22,7 @@ public abstract class EntityResponse extends ResourceSupport {
 //    private String uri;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private EntityInfoResult info;
+    private EntityInfoResult infos;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Collection<String> actions;
@@ -77,12 +77,12 @@ public abstract class EntityResponse extends ResourceSupport {
         return this;
     }
 
-    public EntityInfoResult getInfo() {
-        return info;
+    public EntityInfoResult getInfos() {
+        return infos;
     }
 
-    public EntityResponse setInfo(EntityInfoResult info) {
-        this.info = info;
+    public EntityResponse setInfos(EntityInfoResult infos) {
+        this.infos = infos;
         return this;
     }
 
