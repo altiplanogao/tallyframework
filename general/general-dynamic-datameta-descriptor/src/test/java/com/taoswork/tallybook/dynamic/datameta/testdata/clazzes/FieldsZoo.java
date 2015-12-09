@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.testdata.clazzes;
 
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 
 import java.util.*;
 
@@ -13,25 +13,25 @@ public class FieldsZoo {
     public Integer _Integer;
     public String _String;
 
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public Set _Set;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public Set<Integer> _IntegerSet;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public HashSet<Integer> _IntegerHashSet;
 
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public List _List;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public List<Integer> _IntegerList;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public ArrayList<Integer> _IntegerArrayList;
 
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public Queue _Queue;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public Queue<Integer> _IntegerQueue;
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     public Queue<Queue<Integer>> _IntegerQueueQueue;
 
     public Map _Map;

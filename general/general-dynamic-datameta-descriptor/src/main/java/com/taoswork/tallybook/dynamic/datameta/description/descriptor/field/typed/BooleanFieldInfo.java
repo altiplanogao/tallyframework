@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.BasicFieldInfoBase;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanMode;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.Collections;
@@ -17,9 +17,9 @@ public class BooleanFieldInfo extends BasicFieldInfoBase {
 
     private final Map<String, String> options = new HashMap<String, String>();
 
-    public BooleanFieldInfo(String name, String friendlyName, boolean editable, BooleanModel booleanModel) {
+    public BooleanFieldInfo(String name, String friendlyName, boolean editable, BooleanMode booleanMode) {
         super(name, friendlyName, editable);
-        switch (booleanModel) {
+        switch (booleanMode) {
             case TrueFalse:
                 setAsTrueFalse();
                 break;
@@ -27,7 +27,7 @@ public class BooleanFieldInfo extends BasicFieldInfoBase {
                 setAsYesNo();
                 break;
             default:
-                throw new IllegalStateException("Un expected Boolean model");
+                throw new IllegalStateException("Unexpected Boolean mode");
         }
     }
 

@@ -5,14 +5,14 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection.*;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedmap.MapFieldInfo;
-import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesSetting;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.EmbeddedFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
 import org.apache.commons.lang3.StringUtils;
@@ -47,11 +47,11 @@ public class FieldInfoBuilder {
             EnumFieldInfo enumFieldInfo = new EnumFieldInfo(name, friendlyName, editable, ((EnumFieldMetadata) fieldMetadata).getEnumerationType());
             result = enumFieldInfo;
         } else if (fieldMetadata instanceof BooleanFieldMetadata) {
-            BooleanFieldInfo booleanFieldInfo = new BooleanFieldInfo(name, friendlyName, editable, ((BooleanFieldMetadata) fieldMetadata).getModel());
+            BooleanFieldInfo booleanFieldInfo = new BooleanFieldInfo(name, friendlyName, editable, ((BooleanFieldMetadata) fieldMetadata).getMode());
             result = booleanFieldInfo;
         } else if (fieldMetadata instanceof DateFieldMetadata) {
             DateFieldMetadata dfm = (DateFieldMetadata)fieldMetadata;
-            DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, editable, dfm.getModel(), dfm.getCellModel());
+            DateFieldInfo dateFieldInfo = new DateFieldInfo(name, friendlyName, editable, dfm.getMode(), dfm.getCellMode());
             result = dateFieldInfo;
         } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata feFm = (ForeignEntityFieldMetadata) fieldMetadata;
@@ -71,7 +71,7 @@ public class FieldInfoBuilder {
             throw new IllegalArgumentException();
         } else if (fieldMetadata instanceof CollectionFieldMetadata) {
             final CollectionFieldMetadata typedFieldMetadata = (CollectionFieldMetadata)fieldMetadata;
-            CollectionTypesUnion collectionTypesUnion = typedFieldMetadata.getCollectionTypesUnion();
+            CollectionTypesSetting collectionTypesSetting = typedFieldMetadata.getCollectionTypesSetting();
 //            final EntryTypeUnion entryTypeUnion = typedFieldMetadata.getEntryTypeUnion();
 
             final Class referencingCollectionEntryCls = typedFieldMetadata.getPresentationClass();
@@ -80,27 +80,26 @@ public class FieldInfoBuilder {
             }
             final String referencingCollectionEntryClsName = (referencingCollectionEntryCls != null)? referencingCollectionEntryCls.getName() : "";
 
-            final CollectionModel collectionModel = collectionTypesUnion.getCollectionModel();
-            switch (collectionModel){
+            final CollectionMode collectionMode = collectionTypesSetting.getCollectionMode();
+            switch (collectionMode){
                 case Primitive:
-                    result = new BasicCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    result = new PrimitiveCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
                     break;
-                case Embeddable:
+                case Basic:
                     result = new BasicCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
                     break;
                 case Entity:
-                    result = new EntityEntryCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    result = new EntityCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
                     break;
                 case Lookup:
-                    result = new EntityRefCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    result = new LookupCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
                     break;
                 case AdornedLookup:
-                    result = new EntityRefAdornedCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
+                    result = new AdornedLookupCollectionFieldInfo(name, friendlyName, editable, referencingCollectionEntryClsName);
                     break;
                 default:
-                    throw new IllegalArgumentException("CollectionModel not supported: " + collectionModel);
+                    throw new IllegalArgumentException("CollectionMode not supported: " + collectionMode);
             }
-
         } else if (fieldMetadata instanceof MapFieldMetadata) {
             MapFieldMetadata typedFieldMetadata = (MapFieldMetadata)fieldMetadata;
             EntryTypeUnion keyEntryTypeUnion = typedFieldMetadata.getKeyType();

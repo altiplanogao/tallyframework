@@ -4,7 +4,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationExternalForeignKey;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationMap;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
@@ -17,7 +17,7 @@ import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.EmployeeType;
 import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
-import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntryDelegate;
+import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntry;
 import com.taoswork.tallybook.testframework.domain.nature.ICitizen;
 import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
 
@@ -53,7 +53,7 @@ public class EmployeeImpl implements IEmployee{
     protected Set<String> nickNameSet;
 
     @ElementCollection(targetClass = String.class)
-    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = NicknameEntry.class)
     protected Set nickNameSetNonType;
 
     @ElementCollection
@@ -62,7 +62,7 @@ public class EmployeeImpl implements IEmployee{
     //in blob
 //    @Column(name = "NICKNAME_ARRAY")
 //    @Lob
-//    @PresentationCollection(simpleEntryDelegate = NicknameEntryDelegate.class)
+//    @PresentationCollection(primitiveDelegate = NicknameEntry.class)
 //    protected String[] nickNameArray;
 
     private long salary;
@@ -106,7 +106,7 @@ public class EmployeeImpl implements IEmployee{
     private String cube;
 
     @ManyToMany(targetEntity = ProjectImpl.class)
-    @PresentationCollection(collectionModel = CollectionModel.Lookup)
+    @PresentationCollection(collectionMode = CollectionMode.Lookup)
     private Collection<IProject> projects;
 
     // ...
@@ -125,7 +125,7 @@ public class EmployeeImpl implements IEmployee{
     @CollectionTable(name="EMP_PHONE")
     @MapKeyColumn(name="PHONE_TYPE")
     @Column(name="PHONE_NUM")
-    @PresentationMap(simpleKeyEntryDelegate = PhoneTypeEntryDelegate.class)
+    @PresentationMap(simpleKeyEntryDelegate = PhoneTypeEntry.class)
     private Map<PhoneType, String> phoneNumbers;
 // ...
 

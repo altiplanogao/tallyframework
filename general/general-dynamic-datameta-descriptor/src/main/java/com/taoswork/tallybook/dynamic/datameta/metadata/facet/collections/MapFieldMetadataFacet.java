@@ -3,7 +3,7 @@ package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.IPrimitiveEntry;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
@@ -18,8 +18,8 @@ public class MapFieldMetadataFacet implements IFieldMetadataFacet {
     private final Class mapType;
 
     public MapFieldMetadataFacet(Class mapType,
-                                 Class keyType,Class<? extends ISimpleEntryDelegate> simpleKeyEntryDelegate,
-                                 Class valueType,Class<? extends ISimpleEntryDelegate> simpleValueEntryDelegate) {
+                                 Class keyType,Class<? extends IPrimitiveEntry> simpleKeyEntryDelegate,
+                                 Class valueType,Class<? extends IPrimitiveEntry> simpleValueEntryDelegate) {
         super();
         this.mapType = mapType;
 

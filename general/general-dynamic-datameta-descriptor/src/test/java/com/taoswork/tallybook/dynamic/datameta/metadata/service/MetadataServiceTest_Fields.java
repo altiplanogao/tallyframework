@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesSetting;
 import com.taoswork.tallybook.dynamic.datameta.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
@@ -9,11 +9,9 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.embedded.E
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.*;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.MapFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.EntryType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeNameX;
 import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.CompanyType;
@@ -21,9 +19,7 @@ import com.taoswork.tallybook.testframework.domain.business.impl.*;
 import com.taoswork.tallybook.testframework.domain.common.Address;
 import com.taoswork.tallybook.testframework.domain.common.PhoneType;
 import com.taoswork.tallybook.testframework.domain.nature.impl.CitizenImpl;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -78,12 +74,12 @@ public class MetadataServiceTest_Fields extends MetadataServiceTest_Fields_Base 
         Assert.assertTrue(lockedFieldMeta instanceof BooleanFieldMetadata);
         Assert.assertTrue(activeFieldMeta instanceof BooleanFieldMetadata);
         if (lockedFieldMeta instanceof BooleanFieldMetadata) {
-            BooleanModel model = ((BooleanFieldMetadata) lockedFieldMeta).getModel();
-            Assert.assertEquals(BooleanModel.YesNo, model);
+            BooleanMode mode = ((BooleanFieldMetadata) lockedFieldMeta).getMode();
+            Assert.assertEquals(BooleanMode.YesNo, mode);
         }
         if (activeFieldMeta instanceof BooleanFieldMetadata) {
-            BooleanModel model = ((BooleanFieldMetadata) activeFieldMeta).getModel();
-            Assert.assertEquals(BooleanModel.TrueFalse, model);
+            BooleanMode mode = ((BooleanFieldMetadata) activeFieldMeta).getMode();
+            Assert.assertEquals(BooleanMode.TrueFalse, mode);
         }
     }
 
@@ -176,13 +172,13 @@ public class MetadataServiceTest_Fields extends MetadataServiceTest_Fields_Base 
         Assert.assertNotNull(vacationBookingsFm);
         Assert.assertTrue(vacationBookingsFm.isCollectionField());
 
-        CollectionTypesUnion collectionTypesUnion = vacationBookingsFm.getCollectionTypesUnion();
-        Assert.assertEquals(CollectionModel.Embeddable, collectionTypesUnion.getCollectionModel());
+        CollectionTypesSetting collectionTypesSetting = vacationBookingsFm.getCollectionTypesSetting();
+        Assert.assertEquals(CollectionMode.Basic, collectionTypesSetting.getCollectionMode());
 //        EntryTypeUnion entryTypeUnion =vacationBookingsFm.getEntryTypeUnion();
-        Class entryClass = collectionTypesUnion.getEntryType();
-        Class entryTargetClass = collectionTypesUnion.getEntryTargetType();
-        Class entrySimpleDelegateType = collectionTypesUnion.getEntrySimpleDelegateType();
-        Class entryJoinEntityType = collectionTypesUnion.getEntryJoinEntityType();
+        Class entryClass = collectionTypesSetting.getEntryType();
+        Class entryTargetClass = collectionTypesSetting.getEntryTargetType();
+        Class entrySimpleDelegateType = collectionTypesSetting.getEntryPrimitiveDelegateType();
+        Class entryJoinEntityType = collectionTypesSetting.getEntryJoinEntityType();
 
         Assert.assertEquals(Object.class, entryClass);
         Assert.assertEquals(VacationEntry.class, entryTargetClass);
@@ -225,8 +221,8 @@ public class MetadataServiceTest_Fields extends MetadataServiceTest_Fields_Base 
         Assert.assertTrue(departmentEmployeeFm.isCollectionField());
         Assert.assertTrue(departmentEmployeeListFm.isCollectionField());
 
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getCollectionTypesUnion().getEntryTargetType());
-        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getCollectionTypesUnion().getEntryTargetType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeFm.getCollectionTypesSetting().getEntryTargetType());
+        Assert.assertEquals(EmployeeImpl.class, departmentEmployeeListFm.getCollectionTypesSetting().getEntryTargetType());
 
         IClassMetadata classMetadata = departmentMetadata.getReferencingClassMetadata(EmployeeImpl.class);
         Assert.assertNotNull(classMetadata);

@@ -11,7 +11,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.Exte
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.ForeignEntityFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateMode;
 import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -123,7 +123,7 @@ public abstract class EntityTranslator {
                                 field.set(instance, null);
                             } else {
                                 DateFieldMetadata dateFieldMetadata = (DateFieldMetadata) fieldMetadata;
-                                DateModel model = dateFieldMetadata.getModel();
+                                DateMode model = dateFieldMetadata.getMode();
                                 boolean useJavaDate = dateFieldMetadata.isUseJavaDate();
                                 Long ms = Long.parseLong(fieldValue);
                                 Object val = ms;

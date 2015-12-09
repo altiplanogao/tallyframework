@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface PresentationDate {
-    DateModel model() default DateModel.DateTime;
-    DateCellModel cellModel() default DateCellModel.DateAndTime;
+    DateMode mode() default DateMode.DateTime;
+    DateCellMode cellMode() default DateCellMode.DateAndTime;
 }

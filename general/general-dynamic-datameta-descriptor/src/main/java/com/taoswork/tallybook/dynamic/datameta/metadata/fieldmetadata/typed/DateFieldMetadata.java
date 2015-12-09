@@ -6,23 +6,23 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.facet.basic.DateFieldMet
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseNonCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.FieldMetadataIntermediate;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateMode;
 
 /**
  * Created by Gao Yuan on 2015/10/30.
  */
 public final class DateFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
-    private final DateModel model;
-    private final DateCellModel cellModel;
+    private final DateMode mode;
+    private final DateCellMode cellMode;
     private final boolean useJavaDate;
 
     public DateFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         DateFieldMetadataFacet booleanFieldFacet = (DateFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Date);
         if (null != booleanFieldFacet) {
-            this.model = booleanFieldFacet.model;
-            this.cellModel = booleanFieldFacet.cellModel;
+            this.mode = booleanFieldFacet.mode;
+            this.cellMode = booleanFieldFacet.cellMode;
             this.useJavaDate = booleanFieldFacet.useJavaDate;
         } else {
             throw new IllegalArgumentException();
@@ -34,12 +34,12 @@ public final class DateFieldMetadata extends BaseNonCollectionFieldMetadata impl
         return FieldType.DATE;
     }
 
-    public DateModel getModel() {
-        return model;
+    public DateMode getMode() {
+        return mode;
     }
 
-    public DateCellModel getCellModel() {
-        return cellModel;
+    public DateCellMode getCellMode() {
+        return cellMode;
     }
 
     public boolean isUseJavaDate() {

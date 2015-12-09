@@ -6,8 +6,8 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typed.Date
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.IFieldHandler;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationDate;
 
 import java.lang.reflect.Field;
@@ -42,11 +42,11 @@ class _DateFieldHandler implements IFieldHandler {
             DateFieldMetadataFacet dateFieldFacet = null;
             PresentationDate presentationBoolean = field.getDeclaredAnnotation(PresentationDate.class);
             boolean useJavaDate = Date.class.equals(field.getType());
-            DateModel model = DateModel.DateTime;
-            DateCellModel cellModel = DateCellModel.DateAndTime;
+            DateMode model = DateMode.DateTime;
+            DateCellMode cellModel = DateCellMode.DateAndTime;
             if (presentationBoolean != null) {
-                model = presentationBoolean.model();
-                cellModel = presentationBoolean.cellModel();
+                model = presentationBoolean.mode();
+                cellModel = presentationBoolean.cellMode();
             }
             dateFieldFacet = new DateFieldMetadataFacet(model, cellModel, useJavaDate);
             if(dateFieldFacet != null){

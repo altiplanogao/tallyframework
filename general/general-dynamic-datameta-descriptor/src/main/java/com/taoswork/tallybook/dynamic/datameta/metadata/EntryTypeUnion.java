@@ -2,9 +2,9 @@ package com.taoswork.tallybook.dynamic.datameta.metadata;
 
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.EntryType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.PaleEntryDelegate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.IPrimitiveEntry;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.PaleEntry;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +15,9 @@ public final class EntryTypeUnion implements Serializable {
 
     private final EntryType entryType;
     private final Class entryClass;
-    private final Class<? extends ISimpleEntryDelegate> simpleEntryDelegate;
+    private final Class<? extends IPrimitiveEntry> simpleEntryDelegate;
 
-    public EntryTypeUnion(Class eleType, Class<? extends ISimpleEntryDelegate> simpleEntryDelegate) {
+    public EntryTypeUnion(Class eleType, Class<? extends IPrimitiveEntry> simpleEntryDelegate) {
         entryClass = eleType;
         if (FieldMetadataHelper.isEmbeddable(eleType)) {
             this.entryType = EntryType.Embeddable;
@@ -28,12 +28,12 @@ public final class EntryTypeUnion implements Serializable {
         } else {
             this.entryType = EntryType.Simple;
             if(simpleEntryDelegate == null && String.class.equals(entryClass)){
-                simpleEntryDelegate = StringEntryDelegate.class;
+                simpleEntryDelegate = StringEntry.class;
             }
 
             if(simpleEntryDelegate == null){
-                simpleEntryDelegate = PaleEntryDelegate.class;
-                LOGGER.error("simple entry un-workable if simpleEntryDelegate == null ");
+                simpleEntryDelegate = PaleEntry.class;
+                LOGGER.error("simple entry un-workable if primitiveDelegate == null ");
             }
             this.simpleEntryDelegate = simpleEntryDelegate;
         }
@@ -79,7 +79,7 @@ public final class EntryTypeUnion implements Serializable {
         return null;
     }
 
-    public Class<? extends ISimpleEntryDelegate> getSimpleEntryDelegateClass(){
+    public Class<? extends IPrimitiveEntry> getSimpleEntryDelegateClass(){
         if(isSimple()){
             return simpleEntryDelegate;
         }

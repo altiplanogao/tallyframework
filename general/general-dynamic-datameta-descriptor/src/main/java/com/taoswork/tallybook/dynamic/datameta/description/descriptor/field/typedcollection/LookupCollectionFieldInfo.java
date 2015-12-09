@@ -3,13 +3,13 @@ package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typ
 /**
  * Created by Gao Yuan on 2015/11/15.
  */
-public class EntityEntryCollectionFieldInfo extends _CollectionFieldInfo {
-    public EntityEntryCollectionFieldInfo(String name, String friendlyName, boolean editable, String instanceType) {
+public class LookupCollectionFieldInfo extends _CollectionFieldInfo {
+    public LookupCollectionFieldInfo(String name, String friendlyName, boolean editable, String instanceType) {
         super(name, friendlyName, editable, instanceType);
     }
 
     @Override
     public String getEntryType() {
-        return "entity-entry";
+        return "entity-ref";
     }
 }

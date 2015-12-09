@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesSetting;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections.CollectionFieldMetadataFacet;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
@@ -12,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
-    private final CollectionTypesUnion collectionTypesUnion;
+    private final CollectionTypesSetting collectionTypesSetting;
 
     private final Class presentationCeilingClass;
     private final Class presentationClass;
@@ -22,29 +22,29 @@ public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         super(intermediate);
 
         CollectionFieldMetadataFacet facet = (CollectionFieldMetadataFacet) intermediate.getFacet(FieldFacetType.Collection);
-        this.collectionTypesUnion = SerializationUtils.clone(facet.getCollectionTypesUnion());
-        this.collectionImplementType = workOutCollectionImplementType(collectionTypesUnion.getCollectionClass());
+        this.collectionTypesSetting = SerializationUtils.clone(facet.getCollectionTypesSetting());
+        this.collectionImplementType = workOutCollectionImplementType(collectionTypesSetting.getCollectionClass());
 
-        switch (collectionTypesUnion.getCollectionModel()) {
+        switch (collectionTypesSetting.getCollectionMode()) {
             case Primitive:
-                presentationClass = collectionTypesUnion.getEntrySimpleDelegateType();
+                presentationClass = collectionTypesSetting.getEntryPrimitiveDelegateType();
                 presentationCeilingClass = presentationClass;
                 break;
-            case Embeddable:
-                presentationClass = collectionTypesUnion.getEntryTargetType();
+            case Basic:
+                presentationClass = collectionTypesSetting.getEntryTargetType();
                 presentationCeilingClass = presentationClass;
                 break;
             case Entity:
-                presentationClass = collectionTypesUnion.getEntryTargetType();
-                presentationCeilingClass = collectionTypesUnion.getEntryType();
+                presentationClass = collectionTypesSetting.getEntryTargetType();
+                presentationCeilingClass = collectionTypesSetting.getEntryType();
                 break;
             case Lookup:
-                presentationClass = collectionTypesUnion.getEntryTargetType();
-                presentationCeilingClass = collectionTypesUnion.getEntryType();
+                presentationClass = collectionTypesSetting.getEntryTargetType();
+                presentationCeilingClass = collectionTypesSetting.getEntryType();
                 break;
             case AdornedLookup:
-                presentationClass = collectionTypesUnion.getEntryJoinEntityType();
-                presentationCeilingClass = collectionTypesUnion.getEntryType();
+                presentationClass = collectionTypesSetting.getEntryJoinEntityType();
+                presentationCeilingClass = collectionTypesSetting.getEntryType();
                 break;
             default:
                 throw new IllegalArgumentException("Collection Model not specified.");
@@ -59,8 +59,8 @@ public final class CollectionFieldMetadata extends BaseCollectionFieldMetadata {
         return FieldType.COLLECTION;
     }
 
-    public CollectionTypesUnion getCollectionTypesUnion() {
-        return collectionTypesUnion;
+    public CollectionTypesSetting getCollectionTypesSetting() {
+        return collectionTypesSetting;
     }
 
     @Override

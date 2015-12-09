@@ -6,11 +6,11 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import com.taoswork.tallybook.testframework.domain.TallyMockupDataDomain;
 import com.taoswork.tallybook.testframework.domain.business.ICompany;
 import com.taoswork.tallybook.testframework.domain.business.enumtype.CompanyType;
@@ -120,14 +120,14 @@ public class CompanyImpl implements ICompany {
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
     @PresentationField
-    @PresentationBoolean(model = BooleanModel.YesNo)
+    @PresentationBoolean(mode = BooleanMode.YesNo)
     protected boolean locked = true;
 
     @Column(name = "ACTIVE", nullable = false, length = 2,
         columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
     @PresentationField
-    @PresentationBoolean(model = BooleanModel.TrueFalse)
+    @PresentationBoolean(mode = BooleanMode.TrueFalse)
     protected Boolean active = true;
 
     @Column(name = "TAX_CODE")
@@ -150,7 +150,7 @@ public class CompanyImpl implements ICompany {
         tab = Presentation.Tab.Marketing,
         group = Presentation.Group.Public
     )
-    @PresentationCollection(simpleEntryDelegate = StringEntryDelegate.class)
+    @PresentationCollection(primitiveDelegate = StringEntry.class)
     protected List<String> publicProducts = new ArrayList<String>();
 
     @ElementCollection(fetch = FetchType.LAZY)

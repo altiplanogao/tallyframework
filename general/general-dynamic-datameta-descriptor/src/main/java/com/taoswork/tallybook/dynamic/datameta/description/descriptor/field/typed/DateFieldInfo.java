@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typed;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.base.BasicFieldInfoBase;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.DateMode;
 
 /**
  * Created by Gao Yuan on 2015/10/24.
@@ -19,9 +19,9 @@ public class DateFieldInfo extends BasicFieldInfoBase {
     private final String model;
     private final String cellModel;
 
-    public DateFieldInfo(String name, String friendlyName, boolean editable, DateModel dateModel, DateCellModel dateCellModel) {
+    public DateFieldInfo(String name, String friendlyName, boolean editable, DateMode dateMode, DateCellMode dateCellMode) {
         super(name, friendlyName, editable);
-        switch (dateModel) {
+        switch (dateMode) {
             case Date:
                 model = DATE;
                 break;
@@ -32,9 +32,9 @@ public class DateFieldInfo extends BasicFieldInfoBase {
                 model = DATATIME_WITH_TIMEZONE;
                 break;
             default:
-                throw new IllegalStateException("Un expected Date model");
+                throw new IllegalStateException("Un expected Date mode");
         }
-        switch (dateCellModel) {
+        switch (dateCellMode) {
             case Date:
                 cellModel = CELL_DATE;
                 break;
@@ -45,7 +45,7 @@ public class DateFieldInfo extends BasicFieldInfoBase {
                 cellModel = CELL_DATE_AND_TIME;
                 break;
             default:
-                throw new IllegalStateException("Un expected Date Cell model");
+                throw new IllegalStateException("Un expected Date Cell mode");
         }
     }
 

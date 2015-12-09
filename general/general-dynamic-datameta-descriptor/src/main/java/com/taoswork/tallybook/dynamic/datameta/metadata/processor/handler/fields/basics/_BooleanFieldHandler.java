@@ -28,7 +28,7 @@ class _BooleanFieldHandler implements IFieldHandler {
             BooleanFieldMetadataFacet booleanFieldFacet = null;
             PresentationBoolean presentationBoolean = field.getDeclaredAnnotation(PresentationBoolean.class);
             if (presentationBoolean != null) {
-                booleanFieldFacet = new BooleanFieldMetadataFacet(presentationBoolean.model());
+                booleanFieldFacet = new BooleanFieldMetadataFacet(presentationBoolean.mode());
             } else {
                 booleanFieldFacet = new BooleanFieldMetadataFacet();
             }

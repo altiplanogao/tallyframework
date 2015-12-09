@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.description.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedcollection._CollectionFieldInfo;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import com.taoswork.tallybook.testframework.domain.business.embed.VacationEntry;
 import com.taoswork.tallybook.testframework.domain.business.impl.EmployeeImpl;
-import com.taoswork.tallybook.testframework.domain.business.impl.NicknameEntryDelegate;
+import com.taoswork.tallybook.testframework.domain.business.impl.NicknameEntry;
 import org.junit.Test;
 
 /**
@@ -19,10 +19,10 @@ public class MetaInfoServiceTest_Fields_Collection extends MetaInfoServiceTest_F
         _CollectionFieldInfo nickFmInList = (_CollectionFieldInfo) employeeInfo.getField("nickNameList");
 //        _CollectionFieldInfo nickFmInArray = (_CollectionFieldInfo) employeeInfo.getField("nickNameArray");
 
-        assertValidCollectionFieldInfo(nickFmInTypedSet, employeeInfo, StringEntryDelegate.class);
-        assertValidCollectionFieldInfo(nickFmInSet, employeeInfo, NicknameEntryDelegate.class);
-        assertValidCollectionFieldInfo(nickFmInList, employeeInfo, StringEntryDelegate.class);
-//        assertValidCollectionFieldInfo(nickFmInArray, employeeInfo, NicknameEntryDelegate.class);
+        assertValidCollectionFieldInfo(nickFmInTypedSet, employeeInfo, StringEntry.class);
+        assertValidCollectionFieldInfo(nickFmInSet, employeeInfo, NicknameEntry.class);
+        assertValidCollectionFieldInfo(nickFmInList, employeeInfo, StringEntry.class);
+//        assertValidCollectionFieldInfo(nickFmInArray, employeeInfo, NicknameEntry.class);
     }
 
     @Test

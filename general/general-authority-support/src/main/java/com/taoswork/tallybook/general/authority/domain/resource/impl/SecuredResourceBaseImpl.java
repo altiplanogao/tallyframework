@@ -11,7 +11,7 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.Presentati
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
 import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typed.BooleanMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
 
@@ -73,7 +73,7 @@ public abstract class SecuredResourceBaseImpl<RF extends SecuredResourceSpecial>
     @Convert(converter = BooleanToStringConverter.class)
     @PersistField(fieldType = FieldType.BOOLEAN)
     @PresentationField(order = 6)
-    @PresentationBoolean(model = BooleanModel.YesNo)
+    @PresentationBoolean(mode = BooleanMode.YesNo)
     protected Boolean masterControlled = Boolean.TRUE;
 
     @Version

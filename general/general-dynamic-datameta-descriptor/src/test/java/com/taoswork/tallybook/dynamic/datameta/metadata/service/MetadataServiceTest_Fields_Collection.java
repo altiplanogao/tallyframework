@@ -1,17 +1,13 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.service;
 
-import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcollection.CollectionFieldMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.service.impl.MetadataServiceImpl;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import com.taoswork.tallybook.testframework.domain.business.impl.EmployeeImpl;
-import com.taoswork.tallybook.testframework.domain.business.impl.NicknameEntryDelegate;
-import org.junit.After;
+import com.taoswork.tallybook.testframework.domain.business.impl.NicknameEntry;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,25 +35,25 @@ public class MetadataServiceTest_Fields_Collection  extends MetadataServiceTest_
         Assert.assertTrue(nickFmInList.isCollectionField());
 //        Assert.assertTrue(nickFmInArray.isCollectionField());
 
-        Assert.assertEquals(CollectionModel.Primitive, nickFmInTypedSet.getCollectionTypesUnion().getCollectionModel());
-        Assert.assertEquals(CollectionModel.Primitive, nickFmInSet.getCollectionTypesUnion().getCollectionModel());
-        Assert.assertEquals(CollectionModel.Primitive, nickFmInList.getCollectionTypesUnion().getCollectionModel());
+        Assert.assertEquals(CollectionMode.Primitive, nickFmInTypedSet.getCollectionTypesSetting().getCollectionMode());
+        Assert.assertEquals(CollectionMode.Primitive, nickFmInSet.getCollectionTypesSetting().getCollectionMode());
+        Assert.assertEquals(CollectionMode.Primitive, nickFmInList.getCollectionTypesSetting().getCollectionMode());
 
-        Assert.assertEquals(String.class, nickFmInTypedSet.getCollectionTypesUnion().getEntryType());
-        Assert.assertEquals(Object.class, nickFmInSet.getCollectionTypesUnion().getEntryType());
-        Assert.assertEquals(String.class, nickFmInList.getCollectionTypesUnion().getEntryType());
+        Assert.assertEquals(String.class, nickFmInTypedSet.getCollectionTypesSetting().getEntryType());
+        Assert.assertEquals(Object.class, nickFmInSet.getCollectionTypesSetting().getEntryType());
+        Assert.assertEquals(String.class, nickFmInList.getCollectionTypesSetting().getEntryType());
 
-        Assert.assertEquals(String.class, nickFmInTypedSet.getCollectionTypesUnion().getEntryTargetType());
-        Assert.assertEquals(String.class, nickFmInSet.getCollectionTypesUnion().getEntryTargetType());
-        Assert.assertEquals(String.class, nickFmInList.getCollectionTypesUnion().getEntryTargetType());
+        Assert.assertEquals(String.class, nickFmInTypedSet.getCollectionTypesSetting().getEntryTargetType());
+        Assert.assertEquals(String.class, nickFmInSet.getCollectionTypesSetting().getEntryTargetType());
+        Assert.assertEquals(String.class, nickFmInList.getCollectionTypesSetting().getEntryTargetType());
 
-        Assert.assertEquals(null, nickFmInTypedSet.getCollectionTypesUnion().getEntryJoinEntityType());
-        Assert.assertEquals(null, nickFmInSet.getCollectionTypesUnion().getEntryJoinEntityType());
-        Assert.assertEquals(null, nickFmInList.getCollectionTypesUnion().getEntryJoinEntityType());
+        Assert.assertEquals(null, nickFmInTypedSet.getCollectionTypesSetting().getEntryJoinEntityType());
+        Assert.assertEquals(null, nickFmInSet.getCollectionTypesSetting().getEntryJoinEntityType());
+        Assert.assertEquals(null, nickFmInList.getCollectionTypesSetting().getEntryJoinEntityType());
 
-        Assert.assertEquals(StringEntryDelegate.class, nickFmInTypedSet.getCollectionTypesUnion().getEntrySimpleDelegateType());
-        Assert.assertEquals(NicknameEntryDelegate.class, nickFmInSet.getCollectionTypesUnion().getEntrySimpleDelegateType());
-        Assert.assertEquals(StringEntryDelegate.class, nickFmInList.getCollectionTypesUnion().getEntrySimpleDelegateType());
+        Assert.assertEquals(StringEntry.class, nickFmInTypedSet.getCollectionTypesSetting().getEntryPrimitiveDelegateType());
+        Assert.assertEquals(NicknameEntry.class, nickFmInSet.getCollectionTypesSetting().getEntryPrimitiveDelegateType());
+        Assert.assertEquals(StringEntry.class, nickFmInList.getCollectionTypesSetting().getEntryPrimitiveDelegateType());
     }
 
     @Test

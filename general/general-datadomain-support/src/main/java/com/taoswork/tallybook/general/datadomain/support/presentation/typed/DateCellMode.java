@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.datadomain.support.presentation.typed;
 
-public enum DateModel {
+public enum DateCellMode {
     Date,
-    DateTime,
-    DateTimeWithZone;
+    Time,
+    DateAndTime;
 }

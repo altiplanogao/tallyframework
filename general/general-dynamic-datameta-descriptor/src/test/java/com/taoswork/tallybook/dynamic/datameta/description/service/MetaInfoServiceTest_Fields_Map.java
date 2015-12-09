@@ -2,11 +2,11 @@ package com.taoswork.tallybook.dynamic.datameta.description.service;
 
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.descriptor.field.typedmap.MapFieldInfo;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeName;
 import com.taoswork.tallybook.testframework.domain.business.embed.EmployeeNameX;
 import com.taoswork.tallybook.testframework.domain.business.impl.EmployeeImpl;
-import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntryDelegate;
+import com.taoswork.tallybook.testframework.domain.common.PhoneTypeEntry;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class MetaInfoServiceTest_Fields_Map extends MetaInfoServiceTest_Fields_B
         IFieldInfo fieldInfo = employeeInfo.getField("phoneNumbers");
         Assert.assertNotNull(fieldInfo);
         MapFieldInfo mapFieldInfo = (MapFieldInfo)fieldInfo;
-        assertValidMapFieldInfo(mapFieldInfo, employeeInfo, PhoneTypeEntryDelegate.class, StringEntryDelegate.class);
+        assertValidMapFieldInfo(mapFieldInfo, employeeInfo, PhoneTypeEntry.class, StringEntry.class);
     }
 
     @Test

@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.dynamic.datameta.metadata.facet.collections;
 
-import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesUnion;
+import com.taoswork.tallybook.dynamic.datameta.metadata.CollectionTypesSetting;
 import com.taoswork.tallybook.dynamic.datameta.metadata.FieldFacetType;
 import com.taoswork.tallybook.dynamic.datameta.metadata.facet.IFieldMetadataFacet;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.IPrimitiveEntry;
 
 /**
  * Created by Gao Yuan on 2015/5/25.
@@ -14,12 +14,12 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
     /**
      * the entry-type used for user editing, assume we have collection field:
      * @Relation(target=XxxImp.class)
-     * @PresentationCollection(collectionModel=model, joinEntity=XxxRefImp.class, simpleEntryDelegate= simpleEntryDelegate.class)
+     * @PresentationCollection(collectionMode=mode, joinEntity=XxxRefImp.class, primitiveDelegate= primitiveDelegate.class)
      * List<Xxx> xxxs;
      *
      * typical relationships are:
      * Model:               EntryType:    EntryTargetType:  EntryUiType
-     * Primitive,           Xxx           XxxImp            simpleEntryDelegate
+     * Primitive,           Xxx           XxxImp            primitiveDelegate
      * Embeddable,          Xxx           XxxImp            XxxImp(new embeddable object)
      * Entity,              Xxx           XxxImp            XxxImp(new entity, with foreign-key assigned)
      * Lookup,              Xxx           XxxImp            XxxImp(a list for lookup)
@@ -27,18 +27,18 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
      *
      * Typical entryUiType
      */
-    protected final CollectionTypesUnion collectionTypesUnion;
+    protected final CollectionTypesSetting collectionTypesSetting;
 
     public CollectionFieldMetadataFacet(Class entryType, Class entryTargetType,
-                                        Class<? extends ISimpleEntryDelegate> entrySimpleDelegateType,
-                                        Class entryJoinEntityType,
-                                        CollectionModel collectionModel,
-                                        Class collectionClass) {
-        this.collectionTypesUnion = new CollectionTypesUnion(entryType, entryTargetType,
-            entrySimpleDelegateType,
-             entryJoinEntityType,
-             collectionModel,
-             collectionClass);
+                                        Class collectionClass,
+                                        CollectionMode collectionMode,
+                                        Class<? extends IPrimitiveEntry> entryPrimitiveDelegateType,
+                                        Class entryJoinEntityType) {
+        this.collectionTypesSetting = new CollectionTypesSetting(entryType, entryTargetType,
+            collectionClass,
+            collectionMode,
+            entryPrimitiveDelegateType,
+            entryJoinEntityType);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CollectionFieldMetadataFacet implements IFieldMetadataFacet {
         return FieldFacetType.Collection;
     }
 
-    public CollectionTypesUnion getCollectionTypesUnion(){
-        return this.collectionTypesUnion;
+    public CollectionTypesSetting getCollectionTypesSetting(){
+        return this.collectionTypesSetting;
     }
 }

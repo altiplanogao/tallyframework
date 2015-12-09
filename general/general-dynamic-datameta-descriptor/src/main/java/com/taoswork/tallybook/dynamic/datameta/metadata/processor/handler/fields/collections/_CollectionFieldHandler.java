@@ -6,10 +6,10 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ClassProcessor;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.dynamic.datameta.metadata.processor.handler.fields.FieldMetadataHelper;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
 import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.ISimpleEntryDelegate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntryDelegate;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.IPrimitiveEntry;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.entry.StringEntry;
 import com.taoswork.tallybook.general.solution.reflect.GenericTypeUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ class _CollectionFieldHandler extends _1DCollectionFieldHandler {
 
     private CollectionFieldMetadataFacet getCollectionFieldMetadataFacet(Field field, Class collectionType, Type genericType) {
         final Class entryType;
-        final Class targetEntryType;
+        final Class entryTargetType;
         if (genericType instanceof ParameterizedType) {
             Type[] typeArgs = ((ParameterizedType) genericType).getActualTypeArguments();
             if (typeArgs != null && typeArgs.length > 0) {
@@ -73,67 +73,68 @@ class _CollectionFieldHandler extends _1DCollectionFieldHandler {
         }
         final Class specifiedTarget = FieldMetadataHelper.getCollectionTargetType(field, true, true, true);
         if (specifiedTarget != null) {
-            targetEntryType = specifiedTarget;
+            entryTargetType = specifiedTarget;
         } else {
-            targetEntryType = entryType;
+            entryTargetType = entryType;
         }
 
-        Class<? extends ISimpleEntryDelegate> simpleEntryDelegate = null;
+        Class<? extends IPrimitiveEntry> primitiveEntryDelegate = null;
         PresentationCollection presentationCollection = field.getAnnotation(PresentationCollection.class);
-        CollectionModel collectionModel = CollectionModel.Unknown;
+        CollectionMode collectionMode = CollectionMode.Unknown;
         Class joinEntity = null;
         if (presentationCollection != null) {
-            Class<? extends ISimpleEntryDelegate> marked = presentationCollection.simpleEntryDelegate();
-            if (!ISimpleEntryDelegate.class.equals(marked)) {
-                simpleEntryDelegate = marked;
+            Class<? extends IPrimitiveEntry> marked = presentationCollection.primitiveDelegate();
+            if (!IPrimitiveEntry.class.equals(marked)) {
+                primitiveEntryDelegate = marked;
             }
-            collectionModel = presentationCollection.collectionModel();
+            collectionMode = presentationCollection.collectionMode();
             joinEntity = presentationCollection.joinEntity();
             if (void.class.equals(joinEntity)) {
                 joinEntity = null;
             }
         }
-        if (collectionModel == CollectionModel.Unknown) {
-            if (FieldMetadataHelper.isEmbeddable(targetEntryType)) {
-                collectionModel = CollectionModel.Embeddable;
-            } else if (FieldMetadataHelper.isEntity(targetEntryType)) {
+        if (collectionMode == CollectionMode.Unknown) {
+            if (FieldMetadataHelper.isEmbeddable(entryTargetType)) {
+                collectionMode = CollectionMode.Basic;
+            } else if (FieldMetadataHelper.isEntity(entryTargetType)) {
                 OneToMany oneToManyRelation = field.getAnnotation(OneToMany.class);
                 if (oneToManyRelation != null) {
-                    collectionModel = CollectionModel.Entity;
+                    collectionMode = CollectionMode.Entity;
                 } else {
                     ManyToMany manyToManyRelation = field.getAnnotation(ManyToMany.class);
                     if (manyToManyRelation != null) {
                         if (presentationCollection != null) {
                             if (presentationCollection.joinEntity() != void.class) {
-                                collectionModel = CollectionModel.AdornedLookup;
+                                collectionMode = CollectionMode.AdornedLookup;
                             } else {
-                                collectionModel = CollectionModel.Lookup;
+                                collectionMode = CollectionMode.Lookup;
                             }
                         } else {
-                            collectionModel = CollectionModel.Lookup;
+                            collectionMode = CollectionMode.Lookup;
                         }
                     }
                 }
             } else {
-                collectionModel = CollectionModel.Primitive;
+                collectionMode = CollectionMode.Primitive;
             }
         }
-        if (collectionModel == CollectionModel.Unknown) {
-            throw new IllegalArgumentException("Unknown collection model for field: " + field);
+        if (collectionMode == CollectionMode.Unknown) {
+            throw new IllegalArgumentException("Unknown collection mode for field: " + field);
         }
-        if(CollectionModel.Primitive.equals(collectionModel)){
-            if(simpleEntryDelegate == null){
-                if(String.class.equals(targetEntryType)){
-                    simpleEntryDelegate = StringEntryDelegate.class;
+        if(CollectionMode.Primitive.equals(collectionMode)){
+            if(primitiveEntryDelegate == null){
+                if(String.class.equals(entryTargetType)){
+                    primitiveEntryDelegate = StringEntry.class;
                 }
             }
-            if(simpleEntryDelegate == null){
-                throw new IllegalArgumentException("simpleEntryDelegate couldn't be null: " + field);
+            if(primitiveEntryDelegate == null){
+                throw new IllegalArgumentException("primitiveDelegate couldn't be null: " + field);
             }
         }
 
-        CollectionFieldMetadataFacet collectionFieldMetadataFacet = new CollectionFieldMetadataFacet(entryType, targetEntryType,
-            simpleEntryDelegate, joinEntity, collectionModel, collectionType);
+        CollectionFieldMetadataFacet collectionFieldMetadataFacet = new CollectionFieldMetadataFacet(
+            entryType, entryTargetType, collectionType, collectionMode,
+            primitiveEntryDelegate, joinEntity);
         return collectionFieldMetadataFacet;
     }
 }

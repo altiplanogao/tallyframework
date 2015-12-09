@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.general.datadomain.support.presentation.typed;
 
-public enum BooleanModel {
+public enum BooleanMode {
     YesNo,
     TrueFalse
 }

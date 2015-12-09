@@ -9,7 +9,7 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.typedcolle
 import com.taoswork.tallybook.dynamic.dataio.reference.ExternalReference;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import com.taoswork.tallybook.general.datadomain.support.entity.valuecopier.IEntityValueCopier;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionModel;
+import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.CollectionMode;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -25,11 +25,11 @@ public class EntityCopier {
         private final boolean primitive;
         private final IClassMetadata referencingClassMetadata;
         public CollectionFieldCopier(final IClassMetadata topClassMetadata, CollectionFieldMetadata fieldMetadata) {
-            CollectionTypesUnion collectionTypesUnion = fieldMetadata.getCollectionTypesUnion();
+            CollectionTypesSetting collectionTypesSetting = fieldMetadata.getCollectionTypesSetting();
             this.topClassMetadata = topClassMetadata;
-            this.primitive = CollectionModel.Primitive.equals(collectionTypesUnion.getCollectionModel());
+            this.primitive = CollectionMode.Primitive.equals(collectionTypesSetting.getCollectionMode());
             if(primitive){
-                referencingClassMetadata = topClassMetadata.getReferencingClassMetadata(collectionTypesUnion.getEntryTargetType());
+                referencingClassMetadata = topClassMetadata.getReferencingClassMetadata(collectionTypesSetting.getEntryTargetType());
             }else {
                 referencingClassMetadata = null;
             }

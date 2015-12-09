@@ -77,7 +77,7 @@ public class PersonImpl
     @Temporal(TemporalType.TIMESTAMP)
     @PersistField(fieldType = FieldType.DATE)
     @PresentationField(order = 4)
-    @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
+    @PresentationDate(mode = DateMode.DateTime, cellMode = DateCellMode.Date)
     public Date birth = new Date();
 
     @Column(name = "EMAIL", length = 120)
@@ -95,7 +95,7 @@ public class PersonImpl
     @Convert(converter = BooleanToStringConverter.class)
     @PersistField(fieldType = FieldType.BOOLEAN)
     @PresentationField(order = 7)
-    @PresentationBoolean(model = BooleanModel.YesNo)
+    @PresentationBoolean(mode = BooleanMode.YesNo)
     protected Boolean active = true;
 
     @Column(name = "UUID", unique = true)
@@ -107,7 +107,7 @@ public class PersonImpl
     @Temporal(TemporalType.TIMESTAMP)
     @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = FieldCreateDateValueGate.class, skipDefaultFieldValueGate = true, editable = false)
     @PresentationField(order = 99, visibility = Visibility.GRID_HIDE)
-    @PresentationDate(model = DateModel.DateTime, cellModel = DateCellModel.Date)
+    @PresentationDate(mode = DateMode.DateTime, cellMode = DateCellMode.Date)
     public Date createDate = new Date();
 
     public PersonImpl() {
