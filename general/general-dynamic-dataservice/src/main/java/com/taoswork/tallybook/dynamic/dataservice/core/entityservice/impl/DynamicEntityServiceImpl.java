@@ -180,13 +180,10 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
         Class rootable = (entityClz);
         try {
             Object entity = (Object) rootable.newInstance();
-            ObjectResult persistableResult = new ObjectResult();
-            Class clz = entity.getClass();
-            IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
-            persistableResult
-                .setEntity(entity);
+            ObjectResult objResult = new ObjectResult();
+            objResult.setValue(entity);
 
-            return persistableResult;
+            return objResult;
         } catch (InstantiationException e) {
             LOGGER.error(e.getMessage());
             throw new ServiceException(e);
@@ -205,12 +202,6 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     @Override
     public <T extends Persistable> IClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy) {
         return dynamicEntityMetadataAccess.getClassMetadata(entityType, withHierarchy);
-    }
-
-    @Override
-    public <T extends Persistable> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale) {
-        boolean withHierarchy = EntityInfoType.isIncludeHierarchyByDefault(infoType);
-        return this.describe(entityType, withHierarchy, infoType, locale);
     }
 
     @Override

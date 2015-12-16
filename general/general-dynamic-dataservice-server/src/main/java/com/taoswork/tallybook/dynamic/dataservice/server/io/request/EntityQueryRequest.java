@@ -3,7 +3,9 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.request;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertySortCriteria;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 
+import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -14,6 +16,10 @@ public class EntityQueryRequest extends EntityRequest {
     public static final int DEFAULT_REQUEST_MAX_RESULT_COUNT = 50;
 
     private CriteriaTransferObject criteriaTransferObject = new CriteriaTransferObject();
+
+    public EntityQueryRequest(EntityTypeParameter entityTypeParam, URI fullUri) {
+        super(entityTypeParam, fullUri);
+    }
 
     public long getStartIndex() {
         return criteriaTransferObject.getFirstResult();

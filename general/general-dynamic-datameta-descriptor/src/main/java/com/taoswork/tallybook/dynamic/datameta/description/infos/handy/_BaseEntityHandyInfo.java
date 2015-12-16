@@ -13,17 +13,17 @@ abstract class _BaseEntityHandyInfo extends NamedInfoImpl implements IEntityInfo
 
     protected _BaseEntityHandyInfo(EntityInfo entityInfo) {
         this.copyNamedInfo(entityInfo);
-        this.containsHierarchy = entityInfo.isContainsHierarchy();
-        this.entityType = entityInfo.getEntityType();
+        this.containsHierarchy = entityInfo.isWithHierarchy();
+        this.entityType = entityInfo.getType();
     }
 
     @Override
-    public boolean isContainsHierarchy() {
+    public boolean isWithHierarchy() {
         return containsHierarchy;
     }
 
     @Override
-    public String getEntityType() {
+    public String getType() {
         return entityType;
     }
 }

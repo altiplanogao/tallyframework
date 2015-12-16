@@ -11,7 +11,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dao.DynamicEntityDao;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
 import com.taoswork.tallybook.dynamic.dataservice.core.security.impl.SecurityVerifierAgent;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityCatalog;
 import com.taoswork.tallybook.general.extension.utils.StringUtility;
 import com.taoswork.tallybook.general.solution.cache.ehcache.CachedRepoManager;
 import com.taoswork.tallybook.general.solution.time.TimeCounter;
@@ -39,7 +39,7 @@ public abstract class DataServiceBase implements IDataService {
 
     private final Map<String, String> entityResNameToTypeName = new HashMap<String, String>();
     //key is type name
-    private Map<String, EntityEntry> entityTypeNameToEntries;
+    private Map<String, EntityCatalog> entityTypeNameToCatalogs;
 
     public DataServiceBase(
             IDataServiceDefinition dataServiceDefinition,
@@ -224,35 +224,35 @@ public abstract class DataServiceBase implements IDataService {
     }
 
     @Override
-    public Map<String, EntityEntry> getEntityEntries() {
-        if (entityTypeNameToEntries == null) {
-            entityTypeNameToEntries = new HashMap<String, EntityEntry>();
+    public Map<String, EntityCatalog> getEntityCatalogs() {
+        if (entityTypeNameToCatalogs == null) {
+            entityTypeNameToCatalogs = new HashMap<String, EntityCatalog>();
 
             DynamicEntityMetadataAccess dynamicEntityMetadataAccess = getService(DynamicEntityMetadataAccess.COMPONENT_NAME);
 
             for (Class entityType : dynamicEntityMetadataAccess.getAllEntities(true, true)) {
                 String typeName = entityType.getName();
-                if (entityTypeNameToEntries.containsKey(typeName)) {
-                    LOGGER.error("EntityEntry with name '{}' already exist, over-writing", typeName);
+                if (entityTypeNameToCatalogs.containsKey(typeName)) {
+                    LOGGER.error("EntityCatalog with name '{}' already exist, over-writing", typeName);
                 }
-                EntityEntry entityEntry = new EntityEntry(entityType);
-                String newResourceName = entityEntry.getResourceName();
+                EntityCatalog entityCatalog = new EntityCatalog(entityType);
+                String newResourceName = entityCatalog.getResourceName();
 
-                entityTypeNameToEntries.put(typeName, entityEntry);
+                entityTypeNameToCatalogs.put(typeName, entityCatalog);
                 entityResNameToTypeName.put(newResourceName, typeName);
             }
         }
-        return Collections.unmodifiableMap(entityTypeNameToEntries);
+        return Collections.unmodifiableMap(entityTypeNameToCatalogs);
     }
 
     @Override
     public String getEntityResourceName(String typeName) {
-        Map<String, EntityEntry> entityEntries = getEntityEntries();
-        EntityEntry entityEntry = entityEntries.get(typeName);
-        if (entityEntry == null) {
+        Map<String, EntityCatalog> entityEntries = getEntityCatalogs();
+        EntityCatalog entityCatalog = entityEntries.get(typeName);
+        if (entityCatalog == null) {
             return null;
         }
-        return entityEntry.getResourceName();
+        return entityCatalog.getResourceName();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,46 +19,46 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.CREATE,
-            EntityActionNames.READ,
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE,
-            EntityActionNames.QUERY);
+            EntityAction.CREATE,
+            EntityAction.READ,
+            EntityAction.UPDATE,
+            EntityAction.DELETE,
+            EntityAction.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status),
-            EntityActionNames.READ,
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE,
-            EntityActionNames.QUERY);
+            EntityAction.READ,
+            EntityAction.UPDATE,
+            EntityAction.DELETE,
+            EntityAction.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.CREATE,
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE,
-            EntityActionNames.QUERY);
+            EntityAction.CREATE,
+            EntityAction.UPDATE,
+            EntityAction.DELETE,
+            EntityAction.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.CREATE,
-            EntityActionNames.READ,
-            EntityActionNames.DELETE,
-            EntityActionNames.QUERY);
+            EntityAction.CREATE,
+            EntityAction.READ,
+            EntityAction.DELETE,
+            EntityAction.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.CREATE,
-            EntityActionNames.READ,
-            EntityActionNames.UPDATE,
-            EntityActionNames.QUERY);
+            EntityAction.CREATE,
+            EntityAction.READ,
+            EntityAction.UPDATE,
+            EntityAction.QUERY);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.CREATE,
-            EntityActionNames.READ,
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE);
+            EntityAction.CREATE,
+            EntityAction.READ,
+            EntityAction.UPDATE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.None, status));
@@ -70,31 +70,31 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE);
+            EntityAction.UPDATE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status),
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE);
+            EntityAction.UPDATE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE);
+            EntityAction.UPDATE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.DELETE);
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.UPDATE);
+            EntityAction.UPDATE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.UPDATE,
-            EntityActionNames.DELETE);
+            EntityAction.UPDATE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.None, status));
@@ -106,31 +106,31 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.DELETE);
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.None, status));
@@ -142,31 +142,31 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(   //Editing
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(   //Editing
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(   //Editing
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(   //Reading
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.DELETE);
+            EntityAction.DELETE);
 
         assertCollectionMatching(   //Editing
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(   //Editing
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.SAVE,
-            EntityActionNames.DELETE);
+            EntityAction.SAVE,
+            EntityAction.DELETE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.None, status));
@@ -177,38 +177,38 @@ public class ActionsBuilderTest {
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq, status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Create), status));
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Read), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Update), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Delete), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.Crudq.exclude(Access.Query), status),
-            EntityActionNames.SAVE);
+            EntityAction.SAVE);
 
         assertCollectionMatching(
             ActionsBuilder.makeActions(Access.None, status));
     }
 
-    private void assertCollectionMatching(Collection<String> target, String... actions){
-        Set<String> actionSet = new HashSet<String>();
-        for(String a : actions){
+    private void assertCollectionMatching(Collection<EntityAction> target, EntityAction... actions){
+        Set<EntityAction> actionSet = new HashSet<EntityAction>();
+        for(EntityAction a : actions){
             actionSet.add(a);
         }
         Assert.assertEquals(actionSet.size(), target.size());
-        for(String t : actionSet){
+        for(EntityAction t : actionSet){
             Assert.assertTrue(target.contains(t));
         }
     }

@@ -15,7 +15,7 @@ public interface DataServiceManager {
 
     DataServiceManager buildingAnnounceFinishing();
 
-    ManagedEntityEntry getInterfaceEntityEntry(String entityClz);
+    ManagedEntityCatalog getInterfaceEntityEntry(String entityClz);
 
     String getEntityInterfaceName(String resourceName);
 

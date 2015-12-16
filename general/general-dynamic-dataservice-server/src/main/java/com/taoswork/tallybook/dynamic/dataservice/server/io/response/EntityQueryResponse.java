@@ -1,24 +1,24 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityQueryResult;
 
 /**
  * Created by Gao Yuan on 2015/6/1.
  */
 public class EntityQueryResponse extends EntityResponse{
-    private final String queryBaseUri;
+    private final String queryUri;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     EntityQueryResult entities;
 
-    public EntityQueryResponse(String queryBaseUri) {
-        this.queryBaseUri = queryBaseUri;
+    public EntityQueryResponse(String queryUri) {
+        this.queryUri = queryUri;
     }
 
-    public String getQueryBaseUri() {
-        return queryBaseUri;
+    public String getQueryUri() {
+        return queryUri;
     }
 
     public EntityQueryResult getEntities() {
@@ -32,6 +32,6 @@ public class EntityQueryResponse extends EntityResponse{
 
     @Override
     public String getAction() {
-        return EntityActionNames.QUERY;
+        return EntityAction.QUERY.getType();
     }
 }

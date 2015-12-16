@@ -3,6 +3,7 @@ package com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter;
 import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import org.apache.commons.lang3.StringUtils;
 
 public class EntityTypeParameterBuilder {
 
@@ -26,6 +27,12 @@ public class EntityTypeParameterBuilder {
             .setTypeName(entityTypeName)
             .setType(entityType)
             .setCeilingType(entityType);
+        if(entityType != null){
+            if(StringUtils.equals(entityTypeName, entityType.getName())){
+                String adjustedResName = dataServiceManager.getEntityResourceName(entityTypeName);
+                entityTypes.setTypeName(adjustedResName);
+            }
+        }
         return entityTypes;
     }
 

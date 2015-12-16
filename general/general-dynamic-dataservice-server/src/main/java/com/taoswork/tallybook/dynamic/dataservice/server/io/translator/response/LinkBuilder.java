@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityActionPaths;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityCreateFreshResponse;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
@@ -69,26 +69,27 @@ public class LinkBuilder {
     private static void appendEntityActionUris (String entityName, EntityResponse response){
         {   //inspect
             String uri = EntityActionPaths.EntityUris.uriTemplateForInfo(entityName);
-            response.add(new Link(uri).withRel(EntityActionNames.INSPECT));
+            response.add(new Link(uri).withRel(EntityAction.INSPECT.getType()));
         }
         {   //search
-            response.add(new Link(EntityActionPaths.EntityUris.uriTemplateForQuery(entityName)).withRel(EntityActionNames.QUERY));
+            response.add(new Link(EntityActionPaths.EntityUris.uriTemplateForQuery(entityName))
+                .withRel(EntityAction.QUERY.getType()));
         }
         {   //create
             String uri = EntityActionPaths.EntityUris.uriTemplateForCreate(entityName);
-            response.add(new Link(uri).withRel(EntityActionNames.CREATE));
+            response.add(new Link(uri).withRel(EntityAction.CREATE.getType()));
         }
         {   //read
             String uri = EntityActionPaths.EntityUris.uriTemplateForRead(entityName);
-            response.add(new Link(uri).withRel(EntityActionNames.READ));
+            response.add(new Link(uri).withRel(EntityAction.READ.getType()));
         }
         {   //update
             String uri = EntityActionPaths.EntityUris.uriTemplateForUpdate(entityName);
-            response.add(new Link(uri).withRel(EntityActionNames.UPDATE));
+            response.add(new Link(uri).withRel(EntityAction.UPDATE.getType()));
         }
         {   //delete
             String uri = EntityActionPaths.EntityUris.uriTemplateForDelete(entityName);
-            response.add(new Link(uri).withRel(EntityActionNames.DELETE));
+            response.add(new Link(uri).withRel(EntityAction.DELETE.getType()));
         }
     }
 

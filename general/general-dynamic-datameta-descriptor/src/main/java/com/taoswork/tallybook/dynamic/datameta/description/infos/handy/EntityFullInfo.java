@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/9.
  */
-public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo {
+public final class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo {
     private final String idField;
     private final String nameField;
     public final String primarySearchField;
@@ -34,7 +34,7 @@ public class EntityFullInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     }
 
     @Override
-    public String getType() {
+    public String getInfoType() {
         return EntityInfoType.Full.getType();
     }
 

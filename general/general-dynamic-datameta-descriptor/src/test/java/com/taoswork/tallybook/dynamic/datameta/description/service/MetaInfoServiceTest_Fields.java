@@ -40,7 +40,7 @@ public class MetaInfoServiceTest_Fields extends MetaInfoServiceTest_Fields_Base 
         Assert.assertEquals(entityInfo.getFields().size(), 19); //Address expanded
 
         if (entityInfo != null) {
-            Assert.assertEquals(entityInfo.getEntityType(), CompanyImpl.class.getName());
+            Assert.assertEquals(entityInfo.getType(), CompanyImpl.class.getName());
 
             Assert.assertNotNull(entityInfo);
             ITabInfo[] tabInfos = entityInfo.getTabs().toArray(new ITabInfo[]{});

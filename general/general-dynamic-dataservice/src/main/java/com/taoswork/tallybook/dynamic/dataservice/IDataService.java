@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.security.ISecurityVerifier;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityCatalog;
 
 import java.util.Map;
 
@@ -29,10 +29,10 @@ public interface IDataService {
     IDataServiceDefinition getDataServiceDefinition();
 
     /**
-     * Type name to EntityEntry
+     * Type name to EntityCatalog
      * @return
      */
-    Map<String, EntityEntry> getEntityEntries();
+    Map<String, EntityCatalog> getEntityCatalogs();
 
     /**
      * Convert typeName to resourceName

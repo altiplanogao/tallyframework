@@ -35,4 +35,8 @@ public class EntityTypeParameter {
         return this;
     }
 
+    public String getEntityUri(){
+        return "/" + this.typeName;
+    }
+
 }

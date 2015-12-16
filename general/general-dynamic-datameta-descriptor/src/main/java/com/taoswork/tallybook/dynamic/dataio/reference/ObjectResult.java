@@ -4,24 +4,24 @@ package com.taoswork.tallybook.dynamic.dataio.reference;
  * Created by Gao Yuan on 2015/11/26.
  */
 public class ObjectResult {
-    String entityName;
-    Object entity;
+    String name;
+    Object value;
 
-    public String getEntityName() {
-        return entityName;
+    public String getName() {
+        return name;
     }
 
-    public ObjectResult setEntityName(String entityName) {
-        this.entityName = entityName;
+    public ObjectResult setName(String name) {
+        this.name = name;
         return this;
     }
 
-    public Object getEntity() {
-        return entity;
+    public Object getValue() {
+        return value;
     }
 
-    public ObjectResult setEntity(Object entity) {
-        this.entity = entity;
+    public ObjectResult setValue(Object value) {
+        this.value = value;
         return this;
     }
 }

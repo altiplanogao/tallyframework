@@ -12,9 +12,10 @@ import com.taoswork.tallybook.dynamic.datameta.metadata.IFieldMetadata;
 import com.taoswork.tallybook.dynamic.datameta.metadata.fieldmetadata.BaseCollectionFieldMetadata;
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.CollectionEntryTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
@@ -78,17 +79,17 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = entityTypes.getCeilingType();
-        if (entityType == null) {
+        Class entityCeilingType = entityTypes.getCeilingType();
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
 
         Locale locale = super.getLocale(request);
-        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), requestParams, getParamInfoFilter());
+            uriFromRequest(request), requestParams, getParamInfoFilter());
         infoRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityInfoResponse entityResponse = frontEndEntityService.getInfoResponse(infoRequest, locale);
@@ -116,17 +117,17 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
                         @RequestParam MultiValueMap<String, String> requestParams) {
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = entityTypes.getCeilingType();
-        if (entityType == null) {
+        Class entityCeilingType = entityTypes.getCeilingType();
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
 
         Locale locale = super.getLocale(request);
-        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), requestParams, getParamInfoFilter());
+            uriFromRequest(request), requestParams, getParamInfoFilter());
         entityRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
@@ -137,7 +138,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
 
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
@@ -184,30 +185,30 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
                               @PathVariable Map<String, String> pathVars) {
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = entityTypes.getCeilingType();
-        if (entityType == null) {
+        Class entityCeilingType = entityTypes.getCeilingType();
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
 
         Locale locale = super.getLocale(request);
-        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request));
+            uriFromRequest(request));
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
         if (isAjaxDataRequest(request)) {
             return makeDataView(model, addResponse);
         }
 
-        model.addAttribute("currentAction", EntityActionNames.CREATE);
+        model.addAttribute("currentAction", EntityAction.CREATE.getType());
         model.addAttribute("formAction", request.getRequestURL().toString());
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
 
         model.addAttribute("menu", menu);
         model.addAttribute("current", currentPath);
@@ -274,7 +275,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), entityForm);
+            uriFromRequest(request), entityForm);
         EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
         boolean success = createResponse.success();
@@ -304,30 +305,30 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
                        @PathVariable("id") String id) {
         String entityTypeName = getEntityTypeName(pathVars);
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = entityTypes.getCeilingType();
-        if (entityType == null) {
+        Class entityCeilingType = entityTypes.getCeilingType();
+        if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
 
         Locale locale = super.getLocale(request);
-        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+        IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), id);
+            uriFromRequest(request), id);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
         if (isAjaxDataRequest(request)) {
             return makeDataView(model, readResponse);
         }
 
-        model.addAttribute("currentAction", EntityActionNames.READ);
+        model.addAttribute("currentAction", EntityAction.READ.getType());
         model.addAttribute("formAction", request.getRequestURL().toString());
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
+        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
         if (readResponse.getEntity() != null) {
 //            currentPath.pushEntry(readResponse.getEntity().getDataName(), request.getRequestURI());
             model.addAttribute("entityName", readResponse.getEntity().getDataName());
@@ -410,7 +411,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), entityForm);
+            uriFromRequest(request), entityForm);
         EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
         boolean success = updateResponse.success();
@@ -457,7 +458,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
         EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
-            request.getRequestURI(), uriFromRequest(request), id, entityForm);
+            uriFromRequest(request), id, entityForm);
 
         EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
         boolean success = deleteResponse.success();
@@ -473,54 +474,143 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
     /// Methods by Collection Field                                                 //////
     //////////////////////////////////////////////////////////////////////////////////////
 
-    @RequestMapping(value = "/{collectionField:.*}/add", method = RequestMethod.GET)
+//    @RequestMapping(value = "/{collectionField:.*}/add", method = RequestMethod.GET)
+//    public String collectionCreateFresh(HttpServletRequest request, HttpServletResponse response,
+//                                        Model model,
+//                                        @PathVariable Map<String, String> pathVars,
+//                                        @PathVariable(value = "collectionField") String collectionField){
+//        String entityTypeName = getEntityTypeName(pathVars);
+//        EntityTypeParameter holderEntityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
+//        Class entityType = holderEntityTypes.getType();
+//        Class entityCeilingType = holderEntityTypes.getCeilingType();
+//        if (entityCeilingType == null) {
+//            return VIEWS.Redirect2Home;
+//        }
+//        if (entityType == null) {
+//            return VIEWS.Redirect2Failure;
+//        }
+//        Locale locale = super.getLocale(request);
+//        IDataService dataService = dataServiceManager.getDataService(entityType.getName());
+//        final DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
+//        IClassMetadata cm = dynamicEntityService.inspectMetadata(entityType, true);
+//        IFieldMetadata fm = cm.getFieldMetadata(collectionField);
+//        if(!(fm instanceof BaseCollectionFieldMetadata)){
+//           return null;
+//        }
+//        BaseCollectionFieldMetadata cfm = (BaseCollectionFieldMetadata)fm;
+//        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
+//
+//        EntityTypeParameter entityTypes = new EntityTypeParameter();
+//        entityTypes.setTypeName(cfm.getName())
+//            .setCeilingType(cfm.getPresentationCeilingClass())
+//            .setType(cfm.getPresentationClass());
+//        CollectionEntryCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCollectionCreateFreshRequest(entityTypes, collectionField,
+//            uriFromRequest(request));
+//
+//        CollectionEntryCreateFreshResponse addResponse = frontEndEntityService.collectionEntryCreateFresh(addRequest, locale);
+//        if (isAjaxDataRequest(request)) {
+//            return makeDataView(model, addResponse);
+//        }
+//
+//        model.addAttribute("currentAction", EntityAction.CREATE.getType());
+//        model.addAttribute("formAction", request.getRequestURL().toString());
+//
+//        Person person = adminCommonModelService.getPersistentPerson();
+//        AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
+//        IMenu menu = adminMenuService.buildMenu(employee);
+//
+//        model.addAttribute("menu", menu);
+//        model.addAttribute("person", person);
+//
+//        model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
+//        String entityResultInJson = getObjectInJson(addResponse);
+//        model.addAttribute("addData", entityResultInJson);
+//
+//        model.addAttribute("viewType", "entityAdd");
+//        setCommonModelAttributes(model, locale);
+//
+//        boolean success = addResponse.success();
+//        if (!success) {
+//            if (!addResponse.getErrors().isAuthorized()) {
+//                model.addAttribute("viewType", "noPermission");
+//            } else {
+//                setErrorModelAttributes(model, addResponse);
+//                model.addAttribute("viewType", "uncheckedError");
+//            }
+//        }
+//        if (isSimpleViewRequest(request)) {
+//            return VIEWS.SimpleView;
+//        } else {
+//            model.addAttribute("formScope", "main");
+//            return VIEWS.FramedView;
+//        }
+//    }
+
+    @RequestMapping(value = "/{id}/{collectionField:.*}", method = RequestMethod.GET)
+    public String collectionQuery(HttpServletRequest request, HttpServletResponse response,
+                                  Model model,
+                                  @PathVariable Map<String, String> pathVars,
+                                  @PathVariable(value = "id") String id,
+                                  @PathVariable(value = "collectionField") String collectionField,
+                                  @RequestParam MultiValueMap<String, String> requestParams){
+        return null;
+    }
+
+    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.GET)
     public String collectionCreateFresh(HttpServletRequest request, HttpServletResponse response,
                                         Model model,
                                         @PathVariable Map<String, String> pathVars,
+                                        @PathVariable(value = "id") String id,
                                         @PathVariable(value = "collectionField") String collectionField){
         String entityTypeName = getEntityTypeName(pathVars);
-        EntityTypeParameter holderEntityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
-        Class entityType = holderEntityTypes.getType();
-        Class entityCeilingType = holderEntityTypes.getCeilingType();
+        EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
+        Class entityType = entityTypes.getType();
+        Class entityCeilingType = entityTypes.getCeilingType();
         if (entityCeilingType == null) {
             return VIEWS.Redirect2Home;
         }
         if (entityType == null) {
             return VIEWS.Redirect2Failure;
         }
+
+        if (!(isAjaxRequest(request))) {
+            return VIEWS.Redirect2Failure;
+        }
+
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         final DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
         IClassMetadata cm = dynamicEntityService.inspectMetadata(entityType, true);
         IFieldMetadata fm = cm.getFieldMetadata(collectionField);
         if(!(fm instanceof BaseCollectionFieldMetadata)){
-           return null;
+            return null;
         }
+
         BaseCollectionFieldMetadata cfm = (BaseCollectionFieldMetadata)fm;
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
 
-        EntityTypeParameter entityTypes = new EntityTypeParameter();
-        entityTypes.setTypeName(cfm.getName())
-            .setCeilingType(cfm.getPresentationCeilingClass())
-            .setType(cfm.getPresentationClass());
-        CollectionEntryCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCollectionCreateFreshRequest(entityTypes, collectionField,
-            request.getRequestURI(), uriFromRequest(request));
+        CollectionEntryTypeParameter collectionEntryTypeParameter = new CollectionEntryTypeParameter(entityType,
+            cfm.getName(), cfm.getPresentationCeilingClass(), cfm.getPresentationClass());
+//        EntityTypeParameter entryTypes = new EntityTypeParameter();
+//        entryTypes.setTypeName(cfm.getName())
+//            .setCeilingType(cfm.getPresentationCeilingClass())
+//            .setType(cfm.getPresentationClass());
+        CollectionEntryCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCollectionCreateFreshRequest(entityTypes,
+            uriFromRequest(request), collectionEntryTypeParameter);
 
         CollectionEntryCreateFreshResponse addResponse = frontEndEntityService.collectionEntryCreateFresh(addRequest, locale);
         if (isAjaxDataRequest(request)) {
             return makeDataView(model, addResponse);
         }
 
-        model.addAttribute("currentAction", EntityActionNames.CREATE);
+        model.addAttribute("currentAction", EntityAction.CREATE.getType());
         model.addAttribute("formAction", request.getRequestURL().toString());
 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypeName, request);
 
         model.addAttribute("menu", menu);
-        model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
 
         model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
@@ -545,25 +635,6 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
             model.addAttribute("formScope", "main");
             return VIEWS.FramedView;
         }
-    }
-
-    @RequestMapping(value = "/{id}/{collectionField:.*}", method = RequestMethod.GET)
-    public String collectionQuery(HttpServletRequest request, HttpServletResponse response,
-                                  Model model,
-                                  @PathVariable Map<String, String> pathVars,
-                                  @PathVariable(value = "id") String id,
-                                  @PathVariable(value = "collectionField") String collectionField,
-                                  @RequestParam MultiValueMap<String, String> requestParams){
-        return null;
-    }
-
-    @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.GET)
-    public String collectionCreateFresh(HttpServletRequest request, HttpServletResponse response,
-                                        Model model,
-                                        @PathVariable Map<String, String> pathVars,
-                                        @PathVariable(value = "id") String id,
-                                        @PathVariable(value = "collectionField") String collectionField){
-        return null;
     }
 
     @RequestMapping(value = "/{id}/{collectionField:.*}/add", method = RequestMethod.POST)

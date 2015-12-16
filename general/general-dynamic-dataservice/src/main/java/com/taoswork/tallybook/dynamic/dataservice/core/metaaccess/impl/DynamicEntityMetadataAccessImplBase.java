@@ -166,7 +166,8 @@ public abstract class DynamicEntityMetadataAccessImplBase extends DynamicEntityM
     }
 
     private EntityInfo calcEntityInfo(Class<?> entityType, ClassScope classScope) {
-        IClassMetadata metadata = this.getClassMetadata(entityType, classScope.isWithHierarchy());
+        boolean withHierarchy = classScope.isWithHierarchy();
+        IClassMetadata metadata = this.getClassMetadata(entityType, withHierarchy);
         EntityInfo entityInfo = calcEntityInfo(metadata);
         return entityInfo;
     }

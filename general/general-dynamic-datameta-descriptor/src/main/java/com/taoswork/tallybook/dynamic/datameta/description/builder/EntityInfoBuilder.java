@@ -9,7 +9,6 @@ import com.taoswork.tallybook.dynamic.datameta.description.descriptor.tab.TabInf
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.main.impl.EntityInfoImpl;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
-import com.taoswork.tallybook.dynamic.datameta.metadata.classmetadata.ClassTreeMetadata;
 
 import java.util.*;
 
@@ -26,10 +25,7 @@ public final class EntityInfoBuilder {
         RawEntityInfo rawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(classMetadata);
 
         Class entityType = classMetadata.getEntityClz();
-        boolean withHierarchy = false;
-        if (classMetadata instanceof ClassTreeMetadata) {
-            withHierarchy = true;
-        }
+        boolean withHierarchy = classMetadata.containsHierarchy();
         Collection<Class> refEntries = rawEntityInfo.getReferencingEntries();
         Map<String, EntityInfo> childInfoMap = new HashMap<String, EntityInfo>();
         if(refEntries != null && !refEntries.isEmpty()){

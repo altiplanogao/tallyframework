@@ -22,8 +22,8 @@ public class EntityInfoImpl
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityInfoImpl.class);
 
-    private boolean containsHierarchy = true;
-    private Class entityType = null;
+    private boolean withHierarchy = true;
+    private Class type = null;
 
     private String idField;
     private String nameField;
@@ -33,12 +33,12 @@ public class EntityInfoImpl
     private List<ITabInfo> tabs = new ArrayList<ITabInfo>();
 
     private List<String> gridFields = new ArrayList<String>();
-    private final Map<String, EntityInfo> referencingEntryEntityInfos = new HashMap<String, EntityInfo>();
-    private transient Map<String, IEntityInfo> entryInfos;
+    private final Map<String, EntityInfo> referencingEntityInfos = new HashMap<String, EntityInfo>();
+    private transient Map<String, IEntityInfo> ientityInfos;
 
-    public EntityInfoImpl(Class entityType, boolean containsHierarchy, List<ITabInfo> tabs, Map<String, IFieldInfo> fields) {
-        this.containsHierarchy = containsHierarchy;
-        this.entityType = entityType;
+    public EntityInfoImpl(Class type, boolean withHierarchy, List<ITabInfo> tabs, Map<String, IFieldInfo> fields) {
+        this.withHierarchy = withHierarchy;
+        this.type = type;
         this.tabs = tabs;
         this.fields = new HashMap<String, IFieldInfo>();
         for (Map.Entry<String, IFieldInfo> field : fields.entrySet()) {
@@ -112,53 +112,53 @@ public class EntityInfoImpl
     }
 
     @Override
-    public String getType() {
+    public String getInfoType() {
         return EntityInfoType.Main.getType();
     }
 
     @Override
-    public boolean isContainsHierarchy() {
-        return containsHierarchy;
+    public boolean isWithHierarchy() {
+        return withHierarchy;
     }
 
     @Override
-    public String getEntityType() {
-        if (entityType != null)
-            return entityType.getName();
+    public String getType() {
+        if (type != null)
+            return type.getName();
         return null;
     }
 
     @Override
     public void addReferencingInfo(String entryName, EntityInfo entityInfo){
-        referencingEntryEntityInfos.put(entryName, entityInfo);
+        referencingEntityInfos.put(entryName, entityInfo);
     }
 
     @Override
     public Map<String, EntityInfo> getReferencingInfos() {
-        if(referencingEntryEntityInfos.isEmpty())
+        if(referencingEntityInfos.isEmpty())
             return null;
-        return Collections.unmodifiableMap(referencingEntryEntityInfos);
+        return Collections.unmodifiableMap(referencingEntityInfos);
     }
 
     @Override
     @JsonIgnore
     public Map<String, IEntityInfo> getReferencing() {
-        if(entryInfos == null){
+        if(ientityInfos == null){
             synchronized (this){
-                if(entryInfos != null){
-                    return entryInfos;
+                if(ientityInfos != null){
+                    return ientityInfos;
                 }
                 Map<String, IEntityInfo> tempInfos = getReferencingInfosAsType(EntityInfoType.Grid);
-                entryInfos = tempInfos;
+                ientityInfos = tempInfos;
             }
         }
-        return entryInfos;
+        return ientityInfos;
     }
 
     @Override
     public Map<String, IEntityInfo> getReferencingInfosAsType(EntityInfoType entityInfoType) {
         Map<String, IEntityInfo> iEntityInfos = new HashMap<String, IEntityInfo>();
-        for (Map.Entry<String, EntityInfo> entry : referencingEntryEntityInfos.entrySet()){
+        for (Map.Entry<String, EntityInfo> entry : referencingEntityInfos.entrySet()){
             String key = entry.getKey();
             EntityInfo val = entry.getValue();
             IEntityInfo ival = convert(val, entityInfoType);

@@ -5,9 +5,10 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 /**
  */
 public class EntityInstanceResult {
-    String dataName;
     String idKey;
     String idValue;
+
+    String dataName;
     Persistable bean;
 
     public Persistable getBean() {

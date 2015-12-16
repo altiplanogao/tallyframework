@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/8/9.
  */
-public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo {
+public final class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo {
     private final String idField;
     private final String nameField;
     public final String primarySearchField;
@@ -32,7 +32,7 @@ public class EntityGridInfo extends _BaseEntityHandyInfo implements IEntityInfo 
     }
 
     @Override
-    public String getType() {
+    public String getInfoType() {
         return EntityInfoType.Grid.getType();
     }
 

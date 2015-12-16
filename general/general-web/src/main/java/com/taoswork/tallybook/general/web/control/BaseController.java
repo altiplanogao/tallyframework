@@ -96,17 +96,17 @@ public abstract class BaseController {
         return DataView;
     }
 
-    protected static String uriFromRequest(HttpServletRequest request){
+    protected static URI uriFromRequest(HttpServletRequest request){
         try {
             URI uriobj = new URI(null, null, request.getRequestURI(), request.getQueryString(), null);
-            return uriobj.toString();
+            return uriobj;
         } catch (URISyntaxException e) {
             String query = request.getQueryString();
             String uri = request.getRequestURI();
             if(StringUtils.isEmpty(query)){
-                return uri;
+                return URI.create(uri);
             }else {
-                return uri + "?" + query;
+                return URI.create(uri + "?" + query);
             }
         }
     }

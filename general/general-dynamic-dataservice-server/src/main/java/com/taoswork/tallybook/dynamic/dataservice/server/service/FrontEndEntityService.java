@@ -9,13 +9,15 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQue
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityActionPaths;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.EntityInfoResult;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.response.result.InfoTypeOption;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.request.Request2CtoTranslator;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.ActionsBuilder;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response.LinkBuilder;
@@ -56,19 +58,31 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
     private void appendAuthorizedActions(EntityRequest request, EntityResponse response, ActionsBuilder.CurrentStatus currentStatus) {
         Access access = dynamicEntityService.getAuthorizeAccess(request.getEntityType(), Access.Crudq);
-        Collection<String> actions = ActionsBuilder.makeActions(access, currentStatus);
-        response.setActions(actions);
+        Collection<EntityAction> actions = ActionsBuilder.makeActions(access, currentStatus);
+        Collection<String> actionsString = EntityAction.convertToTypes(actions, new HashSet<String>());
+        response.setActions(actionsString);
     }
 
-    private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale) {
-        Class<? extends Persistable> entityCeilingType = request.getEntityType();
-        Class<? extends Persistable> entityType = response.getEntityType();
-        if (entityType == null)
+    private void appendInfoFields(EntityRequest request, EntityResponse response, Locale locale, InfoTypeOption infoTypeOption, boolean withHierarchy) {
+        final Class<? extends Persistable> useType;
+
+        switch (infoTypeOption){
+            case UseCeiling:
+                useType = response.getEntityCeilingType();
+                break;
+            case UseFactual:
+                useType = response.getEntityType();
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+
+        if (useType == null)
             return;
 
         List<IEntityInfo> entityInfos = new ArrayList<IEntityInfo>();
         for (EntityInfoType infoType : request.getEntityInfoTypes()) {
-            IEntityInfo entityInfo = dynamicEntityService.describe(entityType, infoType, locale);
+            IEntityInfo entityInfo = dynamicEntityService.describe(useType, withHierarchy, infoType, locale);
             entityInfos.add(entityInfo);
         }
 
@@ -80,7 +94,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             if (entityInfo != null) {
                 infoResult.setIdFieldIfEmpty(entityInfo.getIdField());
                 infoResult.setNameFieldIfEmpty(entityInfo.getNameField());
-                infoResult.addDetail(entityInfo.getType(), entityInfo);
+                infoResult.addDetail(entityInfo.getInfoType(), entityInfo);
             }
         }
 
@@ -95,7 +109,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     public EntityInfoResponse getInfoResponse(EntityInfoRequest request, Locale locale) {
         EntityInfoResponse response = new EntityInfoResponse();
         responseTranslator().translateInfoResponse(request, response, locale);
-        this.appendInfoFields(request, response, locale);
+        this.appendInfoFields(request, response, locale, InfoTypeOption.UseCeiling, false);
         this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
         LinkBuilder.buildLinkForInfoResults(request, response);
         return response;
@@ -118,7 +132,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateQueryResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseCeiling, true);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Nothing);
             LinkBuilder.buildLinkForQueryResults(request, response);
         }
@@ -137,7 +151,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateCreateFreshResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseFactual, false);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
             LinkBuilder.buildLinkForNewInstanceResults(request, response);
         }
@@ -159,7 +173,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateCreateResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseFactual, false);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
         }
         return response;
@@ -181,7 +195,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateReadResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseFactual, false);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
             LinkBuilder.buildLinkForReadResults(request, response);
         }
@@ -199,7 +213,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             se = e;
         } finally {
             responseTranslator().translateUpdateResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseFactual, false);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.EditAheadReading);
         }
         return response;
@@ -226,13 +240,13 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         ObjectResult result = null;
         ServiceException se = null;
         try {
-            Class<?> entityType = request.getEntityType();
+            Class<?> entityType = request.getEntryPresentationClass();
             result = dynamicEntityService.makeDissociatedObject(entityType);
         } catch (ServiceException e) {
             se = e;
         } finally {
             responseTranslator().translateCollectionEntryCreateFreshResponse(request, result, se, response, locale);
-            this.appendInfoFields(request, response, locale);
+            this.appendInfoFields(request, response, locale, InfoTypeOption.UseFactual, false);
             this.appendAuthorizedActions(request, response, ActionsBuilder.CurrentStatus.Adding);
         }
         return response;

@@ -9,11 +9,11 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/9.
  */
 public interface IEntityInfo extends NamedInfo {
+    String getInfoType();
+
     String getType();
 
-    boolean isContainsHierarchy();
-
-    String getEntityType();
+    boolean isWithHierarchy();
 
     String getIdField();
 

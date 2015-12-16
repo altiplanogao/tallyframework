@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 
 /**
  * Created by Gao Yuan on 2015/9/30.
@@ -8,6 +8,6 @@ import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActio
 public class EntityInfoResponse extends EntityResponse {
     @Override
     public String getAction() {
-        return EntityActionNames.INSPECT;
+        return EntityAction.INSPECT.getType();
     }
 }

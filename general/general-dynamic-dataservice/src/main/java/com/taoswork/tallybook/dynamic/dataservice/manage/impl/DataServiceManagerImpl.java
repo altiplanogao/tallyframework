@@ -2,9 +2,9 @@ package com.taoswork.tallybook.dynamic.dataservice.manage.impl;
 
 import com.taoswork.tallybook.dynamic.dataservice.IDataService;
 import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityCatalog;
 import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
-import com.taoswork.tallybook.dynamic.dataservice.manage.ManagedEntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.manage.ManagedEntityCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -22,7 +22,8 @@ public class DataServiceManagerImpl implements DataServiceManager, ApplicationCo
 
     // DataService name to DataService
     private final Map<String, IDataService> dataServiceMap = new HashMap<String, IDataService>();
-    private final Map<String, ManagedEntityEntry> entityTypeNameToEntryMap = new HashMap<String, ManagedEntityEntry>();
+
+    private final Map<String, ManagedEntityCatalog> entityTypeNameToCatalogMap = new HashMap<String, ManagedEntityCatalog>();
 
     private final Map<String, String> entityResNameToTypeName = new HashMap<String, String>();
 
@@ -37,24 +38,24 @@ public class DataServiceManagerImpl implements DataServiceManager, ApplicationCo
     @Override
     public DataServiceManager buildingAppendDataService(String dataServiceBeanName, IDataService dataService){
         dataServiceMap.put(dataServiceBeanName, dataService);
-        for(Map.Entry<String, EntityEntry> entryEntryElement : dataService.getEntityEntries().entrySet()){
-            String typeName = entryEntryElement.getKey();
-            EntityEntry entityEntry = entryEntryElement.getValue();
-            if(entityTypeNameToEntryMap.containsKey(typeName)){
-                LOGGER.error("ManagedEntityEntry with name '{}' already exist, over-writing", typeName);
+        for(Map.Entry<String, EntityCatalog> entityCatalogEntry : dataService.getEntityCatalogs().entrySet()){
+            String typeName = entityCatalogEntry.getKey();
+            EntityCatalog entityCatalog = entityCatalogEntry.getValue();
+            if(entityTypeNameToCatalogMap.containsKey(typeName)){
+                LOGGER.error("ManagedEntityCatalog with name '{}' already exist, over-writing", typeName);
             }
-            entityTypeNameToEntryMap.put(typeName, new ManagedEntityEntry(dataServiceBeanName, entityEntry));
+            entityTypeNameToCatalogMap.put(typeName, new ManagedEntityCatalog(dataServiceBeanName, entityCatalog));
         }
         return this;
     }
 
     @Override
     public DataServiceManager buildingAnnounceFinishing(){
-        for(Map.Entry<String, ManagedEntityEntry> entryEntry : entityTypeNameToEntryMap.entrySet()){
+        for(Map.Entry<String, ManagedEntityCatalog> entryEntry : entityTypeNameToCatalogMap.entrySet()){
             String interfaceName = entryEntry.getKey();
-            EntityEntry managedEntityEntry = entryEntry.getValue().getEntityEntry();
+            EntityCatalog managedEntityCatalog = entryEntry.getValue();
 
-            String resourceName = managedEntityEntry.getResourceName();
+            String resourceName = managedEntityCatalog.getResourceName();
             if(entityResNameToTypeName.containsKey(resourceName)){
                 LOGGER.error("ResourceName '{}' for interface '{}' already used.", resourceName, interfaceName);
             }
@@ -65,8 +66,8 @@ public class DataServiceManagerImpl implements DataServiceManager, ApplicationCo
     }
 
     @Override
-    public ManagedEntityEntry getInterfaceEntityEntry(String entityType){
-        return entityTypeNameToEntryMap.get(entityType);
+    public ManagedEntityCatalog getInterfaceEntityEntry(String entityType){
+        return entityTypeNameToCatalogMap.get(entityType);
     }
 
     @Override
@@ -76,9 +77,9 @@ public class DataServiceManagerImpl implements DataServiceManager, ApplicationCo
 
     @Override
     public String getEntityResourceName(String entityType) {
-        ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
-        if (null != managedEntityEntry) {
-            return managedEntityEntry.getEntityEntry().getResourceName();
+        ManagedEntityCatalog managedEntityCatalog = getInterfaceEntityEntry(entityType);
+        if (null != managedEntityCatalog) {
+            return managedEntityCatalog.getResourceName();
         } else {
             return "";
         }
@@ -91,9 +92,9 @@ public class DataServiceManagerImpl implements DataServiceManager, ApplicationCo
 
     @Override
     public IDataService getDataService(String entityType) {
-        ManagedEntityEntry managedEntityEntry = getInterfaceEntityEntry(entityType);
-        if (null != managedEntityEntry) {
-            return dataServiceMap.get(managedEntityEntry.getDataServiceName());
+        ManagedEntityCatalog managedEntityCatalog = getInterfaceEntityEntry(entityType);
+        if (null != managedEntityCatalog) {
+            return dataServiceMap.get(managedEntityCatalog.getDataServiceName());
         } else {
             return null;
         }

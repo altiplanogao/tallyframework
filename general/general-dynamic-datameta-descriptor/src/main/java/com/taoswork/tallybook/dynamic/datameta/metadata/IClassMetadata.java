@@ -16,6 +16,8 @@ public interface IClassMetadata extends IFriendly, Cloneable, Serializable {
 
     boolean containsSuper();
 
+    boolean containsHierarchy();
+
     String getIdFieldName();
 
     Field getIdField();

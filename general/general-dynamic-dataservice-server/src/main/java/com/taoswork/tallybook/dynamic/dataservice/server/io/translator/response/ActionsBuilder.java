@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.translator.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 import com.taoswork.tallybook.general.authority.core.basic.Access;
 
 import java.util.ArrayList;
@@ -18,28 +18,28 @@ public class ActionsBuilder {
         Adding
     }
 
-    private static void makeOverallActions(Access access, Collection<String> actions) {
+    private static void makeOverallActions(Access access, Collection<EntityAction> actions) {
         //CRUD
-        if (access.hasGeneral(Access.CREATE)) actions.add(EntityActionNames.CREATE);
-        if (access.hasGeneral(Access.READ)) actions.add(EntityActionNames.READ);
-        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityActionNames.UPDATE);
-        if (access.hasGeneral(Access.DELETE)) actions.add(EntityActionNames.DELETE);
-        if (access.hasGeneral(Access.QUERY)) actions.add(EntityActionNames.QUERY);
+        if (access.hasGeneral(Access.CREATE)) actions.add(EntityAction.CREATE);
+        if (access.hasGeneral(Access.READ)) actions.add(EntityAction.READ);
+        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityAction.UPDATE);
+        if (access.hasGeneral(Access.DELETE)) actions.add(EntityAction.DELETE);
+        if (access.hasGeneral(Access.QUERY)) actions.add(EntityAction.QUERY);
     }
 
-    private static void makeReadingActions(Access access, Collection<String> actions) {
+    private static void makeReadingActions(Access access, Collection<EntityAction> actions) {
         //Edit, Delete
-        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityActionNames.UPDATE);
-        if (access.hasGeneral(Access.DELETE)) actions.add(EntityActionNames.DELETE);
+        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityAction.UPDATE);
+        if (access.hasGeneral(Access.DELETE)) actions.add(EntityAction.DELETE);
     }
 
-    private static void makeEditingActions(Access access, Collection<String> actions) {
+    private static void makeEditingActions(Access access, Collection<EntityAction> actions) {
         //Save, Delete
-        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityActionNames.SAVE);
-        if (access.hasGeneral(Access.DELETE)) actions.add(EntityActionNames.DELETE);
+        if (access.hasGeneral(Access.UPDATE)) actions.add(EntityAction.SAVE);
+        if (access.hasGeneral(Access.DELETE)) actions.add(EntityAction.DELETE);
     }
 
-    private static void makeEditAheadReadingActions(Access access, Collection<String> actions) {
+    private static void makeEditAheadReadingActions(Access access, Collection<EntityAction> actions) {
         //Save, Delete
         if (access.hasGeneral(Access.UPDATE)) {
             makeEditingActions(access, actions);
@@ -48,13 +48,13 @@ public class ActionsBuilder {
         }
     }
 
-    private static void makeAddingActions(Access access, Collection<String> actions) {
+    private static void makeAddingActions(Access access, Collection<EntityAction> actions) {
         //Save
-        if (access.hasGeneral(Access.CREATE)) actions.add(EntityActionNames.SAVE);
+        if (access.hasGeneral(Access.CREATE)) actions.add(EntityAction.SAVE);
     }
 
-    public static Collection<String> makeActions(Access access, CurrentStatus status) {
-        Collection<String> actions = new ArrayList<String>();
+    public static Collection<EntityAction> makeActions(Access access, CurrentStatus status) {
+        Collection<EntityAction> actions = new ArrayList<EntityAction>();
         switch (status) {
             case Nothing:
                 makeOverallActions(access, actions);

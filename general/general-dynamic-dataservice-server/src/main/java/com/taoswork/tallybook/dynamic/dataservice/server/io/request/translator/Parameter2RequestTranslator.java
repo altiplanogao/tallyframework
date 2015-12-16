@@ -6,6 +6,7 @@ import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertySor
 import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.SortDirection;
 import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
+import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.CollectionEntryTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.general.extension.utils.UriUtility;
 import org.apache.commons.collections4.MapUtils;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -106,21 +108,18 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityInfoRequest makeInfoRequest(EntityTypeParameter entityTypeParam,
-                                                    String entityUri, String fullUrl,
+                                                    URI fullUri,
                                                     MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
-        EntityInfoRequest request = new EntityInfoRequest();
-        request.setEntityRequest(entityTypeParam, entityUri, fullUrl);
+        EntityInfoRequest request = new EntityInfoRequest(entityTypeParam, fullUri);
         _fillInfoCriterias(request, requestParams, infoFilter);
 
         return request;
     }
 
     public static EntityQueryRequest makeQueryRequest(EntityTypeParameter entityTypeParam,
-                                                      String uri, String fullUrl,
+                                                      URI fullUri,
                                                       MultiValueMap<String, String> requestParams, Set<String> infoFilter) {
-        EntityQueryRequest request = new EntityQueryRequest();
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(uri);
+        EntityQueryRequest request = new EntityQueryRequest(entityTypeParam, fullUri);
         _queryRequestSetPropertyCriterias(request, requestParams);
         _fillInfoCriterias(request, requestParams, infoFilter);
 
@@ -128,29 +127,23 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityCreateFreshRequest makeCreateFreshRequest(EntityTypeParameter entityTypeParam,
-                                                                  String uri, String fullUrl) {
-        EntityCreateFreshRequest request = new EntityCreateFreshRequest();
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+                                                                  URI fullUri) {
+        EntityCreateFreshRequest request = new EntityCreateFreshRequest(entityTypeParam, fullUri);
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityCreateRequest makeCreateRequest(EntityTypeParameter entityTypeParam,
-                                                        String uri, String fullUrl, Entity entity) {
-        EntityCreateRequest request = new EntityCreateRequest(entity);
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+                                                        URI fullUri, Entity entity) {
+        EntityCreateRequest request = new EntityCreateRequest(entityTypeParam, fullUri, entity);
         request.clearEntityInfoType();
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityReadRequest makeReadRequest(EntityTypeParameter entityTypeParam,
-                                                    String uri, String fullUrl, String id) {
-        EntityReadRequest request = new EntityReadRequest();
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+                                                    URI fullUri, String id) {
+        EntityReadRequest request = new EntityReadRequest(entityTypeParam, fullUri);
         request.setId(id);
         request.addEntityInfoType(EntityInfoType.Form);
 
@@ -158,20 +151,16 @@ public class Parameter2RequestTranslator {
     }
 
     public static EntityUpdateRequest makeUpdateRequest(EntityTypeParameter entityTypeParam,
-                                                        String uri, String fullUrl, Entity entity) {
-        EntityUpdateRequest request = new EntityUpdateRequest(entity);
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+                                                        URI fullUri, Entity entity) {
+        EntityUpdateRequest request = new EntityUpdateRequest(entityTypeParam, fullUri, entity);
         request.clearEntityInfoType();
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }
 
     public static EntityDeleteRequest makeDeleteRequest(EntityTypeParameter entityTypeParam,
-                                                        String uri, String fullUrl, String id, Entity entity) {
-        EntityDeleteRequest request = new EntityDeleteRequest(entity);
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+                                                        URI fullUri, String id, Entity entity) {
+        EntityDeleteRequest request = new EntityDeleteRequest(entityTypeParam, fullUri, entity);
         request.setId(id);
         if (entity.getEntityType() == null) {
             entity.setEntityType(entityTypeParam.getType());
@@ -196,11 +185,9 @@ public class Parameter2RequestTranslator {
         }
     }
 
-    public static CollectionEntryCreateFreshRequest makeCollectionCreateFreshRequest(EntityTypeParameter entityTypeParam,
-                                                                            String collectionField, String uri, String fullUrl) {
-        CollectionEntryCreateFreshRequest request = new CollectionEntryCreateFreshRequest(collectionField);
-        request.setEntityRequest(entityTypeParam, uri, fullUrl);
-        request.setEntityUri(UriUtility.findParent(uri));
+    public static CollectionEntryCreateFreshRequest makeCollectionCreateFreshRequest(EntityTypeParameter entityTypeParam, URI fullUri,
+                                                                                     CollectionEntryTypeParameter collectionEntryTypeParameter) {
+        CollectionEntryCreateFreshRequest request = new CollectionEntryCreateFreshRequest(entityTypeParam, fullUri, collectionEntryTypeParameter);
         request.addEntityInfoType(EntityInfoType.Form);
         return request;
     }

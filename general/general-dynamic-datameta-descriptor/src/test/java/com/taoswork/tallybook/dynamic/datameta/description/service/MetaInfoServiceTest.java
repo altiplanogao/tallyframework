@@ -46,7 +46,7 @@ public class MetaInfoServiceTest {
         IClassMetadata classMetadata = metadataService.generateMetadata(classTree, null, true);
         EntityInfo entityInfo = metaInfoService.generateEntityMainInfo(classMetadata);
         Assert.assertNotNull(entityInfo);
-        Assert.assertEquals(entityInfo.getEntityType(), A.class.getName());
+        Assert.assertEquals(entityInfo.getType(), A.class.getName());
         Assert.assertEquals(entityInfo.getGridFields().size(), 3);
     }
 }

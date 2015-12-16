@@ -118,6 +118,11 @@ public class MutableClassMetadata extends FriendlyMetadata implements IClassMeta
         return containsSuper;
     }
 
+    @Override
+    public boolean containsHierarchy() {
+        return false;
+    }
+
     public void setContainsSuper(boolean containsSuper) {
         this.containsSuper = containsSuper;
     }

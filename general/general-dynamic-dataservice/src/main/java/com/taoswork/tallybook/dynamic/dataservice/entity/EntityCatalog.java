@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Created by Gao Yuan on 2015/6/4.
  */
-public class EntityEntry {
+public class EntityCatalog {
     protected final String resourceName;
     protected final String entityInterfaceName;
 
-    public EntityEntry(Class<?> entityInterface) {
+    public EntityCatalog(Class<?> entityInterface) {
         this.entityInterfaceName = entityInterface.getName();
         String typeName = entityInterface.getSimpleName().toLowerCase();
         PersistEntity persistEntity = entityInterface.getDeclaredAnnotation(PersistEntity.class);
@@ -20,6 +20,11 @@ public class EntityEntry {
                 typeName = nameOverride;
         }
         this.resourceName = typeName;
+    }
+
+    protected EntityCatalog(String resourceName, String entityInterfaceName) {
+        this.resourceName = resourceName;
+        this.entityInterfaceName = entityInterfaceName;
     }
 
     public String getResourceName() {

@@ -48,6 +48,7 @@ public class MetadataServiceImpl implements MetadataService {
     @Override
     public IClassMetadata generateMetadata(final EntityClassTree entityClassTree, String idFieldName, boolean includeSuper) {
         final ClassTreeMetadata classTreeMetadata = new ClassTreeMetadata(entityClassTree);
+        classTreeMetadata.setContainsSuper(includeSuper);
         //Handle the fields in current class
         {
             final Class rootClz = entityClassTree.getData().clz;

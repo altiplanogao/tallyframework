@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 
 public class EntityReadResponse extends EntityInstanceResponse {
     private final String beanUri;
@@ -15,7 +15,7 @@ public class EntityReadResponse extends EntityInstanceResponse {
 
     @Override
     public String getAction() {
-        return EntityActionNames.READ;
+        return EntityAction.READ.getType();
     }
 
     @Override

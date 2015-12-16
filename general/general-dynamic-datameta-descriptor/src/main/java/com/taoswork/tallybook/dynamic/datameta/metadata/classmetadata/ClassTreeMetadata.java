@@ -18,4 +18,9 @@ public class ClassTreeMetadata extends MutableClassMetadata implements Serializa
     public EntityClassTree getEntityClassTree() {
         return entityClassTree;
     }
+
+    @Override
+    public boolean containsHierarchy() {
+        return true;
+    }
 }

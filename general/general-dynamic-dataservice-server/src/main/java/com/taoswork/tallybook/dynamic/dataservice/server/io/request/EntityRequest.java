@@ -5,6 +5,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.En
 import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 import org.springframework.util.StringUtils;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -14,40 +15,28 @@ import java.util.Set;
  * Created by Gao Yuan on 2015/8/4.
  */
 public abstract class EntityRequest {
-    private String resourceName;
+    private final String resourceName;
     private Class<? extends Persistable> entityType;
-    private String uri;
-    private String entityUri;
-    private String fullUri;
+    //The uri of this request
+    private final String uri;
+    //The uri of this request, with parameter
+    private final URI fullUri;
+    private final String entityUri;
+
     private final Set<EntityInfoType> entityInfoTypes = new HashSet<EntityInfoType>();
 
-    public EntityRequest(){
-        this("", "", "");
-    }
-
-    public EntityRequest(String resourceName,
-                         Class<? extends Persistable> entityType,
-                         String uri){
-        this.setResourceName(resourceName)
-            .setEntityType(entityType)
-            .setUri(uri);
-    }
-
-    public EntityRequest(String resourceName,
-                         String entityType,
-                         String uri){
-        this.setResourceName(resourceName)
-            .withEntityType(entityType)
-            .setUri(uri);
+    public EntityRequest(EntityTypeParameter entityTypeParam,
+                         URI fullUri){
+        this.resourceName = entityTypeParam.getTypeName();
+        this.setEntityType(entityTypeParam.getType());
+       // this.entityType = entityTypeParam.getType();
+        this.fullUri = fullUri;
+        this.uri = fullUri.getPath();
+        this.entityUri = entityTypeParam.getEntityUri();
     }
 
     public String getFullUri() {
-        return fullUri;
-    }
-
-    public EntityRequest setFullUri(String fullUri) {
-        this.fullUri = fullUri;
-        return this;
+        return fullUri.toString();
     }
 
     public Class<? extends Persistable> getEntityType() {
@@ -81,36 +70,12 @@ public abstract class EntityRequest {
         return resourceName;
     }
 
-    public EntityRequest setResourceName(String resourceName){
-        this.resourceName = resourceName;
-        return this;
-    }
-
     public String getUri() {
         return uri;
     }
 
-    public EntityRequest setUri(String currentUri) {
-        this.uri = currentUri;
-        return this;
-    }
-
     public String getEntityUri() {
         return entityUri;
-    }
-
-    public EntityRequest setEntityUri(String entityUri) {
-        this.entityUri = entityUri;
-        return this;
-    }
-
-    public EntityRequest setEntityRequest(EntityTypeParameter entityTypeParam,
-                         String uri, String fullUri){
-        this.setResourceName(entityTypeParam.getTypeName())
-            .setEntityType(entityTypeParam.getType())
-            .setUri(uri)
-            .setFullUri(fullUri);
-        return this;
     }
 
     ////////////////////////////////////////

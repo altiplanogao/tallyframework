@@ -24,6 +24,7 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     //Main
     private final Class entityClz;
     private final boolean containsSuper;
+    private final boolean containsHierarchy;
 
     public final String name;
     public final String friendlyName;
@@ -55,6 +56,7 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
 
         this.entityClz = classMetadata.getEntityClz();
         this.containsSuper = classMetadata.containsSuper();
+        this.containsHierarchy = classMetadata.containsHierarchy();
 
         this.idFieldName = classMetadata.getIdFieldName();
         this.nameFieldName = classMetadata.getNameFieldName();
@@ -90,6 +92,11 @@ public final class ImmutableClassMetadata implements IClassMetadata, Serializabl
     @Override
     public boolean containsSuper() {
         return this.containsSuper;
+    }
+
+    @Override
+    public boolean containsHierarchy() {
+        return containsHierarchy;
     }
 
     @Override

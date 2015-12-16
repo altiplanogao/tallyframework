@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response;
 
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.EntityActionNames;
+import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 
 /**
  * Created by Gao Yuan on 2015/11/26.
@@ -18,6 +18,6 @@ public class CollectionEntryCreateFreshResponse extends EntityResponse {
 
     @Override
     public String getAction() {
-        return EntityActionNames.CREATE;
+        return EntityAction.CREATE.getType();
     }
 }

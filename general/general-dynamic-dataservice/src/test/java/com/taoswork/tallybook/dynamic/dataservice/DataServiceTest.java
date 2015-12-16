@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice;
 
 import com.taoswork.tallybook.dynamic.dataservice.core.metaaccess.DynamicEntityMetadataAccess;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityEntry;
+import com.taoswork.tallybook.dynamic.dataservice.entity.EntityCatalog;
 import com.taoswork.tallybook.dynamic.dataservice.servicemockup.TallyMockupDataService;
 import com.taoswork.tallybook.testframework.domain.zoo.ZooKeeper;
 import com.taoswork.tallybook.testframework.domain.zoo.impl.ZooKeeperImpl;
@@ -32,7 +32,7 @@ public class DataServiceTest {
 
     @Test
     public void testEntityEntries(){
-        Map<String, EntityEntry> entityEntries = dataService.getEntityEntries();
+        Map<String, EntityCatalog> entityEntries = dataService.getEntityCatalogs();
 
         {
             Class entityType = ZooKeeper.class;

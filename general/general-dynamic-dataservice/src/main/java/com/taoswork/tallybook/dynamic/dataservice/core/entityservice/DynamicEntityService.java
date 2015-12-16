@@ -71,8 +71,6 @@ public interface DynamicEntityService {
 
     <T extends Persistable> IClassMetadata inspectMetadata(Class<T> entityType, boolean withHierarchy);
 
-    <T extends Persistable> IEntityInfo describe(Class<T> entityType, EntityInfoType infoType, Locale locale);
-
     <T extends Persistable> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale);
 
     <T extends Persistable> Access getAuthorizeAccess(Class<T> entityType, Access mask);
