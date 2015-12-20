@@ -13,43 +13,45 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/5.
  */
 public class EntityInfoResult {
-    private String resourceName;
-    private Class<?> entityCeilingType;
-    private Class<?> entityType;
-    private String entityUri;
-    private String beanUri;
+    //private String resourceName;
+    private Class<?> type;
+    private Class<?> ceilingType;
     private String idField;
     private String nameField;
 
+    private String entityUri;
+    private String beanUri;
+
     private Map<String, IEntityInfo> details;
 
-    public String getResourceName() {
-        return resourceName;
+//    public String getResourceName() {
+//        return resourceName;
+//    }
+//
+//    public EntityInfoResult setResourceName(String resourceName) {
+//        this.resourceName = resourceName;
+//        return this;
+//    }
+
+    public Class<?> getCeilingType() {
+        return ceilingType;
     }
 
-    public EntityInfoResult setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public EntityInfoResult setCeilingType(Class<?> ceilingType) {
+        this.ceilingType = ceilingType;
         return this;
     }
 
-    public Class<?> getEntityCeilingType() {
-        return entityCeilingType;
+    public Class<?> getType() {
+        return type;
     }
 
-    public EntityInfoResult setEntityCeilingType(Class<?> entityCeilingType) {
-        this.entityCeilingType = entityCeilingType;
+    public EntityInfoResult setType(Class<?> type) {
+        this.type = type;
         return this;
     }
 
-    public Class<?> getEntityType() {
-        return entityType;
-    }
-
-    public EntityInfoResult setEntityType(Class<?> entityType) {
-        this.entityType = entityType;
-        return this;
-    }
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String getEntityUri() {
         return entityUri;
     }
@@ -59,6 +61,7 @@ public class EntityInfoResult {
         return this;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String getBeanUri() {
         return beanUri;
     }

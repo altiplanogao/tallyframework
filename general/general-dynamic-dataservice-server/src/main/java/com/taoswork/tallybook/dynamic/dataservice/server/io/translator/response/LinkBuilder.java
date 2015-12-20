@@ -59,7 +59,7 @@ public class LinkBuilder {
     }
 
     public static String buildLinkForReadInstance(String entityName){
-        return EntityActionPaths.EntityUris.uriTemplateForRead(entityName);
+        return EntityActionPaths.EntityUris.uriTemplateForAction(entityName, EntityAction.READ);
     }
     /**
      *
@@ -68,28 +68,34 @@ public class LinkBuilder {
      */
     private static void appendEntityActionUris (String entityName, EntityResponse response){
         {   //inspect
-            String uri = EntityActionPaths.EntityUris.uriTemplateForInfo(entityName);
-            response.add(new Link(uri).withRel(EntityAction.INSPECT.getType()));
+            EntityAction action = EntityAction.INFO;
+            String uri = EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action);
+            response.add(new Link(uri).withRel(action.getType()));
         }
         {   //search
-            response.add(new Link(EntityActionPaths.EntityUris.uriTemplateForQuery(entityName))
-                .withRel(EntityAction.QUERY.getType()));
+            EntityAction action = EntityAction.QUERY;
+            response.add(new Link(EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action))
+                .withRel(action.getType()));
         }
         {   //create
-            String uri = EntityActionPaths.EntityUris.uriTemplateForCreate(entityName);
-            response.add(new Link(uri).withRel(EntityAction.CREATE.getType()));
+            EntityAction action = EntityAction.CREATE;
+            String uri = EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action);
+            response.add(new Link(uri).withRel(action.getType()));
         }
         {   //read
-            String uri = EntityActionPaths.EntityUris.uriTemplateForRead(entityName);
-            response.add(new Link(uri).withRel(EntityAction.READ.getType()));
+            EntityAction action = EntityAction.READ;
+            String uri = EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action);
+            response.add(new Link(uri).withRel(action.getType()));
         }
         {   //update
-            String uri = EntityActionPaths.EntityUris.uriTemplateForUpdate(entityName);
-            response.add(new Link(uri).withRel(EntityAction.UPDATE.getType()));
+            EntityAction action = EntityAction.UPDATE;
+            String uri = EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action);
+            response.add(new Link(uri).withRel(action.getType()));
         }
         {   //delete
-            String uri = EntityActionPaths.EntityUris.uriTemplateForDelete(entityName);
-            response.add(new Link(uri).withRel(EntityAction.DELETE.getType()));
+            EntityAction action = EntityAction.DELETE;
+            String uri = EntityActionPaths.EntityUris.uriTemplateForAction(entityName, action);
+            response.add(new Link(uri).withRel(action.getType()));
         }
     }
 

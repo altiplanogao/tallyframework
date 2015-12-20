@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class Entity implements Serializable{
     private Integer timezoneOffset;
-    private Class<? extends Persistable> entityType;
-    private Class<? extends Persistable> entityCeilingType;
+    private Class<? extends Persistable> type;
+    private Class<? extends Persistable> ceilingType;
     private final Map<String, String> props = new HashMap<String, String>();
     public final static String ENTITY_PROPERTY_NAME = "props";
 
@@ -24,21 +24,21 @@ public class Entity implements Serializable{
         this.timezoneOffset = timezoneOffset;
     }
 
-    public Class<? extends Persistable> getEntityType() {
-        return entityType;
+    public Class<? extends Persistable> getType() {
+        return type;
     }
 
-    public Entity setEntityType(Class<? extends Persistable> entityType) {
-        this.entityType = entityType;
+    public Entity setType(Class<? extends Persistable> type) {
+        this.type = type;
         return this;
     }
 
-    public Class<? extends Persistable> getEntityCeilingType() {
-        return entityCeilingType;
+    public Class<? extends Persistable> getCeilingType() {
+        return ceilingType;
     }
 
-    public Entity setEntityCeilingType(Class<? extends Persistable> entityCeilingType) {
-        this.entityCeilingType = entityCeilingType;
+    public Entity setCeilingType(Class<? extends Persistable> ceilingType) {
+        this.ceilingType = ceilingType;
         return this;
     }
 

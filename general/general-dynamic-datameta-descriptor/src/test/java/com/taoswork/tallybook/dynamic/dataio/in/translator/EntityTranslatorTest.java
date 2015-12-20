@@ -42,7 +42,7 @@ public class EntityTranslatorTest {
     @Test
     public void testStringField() throws TranslateException {
         Entity entity = new Entity();
-        entity.setEntityType(CompanyImpl.class);
+        entity.setType(CompanyImpl.class);
         entity.setProperty("description", "ABCD abcd");
         ICompany company = (ICompany) translator.translate(entity, null);
         Assert.assertEquals("ABCD abcd", company.getDescription());
@@ -51,7 +51,7 @@ public class EntityTranslatorTest {
     @Test
     public void testBooleanFields() throws TranslateException {
         Entity entity = new Entity();
-        entity.setEntityType(CompanyImpl.class);
+        entity.setType(CompanyImpl.class);
         entity.setProperty("locked", "true");
         entity.setProperty("active", "true");
         ICompany company = (ICompany) translator.translate(entity, null);
@@ -67,7 +67,7 @@ public class EntityTranslatorTest {
     @Test
     public void testEnumFields() throws TranslateException {
         Entity entity = new Entity();
-        entity.setEntityType(CompanyImpl.class);
+        entity.setType(CompanyImpl.class);
         entity.setProperty("companyType", CompanyType.National.toString());
         ICompany company = (ICompany) translator.translate(entity, null);
         Assert.assertEquals(CompanyType.National, company.getCompanyType());
@@ -79,7 +79,7 @@ public class EntityTranslatorTest {
     @Test
     public void testEmbeddedField() throws TranslateException {
         Entity entity = new Entity();
-        entity.setEntityType(CompanyImpl.class);
+        entity.setType(CompanyImpl.class);
         entity.setProperty("address.street", "Street A");
         entity.setProperty("address.city", "City B");
         entity.setProperty("address.state", "State C");
@@ -97,7 +97,7 @@ public class EntityTranslatorTest {
     @Test
     public void testForeignEntityField() throws TranslateException {
         Entity entity = new Entity();
-        entity.setEntityType(EmployeeImpl.class);
+        entity.setType(EmployeeImpl.class);
         entity.setProperty("department", "{\"id\":-123,\"display\":\"department a\"}");
         IEmployee employee = (IEmployee) translator.translate(entity, null);
         Assert.assertNotNull(employee);
@@ -109,7 +109,7 @@ public class EntityTranslatorTest {
     @Test
     public void testExternalForeignEntityField() throws TranslateException{
         Entity entity = new Entity();
-        entity.setEntityType(EmployeeImpl.class);
+        entity.setType(EmployeeImpl.class);
         entity.setProperty("citizenId", "{\"id\":-123,\"display\":\"Citizen Kane\"}");
         IEmployee employee = (IEmployee) translator.translate(entity, null);
         Assert.assertNotNull(employee);

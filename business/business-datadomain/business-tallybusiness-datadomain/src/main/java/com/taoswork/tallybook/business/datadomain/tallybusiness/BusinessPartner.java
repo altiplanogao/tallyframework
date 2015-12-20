@@ -9,7 +9,7 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
  *
  * Business partner: a company, an organization, a division, a branch
  */
-@PersistEntity(
+@PersistEntity(nameOverride = "bp",
     validators = {BusinessPartnerValidator.class}
 )
 public interface BusinessPartner extends Persistable {

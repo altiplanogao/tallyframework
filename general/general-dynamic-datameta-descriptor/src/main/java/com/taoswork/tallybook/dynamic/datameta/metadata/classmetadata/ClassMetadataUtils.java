@@ -34,7 +34,7 @@ public class ClassMetadataUtils {
         IFieldMetadata fieldMetadata = classMetadata.getFieldMetadata(currentPiece);
         if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
-            Class entityTypeName = foreignEntityFieldMetadata.getEntityType();
+            Class entityTypeName = foreignEntityFieldMetadata.getTargetType();
             IClassMetadata subCm = classMetadata.getReferencingClassMetadata(entityTypeName);
             return getRoutedFieldMetadata(subCm, remainPiece);
         } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
@@ -62,10 +62,10 @@ public class ClassMetadataUtils {
                 continue;
             }
             if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
-                entities.add(((ForeignEntityFieldMetadata) fieldMetadata).getEntityType());
+                entities.add(((ForeignEntityFieldMetadata) fieldMetadata).getTargetType());
             } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
                 //add or not?
-                entities.add(((ExternalForeignEntityFieldMetadata) fieldMetadata).getEntityType());
+                entities.add(((ExternalForeignEntityFieldMetadata) fieldMetadata).getTargetType());
             } else if (fieldMetadata instanceof EmbeddedFieldMetadata) {
                 EmbeddedFieldMetadata typedFieldMetadata = (EmbeddedFieldMetadata)fieldMetadata;
                 calcReferencedTypes(typedFieldMetadata.getClassMetadata(), entities);

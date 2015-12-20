@@ -256,7 +256,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
     private <T> Class<T> getCeilingType(Entity entity) {
-        return (Class<T>)entity.getEntityCeilingType();
+        return (Class<T>)entity.getCeilingType();
     }
 
 

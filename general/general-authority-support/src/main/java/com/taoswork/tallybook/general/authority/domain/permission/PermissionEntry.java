@@ -13,7 +13,9 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 @PersistEntity(
     validators = {PermissionEntryValidator.class}
 )
-public interface PermissionEntry<P extends Permission>
+public interface PermissionEntry<P extends Permission,
+    SR extends SecuredResource,
+    SRS extends SecuredResourceSpecial>
          extends Persistable {
     Long getId();
 
@@ -23,13 +25,13 @@ public interface PermissionEntry<P extends Permission>
 
     void setName(String name);
 
-    SecuredResource getSecuredResource();
+    SR getSecuredResource();
 
-    void setSecuredResource(SecuredResource securedResource);
+    void setSecuredResource(SR securedResource);
 
-    SecuredResourceSpecial getSecuredResourceSpecial();
+    SRS getSecuredResourceSpecial();
 
-    void setSecuredResourceSpecial(SecuredResourceSpecial resourceCriteria);
+    void setSecuredResourceSpecial(SRS resourceCriteria);
 
     ResourceAccess getAccess();
 

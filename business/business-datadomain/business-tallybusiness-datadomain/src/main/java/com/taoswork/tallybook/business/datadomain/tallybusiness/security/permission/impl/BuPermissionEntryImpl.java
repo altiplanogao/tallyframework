@@ -2,6 +2,8 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.security.permis
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermission;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermissionEntry;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResource;
+import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuSecuredResourceSpecial;
 import com.taoswork.tallybook.general.authority.domain.permission.impl.PermissionEntryBaseImpl;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
 import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
@@ -17,7 +19,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="TB_SEC_PERM_ENTRY")
 public class BuPermissionEntryImpl
-    extends PermissionEntryBaseImpl<BuPermission>
+    extends PermissionEntryBaseImpl<BuPermission, BuSecuredResource, BuSecuredResourceSpecial>
     implements BuPermissionEntry {
 
     @Column(name = "BU_ID", nullable = false)
@@ -28,13 +30,13 @@ public class BuPermissionEntryImpl
     @ManyToOne(targetEntity = BuSecuredResourceSpecialImpl.class)
     @JoinColumn(name = "RES_SPEC_ID")
     @PresentationField(order = 5)
-    protected SecuredResourceSpecial securedResourceSpecial;
+    protected BuSecuredResourceSpecial securedResourceSpecial;
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BuSecuredResourceImpl.class)
     @JoinColumn(name = "RES_ID")
     @PresentationField(order = 5)
-    protected SecuredResource securedResource;
+    protected BuSecuredResource securedResource;
 
     @FieldRelation(RelationType.TwoWay_ManyToOneOwner)
     @ManyToOne(targetEntity = BuPermissionEntryImpl.class)
@@ -54,22 +56,22 @@ public class BuPermissionEntryImpl
     }
 
     @Override
-    public SecuredResourceSpecial getSecuredResourceSpecial() {
+    public BuSecuredResourceSpecial getSecuredResourceSpecial() {
         return securedResourceSpecial;
     }
 
     @Override
-    public void setSecuredResourceSpecial(SecuredResourceSpecial securedResourceSpecial) {
+    public void setSecuredResourceSpecial(BuSecuredResourceSpecial securedResourceSpecial) {
         this.securedResourceSpecial = securedResourceSpecial;
     }
 
     @Override
-    public SecuredResource getSecuredResource() {
+    public BuSecuredResource getSecuredResource() {
         return securedResource;
     }
 
     @Override
-    public void setSecuredResource(SecuredResource securedResource) {
+    public void setSecuredResource(BuSecuredResource securedResource) {
         this.securedResource = securedResource;
     }
 

@@ -14,19 +14,21 @@ import java.lang.reflect.Field;
 public final class ExternalForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
     private final static Logger LOGGER = LoggerFactory.getLogger(ExternalForeignEntityFieldMetadata.class);
 
-    private final Class entityType;
-    private final String entityFieldName;
-    private final String entityDisplayProperty;
-    private final String entityIdProperty;
+    private final Class declareType;
+    private final Class targetType;
+    private final String theDataFieldName;
+    private final String displayProperty;
+    private final String idProperty;
     private transient Field entityField;
 
     public ExternalForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ExternalForeignEntityFieldMetadataFacet foreignFieldFacet = (ExternalForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ExternalForeignEntity);
-        this.entityType = foreignFieldFacet.targetType;
-        this.entityFieldName = foreignFieldFacet.realTargetField;
-        this.entityDisplayProperty = foreignFieldFacet.displayField;
-        this.entityIdProperty = foreignFieldFacet.idProperty;
+        this.declareType = foreignFieldFacet.declaredType;
+        this.targetType = foreignFieldFacet.targetType;
+        this.theDataFieldName = foreignFieldFacet.theDataField;
+        this.displayProperty = foreignFieldFacet.displayField;
+        this.idProperty = foreignFieldFacet.idProperty;
     }
 
     @Override
@@ -34,12 +36,16 @@ public final class ExternalForeignEntityFieldMetadata extends BaseNonCollectionF
         return FieldType.EXTERNAL_FOREIGN_KEY;
     }
 
-    public Class getEntityType() {
-        return entityType;
+    public Class getDeclareType() {
+        return declareType;
     }
 
-    public String getEntityFieldName() {
-        return entityFieldName;
+    public Class getTargetType() {
+        return targetType;
+    }
+
+    public String getTheDataFieldName() {
+        return theDataFieldName;
     }
 
     @Override
@@ -52,7 +58,7 @@ public final class ExternalForeignEntityFieldMetadata extends BaseNonCollectionF
             if (this.entityField == null) {
                 try {
                     String declaringClassName = this.basicFieldMetadataObject.getDeclaringClassName();                   Class ownerClz = Class.forName(declaringClassName);
-                    Field field = ownerClz.getDeclaredField(this.entityFieldName);
+                    Field field = ownerClz.getDeclaredField(this.theDataFieldName);
                     field.setAccessible(true);
                     this.entityField = (field);
                 } catch (ClassNotFoundException e) {
@@ -67,11 +73,11 @@ public final class ExternalForeignEntityFieldMetadata extends BaseNonCollectionF
         }
     }
 
-    public String getEntityIdProperty() {
-        return entityIdProperty;
+    public String getIdProperty() {
+        return idProperty;
     }
 
-    public String getEntityDisplayProperty() {
-        return entityDisplayProperty;
+    public String getDisplayProperty() {
+        return displayProperty;
     }
 }

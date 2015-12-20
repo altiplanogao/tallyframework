@@ -84,7 +84,7 @@ public class AdminBasicEntityOperationSupportController extends _AdminBasicEntit
 
         if(fieldMetadata instanceof ForeignEntityFieldMetadata){
             ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
-            String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
+            String fieldEntityType = foreignEntityFieldMetadata.getTargetType().getName();
 
             String oldUri = request.getRequestURI();
             URI uri = new URI(request.getRequestURI(), false);
@@ -92,7 +92,7 @@ public class AdminBasicEntityOperationSupportController extends _AdminBasicEntit
             return "forward:/" + uri.toString();
         }else if(fieldMetadata instanceof ExternalForeignEntityFieldMetadata){
             ExternalForeignEntityFieldMetadata foreignEntityFieldMetadata = (ExternalForeignEntityFieldMetadata) fieldMetadata;
-            String fieldEntityType = foreignEntityFieldMetadata.getEntityType().getName();
+            String fieldEntityType = foreignEntityFieldMetadata.getTargetType().getName();
 
             String oldUri = request.getRequestURI();
             URI uri = new URI(request.getRequestURI(), false);

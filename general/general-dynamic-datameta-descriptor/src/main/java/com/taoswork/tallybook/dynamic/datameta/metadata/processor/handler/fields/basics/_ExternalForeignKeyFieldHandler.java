@@ -19,16 +19,18 @@ class _ExternalForeignKeyFieldHandler implements IFieldHandler {
             if (persistField != null && FieldType.EXTERNAL_FOREIGN_KEY.equals(persistField.fieldType())) {
                 PresentationExternalForeignKey presentationExternalForeignKey = field.getDeclaredAnnotation(PresentationExternalForeignKey.class);
                 if (presentationExternalForeignKey != null) {
-                    String targetField = presentationExternalForeignKey.targetField();
+                    Class hostClass = field.getDeclaringClass();
+
+                    String dataField = presentationExternalForeignKey.dataField();
+                    Field realDataField = hostClass.getDeclaredField(dataField);
+                    Class declaredType = realDataField.getType();
                     Class targetType = presentationExternalForeignKey.targetType();
 
-                    Class hostClass = field.getDeclaringClass();
-                    Field realTargetField = hostClass.getDeclaredField(targetField);
                     if (void.class.equals(targetType)) {
-                        targetType = field.getType();
+                        targetType = declaredType;
                     }
-                    ExternalForeignEntityFieldMetadataFacet facet = new ExternalForeignEntityFieldMetadataFacet(targetField,
-                        targetType, presentationExternalForeignKey.idField(), presentationExternalForeignKey.displayField());
+                    ExternalForeignEntityFieldMetadataFacet facet = new ExternalForeignEntityFieldMetadataFacet(dataField,
+                        declaredType, targetType, presentationExternalForeignKey.idField(), presentationExternalForeignKey.displayField());
                     fieldMetadata.addFacet(facet);
                     fieldMetadata.setTargetMetadataType(ExternalForeignEntityFieldMetadata.class);
                     return ProcessResult.HANDLED;

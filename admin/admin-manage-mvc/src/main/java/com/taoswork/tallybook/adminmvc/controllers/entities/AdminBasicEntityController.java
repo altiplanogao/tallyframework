@@ -24,6 +24,7 @@ import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityS
 import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.general.solution.menu.IMenu;
 import com.taoswork.tallybook.general.solution.menu.MenuPath;
+import org.apache.commons.httpclient.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -167,6 +168,18 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         }
     }
 
+
+    @RequestMapping(value = "select", method = RequestMethod.GET)
+    public String select(HttpServletRequest request, HttpServletResponse response,
+                        Model model,
+                        @PathVariable Map<String, String> pathVars,
+                        @RequestParam MultiValueMap<String, String> requestParams)throws Exception{
+        String entityTypeName = getEntityTypeName(pathVars);
+        String oldUri = request.getRequestURI();
+        URI uri = new URI(request.getRequestURI(), false);
+        uri.setPath(entityTypeName);
+        return "forward:/" + uri.toString();
+    }
     /**
      * Renders the modal form that is used to add a new parent level entity. Note that this form cannot render any
      * subcollections as operations on those collections require the parent level entity to first be saved and have

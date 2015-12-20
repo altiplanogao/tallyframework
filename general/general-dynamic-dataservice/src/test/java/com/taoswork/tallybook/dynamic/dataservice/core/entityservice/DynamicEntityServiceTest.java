@@ -246,7 +246,7 @@ public class DynamicEntityServiceTest {
             Assert.assertTrue(returned == createAttemptB);
 
             for (ZooKeeper p : cache) {
-                Entity entity = new Entity().setEntityCeilingType(ZooKeeper.class).setEntityType(p.getClass());
+                Entity entity = new Entity().setCeilingType(ZooKeeper.class).setType(p.getClass());
                 dynamicEntityService.delete(entity, p.getId().toString());
             }
 

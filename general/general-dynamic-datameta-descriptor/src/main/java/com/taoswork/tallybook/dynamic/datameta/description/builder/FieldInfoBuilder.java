@@ -56,12 +56,13 @@ public class FieldInfoBuilder {
         } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
             ForeignEntityFieldMetadata feFm = (ForeignEntityFieldMetadata) fieldMetadata;
             ForeignKeyFieldInfo fkFieldInfo = new ForeignKeyFieldInfo(name, friendlyName, editable,
-                feFm.getEntityType().getName(), feFm.getIdField(), feFm.getDisplayField());
+                feFm.getDeclareType(), feFm.getTargetType(),
+                feFm.getIdField(), feFm.getDisplayField());
             result = fkFieldInfo;
         } else if (fieldMetadata instanceof ExternalForeignEntityFieldMetadata) {
             ExternalForeignEntityFieldMetadata feFm = (ExternalForeignEntityFieldMetadata) fieldMetadata;
             ExternalForeignKeyFieldInfo fkFieldInfo = new ExternalForeignKeyFieldInfo(name, friendlyName, editable,
-                feFm.getEntityType().getName(), feFm.getEntityFieldName(), feFm.getEntityIdProperty(), feFm.getEntityDisplayProperty());
+                feFm.getDeclareType(), feFm.getTargetType(), feFm.getTheDataFieldName(), feFm.getIdProperty(), feFm.getDisplayProperty());
             result = fkFieldInfo;
         } else if (fieldMetadata instanceof PaleFieldMetadata) {
             PaleFieldInfo stringFieldInfo = new PaleFieldInfo(name, friendlyName, editable);

@@ -4,6 +4,8 @@ import com.taoswork.tallybook.general.authority.GeneralAuthoritySupportRoot;
 import com.taoswork.tallybook.general.authority.domain.access.ResourceAccess;
 import com.taoswork.tallybook.general.authority.domain.permission.Permission;
 import com.taoswork.tallybook.general.authority.domain.permission.PermissionEntry;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResource;
+import com.taoswork.tallybook.general.authority.domain.resource.SecuredResourceSpecial;
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
 import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
@@ -57,8 +59,10 @@ import javax.persistence.*;
         @PresentationClass.Group(name = PermissionEntryBaseImpl.Presentation.Group.General, order = 1),
         @PresentationClass.Group(name = PermissionEntryBaseImpl.Presentation.Group.Access, order = 2)}
 )
-public abstract class PermissionEntryBaseImpl<P extends Permission>
-        implements PermissionEntry<P> {
+public abstract class PermissionEntryBaseImpl<P extends Permission,
+    SR extends SecuredResource,
+    SRS extends SecuredResourceSpecial>
+        implements PermissionEntry<P, SR, SRS> {
 
     protected static final String ID_GENERATOR_NAME = "PermissionEntryBaseImpl_IdGen";
 

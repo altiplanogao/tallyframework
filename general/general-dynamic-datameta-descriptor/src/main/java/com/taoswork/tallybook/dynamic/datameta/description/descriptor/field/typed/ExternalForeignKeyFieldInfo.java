@@ -8,10 +8,10 @@ public class ExternalForeignKeyFieldInfo extends ForeignKeyFieldInfo {
     public final String entityFieldName;
 
     public ExternalForeignKeyFieldInfo(String name, String friendlyName, boolean editable,
-                                       String entityType, String entityFieldName,
+                                       Class declareType, Class entityType, String entityFieldName,
                                        String entityFieldIdProperty,
                                        String entityFieldDisplayProperty) {
-        super(name, friendlyName, editable, entityType,
+        super(name, friendlyName, editable, declareType, entityType,
             entityFieldIdProperty,
             entityFieldDisplayProperty);
         this.entityFieldName = entityFieldName;

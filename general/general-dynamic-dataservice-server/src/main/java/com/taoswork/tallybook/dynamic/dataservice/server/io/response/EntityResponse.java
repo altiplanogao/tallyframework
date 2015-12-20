@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 public abstract class EntityResponse extends ResourceSupport {
     private static Logger LOGGER = LoggerFactory.getLogger(EntityResponse.class);
-    private String resourceName;
+//    private String resourceName;
     private Class<? extends Persistable> entityCeilingType;
     private Class<? extends Persistable> entityType;
     private String entityUri;
@@ -32,14 +32,14 @@ public abstract class EntityResponse extends ResourceSupport {
 
     public abstract String getAction();
 
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public EntityResponse setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-        return this;
-    }
+//    public String getResourceName() {
+//        return resourceName;
+//    }
+//
+//    public EntityResponse setResourceName(String resourceName) {
+//        this.resourceName = resourceName;
+//        return this;
+//    }
 
     public Class<? extends Persistable> getEntityCeilingType() {
         return entityCeilingType;

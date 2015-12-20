@@ -21,8 +21,8 @@ public class EntityCreateHelper {
 //                    int expected = i + 1;
                 Entity adminEntity = new Entity();
                 adminEntity
-                    .setEntityType(ZooKeeperImpl.class)
-                    .setEntityCeilingType(ZooKeeper.class)
+                    .setType(ZooKeeperImpl.class)
+                    .setCeilingType(ZooKeeper.class)
                     .setProperty("name", name);
                 PersistableResult<ZooKeeper> adminRes = dynamicEntityService.create(adminEntity);
                 ZooKeeper admin = adminRes.getEntity();

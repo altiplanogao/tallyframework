@@ -176,7 +176,7 @@ public class EntityCopier {
                 Object fn = this.makeCopyForEmbeddable(topClassMetadata, fo, embeddedClassMetadata, currentLevel, levelLimit);
                 field.set(target, fn);
             } else if (fieldMetadata instanceof ForeignEntityFieldMetadata) {
-                Class entityType = ((ForeignEntityFieldMetadata) fieldMetadata).getEntityType();
+                Class entityType = ((ForeignEntityFieldMetadata) fieldMetadata).getTargetType();
                 IClassMetadata foreignClassMetadata = topClassMetadata.getReferencingClassMetadata(entityType);
                 Field field = fieldMetadata.getField();
                 Object fo = field.get(source);
@@ -192,7 +192,7 @@ public class EntityCopier {
                     foreignValField.set(target, null);
                 } else {
                     if(externalReference != null) {
-                        Class entityType = efeFm.getEntityType();
+                        Class entityType = efeFm.getTargetType();
                         //backlog data: [type: entityType, key: keyVal]
                         //slot: [target: target, position: foreignValField]
                         externalReference.publishReference(target, foreignValField, entityType, keyVal);

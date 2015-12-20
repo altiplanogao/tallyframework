@@ -10,20 +10,26 @@ import com.taoswork.tallybook.general.datadomain.support.presentation.client.Fie
 import static com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType.FOREIGN_KEY;
 
 public final class ForeignEntityFieldMetadata extends BaseNonCollectionFieldMetadata implements IFieldMetadata {
-    private final Class entityType;
+    private final Class declareType;
+    private final Class targetType;
     private final String idField;
     private final String displayField;
 
     public ForeignEntityFieldMetadata(FieldMetadataIntermediate intermediate) {
         super(intermediate);
         ForeignEntityFieldMetadataFacet foreignFieldFacet = (ForeignEntityFieldMetadataFacet) intermediate.getFacet(FieldFacetType.ForeignEntity);
-        this.entityType = foreignFieldFacet.targetType;
+        this.declareType = foreignFieldFacet.declaredType;
+        this.targetType = foreignFieldFacet.targetType;
         this.idField = foreignFieldFacet.idField;
         this.displayField = foreignFieldFacet.displayField;
     }
 
-    public Class getEntityType() {
-        return entityType;
+    public Class getDeclareType() {
+        return declareType;
+    }
+
+    public Class getTargetType() {
+        return targetType;
     }
 
     public String getIdField() {

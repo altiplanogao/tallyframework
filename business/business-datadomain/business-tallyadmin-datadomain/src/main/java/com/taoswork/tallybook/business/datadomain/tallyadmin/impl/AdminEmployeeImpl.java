@@ -64,7 +64,7 @@ public class AdminEmployeeImpl implements AdminEmployee {
     @Column(name = "PERSON_ID", nullable = false, unique = true)
     @PersistField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
     @PresentationField(visibility = Visibility.VISIBLE_ALL)
-    @PresentationExternalForeignKey(targetType= PersonImpl.class, targetField="person")
+    @PresentationExternalForeignKey(targetType= PersonImpl.class, dataField ="person")
     protected Long personId;
     @Transient
     private transient Person person;

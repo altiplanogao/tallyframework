@@ -73,7 +73,7 @@ public class EmployeeImpl implements IEmployee{
 
     @PersistField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
     @PresentationField()
-    @PresentationExternalForeignKey(targetType = CitizenImpl.class, targetField = "citizen")
+    @PresentationExternalForeignKey(targetType = CitizenImpl.class, dataField = "citizen")
     private Long citizenId;
 
     @Transient

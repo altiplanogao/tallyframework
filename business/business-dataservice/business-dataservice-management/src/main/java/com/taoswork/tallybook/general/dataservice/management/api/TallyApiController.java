@@ -19,10 +19,13 @@ import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,27 +34,27 @@ import java.util.Set;
  */
 @Controller(TallyApiController.TALLY_API_CONTROLLER_NAME)
 @RequestMapping("/{entityTypeName:^[\\w|\\-|\\.]+$}")
-public class TallyApiController  {
+public class TallyApiController {
     public static final String TALLY_API_CONTROLLER_NAME = "TallyApiController";
 
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
 
-    private Set<String> getParamInfoFilter(){
+    private Set<String> getParamInfoFilter() {
         return EntityInfoType.ApiSupportedType;
     }
 
     @RequestMapping("")
     @ResponseBody
     public HttpEntity<?> getEntityList(HttpServletRequest request,
-                                       @PathVariable(value="entityTypeName") String entityTypeName,
+                                       @PathVariable(value = "entityTypeName") String entityTypeName,
                                        @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
 
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
             entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request),
+            uriFromRequest(request),
             requestParams, getParamInfoFilter());
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
@@ -66,13 +69,13 @@ public class TallyApiController  {
     public HttpEntity<?> readEntity(HttpServletRequest request, Model model,
                                     @PathVariable(value = "entityTypeName") String entityTypeName,
                                     @PathVariable("id") String id,
-        @PathVariable Map<String, String> pathVars) throws Exception {
+                                    @PathVariable Map<String, String> pathVars) throws Exception {
 
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-            request.getRequestURI(), UrlUtils.buildFullRequestUrl(request), id);
+            uriFromRequest(request), id);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
@@ -80,15 +83,30 @@ public class TallyApiController  {
         EntityReadResponse response = frontEndEntityService.read(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
- /*   @RequestMapping("/greeting")
-    @ResponseBody
-    public HttpEntity<Greeting> greeting(
-            @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 
-        Greeting greeting = new Greeting(String.format(TEMPLATE, name));
-        greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
+    /*   @RequestMapping("/greeting")
+       @ResponseBody
+       public HttpEntity<Greeting> greeting(
+               @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 
-        return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
+           Greeting greeting = new Greeting(String.format(TEMPLATE, name));
+           greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
+
+           return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
+       }
+   */
+    protected static URI uriFromRequest(HttpServletRequest request) {
+        try {
+            URI uriobj = new URI(null, null, request.getRequestURI(), request.getQueryString(), null);
+            return uriobj;
+        } catch (URISyntaxException e) {
+            String query = request.getQueryString();
+            String uri = request.getRequestURI();
+            if (StringUtils.isEmpty(query)) {
+                return URI.create(uri);
+            } else {
+                return URI.create(uri + "?" + query);
+            }
+        }
     }
-*/
 }

@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface PresentationExternalForeignKey {
     Class targetType() default void.class;
 
-    String targetField() default "";
+    String dataField();
 
     String displayField() default "name";
 

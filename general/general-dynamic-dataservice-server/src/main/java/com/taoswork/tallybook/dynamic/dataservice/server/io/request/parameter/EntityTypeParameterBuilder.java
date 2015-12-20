@@ -38,8 +38,8 @@ public class EntityTypeParameterBuilder {
 
     public static EntityTypeParameter getBy(DataServiceManager dataServiceManager, String entityTypeName, Entity entity) {
         Class typeByName = entityTypeNameToEntityType(dataServiceManager, entityTypeName);
-        Class ceilingType = entity.getEntityCeilingType();
-        Class type = entity.getEntityType();
+        Class ceilingType = entity.getCeilingType();
+        Class type = entity.getType();
         EntityTypeParameter typeParameter = new EntityTypeParameter();
         if(ceilingType == null)
             ceilingType = typeByName;

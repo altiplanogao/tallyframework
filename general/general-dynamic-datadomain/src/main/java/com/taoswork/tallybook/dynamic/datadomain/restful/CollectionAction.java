@@ -15,8 +15,9 @@ public enum CollectionAction implements IFriendlyEnum<String> {
     UPDATE("update", "update"),
     DELETE("delete", "delete"),
     QUERY("query", "query"),
-    SAVE("save", "save"),
-    REORDER("reorder", "reorder");
+
+    REORDER("reorder", "reorder"),
+    SAVE("save", "save");
 
     private final String type;
     private final String friendlyType;

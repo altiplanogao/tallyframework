@@ -56,8 +56,8 @@ public class DynamicEntityServicePerformanceTest {
                 for(int i = 0 ; i < inLoopAttempt ; ++i) {
                     Entity adminEntity = new Entity();
                     adminEntity
-                        .setEntityType(ZooKeeperImpl.class)
-                        .setEntityCeilingType(ZooKeeper.class)
+                        .setType(ZooKeeperImpl.class)
+                        .setCeilingType(ZooKeeper.class)
                         .setProperty("name", nameAAA + i);
                     PersistableResult<ZooKeeper> adminRes = dynamicEntityService.create(adminEntity);
                     ZooKeeper admin = adminRes.getEntity();

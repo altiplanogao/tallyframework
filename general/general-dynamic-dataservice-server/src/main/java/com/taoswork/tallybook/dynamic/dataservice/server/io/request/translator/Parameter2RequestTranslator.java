@@ -8,7 +8,6 @@ import com.taoswork.tallybook.dynamic.dataio.in.Entity;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.CollectionEntryTypeParameter;
 import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
-import com.taoswork.tallybook.general.extension.utils.UriUtility;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,11 +161,11 @@ public class Parameter2RequestTranslator {
                                                         URI fullUri, String id, Entity entity) {
         EntityDeleteRequest request = new EntityDeleteRequest(entityTypeParam, fullUri, entity);
         request.setId(id);
-        if (entity.getEntityType() == null) {
-            entity.setEntityType(entityTypeParam.getType());
+        if (entity.getType() == null) {
+            entity.setType(entityTypeParam.getType());
         }
-        if (entity.getEntityCeilingType() == null) {
-            entity.setEntityCeilingType(entityTypeParam.getCeilingType());
+        if (entity.getCeilingType() == null) {
+            entity.setCeilingType(entityTypeParam.getCeilingType());
         }
         request.clearEntityInfoType();
         return request;

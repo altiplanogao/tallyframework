@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.dynamic.dataservice.entity;
 
 import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
+import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntityHelper;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -12,14 +13,7 @@ public class EntityCatalog {
 
     public EntityCatalog(Class<?> entityInterface) {
         this.entityInterfaceName = entityInterface.getName();
-        String typeName = entityInterface.getSimpleName().toLowerCase();
-        PersistEntity persistEntity = entityInterface.getDeclaredAnnotation(PersistEntity.class);
-        if(persistEntity != null){
-            String nameOverride = persistEntity.nameOverride();
-            if(StringUtils.isNotEmpty(nameOverride))
-                typeName = nameOverride;
-        }
-        this.resourceName = typeName;
+        this.resourceName = PersistEntityHelper.getEntityName(entityInterface);
     }
 
     protected EntityCatalog(String resourceName, String entityInterfaceName) {

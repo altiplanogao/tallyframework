@@ -81,7 +81,7 @@ public abstract class EntityTranslator {
         Persistable instance = null;
         final IClassMetadataAccess classMetadataAccess = getClassMetadataAccess();
         try {
-            final Class entityClass = (source.getEntityType());
+            final Class entityClass = (source.getType());
             final Persistable tempInstance = (Persistable) entityClass.newInstance();
             final IClassMetadata classMetadata = classMetadataAccess.getClassMetadata(entityClass, false);
 
@@ -98,9 +98,9 @@ public abstract class EntityTranslator {
 
             instance = tempInstance;
         } catch (InstantiationException e) {
-            throw new TranslateException("InstantiationException for entity creation: " + source.getEntityType());
+            throw new TranslateException("InstantiationException for entity creation: " + source.getType());
         } catch (IllegalAccessException e) {
-            throw new TranslateException("IllegalAccessException for entity creation: " + source.getEntityType());
+            throw new TranslateException("IllegalAccessException for entity creation: " + source.getType());
         }
         return instance;
     }
@@ -145,7 +145,7 @@ public abstract class EntityTranslator {
                                 valObj = null;
                             } else {
                                 ForeignEntityFieldMetadata foreignEntityFieldMetadata = (ForeignEntityFieldMetadata) fieldMetadata;
-                                Class entityType = foreignEntityFieldMetadata.getEntityType();
+                                Class entityType = foreignEntityFieldMetadata.getTargetType();
                                 ForeignEntityRef ref = objectMapper.get().readValue(valStr, ForeignEntityRef.class);
                                 valObj = (Persistable)entityType.newInstance();
 
@@ -199,11 +199,11 @@ public abstract class EntityTranslator {
 //        try{
 //            Entity tempEntity = new Entity();
 //            Class entityClass = instance.getClass();
-//            tempEntity.setEntityType(entityClass);
+//            tempEntity.setType(entityClass);
 //            if(ceilingType != null){
 //                Class ceilingClz = Class.forName(ceilingType);
 //                if(ceilingClz.isAssignableFrom(entityClass)){
-//                    tempEntity.setEntityCeilingType(ceilingType);
+//                    tempEntity.setCeilingType(ceilingType);
 //                }
 //            }
 //            IClassMetadata classMetadata = entityMetadataAccess.getMutableClassMetadata(entityClass, false);

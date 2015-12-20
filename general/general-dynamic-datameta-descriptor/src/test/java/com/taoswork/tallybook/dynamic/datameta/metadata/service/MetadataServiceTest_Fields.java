@@ -134,22 +134,22 @@ public class MetadataServiceTest_Fields extends MetadataServiceTest_Fields_Base 
     public void testForeignEntityField() {
         ForeignEntityFieldMetadata parkingSpaceFieldMeta = (ForeignEntityFieldMetadata) employeeMetadata.getFieldMetadata("parkingSpace");
         ForeignEntityFieldMetadata departmentFieldMeta = (ForeignEntityFieldMetadata) employeeMetadata.getFieldMetadata("department");
-        Assert.assertEquals(parkingSpaceFieldMeta.getEntityType(), ParkingSpaceImpl.class);
-        Assert.assertEquals(departmentFieldMeta.getEntityType(), DepartmentImpl.class);
+        Assert.assertEquals(parkingSpaceFieldMeta.getTargetType(), ParkingSpaceImpl.class);
+        Assert.assertEquals(departmentFieldMeta.getTargetType(), DepartmentImpl.class);
 
         ForeignEntityFieldMetadata psEmpFieldMeta = (ForeignEntityFieldMetadata) parkSpaceMetadata.getFieldMetadata("employee");
         ForeignEntityFieldMetadata psEmpObjFieldMeta = (ForeignEntityFieldMetadata) parkSpaceMetadata.getFieldMetadata("employeeObj");
         ForeignEntityFieldMetadata psEmpImplFieldMeta = (ForeignEntityFieldMetadata) parkSpaceMetadata.getFieldMetadata("employeeImpl");
-        Assert.assertEquals(psEmpFieldMeta.getEntityType(), EmployeeImpl.class);
-        Assert.assertEquals(psEmpObjFieldMeta.getEntityType(), EmployeeImpl.class);
-        Assert.assertEquals(psEmpImplFieldMeta.getEntityType(), EmployeeImpl.class);
+        Assert.assertEquals(psEmpFieldMeta.getTargetType(), EmployeeImpl.class);
+        Assert.assertEquals(psEmpObjFieldMeta.getTargetType(), EmployeeImpl.class);
+        Assert.assertEquals(psEmpImplFieldMeta.getTargetType(), EmployeeImpl.class);
     }
 
     @Test
     public void testExternalForeignEntityField() {
         ExternalForeignEntityFieldMetadata citizenIdFm = (ExternalForeignEntityFieldMetadata) employeeMetadata.getFieldMetadata("citizenId");
 
-        Assert.assertEquals(citizenIdFm.getEntityType(), CitizenImpl.class);
+        Assert.assertEquals(citizenIdFm.getTargetType(), CitizenImpl.class);
     }
 
     @Test

@@ -8,6 +8,6 @@ import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 public class EntityInfoResponse extends EntityResponse {
     @Override
     public String getAction() {
-        return EntityAction.INSPECT.getType();
+        return EntityAction.INFO.getType();
     }
 }

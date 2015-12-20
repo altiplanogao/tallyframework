@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * May refer to {@link com.taoswork.tallybook.dynamic.dataservice.server.io.EntityActionPaths }
+ * May refer to {@link com.taoswork.tallybook.dynamic.datadomain.restful.EntityActionPaths }
  */
 public enum EntityAction implements IFriendlyEnum<String> {
     CREATE("create", "create"),
@@ -16,7 +16,9 @@ public enum EntityAction implements IFriendlyEnum<String> {
     DELETE("delete", "delete"),
     QUERY("query", "query"),
 
-    INSPECT("inspect", "inspect"),
+    INFO("info", "info"),
+    SELECT("select", "select"),
+    TYPEAHEAD("typeahead", "typeahead"),
     SAVE("save", "save");
 
     private final String type;

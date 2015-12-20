@@ -43,7 +43,7 @@ public class BasicCollectionFieldInfo extends  _CollectionFieldInfo {
         Map<String, String> actionRefUrlsTemp = new HashMap<String, String>();
         for(String actionStr : supportedActions){
             CollectionAction action = CollectionAction.fromType(actionStr);
-            String relUrl = EntityActionPaths.BeanCollectionFieldUris.uriTemplateForCollectionAction(name, action);
+            String relUrl = EntityActionPaths.BeanFieldUris.uriTemplateForCollectionAction(name, action);
             actionRefUrlsTemp.put(actionStr, relUrl);
         }
         actionRefUrls = Collections.unmodifiableMap(actionRefUrlsTemp);
