@@ -23,10 +23,8 @@ public class EntityTypeParameterBuilder {
 
     public static EntityTypeParameter getBy(DataServiceManager dataServiceManager, String entityTypeName) {
         Class entityType = entityTypeNameToEntityType(dataServiceManager, entityTypeName);
-        EntityTypeParameter entityTypes = new EntityTypeParameter()
-            .setTypeName(entityTypeName)
-            .setType(entityType)
-            .setCeilingType(entityType);
+        EntityTypeParameter entityTypes = new EntityTypeParameter(entityType, entityType)
+            .setTypeName(entityTypeName);
         if(entityType != null){
             if(StringUtils.equals(entityTypeName, entityType.getName())){
                 String adjustedResName = dataServiceManager.getEntityResourceName(entityTypeName);
@@ -40,17 +38,17 @@ public class EntityTypeParameterBuilder {
         Class typeByName = entityTypeNameToEntityType(dataServiceManager, entityTypeName);
         Class ceilingType = entity.getCeilingType();
         Class type = entity.getType();
-        EntityTypeParameter typeParameter = new EntityTypeParameter();
         if(ceilingType == null)
             ceilingType = typeByName;
         if(ceilingType == null){
             ceilingType = type;
         }
-        typeParameter.setTypeName(entityTypeName)
-            .setCeilingType(ceilingType);
+
         if(type != null && ceilingType.isAssignableFrom(type)){
-            typeParameter.setType(type);
+            EntityTypeParameter typeParameter = new EntityTypeParameter(ceilingType, type);
+            typeParameter.setTypeName(entityTypeName);
+            return  typeParameter;
         }
-        return typeParameter;
+        return null;
     }
 }

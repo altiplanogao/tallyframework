@@ -236,12 +236,12 @@ public class FrontEndEntityService implements IFrontEndEntityService {
 
     @Override
     public CollectionEntryCreateFreshResponse collectionEntryCreateFresh(CollectionEntryCreateFreshRequest request, Locale locale) {
-        CollectionEntryCreateFreshResponse response = new CollectionEntryCreateFreshResponse();
-        ObjectResult result = null;
+        CollectionEntryCreateFreshResponse response = new CollectionEntryCreateFreshResponse(request.getUri());
+        PersistableResult result = null;
         ServiceException se = null;
         try {
             Class<?> entityType = request.getEntryPresentationClass();
-            result = dynamicEntityService.makeDissociatedObject(entityType);
+            result = dynamicEntityService.makeDissociatedPersistable(request.getEntryPresentationClass());
         } catch (ServiceException e) {
             se = e;
         } finally {

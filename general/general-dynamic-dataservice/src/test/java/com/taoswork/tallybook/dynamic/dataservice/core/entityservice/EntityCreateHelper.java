@@ -25,14 +25,14 @@ public class EntityCreateHelper {
                     .setCeilingType(ZooKeeper.class)
                     .setProperty("name", name);
                 PersistableResult<ZooKeeper> adminRes = dynamicEntityService.create(adminEntity);
-                ZooKeeper admin = adminRes.getEntity();
+                ZooKeeper admin = adminRes.getValue();
 
                 Long id = admin.getId();
                 PersistableResult<ZooKeeper> adminFromDbRes = dynamicEntityService.read(ZooKeeper.class, Long.valueOf(id));
                 PersistableResult<ZooKeeperImpl> admin2FromDbRes = dynamicEntityService.read(ZooKeeperImpl.class, Long.valueOf(id));
 
-                ZooKeeper adminFromDb = adminFromDbRes.getEntity();
-                ZooKeeper admin2FromDb = admin2FromDbRes.getEntity();
+                ZooKeeper adminFromDb = adminFromDbRes.getValue();
+                ZooKeeper admin2FromDb = admin2FromDbRes.getValue();
 
                 Assert.assertEquals("Created and Read should be same: " + admin.getId() + " : " + adminFromDb.getId(),
                     admin.getId(), adminFromDb.getId());

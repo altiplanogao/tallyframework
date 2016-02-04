@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice;
 
-import com.taoswork.tallybook.dynamic.dataio.reference.ObjectResult;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
@@ -64,8 +63,6 @@ public interface DynamicEntityService {
     <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 
     <T extends Persistable> PersistableResult<T> makeDissociatedPersistable(Class<T> entityClz) throws ServiceException;
-
-    <T> ObjectResult makeDissociatedObject(Class<T> entityClz) throws ServiceException;
 
     Class<?> getRootInstantiableEntityClass(Class<?> entityType);
 

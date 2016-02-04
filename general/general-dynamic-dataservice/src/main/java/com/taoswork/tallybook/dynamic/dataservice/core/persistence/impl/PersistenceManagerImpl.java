@@ -64,7 +64,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
             PersistableResult persistableResult = makePersistableResult(entity);
 
             //store before validate, for security reason
-            entityValueGateService.store(persistableResult.getEntity(), null);
+            entityValueGateService.store(persistableResult.getValue(), null);
             entityValidationService.validate(persistableResult);
 
             return dynamicEntityDao.create(entity);
@@ -90,12 +90,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
             Class<?> guardian = dynamicEntityMetadataAccess.getPermissionGuardian(ceilingType);
             String guardianName = guardian.getName();
             PersistableResult<T> oldEntity = getManagedEntity(ceilingType, entity);
-            securityVerifier.checkAccess(guardianName, Access.Update, oldEntity.getEntity());
+            securityVerifier.checkAccess(guardianName, Access.Update, oldEntity.getValue());
             securityVerifier.checkAccess(guardianName, Access.Update, entity);
             PersistableResult persistableResult = makePersistableResult(entity);
 
             //store before validate, for security reason
-            entityValueGateService.store(persistableResult.getEntity(), oldEntity.getEntity());
+            entityValueGateService.store(persistableResult.getValue(), oldEntity.getValue());
             entityValidationService.validate(persistableResult);
 
             return dynamicEntityDao.update(entity);
@@ -112,7 +112,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
                 PersistableResult<T> temp = makePersistableResult(entity);
                 throw new NoSuchRecordException(ceilingType, temp.getIdValue());
             }
-            entity = oldEntity.getEntity();
+            entity = oldEntity.getValue();
             securityVerifier.checkAccess(guardianName, Access.Delete, entity);
             dynamicEntityDao.delete(entity);
         }
@@ -163,10 +163,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
                 Object id = idField.get(entity);
                 persistableResult.setIdKey(idField.getName())
                     .setIdValue((id == null) ? null : id.toString())
-                    .setEntity(entity);
+                    .setValue(entity);
                 if(nameField != null){
                     Object name = nameField.get(entity);
-                    persistableResult.setEntityName((name == null) ? null : name.toString());
+                    persistableResult.setName((name == null) ? null : name.toString());
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error(e.getMessage());

@@ -40,7 +40,7 @@ public class EntityValidationServiceImpl implements EntityValidationService {
 
     @Override
     public void validate(PersistableResult persistableResult) throws ServiceException {
-        Persistable entity = persistableResult.getEntity();
+        Persistable entity = persistableResult.getValue();
         Class entityType = entity.getClass();
         IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(entityType, false);
 

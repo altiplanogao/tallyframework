@@ -13,25 +13,14 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/8/5.
  */
 public class EntityInfoResult {
-    //private String resourceName;
     private Class<?> type;
     private Class<?> ceilingType;
     private String idField;
     private String nameField;
 
-    private String entityUri;
     private String beanUri;
 
     private Map<String, IEntityInfo> details;
-
-//    public String getResourceName() {
-//        return resourceName;
-//    }
-//
-//    public EntityInfoResult setResourceName(String resourceName) {
-//        this.resourceName = resourceName;
-//        return this;
-//    }
 
     public Class<?> getCeilingType() {
         return ceilingType;
@@ -52,16 +41,6 @@ public class EntityInfoResult {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public String getEntityUri() {
-        return entityUri;
-    }
-
-    public EntityInfoResult setEntityUri(String entityUri) {
-        this.entityUri = entityUri;
-        return this;
-    }
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String getBeanUri() {
         return beanUri;
     }
@@ -76,7 +55,7 @@ public class EntityInfoResult {
     }
 
     public void setIdFieldIfEmpty(String idField) {
-        if(StringUtils.isEmpty(this.idField)){
+        if (StringUtils.isEmpty(this.idField)) {
             setIdField(idField);
         }
     }
@@ -91,7 +70,7 @@ public class EntityInfoResult {
     }
 
     public void setNameFieldIfEmpty(String nameField) {
-        if(StringUtils.isEmpty(this.nameField)){
+        if (StringUtils.isEmpty(this.nameField)) {
             setNameField(nameField);
         }
     }
@@ -101,8 +80,8 @@ public class EntityInfoResult {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Map<String, IEntityInfo> getDetails(){
-        if (null == details){
+    public Map<String, IEntityInfo> getDetails() {
+        if (null == details) {
             return null;
         }
         return Collections.unmodifiableMap(details);
@@ -114,27 +93,27 @@ public class EntityInfoResult {
     }
 
 
-    public EntityInfoResult addDetail(String typeName, IEntityInfo entityDetail){
-        if(this.details == null){
+    public EntityInfoResult addDetail(String typeName, IEntityInfo entityDetail) {
+        if (this.details == null) {
             this.details = new HashMap<String, IEntityInfo>();
         }
         this.details.put(typeName, entityDetail);
         return this;
     }
 
-    public EntityInfoResult addDetails(Map<String, IEntityInfo> entityDetailMap){
-        if(this.details == null){
+    public EntityInfoResult addDetails(Map<String, IEntityInfo> entityDetailMap) {
+        if (this.details == null) {
             this.details = new HashMap<String, IEntityInfo>();
         }
         this.details.putAll(entityDetailMap);
         return this;
     }
 
-    public <T extends IEntityInfo> T getDetail(String infoType){
+    public <T extends IEntityInfo> T getDetail(String infoType) {
         return (T) details.get(infoType);
     }
 
-    public <T extends IEntityInfo> T getDetail(EntityInfoType infoType){
+    public <T extends IEntityInfo> T getDetail(EntityInfoType infoType) {
         return (T) details.get(infoType.getType());
     }
 

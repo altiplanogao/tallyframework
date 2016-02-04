@@ -343,8 +343,8 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
         if (readResponse.getEntity() != null) {
-//            currentPath.pushEntry(readResponse.getEntity().getDataName(), request.getRequestURI());
-            model.addAttribute("entityName", readResponse.getEntity().getDataName());
+//            currentPath.pushEntry(readResponse.getValue().getName(), request.getRequestURI());
+            model.addAttribute("entityName", readResponse.getEntity().getName());
         }
 
         model.addAttribute("menu", menu);

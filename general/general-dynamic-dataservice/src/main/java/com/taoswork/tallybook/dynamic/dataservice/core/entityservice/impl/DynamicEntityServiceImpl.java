@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.dynamic.dataservice.core.entityservice.impl;
 
-import com.taoswork.tallybook.dynamic.dataio.reference.ObjectResult;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
 import com.taoswork.tallybook.dynamic.datameta.description.infos.IEntityInfo;
 import com.taoswork.tallybook.dynamic.datameta.metadata.IClassMetadata;
@@ -91,7 +90,7 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     @Override
     public <T extends Persistable> T straightRead(Class<T> entityClz, Object key) throws ServiceException {
         PersistableResult<T> result = read(entityClz, key, new ExternalReference());
-        return result.getEntity();
+        return result.getValue();
     }
 
     @Override
@@ -155,15 +154,23 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
     public <T extends Persistable> PersistableResult<T> makeDissociatedPersistable(Class<T> entityClz) throws ServiceException {
         Class rootable = dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);
         try {
-            Persistable entity = (Persistable) rootable.newInstance();
             PersistableResult<T> persistableResult = new PersistableResult<T>();
+            T entity = (T) rootable.newInstance();
+            persistableResult.setValue(entity);
+
             Class clz = entity.getClass();
             IClassMetadata classMetadata = dynamicEntityMetadataAccess.getClassMetadata(clz, false);
             Field idField = classMetadata.getIdField();
-            Object id = idField.get(entity);
-            persistableResult.setIdKey(idField.getName())
-                .setIdValue((id == null) ? null : id.toString())
-                .setEntity(entity);
+            if(idField != null){
+                Object id = idField.get(entity);
+                persistableResult.setIdKey(idField.getName())
+                    .setIdValue((id == null) ? null : id.toString());
+            }
+            Field nameField = classMetadata.getNameField();
+            if (nameField != null){
+                String name = (String)nameField.get(entity);
+                persistableResult.setName(name);
+            }
 
             return persistableResult;
         } catch (InstantiationException e) {
@@ -174,25 +181,6 @@ public final class DynamicEntityServiceImpl implements DynamicEntityService {
             throw new ServiceException(e);
         }
     }
-
-    @Override
-    public <T> ObjectResult makeDissociatedObject(Class<T> entityClz) throws ServiceException {
-        Class rootable = (entityClz);
-        try {
-            Object entity = (Object) rootable.newInstance();
-            ObjectResult objResult = new ObjectResult();
-            objResult.setValue(entity);
-
-            return objResult;
-        } catch (InstantiationException e) {
-            LOGGER.error(e.getMessage());
-            throw new ServiceException(e);
-        } catch (IllegalAccessException e) {
-            LOGGER.error(e.getMessage());
-            throw new ServiceException(e);
-        }
-    }
-
     @Override
     public Class<?> getRootInstantiableEntityClass(Class<?> entityClz) {
         Class<?> entityRootClz = this.dynamicEntityMetadataAccess.getRootInstantiableEntityType(entityClz);

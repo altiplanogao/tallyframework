@@ -8,8 +8,8 @@ import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
 public class PersistableResult<T extends Persistable> {
     String idKey;
     String idValue;
-    String entityName;
-    T entity;
+    String name;
+    T value;
 
     public String getIdKey() {
         return idKey;
@@ -29,21 +29,21 @@ public class PersistableResult<T extends Persistable> {
         return this;
     }
 
-    public String getEntityName() {
-        return entityName;
+    public String getName() {
+        return name;
     }
 
-    public PersistableResult setEntityName(String entityName) {
-        this.entityName = entityName;
+    public PersistableResult setName(String name) {
+        this.name = name;
         return this;
     }
 
-    public T getEntity() {
-        return entity;
+    public T getValue() {
+        return value;
     }
 
-    public PersistableResult setEntity(T entity) {
-        this.entity = entity;
+    public PersistableResult setValue(T value) {
+        this.value = value;
         return this;
     }
 }

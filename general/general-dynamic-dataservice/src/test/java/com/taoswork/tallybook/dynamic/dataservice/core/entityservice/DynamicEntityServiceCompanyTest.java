@@ -56,7 +56,7 @@ public class DynamicEntityServiceCompanyTest {
                 }
 
                 PersistableResult<ICompany> readCompanyR = dynamicEntityService.read(ICompany.class, company.getId());
-                ICompany companyByRead = readCompanyR.getEntity();
+                ICompany companyByRead = readCompanyR.getValue();
                 {
                     Assert.assertEquals(company.getId(), companyByRead.getId());
                     List<String> privateProducts = companyByRead.getPrivateProducts();

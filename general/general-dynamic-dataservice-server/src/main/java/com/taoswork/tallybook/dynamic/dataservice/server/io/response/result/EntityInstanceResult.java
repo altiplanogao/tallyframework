@@ -1,21 +1,19 @@
 package com.taoswork.tallybook.dynamic.dataservice.server.io.response.result;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-
 /**
  */
 public class EntityInstanceResult {
     String idKey;
     String idValue;
 
-    String dataName;
-    Persistable bean;
+    String name;
+    Object bean;
 
-    public Persistable getBean() {
+    public Object getBean() {
         return bean;
     }
 
-    public EntityInstanceResult setBean(Persistable bean) {
+    public EntityInstanceResult setBean(Object bean) {
         this.bean = bean;
         return this;
     }
@@ -38,12 +36,12 @@ public class EntityInstanceResult {
         return this;
     }
 
-    public String getDataName() {
-        return dataName;
+    public String getName() {
+        return name;
     }
 
-    public EntityInstanceResult setDataName(String dataName) {
-        this.dataName = dataName;
+    public EntityInstanceResult setName(String name) {
+        this.name = name;
         return this;
     }
 }

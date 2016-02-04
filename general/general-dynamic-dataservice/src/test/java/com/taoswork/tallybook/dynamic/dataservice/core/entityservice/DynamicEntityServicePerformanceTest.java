@@ -60,7 +60,7 @@ public class DynamicEntityServicePerformanceTest {
                         .setCeilingType(ZooKeeper.class)
                         .setProperty("name", nameAAA + i);
                     PersistableResult<ZooKeeper> adminRes = dynamicEntityService.create(adminEntity);
-                    ZooKeeper admin = adminRes.getEntity();
+                    ZooKeeper admin = adminRes.getValue();
                     ids.add(admin.getId());
                     created++;
                 }
@@ -100,7 +100,7 @@ public class DynamicEntityServicePerformanceTest {
             MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER, "READ");
             for (Long id : ids) {
                 PersistableResult<ZooKeeper> adminFromDbRes = dynamicEntityService.read(ZooKeeper.class, Long.valueOf(id));
-                Assert.assertEquals(id, adminFromDbRes.getEntity().getId());
+                Assert.assertEquals(id, adminFromDbRes.getValue().getId());
                 read++;
             }
             methodTimeCounter.noticePerActionCostOnExit(read);
@@ -110,12 +110,12 @@ public class DynamicEntityServicePerformanceTest {
             MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER, "UPDATE");
             for (Long id : ids) {
                 PersistableResult<ZooKeeper> adminFromDbRes = dynamicEntityService.read(ZooKeeper.class, Long.valueOf(id));
-                ZooKeeper admin = adminFromDbRes.getEntity();
+                ZooKeeper admin = adminFromDbRes.getValue();
                 String oldEmail = admin.getEmail();
                 String newEmail = admin.getName() + "@xxx.com";
                 admin.setEmail(newEmail);
                 PersistableResult<ZooKeeper> freshAdminFrom = dynamicEntityService.update(ZooKeeper.class, admin);
-                Assert.assertEquals(newEmail, freshAdminFrom.getEntity().getEmail());
+                Assert.assertEquals(newEmail, freshAdminFrom.getValue().getEmail());
                 updated ++;
             }
             methodTimeCounter.noticePerActionCostOnExit(updated);

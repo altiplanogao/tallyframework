@@ -5,15 +5,9 @@ import com.taoswork.tallybook.dynamic.datadomain.restful.EntityAction;
 /**
  * Created by Gao Yuan on 2015/11/26.
  */
-public class CollectionEntryCreateFreshResponse extends EntityResponse {
-    Object record;
-
-    public Object getRecord() {
-        return record;
-    }
-
-    public void setRecord(Object record) {
-        this.record = record;
+public class CollectionEntryCreateFreshResponse extends EntityCreateFreshResponse {
+    public CollectionEntryCreateFreshResponse(String createUri) {
+        super(createUri);
     }
 
     @Override

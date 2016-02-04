@@ -16,10 +16,8 @@ public class ResultTranslator {
     public static EntityInfoResult convertInfoResult(EntityRequest request,
                                                      EntityResponse response) {
         EntityInfoResult result = new EntityInfoResult();
-        result//.setResourceName(request.getResourceName())
-            .setCeilingType(request.getEntityType())
+        result.setCeilingType(request.getEntityType())
             .setType(response.getEntityType())
-            .setEntityUri(request.getEntityUri())
             .setBeanUri(LinkBuilder.buildLinkForReadInstance(request.getResourceName()));
         return result;
     }
@@ -38,10 +36,10 @@ public class ResultTranslator {
 
     public static EntityInstanceResult convertInstanceResult(PersistableResult er) {
         EntityInstanceResult result = new EntityInstanceResult();
-        result.setBean(er.getEntity())
+        result.setBean(er.getValue())
+            .setName(er.getName())
             .setIdKey(er.getIdKey())
-            .setIdValue(er.getIdValue())
-            .setDataName(er.getEntityName());
+            .setIdValue(er.getIdValue());
         return result;
     }
 }
