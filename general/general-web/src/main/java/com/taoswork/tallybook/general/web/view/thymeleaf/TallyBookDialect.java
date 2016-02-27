@@ -17,8 +17,8 @@ public class TallyBookDialect extends AbstractDialect {
         return "tb";
     }
 
-    private void initProcessors(){
-        if (null == processors){
+    private void initProcessors() {
+        if (null == processors) {
             processors = new HashSet<IProcessor>();
             processors.add(new CsrfProcessor());
         }

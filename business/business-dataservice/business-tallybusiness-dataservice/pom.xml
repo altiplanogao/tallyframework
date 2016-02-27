@@ -17,7 +17,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-dynamic-dataservice</artifactId>
+            <artifactId>dataservice-on-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

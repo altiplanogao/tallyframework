@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.business.dataservice.tallymanagement.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
-import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementJpaDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.descriptor.jpa.config.ADataServiceBeanConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,19 +19,19 @@ import javax.sql.DataSource;
  * Created by Gao Yuan on 2015/7/6.
  */
 @Configuration
-   @ComponentScan(
-           basePackageClasses = TallyManagementDataService.class,
-           includeFilters = {@ComponentScan.Filter(
-                   type = FilterType.ANNOTATION,
-                   value = {
-                           Dao.class,
-                           EntityService.class})},
-           excludeFilters = {@ComponentScan.Filter(
-                   type = FilterType.ANNOTATION,
-                   value = {Configuration.class}
-           )}
-   )
-   @EnableTransactionManagement
+@ComponentScan(
+        basePackageClasses = TallyManagementDataService.class,
+        includeFilters = {@ComponentScan.Filter(
+                type = FilterType.ANNOTATION,
+                value = {
+                        Dao.class,
+                        EntityService.class})},
+        excludeFilters = {@ComponentScan.Filter(
+                type = FilterType.ANNOTATION,
+                value = {Configuration.class}
+        )}
+)
+@EnableTransactionManagement
 public class TallyManagementDataServiceBeanConfiguration extends ADataServiceBeanConfiguration {
 
     public TallyManagementDataServiceBeanConfiguration() {
@@ -39,19 +39,19 @@ public class TallyManagementDataServiceBeanConfiguration extends ADataServiceBea
     }
 
     @Override
-    @Bean(name = TallyManagementDataServiceDefinition.TMANAGEMENT_DATASOURCE_NAME)
+    @Bean(name = TallyManagementJpaDatasourceDefinition.TMANAGEMENT_DATASOURCE_NAME)
     public DataSource serviceDataSource() {
         return super.serviceDataSource();
     }
 
     @Override
-    @Bean(name = TallyManagementDataServiceDefinition.TMANAGEMENT_ENTITY_MANAGER_FACTORY_NAME)
+    @Bean(name = TallyManagementJpaDatasourceDefinition.TMANAGEMENT_ENTITY_MANAGER_FACTORY_NAME)
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         return super.entityManagerFactory();
     }
 
     @Override
-    @Bean(name = TallyManagementDataServiceDefinition.TMANAGEMENT_TRANSACTION_MANAGER_NAME)
+    @Bean(name = TallyManagementJpaDatasourceDefinition.TMANAGEMENT_TRANSACTION_MANAGER_NAME)
     public JpaTransactionManager jpaTransactionManager() {
         return super.jpaTransactionManager();
     }

@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness;
 
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
+import com.taoswork.tallybook.dataservice.jpa.config.db.setting.TestDbSetting;
 import org.junit.Assert;
 import org.junit.Test;
 

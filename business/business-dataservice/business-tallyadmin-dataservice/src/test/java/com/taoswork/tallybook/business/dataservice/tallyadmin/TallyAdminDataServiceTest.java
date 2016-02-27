@@ -1,14 +1,18 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.impl.AdminEmployeeImpl;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestDatasourceConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestDatasourceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import org.junit.*;
+import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.service.IEntityService;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Created by Gao Yuan on 2015/5/13.
@@ -18,20 +22,21 @@ public class TallyAdminDataServiceTest {
 
     @BeforeClass
     public static void setDataService() {
-        dataService = new TallyAdminDataService(new TestDbSetting());
+        dataService = new TallyAdminDataService(TallyAdminTestDatasourceConfiguration.class);
     }
 
     @AfterClass
     public static void tearDown() {
+        TallyAdminTestDatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        mdbDef.dropDatabase();
         dataService = null;
     }
 
-
     @Test
     public void testDataService() throws ServiceException {
-        DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
-        Assert.assertNotNull(dynamicEntityService);
-        CriteriaQueryResult<AdminEmployee> admins = dynamicEntityService.query(AdminEmployee.class, null);
+        IEntityService entityService = dataService.getService(IEntityService.COMPONENT_NAME);
+        Assert.assertNotNull(entityService);
+        CriteriaQueryResult<AdminEmployee> admins = entityService.query(AdminEmployee.class, null);
 
         AdminEmployeeDao employeeDao = dataService.getService(AdminEmployeeDao.COMPONENT_NAME);
         Assert.assertNotNull(employeeDao);
@@ -44,7 +49,7 @@ public class TallyAdminDataServiceTest {
 
         AdminEmployee employeeInDb = employeeService.readAdminEmployeeByPersonId(-1L);
         Assert.assertTrue(employeeInDb.getPersonId().equals(-1L));
-        Assert.assertTrue(employeeInDb.getTitle().equals("master"));
+        Assert.assertTrue(employeeInDb.getTitle().equals("Master"));
 
         int createAttempt = 10;
         int created = 0;
@@ -52,7 +57,7 @@ public class TallyAdminDataServiceTest {
             for (int i = 0; i < createAttempt; ++i) {
                 int expected = i + 1;
                 Long personId = i + 2L;
-                AdminEmployee employee = new AdminEmployeeImpl();
+                AdminEmployee employee = new AdminEmployee();
                 employee.setPersonId(personId);
                 employee.setTitle("Title" + expected);
                 employee.setName("Name" + expected);

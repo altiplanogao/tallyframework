@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallymanagement;
 
-import com.taoswork.tallybook.testframework.persistence.TestApplicationContext;
+import com.taoswork.tallybook.testmaterial.jpa.persistence.TestApplicationContext;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -10,10 +10,10 @@ import org.springframework.context.ApplicationContext;
  */
 public class TallyManagementDataDomainTest {
     @Test
-    public void testCreateDb(){
+    public void testCreateDb() {
         try {
             ApplicationContext applicationContext =
-                TestApplicationContext.getApplicationContext(TallyManagementDbPersistenceConfig.class);
+                    TestApplicationContext.getApplicationContext(TallyManagementDbPersistenceConfig.class);
             Assert.assertTrue(true);
             applicationContext = null;
         } catch (Exception exp) {

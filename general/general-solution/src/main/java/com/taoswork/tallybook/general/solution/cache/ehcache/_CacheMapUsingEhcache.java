@@ -9,8 +9,7 @@ import java.util.*;
  * Created by Gao Yuan on 2015/6/16.
  */
 class _CacheMapUsingEhcache<K, V>
-        implements ICacheMap<K,V>
-{
+        implements ICacheMap<K, V> {
     private final String scopeName;
     private final Cache cache;
 
@@ -37,7 +36,7 @@ class _CacheMapUsingEhcache<K, V>
     @Override
     public boolean containsKey(Object key) {
         Element element = cache.get(key);
-        if(null == element){
+        if (null == element) {
             return false;
         }
         return true;
@@ -51,10 +50,10 @@ class _CacheMapUsingEhcache<K, V>
     @Override
     public V get(Object key) {
         Element element = cache.get(key);
-        if(null == element){
+        if (null == element) {
             return null;
         }
-        return (V)element.getObjectValue();
+        return (V) element.getObjectValue();
     }
 
     @Override

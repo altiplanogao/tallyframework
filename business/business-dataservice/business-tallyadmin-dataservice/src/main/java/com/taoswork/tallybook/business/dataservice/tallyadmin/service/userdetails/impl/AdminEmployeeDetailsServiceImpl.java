@@ -34,17 +34,17 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         PersonDetailsService personDetailsService = tallyUserDataService.getService(PersonDetailsService.COMPONENT_NAME);
         PersonDetails personDetails = personDetailsService.getPersistentPersonDetails();
-        if(null == personDetails){
+        if (null == personDetails) {
             personDetails = personDetailsService.loadPersonByUsername(s);
         }
-        if(personDetails == null){
+        if (personDetails == null) {
             return null;
         }
 
         Person person = personDetails.getPerson();
         AdminEmployeeService adminEmployeeService = tallyAdminDataService.getService(AdminEmployeeService.SERVICE_NAME);
         AdminEmployee adminEmployee = adminEmployeeService.readAdminEmployeeByPersonId(person.getId());
-        if(adminEmployee == null || adminEmployee.getId() == null){
+        if (adminEmployee == null || adminEmployee.getId() == null) {
             return null;
         }
 

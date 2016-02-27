@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/4/14.
  */
 public interface Employee extends
-    //IPermissionUser,
-    Persistable {
+        //IPermissionUser,
+        Persistable {
     Long getId();
 
     Employee setId(Long id);

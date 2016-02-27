@@ -1,13 +1,11 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityServiceBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.core.entity.EntityServiceBase;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -18,7 +16,7 @@ import javax.annotation.Resource;
 @EntityService(AdminEmployeeService.SERVICE_NAME)
 public class AdminEmployeeServiceImpl
         extends EntityServiceBase
-        implements AdminEmployeeService{
+        implements AdminEmployeeService {
 
     @Resource(name = AdminEmployeeDao.COMPONENT_NAME)
     protected AdminEmployeeDao adminEmployeeDao;
@@ -27,13 +25,12 @@ public class AdminEmployeeServiceImpl
 //    protected TallyUserDataService tallyUserDataService;
 
     @Override
-    public AdminEmployee readAdminEmployeeByPersonId(Long personId){
+    public AdminEmployee readAdminEmployeeByPersonId(Long personId) {
         return adminEmployeeDao.readAdminEmployeeByPersonId(personId);
     }
 
     @Override
-    @Transactional(TallyAdminDataServiceDefinition.TADMIN_TRANSACTION_MANAGER_NAME)
-    public AdminEmployee saveAdminEmployee(AdminEmployee employee){
+    public AdminEmployee saveAdminEmployee(AdminEmployee employee) {
         return adminEmployeeDao.save(employee);
     }
 }

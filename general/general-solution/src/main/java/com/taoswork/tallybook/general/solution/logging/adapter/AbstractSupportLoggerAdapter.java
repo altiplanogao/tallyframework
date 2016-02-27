@@ -21,7 +21,7 @@ public abstract class AbstractSupportLoggerAdapter {
     public static final int LOG_LEVEL_FATAL = 50;
     public static final int LOG_LEVEL_SUPPORT = 60;
 
-    public static String levelName(int level){
+    public static String levelName(int level) {
         switch (level) {
             case LOG_LEVEL_TRACE:
                 return (TRACE);
@@ -39,7 +39,8 @@ public abstract class AbstractSupportLoggerAdapter {
                 return (SUPPORT);
         }
     }
-    public static String levelNameInBracket(int level){
+
+    public static String levelNameInBracket(int level) {
         return "[" + levelName(level) + "] ";
     }
 }

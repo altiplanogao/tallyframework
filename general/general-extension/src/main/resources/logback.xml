@@ -13,7 +13,7 @@
 -->
 <configuration debug="false" scan="true" scanPeriod="10 seconds">
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="/home" />
+    <property name="LOG_HOME" value="/home"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%logger{36}] - %msg%n
@@ -22,7 +22,7 @@
     </appender>
 
     <!-- 按照每天生成日志文件 -->
-    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
             <FileNamePattern>${LOG_HOME}/TallyBook.log.%d{yyyy-MM-dd}.log</FileNamePattern>
@@ -63,7 +63,11 @@
 
     <logger name="com.taoswork.tallybook" level="DEBUG"/>
 
-    <logger name="org.hibernate.internal" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.cache" level="ERROR"/>
+    <logger name="org.hibernate.internal" level="ERROR"/>
+
+    <logger name="org.springframework" level="WARN"/>
 
     <!--
     <logger name="" level="INFO"/>
@@ -78,8 +82,8 @@
     -->
     <!-- 日志输出级别 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

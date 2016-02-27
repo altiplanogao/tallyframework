@@ -9,9 +9,9 @@ public class TallyBookAdminCoreRoot {
     public static void initEntityTypes(){
     EntityInterfaceManager.instance()
             .registEntity(AdminPermission.class, AdminPermissionImpl.class)
-            .registEntity(AdminRole.class, AdminRoleImpl.class)
+            .registEntity(AdminRole.class, AdminRole.class)
             .registEntity(AdminPermissionQualifiedEntity.class, AdminPermissionQualifiedEntityImpl.class)
-            .registEntity(AdminUser.class, AdminUserImpl.class)
+            .registEntity(AdminEmployee.class, AdminUserImpl.class)
             .registEntity(UserCertification.class, UserCertificationImpl.class);
 
     }

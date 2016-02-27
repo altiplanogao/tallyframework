@@ -1,15 +1,15 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
-import com.taoswork.tallybook.business.datadomain.tallyuser.gate.PersonValueGate;
+import com.taoswork.tallybook.business.datadomain.tallyuser.gate.PersonGate;
 import com.taoswork.tallybook.business.datadomain.tallyuser.validation.PersonValidator;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 
 import java.util.Date;
 
 @PersistEntity(
-    validators = {PersonValidator.class},
-    valueGates = {PersonValueGate.class}
+        validators = {PersonValidator.class},
+        valueGates = {PersonGate.class}
 )
 public interface Person extends Persistable {
     Long getId();

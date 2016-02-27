@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails;
 
+import com.taoswork.tallybook.business.datadomain.tallyuser.AccountStatus;
 import com.taoswork.tallybook.business.datadomain.tallyuser.FacetType;
-import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

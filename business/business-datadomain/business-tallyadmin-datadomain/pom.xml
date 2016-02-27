@@ -14,17 +14,15 @@
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-dynamic-datadomain</artifactId>
+            <artifactId>authority-solution</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>datadomain-on-mongo</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
             <artifactId>business-tallyuser-datadomain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>test-framework</artifactId>
-            <type>jar</type>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

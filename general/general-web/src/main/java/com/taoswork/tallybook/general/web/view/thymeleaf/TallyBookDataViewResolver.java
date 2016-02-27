@@ -17,7 +17,7 @@ public class TallyBookDataViewResolver extends AbstractCachingViewResolver imple
 
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
-        if(JSON_VIEW_NAME.equals(viewName)){
+        if (JSON_VIEW_NAME.equals(viewName)) {
             View view = new MappingJackson2JsonView();
             return view;
         }
@@ -29,7 +29,7 @@ public class TallyBookDataViewResolver extends AbstractCachingViewResolver imple
         return order;
     }
 
-    public void setOrder(int order){
+    public void setOrder(int order) {
         this.order = order;
     }
 

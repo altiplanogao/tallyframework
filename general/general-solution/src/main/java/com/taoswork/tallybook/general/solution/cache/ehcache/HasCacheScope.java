@@ -5,5 +5,6 @@ package com.taoswork.tallybook.general.solution.cache.ehcache;
  */
 public interface HasCacheScope {
     String getCacheScope();
+
     void setCacheScope(String scope);
 }

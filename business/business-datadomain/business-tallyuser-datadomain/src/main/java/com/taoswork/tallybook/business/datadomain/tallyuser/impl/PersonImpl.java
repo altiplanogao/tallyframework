@@ -5,40 +5,40 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.TallyUserDataDomain;
 import com.taoswork.tallybook.business.datadomain.tallyuser.convert.GenderToStringConverter;
-import com.taoswork.tallybook.dynamic.datadomain.converters.BooleanToStringConverter;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.entity.handyprotect.valuegate.FieldCreateDateValueGate;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationClass;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.*;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.entity.handyprotect.valuegate.CreateDateGate;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.*;
+import com.taoswork.tallybook.datadomain.onjpa.converters.BooleanToStringConverter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "TB_PERSON",
-    indexes = {
-        @Index(name = "idx_birth", columnList = "BIRTH"),
-        @Index(name = "idx_email", columnList = "EMAIL"),
-        @Index(name = "idx_mobile", columnList = "MOBILE"),
-        @Index(name = "idx_uuid", columnList = "UUID")})
+        indexes = {
+                @Index(name = "idx_birth", columnList = "BIRTH"),
+                @Index(name = "idx_email", columnList = "EMAIL"),
+                @Index(name = "idx_mobile", columnList = "MOBILE"),
+                @Index(name = "idx_uuid", columnList = "UUID")})
 @NamedQueries({
-        @NamedQuery(name="Person.ReadPersonByName",
-                query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
+        @NamedQuery(name = "Person.ReadPersonByName",
+                query = "SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
                         " WHERE person.name = :name"),
-        @NamedQuery(name="Person.ReadPersonByUUID",
-                query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
+        @NamedQuery(name = "Person.ReadPersonByUUID",
+                query = "SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
                         " WHERE person.uuid = :uuid"),
-        @NamedQuery(name="Person.ReadPersonByEmail",
-                query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
+        @NamedQuery(name = "Person.ReadPersonByEmail",
+                query = "SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
                         " WHERE person.email = :email"),
-        @NamedQuery(name="Person.ReadPersonByMobile",
-                query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
+        @NamedQuery(name = "Person.ReadPersonByMobile",
+                query = "SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person" +
                         " WHERE person.mobile = :mobile"),
-        @NamedQuery(name="Person.ListPerson",
-                query="SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person"),
+        @NamedQuery(name = "Person.ListPerson",
+                query = "SELECT person FROM com.taoswork.tallybook.business.datadomain.tallyuser.Person person"),
 
 })
 @PresentationClass(
@@ -60,14 +60,14 @@ public class PersonImpl
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PersistField(fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME, required = true)
     @PresentationField(group = "General", order = 2)
     protected String name;
 
     @Column(name = "GENDER", nullable = false, length = 1
-        ,columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.DEFAULT_CHAR + "'"
+            , columnDefinition = "VARCHAR(1) DEFAULT '" + Gender.DEFAULT_CHAR + "'"
     )
-    @PersistField(fieldType = FieldType.ENUMERATION)
+    @PersistField(fieldType = FieldType.ENUMERATION, required = true)
     @PresentationField(group = "General", order = 3)
     @PresentationEnum(enumeration = Gender.class)
     @Convert(converter = GenderToStringConverter.class)
@@ -81,19 +81,19 @@ public class PersonImpl
     public Date birth = new Date();
 
     @Column(name = "EMAIL", length = 120)
-    @PersistField(fieldType = FieldType.EMAIL)
+    @PersistField(fieldType = FieldType.EMAIL, length = 120)
     @PresentationField(group = "General", order = 5)
     protected String email;
 
     @Column(name = "MOBILE", length = 20)
-    @PersistField(fieldType = FieldType.PHONE)
+    @PersistField(fieldType = FieldType.PHONE, length = 20)
     @PresentationField(group = "General", order = 6)
     protected String mobile;
 
     @Column(name = "ACTIVE", nullable = false, length = 2,
-        columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
+            columnDefinition = "VARCHAR(2) DEFAULT 'Y'")
     @Convert(converter = BooleanToStringConverter.class)
-    @PersistField(fieldType = FieldType.BOOLEAN)
+    @PersistField(fieldType = FieldType.BOOLEAN, required = true)
     @PresentationField(order = 7)
     @PresentationBoolean(mode = BooleanMode.YesNo)
     protected Boolean active = true;
@@ -105,7 +105,7 @@ public class PersonImpl
 
     @Column(name = "CREATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = FieldCreateDateValueGate.class, skipDefaultFieldValueGate = true, editable = false)
+    @PersistField(fieldType = FieldType.DATE, fieldValueGateOverride = CreateDateGate.class, skipDefaultFieldValueGate = true, editable = false)
     @PresentationField(order = 99, visibility = Visibility.GRID_HIDE)
     @PresentationDate(mode = DateMode.DateTime, cellMode = DateCellMode.Date)
     public Date createDate = new Date();

@@ -25,6 +25,7 @@ import com.taoswork.tallybook.general.solution.logging.SupportLoggerAdapter;
 
 /**
  * <p>An implementation of SupportLoggerAdapter that would disable SupportLogger logging. (i.e. do nothing)</p>
+ *
  * @author Elbert Bautista (elbertbautista)
  */
 public class DisableSupportLoggerAdapter implements SupportLoggerAdapter {

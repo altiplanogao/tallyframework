@@ -4,10 +4,10 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Employee;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.EmployeeOwnedSetting;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.TallyBusinessDataDomain;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 
 import javax.persistence.*;
 
@@ -22,9 +22,9 @@ public class EmployeeOwnedSettingImpl implements EmployeeOwnedSetting {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
     @TableGenerator(
-        name = ID_GENERATOR_NAME,
-        table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
-        initialValue = 1)
+            name = ID_GENERATOR_NAME,
+            table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
+            initialValue = 1)
     @Column(name = "ID")
     @PersistField(fieldType = FieldType.ID)
     @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)

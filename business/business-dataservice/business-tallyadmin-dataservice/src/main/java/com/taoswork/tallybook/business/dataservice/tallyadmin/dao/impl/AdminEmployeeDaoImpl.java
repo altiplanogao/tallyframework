@@ -1,16 +1,16 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.dao.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
-import com.taoswork.tallybook.dynamic.dataservice.entity.DaoBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.mongo.dao.DocumentDaoBase;
 import com.taoswork.tallybook.general.extension.collections.ListUtility;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -19,28 +19,31 @@ import java.util.List;
 @Dao(AdminEmployeeDao.COMPONENT_NAME)
 @Repository(AdminEmployeeDao.COMPONENT_NAME)
 public class AdminEmployeeDaoImpl
-        extends DaoBase
+        extends DocumentDaoBase
         implements AdminEmployeeDao {
-
-    @PersistenceContext(unitName = TallyAdminDataServiceDefinition.TADMIN_PU_NAME)
-    protected EntityManager em;
 
     @Override
     public AdminEmployee readAdminEmployeeByPersonId(Long id) {
-        TypedQuery<AdminEmployee> query = em.createNamedQuery("AdminEmployee.ReadEmployeeByPersonId", AdminEmployee.class);
-        query.setParameter("personId", id);
-        query.setMaxResults(2);
-        List<AdminEmployee> employees = query.getResultList();
+        Query<AdminEmployee> q = datastore.createQuery(AdminEmployee.class);
+        q.field("personId").equal(id);
+        q.limit(2);
+        List<AdminEmployee> employees = q.asList();
         return ListUtility.getTheSingleElement(employees);
     }
 
     @Override
     public AdminEmployee save(AdminEmployee employee) {
-        if(em.contains(employee) || employee.getId() != null){
-            return em.merge(employee);
-        }else {
-            em.persist(employee);
-            return employee;
-        }
+        Long personId = employee.getPersonId();
+        if (personId == null)
+            throw new IllegalArgumentException();
+        Query<AdminEmployee> q = datastore.createQuery(AdminEmployee.class);
+        q.field("personId").equal(personId);
+
+        Key<AdminEmployee> key = datastore.save(employee);
+        employee.setId((ObjectId) key.getId());
+        UpdateOperations<AdminEmployee> u = datastore.createUpdateOperations(AdminEmployee.class);
+        return employee;
+//        return datastore.findAndModify(q, u, false, true );
+
     }
 }

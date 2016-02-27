@@ -15,15 +15,7 @@
     <modules>
         <module>general-extension</module>
         <module>general-solution</module>
-        <module>general-authority-support</module>
-        <module>general-dynamic-datadomain</module>
-        <module>general-dynamic-datameta-descriptor</module>
-        <module>general-dynamic-dataservice</module>
-        <module>general-dynamic-dataservice-server</module>
-        <module>general-datadomain-support</module>
-        <module>general-dataservice-support</module>
         <module>general-web</module>
-        <module>general-authority</module>
         <module>general-calendar</module>
     </modules>
 </project>

@@ -2,11 +2,11 @@ package com.taoswork.tallybook.business.dataservice.tallyuser.dao.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonKeyType;
-import com.taoswork.tallybook.dynamic.dataservice.entity.DaoBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.core.entity.DaoBase;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 import com.taoswork.tallybook.general.extension.collections.ListUtility;
 import com.taoswork.tallybook.general.extension.utils.AccountUtility;
@@ -26,7 +26,7 @@ public class PersonDaoImpl
         extends DaoBase
         implements PersonDao {
 
-    @PersistenceContext(unitName = TallyUserDataServiceDefinition.TUSER_PU_NAME)
+    @PersistenceContext(unitName = TallyUserJpaDatasourceDefinition.TUSER_PU_NAME)
     protected EntityManager em;
 
     @Override
@@ -59,12 +59,12 @@ public class PersonDaoImpl
     }
 
     @Override
-    public Person readPersonById(Long id){
+    public Person readPersonById(Long id) {
         return em.find(PersonImpl.class, id);
     }
 
     @Override
-    public Person readPersonByUUID(String uuid){
+    public Person readPersonByUUID(String uuid) {
         TypedQuery<Person> query = em.createNamedQuery("Person.ReadPersonByUUID", Person.class);
         query.setParameter("uuid", uuid);
         query.setMaxResults(2);
@@ -100,42 +100,42 @@ public class PersonDaoImpl
     }
 
     @Override
-    public Person readPersonByAnyIdentity(String mobile_Email_PersonName){
-        if(AccountUtility.isEmail(mobile_Email_PersonName)){
+    public Person readPersonByAnyIdentity(String mobile_Email_PersonName) {
+        if (AccountUtility.isEmail(mobile_Email_PersonName)) {
             return readPersonByEmail(mobile_Email_PersonName);
-        }else if(AccountUtility.isPhone(mobile_Email_PersonName)){
+        } else if (AccountUtility.isPhone(mobile_Email_PersonName)) {
             return readPersonByMobile(mobile_Email_PersonName);
-        }else {
+        } else {
             return readPersonByName(mobile_Email_PersonName);
         }
     }
 
     @Override
-    public Person save(Person person){
-        if(em.contains(person) || person.getId() != null){
+    public Person save(Person person) {
+        if (em.contains(person) || person.getId() != null) {
             return em.merge(person);
-        }else {
+        } else {
             em.persist(person);
             return person;
         }
     }
 
     @Override
-    public Person create(){
+    public Person create() {
         Person user = new PersonImpl();
         return user;
     }
 
     @Override
-    public void delete(Person user){
-        if(!em.contains(user)){
+    public void delete(Person user) {
+        if (!em.contains(user)) {
             user = readPersonById(user.getId());
         }
         em.remove(user);
     }
 
     @Override
-    public boolean isThereAnyData(){
+    public boolean isThereAnyData() {
         TypedQuery<Person> query = em.createNamedQuery("Person.ListPerson", Person.class);
         query.setMaxResults(1);
         List<Person> users = query.getResultList();

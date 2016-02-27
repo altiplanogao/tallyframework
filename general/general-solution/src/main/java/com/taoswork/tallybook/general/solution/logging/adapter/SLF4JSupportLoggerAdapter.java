@@ -76,6 +76,7 @@ public class SLF4JSupportLoggerAdapter extends AbstractSupportLoggerAdapter impl
 
     /**
      * Mapping FATAL to ERROR as the SLF4J API does not contain a fatal level
+     *
      * @param message
      */
     @Override
@@ -85,6 +86,7 @@ public class SLF4JSupportLoggerAdapter extends AbstractSupportLoggerAdapter impl
 
     /**
      * Mapping FATAL to ERROR as the SLF4J API does not contain a fatal level
+     *
      * @param message
      * @param t
      */
@@ -136,7 +138,7 @@ public class SLF4JSupportLoggerAdapter extends AbstractSupportLoggerAdapter impl
     }
 
     public int getSupportLevel() {
-        String systemProperty = System.getProperty(DEFAULT_LEVEL_KEY, LOG_LEVEL_WARN+"");
+        String systemProperty = System.getProperty(DEFAULT_LEVEL_KEY, LOG_LEVEL_WARN + "");
         return Integer.valueOf(systemProperty);
     }
 

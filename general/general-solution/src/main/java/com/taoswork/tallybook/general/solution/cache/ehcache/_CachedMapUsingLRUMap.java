@@ -3,7 +3,7 @@ package com.taoswork.tallybook.general.solution.cache.ehcache;
 
 import org.apache.commons.collections4.map.LRUMap;
 
-class _CachedMapUsingLRUMap extends LRUMap implements ICacheMap{
+class _CachedMapUsingLRUMap extends LRUMap implements ICacheMap {
     protected final String scopeName;
 
     public _CachedMapUsingLRUMap(String scopeName) {

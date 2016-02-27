@@ -1,26 +1,29 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser;
 
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserDataServiceBeanConfiguration;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
-
-import java.util.List;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceBeanConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.annotations.DataService;
+import com.taoswork.tallybook.dataservice.jpa.config.JpaDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
+import com.taoswork.tallybook.dataservice.jpa.core.JpaDataServiceBase;
 
 /**
  * Created by Gao Yuan on 2015/5/10.
  */
 @DataService
-public class TallyUserDataService extends DataServiceBase {
+public class TallyUserDataService
+        extends JpaDataServiceBase<TallyUserJpaDatasourceBeanConfiguration,
+        JpaDatasourceConfiguration,
+        IDbConfig> {
     public static final String COMPONENT_NAME = TallyUserDataServiceDefinition.DATA_SERVICE_NAME;
 
-    public TallyUserDataService(IDbSetting dbSetting) {
-        this(dbSetting, TallyUserDataServiceBeanConfiguration.class, null);
+    public TallyUserDataService(Class<? extends JpaDatasourceConfiguration> dSrcConfClz,
+                                Class<? extends IDbConfig> dbConf) {
+        super(new TallyUserDataServiceDefinition(), TallyUserJpaDatasourceBeanConfiguration.class,
+                dSrcConfClz, dbConf);
     }
 
-    TallyUserDataService(IDbSetting dbSetting,
-                         Class<? extends TallyUserDataServiceBeanConfiguration> dataServiceConf,
-                         List<Class> annotatedClasses) {
-        super(new TallyUserDataServiceDefinition(), dbSetting, dataServiceConf, annotatedClasses);
+    public TallyUserDataService(Class<? extends IDbConfig> dbConf) {
+        this(TallyUserJpaDatasourceConfiguration.class, dbConf);
     }
 }

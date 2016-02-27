@@ -14,7 +14,7 @@ public class PropertyGetter implements StringGetter {
     }
 
     @Override
-    public String get(){
+    public String get() {
         return System.getProperty(propertyName, defaultValue);
     }
 }

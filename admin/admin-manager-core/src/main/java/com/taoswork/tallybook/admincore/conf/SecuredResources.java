@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.admincore.conf;
 
+import com.taoswork.tallybook.authority.core.ProtectionMode;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceSpecial;
-import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResourceCase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +19,7 @@ public class SecuredResources {
     static {
         List<SecuredResource> tempResources = new ArrayList<SecuredResource>();
         tempResources.add(new SecuredResource(AdminSecuredResource.class, "", ProtectionMode.FitAll, true));
-        tempResources.add(new SecuredResource(AdminSecuredResourceSpecial.class, "", ProtectionMode.FitAll, true));
+        tempResources.add(new SecuredResource(AdminSecuredResourceCase.class, "", ProtectionMode.FitAll, true));
         tempResources.add(new SecuredResource(AdminEmployee.class, "", ProtectionMode.FitAll, true));
         tempResources.add(new SecuredResource(AdminPermission.class, "", ProtectionMode.FitAll, true));
         resources = Collections.unmodifiableList(tempResources);

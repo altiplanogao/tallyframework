@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
-import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessJpaDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.descriptor.jpa.config.ADataServiceBeanConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,26 +32,26 @@ import javax.sql.DataSource;
         )}
 )
 @EnableTransactionManagement
-public class TallyBusinessDataServiceBeanConfiguration  extends ADataServiceBeanConfiguration {
+public class TallyBusinessDataServiceBeanConfiguration extends ADataServiceBeanConfiguration {
 
     public TallyBusinessDataServiceBeanConfiguration() {
         super();
     }
 
     @Override
-    @Bean(name = TallyBusinessDataServiceDefinition.TBUSINESS_DATASOURCE_NAME)
+    @Bean(name = TallyBusinessJpaDatasourceDefinition.TBUSINESS_DATASOURCE_NAME)
     public DataSource serviceDataSource() {
         return super.serviceDataSource();
     }
 
     @Override
-    @Bean(name = TallyBusinessDataServiceDefinition.TBUSINESS_ENTITY_MANAGER_FACTORY_NAME)
+    @Bean(name = TallyBusinessJpaDatasourceDefinition.TBUSINESS_ENTITY_MANAGER_FACTORY_NAME)
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         return super.entityManagerFactory();
     }
 
     @Override
-    @Bean(name = TallyBusinessDataServiceDefinition.TBUSINESS_TRANSACTION_MANAGER_NAME)
+    @Bean(name = TallyBusinessJpaDatasourceDefinition.TBUSINESS_TRANSACTION_MANAGER_NAME)
     public JpaTransactionManager jpaTransactionManager() {
         return super.jpaTransactionManager();
     }

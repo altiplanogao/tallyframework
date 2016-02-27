@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.admincore.conf;
 
-import com.taoswork.tallybook.general.authority.core.basic.ProtectionMode;
+import com.taoswork.tallybook.authority.core.ProtectionMode;
 
 /**
  * Created by Gao Yuan on 2015/10/23.

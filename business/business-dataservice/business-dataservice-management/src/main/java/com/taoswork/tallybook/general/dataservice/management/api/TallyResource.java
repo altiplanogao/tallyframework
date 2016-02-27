@@ -46,7 +46,7 @@ public class TallyResource {
         return data;
     }
 
-    public Map<String, Object> getResult(){
+    public Map<String, Object> getResult() {
         data.put("links", getLinks());
         return data;
     }

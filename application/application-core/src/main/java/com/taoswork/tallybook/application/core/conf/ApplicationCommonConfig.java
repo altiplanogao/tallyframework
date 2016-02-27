@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.application.core.conf;
 
+import com.taoswork.tallybook.general.solution.exception.UnexpectedException;
 import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.context.MessageSource;
@@ -22,10 +23,10 @@ public class ApplicationCommonConfig {
     public static final String COMMON_MESSAGE = "commonMessage";
     public static final String COMMON_MESSAGE_SOURCE = "commonMessageSource";
 
-    private HashMap<String , String> rawMessages = new HashMap<String, String>();
+    private HashMap<String, String> rawMessages = new HashMap<String, String>();
 
     @Bean(name = COMMON_MESSAGE_SOURCE)
-    public MessageSource commonMessageSource(){
+    public MessageSource commonMessageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         List<String> basenames = new ArrayList<String>();
         basenames.add("classpath:/messages/CommonMessages");
@@ -65,12 +66,12 @@ public class ApplicationCommonConfig {
     }
 
     @Bean(name = COMMON_MESSAGE)
-    public CachedMessageLocalizedDictionary commonMessage(){
+    public CachedMessageLocalizedDictionary commonMessage() {
         //ensure ms created first.
         MessageSource ms = commonMessageSource();
-        Map<String , String> raw = SerializationUtils.clone(rawMessages);
-        if(raw.size() == 0){
-            throw new IllegalStateException("rawMessages not initialized.");
+        Map<String, String> raw = SerializationUtils.clone(rawMessages);
+        if (raw.size() == 0) {
+            throw new UnexpectedException("rawMessages not initialized.");
         }
         CachedMessageLocalizedDictionary commonMessage = new CachedMessageLocalizedDictionary(raw, ms);
         return commonMessage;

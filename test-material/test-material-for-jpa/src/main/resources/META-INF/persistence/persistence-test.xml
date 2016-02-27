@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="tallymockupPU" transaction-type="RESOURCE_LOCAL">
+        <non-jta-data-source>jdbcTestDs</non-jta-data-source>
+
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.ZooImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.ZooKeeperImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.DormitoryImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.CageImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.DogImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.FishImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.CustomizedAnimalImpl</class>
+
+
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.CompanyImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.ProductImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.EmployeeImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.DepartmentImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.ParkingSpaceImpl</class>
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.business.impl.ProjectImpl</class>
+
+
+        <class>com.taoswork.tallybook.testmaterial.jpa.domain.nature.impl.CitizenImpl</class>
+
+        <!--
+        <class>AdminRoleImpl</class>
+        <class>AdminPermissionImpl</class>
+        <class>AdminPermissionQualifiedEntityImpl</class>
+-->
+
+        <exclude-unlisted-classes/>
+
+    </persistence-unit>
+</persistence>

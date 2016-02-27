@@ -5,13 +5,13 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessPartnerT
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.TallyBusinessDataDomain;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.convert.BusinessPartnerTypeToStringConverter;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typed.PresentationEnum;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationEnum;
+import com.taoswork.tallybook.datadomain.onjpa.annotation.FieldRelation;
+import com.taoswork.tallybook.datadomain.onjpa.annotation.RelationType;
 
 import javax.persistence.*;
 
@@ -24,9 +24,9 @@ public class BusinessPartnerImpl implements BusinessPartner {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
     @TableGenerator(
-        name = ID_GENERATOR_NAME,
-        table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
-        initialValue = 1)
+            name = ID_GENERATOR_NAME,
+            table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
+            initialValue = 1)
     @Column(name = "ID")
     @PersistField(fieldType = FieldType.ID)
     @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
@@ -44,7 +44,7 @@ public class BusinessPartnerImpl implements BusinessPartner {
     protected String description;
 
     @Column(name = "BP_TYP", nullable = false, length = 1
-        ,columnDefinition = "VARCHAR(1) DEFAULT '" + BusinessPartnerType.DEFAULT_CHAR + "'"
+            , columnDefinition = "VARCHAR(1) DEFAULT '" + BusinessPartnerType.DEFAULT_CHAR + "'"
     )
     @PersistField(fieldType = FieldType.ENUMERATION)
     @PresentationField(group = "General", order = 3)
@@ -54,13 +54,13 @@ public class BusinessPartnerImpl implements BusinessPartner {
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
-    @JoinColumn(name = "host_id",  nullable = false, updatable = false)
+    @JoinColumn(name = "host_id", nullable = false, updatable = false)
     @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
     protected BusinessUnit host;
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
-    @JoinColumn(name = "guest_id",  nullable = false, updatable = true)
+    @JoinColumn(name = "guest_id", nullable = false, updatable = true)
     @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
     @PresentationField()
     protected BusinessUnit guest;

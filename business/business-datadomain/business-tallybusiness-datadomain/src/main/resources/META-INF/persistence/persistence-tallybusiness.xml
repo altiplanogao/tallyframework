@@ -12,10 +12,10 @@
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.impl.EmployeeOwnedSettingImpl</class>
 
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceImpl</class>
-        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceSpecialImpl</class>
-        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionEntryImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuSecuredResourceCaseImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuResourcePermissionCaseImpl</class>
         <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionImpl</class>
-        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuRoleImpl</class>
+        <class>com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuRole</class>
 
         <exclude-unlisted-classes/>
 

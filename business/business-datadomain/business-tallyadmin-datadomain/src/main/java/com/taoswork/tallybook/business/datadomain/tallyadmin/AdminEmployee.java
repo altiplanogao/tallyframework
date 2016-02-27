@@ -1,51 +1,69 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminPermission;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminRole;
+import com.taoswork.tallybook.authority.solution.domain.user.PersonAuthority;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.valueprotect.AdminEmployeeGate;
+import com.taoswork.tallybook.business.datadomain.tallyuser.AccountStatus;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.general.authority.core.authentication.user.AccountStatus;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
-
-import java.util.Set;
+import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationExternalForeignKey;
 
 /**
- * Created by Gao Yuan on 2015/5/10.
+ * Created by Gao Yuan on 2016/2/15.
  */
 @PersistEntity(nameOverride = "admin",
-    valueGates = {AdminEmployeeGate.class}
+        valueGates = {AdminEmployeeGate.class}
 )
-public interface AdminEmployee extends Persistable {
-    Long getId();
+public class AdminEmployee extends PersonAuthority {
+    //protected Big
+//    @Transient
+//    private transient Person person;
 
-    void setId(Long id);
+    protected String title;
 
-    String getName();
+    protected AccountStatus status;
 
-    void setName(String name);
+    @PersistField(fieldType = FieldType.EXTERNAL_FOREIGN_KEY)
+    @PresentationField(visibility = Visibility.VISIBLE_ALL)
+    @PresentationExternalForeignKey(targetType = PersonImpl.class, dataField = "person")
+    private Long personId;
+    public static final String FN_PERSON_ID = "personId";
 
-    Long getPersonId();
+    private transient Person person;
 
-    void setPersonId(Long personId);
+    public String getTitle() {
+        return title;
+    }
 
-    Person getPerson();
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    void setPerson(Person person);
+    public AccountStatus getStatus() {
+        return status;
+    }
 
-    String getTitle();
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    }
 
-    void setTitle(String title);
+    public Person getPerson() {
+        return person;
+    }
 
-    AccountStatus getStatus();
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-    void setStatus(AccountStatus status);
+    public void setPersonId(Long personId) {
+        this.personId = personId;
+    }
 
-    Set<AdminRole> getAllRoles();
-
-    void setAllRoles(Set<AdminRole> allRoles);
-
-    Set<AdminPermission> getAllPermissions();
-
-    void setAllPermissions(Set<AdminPermission> allPermissions);
+    public Long getPersonId() {
+        return personId;
+    }
 }

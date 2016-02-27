@@ -5,14 +5,16 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
-import com.taoswork.tallybook.dynamic.datameta.description.service.MetaInfoService;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.TestDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityprotect.validate.EntityValidationException;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dataservice.core.entityprotect.validate.EntityValueValidationException;
+import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.jpa.config.db.TestDbConfig;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
+import com.taoswork.tallybook.dataservice.service.IEntityService;
+import com.taoswork.tallybook.descriptor.service.MetaInfoService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +32,7 @@ public class TallyUserEntityServiceTest {
     @Before
     public void setupDataSource() {
         counter++;
-        dataService = new TallyUserDataService(new TestDbSetting());
+        dataService = new TallyUserDataService(TestDbConfig.class);
     }
 
     @After
@@ -55,7 +57,7 @@ public class TallyUserEntityServiceTest {
     public void testDataServices() {
 
         PersonService personService = dataService.getService(PersonService.SERVICE_NAME);
-        Object object = dataService.getService(TallyUserDataServiceDefinition.TUSER_TRANSACTION_MANAGER_NAME);
+        Object object = dataService.getService(TallyUserJpaDatasourceDefinition.TUSER_TRANSACTION_MANAGER_NAME);
 
         Assert.assertTrue(personService != null);
 
@@ -94,30 +96,30 @@ public class TallyUserEntityServiceTest {
 
     @Test
     public void testDynamicEntityService() {
-        DynamicEntityService dynamicEntityService = dataService.getService(DynamicEntityService.COMPONENT_NAME);
-        Assert.assertNotNull(dynamicEntityService);
+        JpaEntityService entityService = dataService.getService(IEntityService.COMPONENT_NAME);
+        Assert.assertNotNull(entityService);
         try {
             Person admin = new PersonImpl();
             admin.setName("admin").setUuid(UUID.randomUUID().toString());
-            dynamicEntityService.create(Person.class, admin);
+            entityService.create(Person.class, admin);
             Assert.fail();
         } catch (ServiceException e) {
-            if (!(e instanceof EntityValidationException)) {
+            if (!(e instanceof EntityValueValidationException)) {
                 Assert.fail();
             }
         }
 
         long existingCount = 0;
         try {
-            Person personImp = dynamicEntityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
-            Person person = dynamicEntityService.straightRead(Person.class, Long.valueOf(-1L));
+            Person personImp = entityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
+            Person person = entityService.straightRead(Person.class, Long.valueOf(-1L));
             Assert.assertEquals(person.getUuid(), personImp.getUuid());
             Assert.assertEquals(person.getId(), personImp.getId());
 
             Assert.assertNotNull(person);
             Assert.assertTrue(person.getName().equals("admin")); //Loaded from load_person.xml
 
-            CriteriaQueryResult<Person> personsExisting = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+            CriteriaQueryResult<Person> personsExisting = entityService.query(Person.class, new CriteriaTransferObject());
             existingCount = personsExisting.getTotalCount();
             Assert.assertTrue(existingCount >= 1);
         } catch (ServiceException e) {
@@ -135,10 +137,10 @@ public class TallyUserEntityServiceTest {
                 Person admin = new PersonImpl();
                 admin.setName("admin").setUuid(UUID.randomUUID().toString());
                 admin.setMobile("1234567890" + (1000 + i));
-                dynamicEntityService.create(Person.class, admin);
+                entityService.create(Person.class, admin);
 
                 Long id = admin.getId();
-                Person adminFromDb = dynamicEntityService.straightRead(Person.class, Long.valueOf(id));
+                Person adminFromDb = entityService.straightRead(Person.class, Long.valueOf(id));
 
                 Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
                 Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
@@ -151,7 +153,7 @@ public class TallyUserEntityServiceTest {
         }
 
         try {
-            CriteriaQueryResult<Person> persons = dynamicEntityService.query(Person.class, new CriteriaTransferObject());
+            CriteriaQueryResult<Person> persons = entityService.query(Person.class, new CriteriaTransferObject());
             Assert.assertEquals(persons.getTotalCount().longValue(), existingCount + createAttempt);
         } catch (ServiceException e) {
             Assert.fail(e.getMessage());

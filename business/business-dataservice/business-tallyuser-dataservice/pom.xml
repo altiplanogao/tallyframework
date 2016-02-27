@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-dynamic-dataservice</artifactId>
+            <artifactId>dataservice-on-jpa</artifactId>
         </dependency>
 
 
@@ -38,8 +38,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>test-framework</artifactId>
-
+            <artifactId>test-material-for-jpa</artifactId>
         </dependency>
     </dependencies>
 

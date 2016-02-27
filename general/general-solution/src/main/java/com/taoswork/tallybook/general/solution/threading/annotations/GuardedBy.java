@@ -5,5 +5,6 @@ package com.taoswork.tallybook.general.solution.threading.annotations;
  */
 public @interface GuardedBy {
     String value();
+
     int lockOrder() default 1;
 }

@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.business.dataservice.tallymodule.conf;
 
 import com.taoswork.tallybook.business.dataservice.tallymodule.TallyModuleDataService;
-import com.taoswork.tallybook.business.dataservice.tallymodule.TallyModuleDataServiceDefinition;
-import com.taoswork.tallybook.dynamic.dataservice.config.ADataServiceBeanConfiguration;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.business.dataservice.tallymodule.TallyModuleJpaDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.descriptor.jpa.config.ADataServiceBeanConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,26 +33,26 @@ import javax.sql.DataSource;
         )}
 )
 @EnableTransactionManagement
-public class TallyModuleDataServiceBeanConfiguration  extends ADataServiceBeanConfiguration {
+public class TallyModuleDataServiceBeanConfiguration extends ADataServiceBeanConfiguration {
 
     public TallyModuleDataServiceBeanConfiguration() {
         super();
     }
 
     @Override
-    @Bean(name = TallyModuleDataServiceDefinition.TMODULE_DATASOURCE_NAME)
+    @Bean(name = TallyModuleJpaDatasourceDefinition.TMODULE_DATASOURCE_NAME)
     public DataSource serviceDataSource() {
         return super.serviceDataSource();
     }
 
     @Override
-    @Bean(name = TallyModuleDataServiceDefinition.TMODULE_ENTITY_MANAGER_FACTORY_NAME)
+    @Bean(name = TallyModuleJpaDatasourceDefinition.TMODULE_ENTITY_MANAGER_FACTORY_NAME)
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         return super.entityManagerFactory();
     }
 
     @Override
-    @Bean(name = TallyModuleDataServiceDefinition.TMODULE_TRANSACTION_MANAGER_NAME)
+    @Bean(name = TallyModuleJpaDatasourceDefinition.TMODULE_TRANSACTION_MANAGER_NAME)
     public JpaTransactionManager jpaTransactionManager() {
         return super.jpaTransactionManager();
     }

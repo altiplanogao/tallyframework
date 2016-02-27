@@ -6,16 +6,16 @@ import org.thymeleaf.processor.ProcessorResult;
 import org.thymeleaf.processor.attr.AbstractAttrProcessor;
 
 public class CsrfProcessor extends AbstractAttrProcessor {
-	//<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    //<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     public static final String ATTR_NAME = "csrf";
 
 //	protected static final String CSRF_TOKEN_NAME = "${_csrf.parameterName}";
 //	protected static final String CSRF_TOKEN_VALUE = "${_csrf.token}";
 
-	public CsrfProcessor(){
-		super(ATTR_NAME);
-	}
-	/*
+    public CsrfProcessor() {
+        super(ATTR_NAME);
+    }
+    /*
     protected final ExploitProtectionService eps;
 
 	public CsrfProcessor(ExploitProtectionService eps) {
@@ -24,10 +24,10 @@ public class CsrfProcessor extends AbstractAttrProcessor {
 	}
 	*/
 
-	@Override
-	protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
-		return null;
-	}
+    @Override
+    protected ProcessorResult processAttribute(Arguments arguments, Element element, String attributeName) {
+        return null;
+    }
 //	@Override
 //	protected ProcessorResult processAttribute(Arguments arguments,
 //			Element element, String attributeName) {
@@ -51,9 +51,9 @@ public class CsrfProcessor extends AbstractAttrProcessor {
 //		return ProcessorResult.OK;
 //	}
 
-	@Override
-	public int getPrecedence() {
-		return 1000;
-	}
+    @Override
+    public int getPrecedence() {
+        return 1000;
+    }
 
 }

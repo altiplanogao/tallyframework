@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-authority-support</artifactId>
+            <artifactId>authority-solution</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

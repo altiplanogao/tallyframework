@@ -5,7 +5,7 @@ import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetails;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetailsService;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,10 +29,10 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
     @Resource(name = PersonService.SERVICE_NAME)
     private PersonService personService;
 
-//
+    //
 //    private Boolean userDbHasData = null;
     @Override
-    public PersonDetails loadPersonByUsername(String username) throws UsernameNotFoundException{
+    public PersonDetails loadPersonByUsername(String username) throws UsernameNotFoundException {
 //        if(null == userDbHasData){
 //            if(personDao.isThereAnyData()){
 //                userDbHasData = true;
@@ -45,10 +45,11 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 //        }
 
         Person person = personService.readPersonByAnyIdentity(username);
-        if(person == null || person.getId() == null){
+        if (person == null || person.getId() == null) {
             return null;
         }
-        PersonCertification userCert = personService.readPersonCertificationByUUID(person.getUuid());;
+        PersonCertification userCert = personService.readPersonCertificationByUUID(person.getUuid());
+        ;
         PersonDetails userDetails = new PersonDetails(person, userCert.getPassword(), new ArrayList<GrantedAuthority>());
         return userDetails;
 
@@ -60,12 +61,12 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
     }
 
     @Override
-    public PersonDetails getPersistentPersonDetails(){
+    public PersonDetails getPersistentPersonDetails() {
         SecurityContext ctx = SecurityContextHolder.getContext();
-        if(null != ctx){
+        if (null != ctx) {
             Authentication auth = ctx.getAuthentication();
-            if(null != auth && !auth.getName().equals(ANONYMOUS_USER_NAME)){
-                PersonDetails userDetails = (PersonDetails)auth.getPrincipal();
+            if (null != auth && !auth.getName().equals(ANONYMOUS_USER_NAME)) {
+                PersonDetails userDetails = (PersonDetails) auth.getPrincipal();
                 return userDetails;
             }
         }

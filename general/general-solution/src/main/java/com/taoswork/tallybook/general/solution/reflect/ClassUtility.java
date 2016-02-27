@@ -2,6 +2,7 @@ package com.taoswork.tallybook.general.solution.reflect;
 
 import com.taoswork.tallybook.general.extension.collections.ListBuilder;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class ClassUtility {
@@ -95,4 +96,49 @@ public class ClassUtility {
         }
         return classes;
     }
+
+    public static Class[] getSuperClasses(Class clz, boolean reverseOrder) {
+        return getSuperClasses(clz, reverseOrder, false);
+    }
+
+    public static Class[] getSuperClasses(Class clz, boolean reverseOrder, boolean includeObject) {
+        boolean skipObject = !includeObject;
+        List<Class> classes = new ArrayList<Class>();
+        if (clz != null) {
+            do {
+                clz = clz.getSuperclass();
+                if(Object.class.equals(clz) && skipObject)
+                    continue;
+                if (clz != null) {
+                    if (reverseOrder) {
+                        classes.add(0, clz);
+                    } else {
+                        classes.add(clz);
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
+        }
+        return classes.toArray(new Class[classes.size()]);
+    }
+
+    public static Field getFieldOfName(Class clz, String fieldName, boolean checkSuper) {
+        do {
+            try {
+                Field field = clz.getDeclaredField(fieldName);
+                if (field != null) {
+                    return field;
+                }
+            } catch (NoSuchFieldException e) {
+            }
+            if (checkSuper) {
+                clz = clz.getSuperclass();
+            } else {
+                return null;
+            }
+        } while (clz != null);
+        return null;
+    }
+
 }

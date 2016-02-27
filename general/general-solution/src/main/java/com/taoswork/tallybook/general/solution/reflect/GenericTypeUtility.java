@@ -14,6 +14,26 @@ public class GenericTypeUtility {
         return !(typeVariables == null || typeVariables.length == 0);
     }
 
+    public static Class getGenericArgument(Field field, int index){
+        final Class entryType;
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            Type[] typeArgs = ((ParameterizedType) genericType).getActualTypeArguments();
+            if (typeArgs != null && typeArgs.length > index) {
+                if (typeArgs[index] instanceof Class) {
+                    entryType = (Class) typeArgs[index];
+                } else {
+                    entryType = Object.class;
+                }
+            } else {
+                entryType = Object.class;
+            }
+        } else {
+            entryType = Object.class;
+        }
+        return entryType;
+    }
+
     public static boolean isTypeArgumentMissing(
             Field field) {
         return isTypeArgumentMissing(
@@ -25,11 +45,11 @@ public class GenericTypeUtility {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             return _isTypeArgumentMissing(parameterizedType);
-        }else if (type instanceof Class) {
-            Class clazz = (Class)type;
+        } else if (type instanceof Class) {
+            Class clazz = (Class) type;
             TypeVariable<Class<?>>[] typeVariables = clazz.getTypeParameters();
             return (typeVariables == null || typeVariables.length == 0) ? false : true;
-        }else {
+        } else {
             throw new RuntimeException("Unexpected Raw Type @ GenericTypeUtility.class");
         }
     }
@@ -65,7 +85,7 @@ public class GenericTypeUtility {
             if (tp != null) {
                 if (isTypeArgumentMissing(tp)) {
                     return true;
-                }else {
+                } else {
                     actual++;
                 }
             }

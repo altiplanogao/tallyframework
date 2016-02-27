@@ -2,13 +2,13 @@ package com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataServiceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonKeyType;
+import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
-import com.taoswork.tallybook.dynamic.dataservice.entity.EntityServiceBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.core.entity.EntityServiceBase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,30 +30,30 @@ public class PersonServiceImpl
     protected PersonCertificationDao personCertificationDao;
 
     @Override
-    public Person readPersonByUUID(String userUuid){
+    public Person readPersonByUUID(String userUuid) {
         return userDao.readPersonByKey(PersonKeyType.UUID, userUuid, false);
     }
 
     @Override
-    @Transactional(TallyUserDataServiceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
+    @Transactional(TallyUserJpaDatasourceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
     public Person readPersonByID(Long id) {
         return userDao.readPersonById(id);
     }
 
     @Override
-    @Transactional(TallyUserDataServiceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
-    public Person savePerson(Person person){
+    @Transactional(TallyUserJpaDatasourceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
+    public Person savePerson(Person person) {
         return userDao.save(person);
     }
 
     @Override
-    @Transactional(TallyUserDataServiceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
+    @Transactional(TallyUserJpaDatasourceDefinition.TUSER_TRANSACTION_MANAGER_NAME)
     public Person readPersonByAnyIdentity(String s) {
         return userDao.readPersonByAnyIdentity(s);
     }
 
     @Override
-    public PersonCertification readPersonCertificationByUUID(String personUUID){
+    public PersonCertification readPersonCertificationByUUID(String personUUID) {
         return personCertificationDao.readPersonCertificationByPersonCode(personUUID);
     }
 }

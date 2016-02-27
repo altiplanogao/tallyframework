@@ -4,10 +4,10 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Asset;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.WorkPlan;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class AssetImp implements Asset {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @PersistField(fieldType = FieldType.NAME)
+    @PersistField(fieldType = FieldType.NAME, required = true)
     @PresentationField(order = 2)
     protected String name;
 

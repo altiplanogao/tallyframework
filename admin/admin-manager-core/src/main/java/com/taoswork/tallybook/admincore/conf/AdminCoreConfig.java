@@ -2,6 +2,7 @@ package com.taoswork.tallybook.admincore.conf;
 
 import com.taoswork.tallybook.admincore.TallyBookAdminCoreRoot;
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
+import com.taoswork.tallybook.authority.solution.domain.resource.ResourceProtectionMode;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceImpl;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
@@ -10,18 +11,17 @@ import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetail
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
 import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
-import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dynamic.dataservice.core.dao.query.dto.PropertyFilterCriteria;
-import com.taoswork.tallybook.dynamic.dataservice.core.entityservice.DynamicEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.core.exception.ServiceException;
-import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
-import com.taoswork.tallybook.dynamic.dataservice.manage.impl.DataServiceManagerImpl;
-import com.taoswork.tallybook.general.authority.domain.resource.ResourceProtectionMode;
-import com.taoswork.tallybook.general.dataservice.support.annotations.Dao;
-import com.taoswork.tallybook.general.dataservice.support.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.IDataService;
+import com.taoswork.tallybook.dataservice.annotations.Dao;
+import com.taoswork.tallybook.dataservice.annotations.EntityService;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
+import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.manage.impl.DataServiceManagerImpl;
+import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,7 +46,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
         )}
 )
 public class AdminCoreConfig {
-        protected IDbSetting getDbSetting(){
+        protected JpaDbSetting getDbSetting(){
                 return null;
         }
 
@@ -104,7 +104,7 @@ public class AdminCoreConfig {
 
         private void dataServiceManagerDoInitialize(DataServiceManager dataServiceManager){
                 IDataService adminDataService = dataServiceManager.getDataServiceByServiceName(TallyAdminDataService.COMPONENT_NAME);
-                DynamicEntityService dynamicEntityService = adminDataService.getService(DynamicEntityService.COMPONENT_NAME);
+                IEntityService entityService = adminDataService.getService(IEntityService.COMPONENT_NAME);
                 try {
                         for (SecuredResource res : SecuredResources.getResources()) {
                                 AdminSecuredResource asr = new AdminSecuredResourceImpl();
@@ -123,9 +123,9 @@ public class AdminCoreConfig {
                                 CriteriaTransferObject cto = new CriteriaTransferObject();
                                 PropertyFilterCriteria propC = new PropertyFilterCriteria("name", res.getName());
                                 cto.addFilterCriteria(propC);
-                                CriteriaQueryResult cqr = dynamicEntityService.query(AdminSecuredResource.class, cto);
+                                CriteriaQueryResult cqr = entityService.query(AdminSecuredResource.class, cto);
                                 if(cqr.fetchedCount() == 0){
-                                        dynamicEntityService.create(AdminSecuredResource.class, asr);
+                                        entityService.create(AdminSecuredResource.class, asr);
                                 }
                         }
                 } catch (ServiceException e) {

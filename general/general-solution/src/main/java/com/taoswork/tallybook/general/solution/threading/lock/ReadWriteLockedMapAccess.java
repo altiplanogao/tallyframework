@@ -15,20 +15,20 @@ public abstract class ReadWriteLockedMapAccess<K, V> {
 
     private final Map<K, V> map;
 
-    public ReadWriteLockedMapAccess(Map<K, V> map){
+    public ReadWriteLockedMapAccess(Map<K, V> map) {
         this.map = map;
     }
 
-    public V getCachedData(K key){
+    public V getCachedData(K key) {
         r.lock();
         V value = getCachedValueDirectly(key);
-        if(!isCacheValid(key, value)){
+        if (!isCacheValid(key, value)) {
             r.unlock();
             w.lock();
-            try{
+            try {
                 //recheck status because another thread might have acquired write lock
                 value = getCachedValueDirectly(key);
-                if(!isCacheValid(key, value)){
+                if (!isCacheValid(key, value)) {
                     value = generateValueForKey(key);
                     doCacheValue(key, value);
                 }// Downgrade by acquiring read lock before releasing write lock
@@ -38,21 +38,22 @@ public abstract class ReadWriteLockedMapAccess<K, V> {
             }
         }
 
-        try{
+        try {
             return value;
         } finally {
             r.unlock();
         }
     }
-    protected final V getCachedValueDirectly(K key){
+
+    protected final V getCachedValueDirectly(K key) {
         return map.get(key);
     }
 
-    protected final boolean isCacheValid(K key, V value){
+    protected final boolean isCacheValid(K key, V value) {
         return value != null;
     }
 
-    protected final void doCacheValue(K key, V value){
+    protected final void doCacheValue(K key, V value) {
         map.put(key, value);
     }
 

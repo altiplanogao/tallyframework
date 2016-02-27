@@ -66,11 +66,11 @@ public class TallyBookThymeleafViewResolver extends ThymeleafViewResolver {
         String layoutViewName = UrlUtility.findLongestPrefixMatchingValue(originalViewName, layoutMap,
                 ESCAPE_MAPPING_VIEW_VALUE, defaultLayout);
 
-        if(!StringUtils.isEmpty(layoutViewName)) {
+        if (!StringUtils.isEmpty(layoutViewName)) {
             AbstractThymeleafView layoutView = (AbstractThymeleafView) super.loadView(layoutViewName, locale);
             layoutView.addStaticVariable(TEMPLATE_VIEW_SLOT_NAME, originalViewName);
             return layoutView;
-        }else {
+        } else {
             return super.loadView(viewName, locale);
         }
     }
@@ -78,9 +78,9 @@ public class TallyBookThymeleafViewResolver extends ThymeleafViewResolver {
     @Override
     public boolean isCache() {
         boolean cacheEnabled = RuntimePropertiesPublisher.instance().getBoolean("thymeleaf.tallybook.extension.cache.enable", true);
-        if(cacheEnabled){
+        if (cacheEnabled) {
             return super.isCache();
-        }else {
+        } else {
             return false;
         }
     }

@@ -2,7 +2,7 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.ModuleUsage;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 
 import java.util.Date;
 

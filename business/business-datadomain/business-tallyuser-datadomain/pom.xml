@@ -14,11 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-dynamic-datadomain</artifactId>
+            <artifactId>datadomain-on-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>test-framework</artifactId>
+            <artifactId>test-material-for-jpa</artifactId>
             <type>jar</type>
             <scope>test</scope>
         </dependency>

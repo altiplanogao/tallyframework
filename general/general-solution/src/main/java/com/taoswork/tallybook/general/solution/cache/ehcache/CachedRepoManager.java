@@ -13,29 +13,29 @@ import java.util.UUID;
 public class CachedRepoManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(CachedRepoManager.class);
 
+    private static Object lock = new Object();
     private static CacheManager ehcacheCacheManager = null;
 
     public static void startEhcache() {
-        if (ehcacheCacheManager == null) {
-            ehcacheCacheManager = CacheManager.getInstance();
+        synchronized (lock) {
+            if (ehcacheCacheManager == null) {
+                ehcacheCacheManager = CacheManager.getInstance();
+            }
         }
     }
 
     public static void stopEhcache() {
-        if (ehcacheCacheManager != null) {
-            ehcacheCacheManager.removeAllCaches();
-            ehcacheCacheManager.shutdown();
-            ehcacheCacheManager = null;
+        synchronized (lock) {
+            if (ehcacheCacheManager != null) {
+                ehcacheCacheManager.removeAllCaches();
+                ehcacheCacheManager.shutdown();
+                ehcacheCacheManager = null;
+            }
         }
     }
 
-    public static <K, V> ICacheMap<K, V> getUniqueCacheMap(CacheType cacheType) {
-        String uuid = UUID.randomUUID().toString();
-        return getCacheMap(cacheType, uuid);
-    }
-
-    public static <K, V> ICacheMap<K, V> getCacheMap(CacheType cacheType){
-        return  getCacheMap(cacheType, UUID.randomUUID().toString());
+    public static <K, V> ICacheMap<K, V> getCacheMap(CacheType cacheType) {
+        return getCacheMap(cacheType, UUID.randomUUID().toString());
     }
 
     public static <K, V> ICacheMap<K, V> getCacheMap(CacheType cacheType, String cacheScope) {
@@ -48,12 +48,14 @@ public class CachedRepoManager {
                 if (null == getEhcacheCacheManager()) {
                     return getDefaultCacheMap(cacheScope);
                 } else {
-                    Cache cache = ehcacheCacheManager.getCache(cacheScope);
-                    if (cache == null) {
-                        cache = new Cache(cacheScope, 1000, true, false, 600, 1800);
-                        ehcacheCacheManager.addCache(cache);
+                    synchronized (lock) {
+                        Cache cache = ehcacheCacheManager.getCache(cacheScope);
+                        if (cache == null) {
+                            cache = new Cache(cacheScope, 1000, true, false, 600, 1800);
+                            ehcacheCacheManager.addCache(cache);
+                        }
+                        return new _CacheMapUsingEhcache<K, V>(cacheScope, cache);
                     }
-                    return new _CacheMapUsingEhcache<K, V>(cacheScope, cache);
                 }
             default:
                 return getDefaultCacheMap(cacheScope);
@@ -66,9 +68,11 @@ public class CachedRepoManager {
 
 
     private static CacheManager getEhcacheCacheManager() {
-        if (null == ehcacheCacheManager) {
-            LOGGER.warn("EhcachedMapManager not started.");
+        synchronized (lock) {
+            if (null == ehcacheCacheManager) {
+                LOGGER.warn("EhcachedMapManager not started.");
+            }
+            return ehcacheCacheManager;
         }
-        return ehcacheCacheManager;
     }
 }

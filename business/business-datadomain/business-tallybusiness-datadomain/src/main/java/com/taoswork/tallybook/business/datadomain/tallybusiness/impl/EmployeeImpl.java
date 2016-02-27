@@ -1,17 +1,13 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.*;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuPermission;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.BuRole;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuPermissionImpl;
-import com.taoswork.tallybook.business.datadomain.tallybusiness.security.permission.impl.BuRoleImpl;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.FieldRelation;
-import com.taoswork.tallybook.general.datadomain.support.presentation.relation.RelationType;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.onjpa.annotation.FieldRelation;
+import com.taoswork.tallybook.datadomain.onjpa.annotation.RelationType;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -28,9 +24,9 @@ public class EmployeeImpl implements Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
     @TableGenerator(
-        name = ID_GENERATOR_NAME,
-        table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
-        initialValue = 1)
+            name = ID_GENERATOR_NAME,
+            table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
+            initialValue = 1)
     @Column(name = "ID")
     @PersistField(fieldType = FieldType.ID)
     @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
@@ -43,7 +39,7 @@ public class EmployeeImpl implements Employee {
 
     @FieldRelation(RelationType.OneWay_ManyToOne)
     @ManyToOne(targetEntity = BusinessUnitImpl.class)
-    @JoinColumn(name = "host_id",  nullable = false, updatable = false)
+    @JoinColumn(name = "host_id", nullable = false, updatable = false)
     @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
     protected BusinessUnit businessUnit;
 
@@ -62,39 +58,6 @@ public class EmployeeImpl implements Employee {
     @OneToOne(targetEntity = EmployeeOwnedSettingImpl.class)
     @JoinColumn(name = "OWN_SET_ID")
     protected EmployeeOwnedSetting setting;
-
-    /** All roles that this user has */
-    @FieldRelation(RelationType.TwoWay_ManyToManyOwner)
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = BuRoleImpl.class)
-    @JoinTable(name = OWN_M2M_EMPLOYEE_ROLES_XTABLE,
-        joinColumns = @JoinColumn(name = XTABLE_EMPLOYEE_ROLES__EMPLOYEE_COL),
-        inverseJoinColumns = @JoinColumn(name = XTABLE_EMPLOYEE_ROLES__ROLE_COL))
-//    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region="blStandardElements")
-//    @BatchSize(size = 50)
-//    @AdminPresentationCollection(addType = AddMethodType.LOOKUP, friendlyName = "roleListTitle", manyToField = "allEmployees",
-//        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
-    protected Set<BuRole> roles;
-    public static final String OWN_M2M_ALL_ROLES = "roles";
-    public static final String OWN_M2M_EMPLOYEE_ROLES_XTABLE = "TB_EMPLOYEE_ROLE_XREF";
-    public static final String XTABLE_EMPLOYEE_ROLES__EMPLOYEE_COL = "TB_EMPLOYEE_ID";
-    public static final String XTABLE_EMPLOYEE_ROLES__ROLE_COL = "TB_ROLE_ID";
-
-    @FieldRelation(RelationType.TwoWay_ManyToManyOwner)
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = BuPermissionImpl.class)
-    @JoinTable(name = OWN_M2M_EMPLOYEE_PERMS_XTABLE,
-        joinColumns = @JoinColumn(name = XTABLE_EMPLOYEE_PERMS__EMPLOYEE_COL),
-        inverseJoinColumns = @JoinColumn(name = XTABLE_EMPLOYEE_PERMS__PERM_COL))
-//    @BatchSize(size = 50)
-//    @AdminPresentationCollection(addType = AddMethodType.LOOKUP,
-//        friendlyName = "permissionListTitle",
-//        customCriteria = "includeFriendlyOnly",
-//        manyToField = "allEmployees",
-//        operationTypes = @AdminPresentationOperationTypes(removeType = OperationType.NONDESTRUCTIVEREMOVE))
-    protected Set<BuPermission> permissions;
-    public static final String OWN_M2M_ALL_PERMS = "permissions";
-    public static final String OWN_M2M_EMPLOYEE_PERMS_XTABLE = "TB_EMPLOYEE_PERM_XREF";
-    public static final String XTABLE_EMPLOYEE_PERMS__EMPLOYEE_COL = "TB_EMPLOYEE_ID";
-    public static final String XTABLE_EMPLOYEE_PERMS__PERM_COL = "TB_PERM_ID";
 
     @Override
     public Long getId() {
@@ -184,12 +147,12 @@ public class EmployeeImpl implements Employee {
 //    }
 //
 //    @Override
-//    public Set<Permission> getPermissions() {
+//    public Set<KPermission> getPermissions() {
 //        return permissions;
 //    }
 //
 //    @Override
-//    public void setPermissions(Set<Permission> permissions) {
+//    public void setPermissions(Set<KPermission> permissions) {
 //        this.permissions = permissions;
 //    }
 }

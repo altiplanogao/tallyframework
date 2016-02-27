@@ -1,32 +1,71 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDataServiceBeanConfiguration;
-import com.taoswork.tallybook.dynamic.dataservice.config.dbsetting.IDbSetting;
-import com.taoswork.tallybook.dynamic.dataservice.impl.DataServiceBase;
-import com.taoswork.tallybook.general.dataservice.support.annotations.DataService;
+import com.taoswork.tallybook.authority.solution.engine.IPermissionEngine;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.AdminSpecifiedConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDatasourceConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistableConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.AdminSecurityDefinition;
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.dataservice.annotations.DataService;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
+import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
+import com.taoswork.tallybook.dataservice.security.ISecurityVerifier;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.security.SecurityVerifierByPermissionEngine;
+import com.taoswork.tallybook.dataservice.service.IEntityService;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/5/12.
  */
 @DataService
 //@Component(TallyAdminDataService.COMPONENT_NAME)
-public class TallyAdminDataService extends DataServiceBase {
+public class TallyAdminDataService
+        extends MongoDataServiceBase<
+        TallyAdminPersistableConfiguration,
+        MongoDatasourceConfiguration> {
+
+    public static final String ADMIN_DATA_PROTECTION_SCOPE = "ADMIN_DATA_PROTECTION_SCOPE";
+    public static final String ADMIN_DATA_TENANT = "ADMIN_DATA_TENANT";
+
     public static final String COMPONENT_NAME = TallyAdminDataServiceDefinition.DATA_SERVICE_NAME;
 
-    public TallyAdminDataService(IDbSetting dbSetting) {
-        this(dbSetting, TallyAdminDataServiceBeanConfiguration.class, null);
+    public TallyAdminDataService() {
+        this(TallyAdminDatasourceConfiguration.class);
     }
 
-    public TallyAdminDataService(IDbSetting dbSetting,
-            Class<? extends TallyAdminDataServiceBeanConfiguration> dataServiceConf,
-            List<Class> annotatedClasses) {
-        super(new TallyAdminDataServiceDefinition(), dbSetting, dataServiceConf, annotatedClasses);
+    public TallyAdminDataService(Class<? extends MongoDatasourceConfiguration> dSrcConfClz) {
+        super(new TallyAdminDataServiceDefinition(),
+                TallyAdminPersistableConfiguration.class,
+                dSrcConfClz, AdminSpecifiedConfiguration.class);
     }
 
     @Override
     protected void postConstruct() {
         super.postConstruct();
+        final Long masterPersonId = -1L;
+        IEntityService<Persistable> entityService = this.getService(IEntityService.COMPONENT_NAME);
+        try {
+            CriteriaTransferObject cto = new CriteriaTransferObject(AdminEmployee.FN_PERSON_ID, "" + masterPersonId);
+            AdminEmployee result = entityService.queryOne(AdminEmployee.class, cto);
+            if(result == null){
+                AdminEmployee newMaster = new AdminEmployee();
+                newMaster.setPersonId(masterPersonId);
+                newMaster.setName("Admin");
+                newMaster.setTitle("Master");
+                newMaster.setProtectionSpace(AdminSecurityDefinition.PROTECTION_SPACE);
+                newMaster.setTenantId(AdminSecurityDefinition.ADMIN_TENANT);
+                entityService.create(AdminEmployee.class, newMaster);
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+//        IPermissionEngine permissionEngine = this.getService(AdminSpecifiedConfiguration.ADMIN_PERMISSION_ENGINE_NAME);
+//        ISecurityVerifier securityVerifier = new SecurityVerifierByPermissionEngine(permissionEngine, ADMIN_DATA_PROTECTION_SCOPE, ADMIN_DATA_TENANT);
+//        this.setSecurityVerifier(securityVerifier);
     }
 }

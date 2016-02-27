@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationEnumClass;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationEnumClass;
 import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
@@ -18,8 +18,9 @@ public enum BusinessPartnerType implements IFriendlyEnum<String> {
     private final String friendlyType;
 
     private static final Map<String, BusinessPartnerType> typeToEnum = new HashMap<String, BusinessPartnerType>();
+
     static {
-        for(BusinessPartnerType _enum : values()){
+        for (BusinessPartnerType _enum : values()) {
             typeToEnum.put(_enum.type, _enum);
         }
     }
@@ -29,7 +30,7 @@ public enum BusinessPartnerType implements IFriendlyEnum<String> {
         this.friendlyType = friendlyType;
     }
 
-    public static BusinessPartnerType fromType(String character){
+    public static BusinessPartnerType fromType(String character) {
         return typeToEnum.get(character);
     }
 

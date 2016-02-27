@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Created by Gao Yuan on 2015/4/24.
  */
-public class SystemSupportLoggerAdapter extends AbstractSupportLoggerAdapter  implements SupportLoggerAdapter {
+public class SystemSupportLoggerAdapter extends AbstractSupportLoggerAdapter implements SupportLoggerAdapter {
 
     public static final String SHOW_DATE_TIME_KEY = "SystemSupportLoggerAdapter.showDateTime";
     public static final String DATE_TIME_FORMAT_KEY = "SystemSupportLoggerAdapter.dateTimeFormat";
@@ -89,7 +89,7 @@ public class SystemSupportLoggerAdapter extends AbstractSupportLoggerAdapter  im
      * Generate a SUPPORT level log message with an accompanying Throwable
      *
      * @param message the log message
-     * @param t the exception to accompany the log message - will result in a stack track in the log
+     * @param t       the exception to accompany the log message - will result in a stack track in the log
      */
     @Override
     public void support(String message, Throwable t) {
@@ -101,7 +101,7 @@ public class SystemSupportLoggerAdapter extends AbstractSupportLoggerAdapter  im
      * in the message.
      *
      * @param lifeCycleEvent The module life cycle type for this log message
-     * @param message the log message
+     * @param message        the log message
      */
     @Override
     public void lifecycle(LifeCycleEvent lifeCycleEvent, String message) {
@@ -183,7 +183,7 @@ public class SystemSupportLoggerAdapter extends AbstractSupportLoggerAdapter  im
         StringBuffer buf = new StringBuffer(32);
 
         // Append a readable representation of the log level
-        buf.append( setting.getShowLevelInBrackets() ? levelNameInBracket(level) : levelName(level));
+        buf.append(setting.getShowLevelInBrackets() ? levelNameInBracket(level) : levelName(level));
 
         // Append date-time if so configured
         if (setting.getShowDateTime()) {

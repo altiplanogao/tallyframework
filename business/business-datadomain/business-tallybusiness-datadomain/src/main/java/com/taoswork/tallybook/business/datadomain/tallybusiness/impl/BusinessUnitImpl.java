@@ -2,11 +2,12 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.BusinessUnit;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.TallyBusinessDataDomain;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.PresentationField;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.FieldType;
-import com.taoswork.tallybook.general.datadomain.support.presentation.client.Visibility;
-import com.taoswork.tallybook.general.datadomain.support.presentation.typedcollection.PresentationCollection;
+import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
+import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,9 +21,9 @@ public class BusinessUnitImpl implements BusinessUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = ID_GENERATOR_NAME)
     @TableGenerator(
-        name = ID_GENERATOR_NAME,
-        table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
-        initialValue = 1)
+            name = ID_GENERATOR_NAME,
+            table = TallyBusinessDataDomain.ID_GENERATOR_TABLE_NAME,
+            initialValue = 1)
     @Column(name = "ID")
     @PersistField(fieldType = FieldType.ID)
     @PresentationField(order = 1, visibility = Visibility.HIDDEN_ALL)
@@ -40,7 +41,7 @@ public class BusinessUnitImpl implements BusinessUnit {
     protected String description;
 
     @ElementCollection
-    @PresentationCollection()
+    @CollectionField(mode = CollectionMode.Primitive)
     protected List<String> tags;
 
 /*  Hide for prototype

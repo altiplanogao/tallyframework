@@ -1,21 +1,20 @@
 package com.taoswork.tallybook.general.dataservice.management.api;
 
-import com.taoswork.tallybook.dynamic.datameta.description.infos.EntityInfoType;
-import com.taoswork.tallybook.dynamic.dataservice.IDataService;
-import com.taoswork.tallybook.dynamic.dataservice.manage.DataServiceManager;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityQueryRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.EntityReadRequest;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameter;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.request.translator.Parameter2RequestTranslator;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityQueryResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.io.response.EntityReadResponse;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.FrontEndEntityService;
-import com.taoswork.tallybook.dynamic.dataservice.server.service.IFrontEndEntityService;
+import com.taoswork.tallybook.dataservice.IDataService;
+import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.io.request.EntityQueryRequest;
+import com.taoswork.tallybook.dataservice.server.io.request.EntityReadRequest;
+import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameter;
+import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
+import com.taoswork.tallybook.dataservice.server.io.request.translator.Parameter2RequestTranslator;
+import com.taoswork.tallybook.dataservice.server.io.response.EntityQueryResponse;
+import com.taoswork.tallybook.dataservice.server.io.response.EntityReadResponse;
+import com.taoswork.tallybook.dataservice.server.service.FrontEndEntityService;
+import com.taoswork.tallybook.dataservice.server.service.IFrontEndEntityService;
+import com.taoswork.tallybook.descriptor.description.infos.EntityInfoType;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -53,9 +52,9 @@ public class TallyApiController {
         Class entityType = entityTypes.getCeilingType();
 
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
-            entityTypes,
-            uriFromRequest(request),
-            requestParams, getParamInfoFilter());
+                entityTypes,
+                uriFromRequest(request),
+                requestParams, getParamInfoFilter());
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);
@@ -75,7 +74,7 @@ public class TallyApiController {
         Class entityType = entityTypes.getCeilingType();
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-            uriFromRequest(request), id);
+                uriFromRequest(request), id);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService);

@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 
 import javax.persistence.*;
 
@@ -12,8 +13,8 @@ import javax.persistence.*;
 @Table(name = "TB_PERSON_CERTIFICATION")
 @NamedQueries({
         @NamedQuery(name = "PersonCertification.ReadByPersonCode",
-        query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification personCertification" +
-        " WHERE personCertification.userCode = :userCode")
+                query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification personCertification" +
+                        " WHERE personCertification.userCode = :userCode")
 })
 public class PersonCertificationImpl
         implements PersonCertification {
@@ -23,9 +24,11 @@ public class PersonCertificationImpl
 
 
     @Column(name = "USER_CODE", nullable = false)
+    @PersistField(required = true)
     protected String userCode;
 
     @Column(name = "PWD", nullable = false)
+    @PersistField(required = true)
     protected String password;
 
     @Column(name = "UPDATE_DATE", nullable = true)

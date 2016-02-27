@@ -29,12 +29,11 @@
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>general-authority-support</artifactId>
+                <artifactId>authority-solution</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 
 
 </project>

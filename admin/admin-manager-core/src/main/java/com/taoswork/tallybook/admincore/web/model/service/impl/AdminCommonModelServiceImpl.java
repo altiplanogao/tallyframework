@@ -42,7 +42,7 @@ public class AdminCommonModelServiceImpl implements AdminCommonModelService {
     }
 
     @Override
-    public Menu getAdminMenu(){
+    public Menu getAdminMenu() {
         return null;
     }
 }

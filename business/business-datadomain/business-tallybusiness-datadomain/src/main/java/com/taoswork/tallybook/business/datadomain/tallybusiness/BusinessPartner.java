@@ -1,16 +1,16 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.validation.BusinessPartnerValidator;
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 
 /**
  * Created by Gao Yuan on 2015/4/14.
- *
+ * <p>
  * Business partner: a company, an organization, a division, a branch
  */
 @PersistEntity(nameOverride = "bp",
-    validators = {BusinessPartnerValidator.class}
+        validators = {BusinessPartnerValidator.class}
 )
 public interface BusinessPartner extends Persistable {
     Long getId();

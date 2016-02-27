@@ -14,10 +14,11 @@ import java.util.Map;
  */
 public class PersonDetails extends User {
 
-    private static class FacetId{
+    private static class FacetId {
         public FacetType type;
         public Long id;
-        FacetId(FacetType type, Long id){
+
+        FacetId(FacetType type, Long id) {
             this.type = type;
             this.id = id;
         }
@@ -65,9 +66,9 @@ public class PersonDetails extends User {
         facetDetailsMap.put(fid, facetDetails);
     }
 
-    public <T extends FacetDetails> T getFacetDetails(FacetType type, Long id){
+    public <T extends FacetDetails> T getFacetDetails(FacetType type, Long id) {
         FacetId fid = new FacetId(type, id);
         FacetDetails details = facetDetailsMap.get(fid);
-        return (T)details;
+        return (T) details;
     }
 }

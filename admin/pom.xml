@@ -12,7 +12,7 @@
 
     <modules>
         <module>admin-manager-core</module>
-        <module>admin-manage-mvc</module>
+        <module>admin-manager-mvc</module>
     </modules>
 
 </project>

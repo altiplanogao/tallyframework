@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.testframework.persistence.conf.TestDbPersistenceConfigBase;
+import com.taoswork.tallybook.testmaterial.jpa.persistence.conf.TestDbPersistenceConfigBase;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-public class TallyBusinessDbPersistenceConfig extends TestDbPersistenceConfigBase{
+public class TallyBusinessDbPersistenceConfig extends TestDbPersistenceConfigBase {
     public static final String TEST_DB_PU_NAME = "tallybusinessPU";
 
     @Override

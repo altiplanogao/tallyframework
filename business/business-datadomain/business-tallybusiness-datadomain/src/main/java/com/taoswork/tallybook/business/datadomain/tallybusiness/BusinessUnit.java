@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.general.datadomain.support.entity.PersistEntity;
-import com.taoswork.tallybook.general.datadomain.support.entity.Persistable;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 
 import java.util.List;
 

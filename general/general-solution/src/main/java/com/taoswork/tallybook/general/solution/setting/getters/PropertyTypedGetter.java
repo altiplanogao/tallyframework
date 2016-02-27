@@ -16,9 +16,9 @@ public abstract class PropertyTypedGetter<T> implements ValueGetter<T> {
     }
 
     @Override
-    public T get(){
+    public T get() {
         String valueInString = propertyGetter.get();
-        if(null == valueInString){
+        if (null == valueInString) {
             return defaultValueObject;
         } else {
             return convert(valueInString);

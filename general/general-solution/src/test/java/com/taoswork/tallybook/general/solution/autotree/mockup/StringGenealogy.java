@@ -11,7 +11,7 @@ public class StringGenealogy extends AutoTreeGenealogy<String> {
 
     @Override
     public String calcDirectSuper(String a, String referenceSuper) {
-        if(a != null && a.indexOf(referenceSuper) == 0 && a.length() > referenceSuper.length()){
+        if (a != null && a.indexOf(referenceSuper) == 0 && a.length() > referenceSuper.length()) {
             return new String(a.substring(0, a.length() - 1));
         }
         return null;
@@ -19,7 +19,7 @@ public class StringGenealogy extends AutoTreeGenealogy<String> {
 
     @Override
     public String calcDirectSuperRegardBranch(String a, String referenceBranch) {
-        if(a != null && a.indexOf(referenceBranch) == 0 && a.length() > referenceBranch.length()){
+        if (a != null && a.indexOf(referenceBranch) == 0 && a.length() > referenceBranch.length()) {
             return null;
         }
         return new String(a.substring(0, a.length() - 1));
@@ -27,8 +27,8 @@ public class StringGenealogy extends AutoTreeGenealogy<String> {
 
     @Override
     public boolean isSuperOf(String a, String b) {
-        if(b.indexOf(a) == 0){
-            if(b.length() > a.length()){
+        if (b.indexOf(a) == 0) {
+            if (b.length() > a.length()) {
                 return true;
             }
         }
