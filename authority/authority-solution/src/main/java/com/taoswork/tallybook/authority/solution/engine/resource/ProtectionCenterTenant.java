@@ -39,7 +39,7 @@ public class ProtectionCenterTenant
     public void buildAllRcProtection(){
         Query<Protection> q = datastore.createQuery(Protection.class);
         q.filter(Protection.FN_PROTECTION_SPACE, protectionSpace)
-                .filter(Protection.FN_TENANT_ID, tenantId);
+                .filter(Protection.FN_NAMESPACE, tenantId);
         List<Protection> protections = q.asList();
         if(protections != null){
             for (Protection sr : protections){
@@ -67,7 +67,7 @@ public class ProtectionCenterTenant
         }
         Query<Protection> q = datastore.createQuery(Protection.class);
         q.filter(Protection.FN_PROTECTION_SPACE, protectionSpace)
-                .filter(Protection.FN_TENANT_ID, tenantId)
+                .filter(Protection.FN_NAMESPACE, tenantId)
                 .filter(Protection.FN_RESOURCE_ENTITY, resource);
         Protection sr = q.get();
         if(sr != null){

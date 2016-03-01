@@ -4,7 +4,6 @@ import com.taoswork.tallybook.authority.core.Access;
 import com.taoswork.tallybook.authority.core.IllegalCodePathException;
 import com.taoswork.tallybook.authority.core.permission.IKAuthority;
 import com.taoswork.tallybook.authority.core.permission.IKPermission;
-import com.taoswork.tallybook.authority.core.resource.KResourceAccess;
 import com.taoswork.tallybook.authority.core.resource.*;
 import com.taoswork.tallybook.authority.core.resource.link.IKProtectionLink;
 import com.taoswork.tallybook.authority.core.resource.link.IKProtectionMapping;

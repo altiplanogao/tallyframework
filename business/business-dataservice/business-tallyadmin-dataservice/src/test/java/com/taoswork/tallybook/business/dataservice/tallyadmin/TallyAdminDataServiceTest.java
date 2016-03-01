@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestDatasourceConfiguration;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminTestDatasourceDefinition;
+import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TestDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
 import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
@@ -22,12 +21,12 @@ public class TallyAdminDataServiceTest {
 
     @BeforeClass
     public static void setDataService() {
-        dataService = new TallyAdminDataService(TallyAdminTestDatasourceConfiguration.class);
+        dataService = new TallyAdminDataService(TestDatasourceConfiguration.class);
     }
 
     @AfterClass
     public static void tearDown() {
-        TallyAdminTestDatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        TestDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
         mdbDef.dropDatabase();
         dataService = null;
     }

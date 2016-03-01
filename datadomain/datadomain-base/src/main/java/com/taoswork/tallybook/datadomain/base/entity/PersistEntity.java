@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface PersistEntity {
-    String nameOverride() default "";
+    String value() default "";//name override
 
     boolean instantiable() default true;
 

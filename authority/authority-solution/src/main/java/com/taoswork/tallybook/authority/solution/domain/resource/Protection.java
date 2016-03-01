@@ -1,16 +1,16 @@
 package com.taoswork.tallybook.authority.solution.domain.resource;
 
 import com.taoswork.tallybook.authority.core.ProtectionMode;
-import com.taoswork.tallybook.authority.solution.domain.resource.protection.ResourceNameFieldGate;
 import com.taoswork.tallybook.authority.solution.domain.resource.protection.ProtectionGate;
 import com.taoswork.tallybook.authority.solution.domain.resource.protection.ProtectionValidator;
+import com.taoswork.tallybook.authority.solution.domain.resource.protection.ResourceNameFieldGate;
 import com.taoswork.tallybook.datadomain.base.entity.MapField;
 import com.taoswork.tallybook.datadomain.base.entity.MapMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.BooleanMode;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationBoolean;
@@ -31,10 +31,10 @@ import java.util.UUID;
         {
                 @Index(value = "protectionSpace", fields ={
                         @Field(Protection.FN_PROTECTION_SPACE)}),
-                @Index(fields = @Field(Protection.FN_TENANT_ID)),
+                @Index(fields = @Field(Protection.FN_NAMESPACE)),
                 @Index(value = "scopedResource", fields = {
                         @Field(Protection.FN_PROTECTION_SPACE),
-                        @Field(Protection.FN_TENANT_ID),
+                        @Field(Protection.FN_NAMESPACE),
                         @Field("resource")
                 }, unique = true)
         }
@@ -44,7 +44,7 @@ import java.util.UUID;
         valueGates = ProtectionGate.class
 )
 @PresentationClass()
-public final class Protection
+public class Protection
         extends AbstractDocument {
 
     @PersistField(fieldType = FieldType.STRING, required = true)
@@ -52,8 +52,8 @@ public final class Protection
     protected String protectionSpace;
     public static final String FN_PROTECTION_SPACE = "protectionSpace";
 
-    private String tenantId;
-    public static final String FN_TENANT_ID = "tenantId";
+    private String namespace;
+    public static final String FN_NAMESPACE = "namespace";
 
     @PersistField(fieldType = FieldType.NAME, required = true, length = 100)
     @PresentationField(order = 1)
@@ -98,12 +98,12 @@ public final class Protection
         this.protectionSpace = protectionSpace;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getNamespace() {
+        return namespace;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     public String getName() {
@@ -124,6 +124,10 @@ public final class Protection
 
     public String getResource() {
         return resource;
+    }
+
+    public void setResource(Class resource) {
+        setResource(resource.getName());
     }
 
     public void setResource(String resource) {

@@ -1,28 +1,68 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
+import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
+import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
+import org.mongodb.morphia.annotations.Entity;
 
 import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/4/16.
  */
-@PersistEntity(nameOverride = "bu")
-public interface BusinessUnit extends Persistable {
-    Long getId();
+@Entity("bu")
+@PersistEntity(value = "bu")
+public class BusinessUnit extends AbstractDocument {
+    
+    @PersistField(fieldType = FieldType.NAME, required = true)
+    @PresentationField(order = 2)
+    protected String name;
 
-    BusinessUnit setId(Long id);
+    @PersistField(fieldType = FieldType.HTML, length = Integer.MAX_VALUE - 1)
+    @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
+    protected String description;
 
-    String getName();
+    @CollectionField(mode = CollectionMode.Primitive)
+    protected List<String> tags;
 
-    BusinessUnit setName(String name);
+/*  Hide for prototype
+    protected List<Employee> employees;
+    protected List<BusinessPartner> businessPartners;
+    protected List<Asset> assets;
+    protected List<WorkPlan> workPlans;
+    protected List<WorkSuite> workSuites;
+    protected List<ModuleUsage> modules;
+*/
 
-    String getDescription();
+    public String getName() {
+        return name;
+    }
 
-    BusinessUnit setDescription(String description);
+    public BusinessUnit setName(String name) {
+        this.name = name;
+        return this;
+    }
 
-    List<String> getTags();
+    public String getDescription() {
+        return description;
+    }
 
-    void setTags(List<String> tags);
+    public BusinessUnit setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
 }

@@ -2,9 +2,7 @@ package com.taoswork.tallybook.admincore.conf;
 
 import com.taoswork.tallybook.admincore.TallyBookAdminCoreRoot;
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
-import com.taoswork.tallybook.authority.solution.domain.resource.ResourceProtectionMode;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.AdminSecuredResource;
-import com.taoswork.tallybook.business.datadomain.tallyadmin.security.permission.impl.AdminSecuredResourceImpl;
+import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminProtection;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.AdminEmployeeDetailsService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.impl.AdminEmployeeDetailsServiceImpl;
@@ -18,6 +16,8 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
+import com.taoswork.tallybook.dataservice.jpa.config.db.ProductDbConfig;
 import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
 import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.manage.impl.DataServiceManagerImpl;
@@ -46,8 +46,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
         )}
 )
 public class AdminCoreConfig {
-        protected JpaDbSetting getDbSetting(){
-                return null;
+        protected Class<? extends IDbConfig> getDbSetting(){
+                return ProductDbConfig.class;
         }
 
         @Bean(name = TallyUserDataService.COMPONENT_NAME)
@@ -57,17 +57,17 @@ public class AdminCoreConfig {
 
         @Bean(name = TallyAdminDataService.COMPONENT_NAME)
         public TallyAdminDataService tallyAdminDataService(){
-                return new TallyAdminDataService(getDbSetting());
+                return new TallyAdminDataService();
         }
 
         @Bean(name = TallyBusinessDataService.COMPONENT_NAME)
         public TallyBusinessDataService tallyBusinessDataService(){
-                return new TallyBusinessDataService(getDbSetting());
+                return new TallyBusinessDataService();
         }
 
         @Bean(name = TallyManagementDataService.COMPONENT_NAME)
         public TallyManagementDataService tallyManagementDataService(){
-                return new TallyManagementDataService(getDbSetting());
+                return new TallyManagementDataService();
         }
 
         @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
@@ -106,26 +106,13 @@ public class AdminCoreConfig {
                 IDataService adminDataService = dataServiceManager.getDataServiceByServiceName(TallyAdminDataService.COMPONENT_NAME);
                 IEntityService entityService = adminDataService.getService(IEntityService.COMPONENT_NAME);
                 try {
-                        for (SecuredResource res : SecuredResources.getResources()) {
-                                AdminSecuredResource asr = new AdminSecuredResourceImpl();
-                                asr.setName(res.getName());
-                                asr.setResourceEntity(res.getEntity());
-                                asr.setCategory(res.getCategory());
-                                asr.setMasterControlled(res.isMasterControlled());
-                                switch (res.getProtectionMode()) {
-                                        case FitAll:
-                                                asr.setProtectionMode(ResourceProtectionMode.PassAll);
-                                                break;
-                                        case FitAny:
-                                                asr.setProtectionMode(ResourceProtectionMode.PassAny);
-                                                break;
-                                }
+                        for (AdminProtection res : SecuredResources.getResources()) {
                                 CriteriaTransferObject cto = new CriteriaTransferObject();
                                 PropertyFilterCriteria propC = new PropertyFilterCriteria("name", res.getName());
                                 cto.addFilterCriteria(propC);
-                                CriteriaQueryResult cqr = entityService.query(AdminSecuredResource.class, cto);
+                                CriteriaQueryResult cqr = entityService.query(AdminProtection.class, cto);
                                 if(cqr.fetchedCount() == 0){
-                                        entityService.create(AdminSecuredResource.class, asr);
+                                        entityService.create(AdminProtection.class, res);
                                 }
                         }
                 } catch (ServiceException e) {

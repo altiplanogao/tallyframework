@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>datadomain-on-jpa</artifactId>
+            <artifactId>datadomain-on-mongo</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
@@ -22,7 +22,11 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>test-material-for-jpa</artifactId>
+            <artifactId>authority-solution</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>test-material-for-mongo</artifactId>
             <type>jar</type>
             <scope>test</scope>
         </dependency>

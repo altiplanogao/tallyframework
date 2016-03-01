@@ -9,11 +9,12 @@ import com.taoswork.tallybook.authority.core.verifier.IKAccessVerifier;
  * Created by Gao Yuan on 2016/2/24.
  */
 public interface IPermissionEngine {
-    IKAuthority getAuthority(String protectionSpace, String tenantId, String userId);
+    IKProtectionMapping getProtectionMapping(String protectionSpace);
 
     IKProtectionCenter getProtectionCenter(String protectionSpace, String tenantId);
 
-    IKProtectionMapping getProtectionMapping(String protectionSpace);
-
     IKAccessVerifier getAccessVerifier(String protectionSpace, String tenantId);
+
+    IKAuthority getAuthority(String protectionSpace, String tenantId, String userId);
+
 }

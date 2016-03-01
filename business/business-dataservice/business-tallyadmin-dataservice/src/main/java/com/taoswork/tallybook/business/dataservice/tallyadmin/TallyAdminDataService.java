@@ -1,6 +1,5 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
-import com.taoswork.tallybook.authority.solution.engine.IPermissionEngine;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.AdminSpecifiedConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDatasourceConfiguration;
@@ -8,16 +7,11 @@ import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPer
 import com.taoswork.tallybook.business.dataservice.tallyadmin.security.AdminSecurityDefinition;
 import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.dataservice.annotations.DataService;
-import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
-import com.taoswork.tallybook.dataservice.security.ISecurityVerifier;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.security.SecurityVerifierByPermissionEngine;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
-
-import java.util.Collection;
 
 /**
  * Created by Gao Yuan on 2015/5/12.
@@ -26,11 +20,8 @@ import java.util.Collection;
 //@Component(TallyAdminDataService.COMPONENT_NAME)
 public class TallyAdminDataService
         extends MongoDataServiceBase<
-        TallyAdminPersistableConfiguration,
-        MongoDatasourceConfiguration> {
-
-    public static final String ADMIN_DATA_PROTECTION_SCOPE = "ADMIN_DATA_PROTECTION_SCOPE";
-    public static final String ADMIN_DATA_TENANT = "ADMIN_DATA_TENANT";
+                TallyAdminPersistableConfiguration,
+                MongoDatasourceConfiguration> {
 
     public static final String COMPONENT_NAME = TallyAdminDataServiceDefinition.DATA_SERVICE_NAME;
 
@@ -58,7 +49,7 @@ public class TallyAdminDataService
                 newMaster.setName("Admin");
                 newMaster.setTitle("Master");
                 newMaster.setProtectionSpace(AdminSecurityDefinition.PROTECTION_SPACE);
-                newMaster.setTenantId(AdminSecurityDefinition.ADMIN_TENANT);
+                newMaster.setNamespace(AdminSecurityDefinition.ADMIN_TENANT);
                 entityService.create(AdminEmployee.class, newMaster);
             }
         } catch (ServiceException e) {

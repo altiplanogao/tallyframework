@@ -1,24 +1,24 @@
 package com.taoswork.tallybook.business.dataservice.tallymodule;
 
-import com.taoswork.tallybook.business.dataservice.tallymodule.conf.TallyModuleDataServiceBeanConfiguration;
-import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
-import com.taoswork.tallybook.dataservice.service.impl.DataServiceBase;
-
-import java.util.List;
+import com.taoswork.tallybook.business.dataservice.tallymodule.conf.TallyModuleDatasourceConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallymodule.conf.TallyModulePersistableConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
 
 /**
  * Created by Gao Yuan on 2015/6/5.
  */
-public class TallyModuleDataService extends DataServiceBase {
-    public static final String COMPONENT_NAME = TallyModuleJpaDatasourceDefinition.DATA_SERVICE_NAME;
+public class TallyModuleDataService
+        extends MongoDataServiceBase<
+                TallyModulePersistableConfiguration,
+                MongoDatasourceConfiguration> {
+    public static final String COMPONENT_NAME = TallyModuleDataServiceDefinition.DATA_SERVICE_NAME;
 
-    public TallyModuleDataService(JpaDbSetting dbSetting) {
-        this(dbSetting, TallyModuleDataServiceBeanConfiguration.class, null);
+    public TallyModuleDataService() {
+        this(TallyModuleDatasourceConfiguration.class);
     }
 
-    public TallyModuleDataService(JpaDbSetting dbSetting,
-                                  Class<? extends TallyModuleDataServiceBeanConfiguration> dataServiceConf,
-                                  List<Class> annotatedClasses) {
-        super(new TallyModuleJpaDatasourceDefinition(), dbSetting, dataServiceConf, annotatedClasses);
+    public TallyModuleDataService(Class<? extends MongoDatasourceConfiguration> dSrcConfClz) {
+        super(new TallyModuleDataServiceDefinition(), TallyModulePersistableConfiguration.class, dSrcConfClz);
     }
 }

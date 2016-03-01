@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.authority.solution.domain;
 
-import com.taoswork.tallybook.authority.core.resource.link.KProtectionMapping;
 import com.taoswork.tallybook.authority.core.resource.link.IKProtectionMapping;
+import com.taoswork.tallybook.authority.core.resource.link.KProtectionMapping;
 import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionLink;
 import com.taoswork.tallybook.datadomain.base.entity.*;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;

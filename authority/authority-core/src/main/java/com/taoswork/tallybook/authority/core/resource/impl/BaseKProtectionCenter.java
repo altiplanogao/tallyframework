@@ -1,6 +1,9 @@
 package com.taoswork.tallybook.authority.core.resource.impl;
 
-import com.taoswork.tallybook.authority.core.resource.*;
+import com.taoswork.tallybook.authority.core.resource.IKProtection;
+import com.taoswork.tallybook.authority.core.resource.IKProtectionCase;
+import com.taoswork.tallybook.authority.core.resource.IKProtectionCenter;
+import com.taoswork.tallybook.authority.core.resource.KCaseFitting;
 import com.taoswork.tallybook.authority.core.resource.link.IKProtectionMapping;
 
 import java.util.ArrayList;

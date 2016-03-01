@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.authority.solution.engine.filter.query;
 
 import com.taoswork.tallybook.authority.core.IllegalCodePathException;
-import com.taoswork.tallybook.authority.core.resource.IKProtectionCase;
 import com.taoswork.tallybook.authority.core.resource.IKProtection;
+import com.taoswork.tallybook.authority.core.resource.IKProtectionCase;
 import com.taoswork.tallybook.authority.core.resource.KAccessibleScope;
 import com.taoswork.tallybook.authority.solution.engine.filter.IFilter;
 import com.taoswork.tallybook.authority.solution.engine.filter.IMongoFilter;

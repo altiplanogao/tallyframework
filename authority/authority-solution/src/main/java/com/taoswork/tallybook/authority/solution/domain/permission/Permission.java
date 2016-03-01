@@ -6,9 +6,9 @@ import com.taoswork.tallybook.datadomain.base.entity.MapField;
 import com.taoswork.tallybook.datadomain.base.entity.MapMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 
 import java.util.HashMap;
 import java.util.Map;

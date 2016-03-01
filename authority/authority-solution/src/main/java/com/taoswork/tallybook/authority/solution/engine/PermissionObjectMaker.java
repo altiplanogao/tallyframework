@@ -1,8 +1,7 @@
 package com.taoswork.tallybook.authority.solution.engine;
 
 import com.taoswork.tallybook.authority.core.Access;
-import com.taoswork.tallybook.authority.core.permission.IKAuthority;
-import com.taoswork.tallybook.authority.core.permission.IKPermission;
+import com.taoswork.tallybook.authority.core.permission.authorities.ISimpleKAuthority;
 import com.taoswork.tallybook.authority.core.permission.impl.KPermission;
 import com.taoswork.tallybook.authority.core.permission.impl.KPermissionCase;
 import com.taoswork.tallybook.authority.core.resource.IKProtection;
@@ -11,10 +10,9 @@ import com.taoswork.tallybook.authority.core.resource.impl.KProtection;
 import com.taoswork.tallybook.authority.solution.domain.ResourceAccess;
 import com.taoswork.tallybook.authority.solution.domain.permission.Permission;
 import com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase;
-import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
-import com.taoswork.tallybook.authority.solution.domain.user.PersonAuthority;
-import com.taoswork.tallybook.authority.solution.engine.authority.PersonKAuthority;
+import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase;
+import com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority;
 import com.taoswork.tallybook.authority.solution.engine.filter.FilterManager;
 import com.taoswork.tallybook.authority.solution.engine.filter.IFilter;
 import com.taoswork.tallybook.authority.solution.engine.resource.ResourceProtectionCase;
@@ -49,16 +47,16 @@ public class PermissionObjectMaker {
         return rpc;
     }
 
-    public static IKAuthority makeAuthority(PersonAuthority personPermissions){
-        PersonKAuthority personAuthority = new PersonKAuthority(personPermissions.getTenantId(), personPermissions.getOwnerId());
-        Map<String, Permission> permissions = personPermissions.getPermissions();
+    public static ISimpleKAuthority makeAuthority(BaseAuthority authority){
+        SKAuthority skAuthority = new SKAuthority(authority.getNamespace(), authority.getOwnerId());
+        Map<String, Permission> permissions = authority.getPermissions();
         if(permissions != null){
             for (Permission permission : permissions.values()){
-                IKPermission rcp = convert(permission);
-                personAuthority.addPermission(rcp);
+                KPermission rcp = convert(permission);
+                skAuthority.addPermission(rcp);
             }
         }
-        return personAuthority;
+        return skAuthority;
     }
 
     private static KPermission convert(Permission permission) {

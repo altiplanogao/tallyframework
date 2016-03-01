@@ -1,38 +1,122 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
+import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
+import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
+import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.annotations.Transient;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/4/14.
  */
-public interface Employee extends
+@Entity("employee")
+@PersistEntity("employee")
+public class Employee extends
         //IPermissionUser,
-        Persistable {
-    Long getId();
+        UserAuthority<Role> {
 
-    Employee setId(Long id);
+    @PersistField(required = true)
+    protected Long personId;
+    @Transient
+    private transient Person person;
 
-    Long getPersonId();
+    @Reference(lazy = true)
+    @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
+    protected BusinessUnit businessUnit;
 
-    Employee setUserId(Long userId);
+    protected EmployeeStatus activeStatus;
 
-    BusinessUnit getBusinessUnit();
+    @PersistField(fieldType = FieldType.NAME, required = true)
+    @PresentationField(order = 2)
+    protected String name;
 
-    Employee setOrganization(BusinessUnit businessUnit);
+    @PersistField(fieldType = FieldType.STRING, required = false)
+    @PresentationField(order = 2)
+    protected String title;
 
-    EmployeeStatus getActiveStatus();
+    @Embedded
+    protected EmployeeOwnedSetting setting;
 
-    Employee setActiveStatus(EmployeeStatus activeStatus);
+    @Reference
+    @CollectionField(mode = CollectionMode.Lookup)
+    List<Role> groups = new ArrayList<Role>();
 
-    String getName();
+    public Long getPersonId() {
+        return personId;
+    }
 
-    Employee setName(String name);
+    public Employee setUserId(Long personId) {
+        this.personId = personId;
+        return this;
+    }
 
-    String getTitle();
+    public BusinessUnit getBusinessUnit() {
+        return businessUnit;
+    }
 
-    Employee setTitle(String title);
+    public Employee setOrganization(BusinessUnit businessUnit) {
+        this.businessUnit = businessUnit;
+        return this;
+    }
 
-    EmployeeOwnedSetting getSetting();
+    public EmployeeStatus getActiveStatus() {
+        return activeStatus;
+    }
 
-    Employee setSetting(EmployeeOwnedSetting setting);
+    public Employee setActiveStatus(EmployeeStatus activeStatus) {
+        this.activeStatus = activeStatus;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Employee setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Employee setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public EmployeeOwnedSetting getSetting() {
+        return setting;
+    }
+
+    public Employee setSetting(EmployeeOwnedSetting setting) {
+        this.setting = setting;
+        return this;
+    }
+
+    public List<Role> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Role> groups) {
+        this.groups = groups;
+    }
+
+    @Override
+    public Collection<? extends GroupAuthority> theGroups() {
+        return getGroups();
+    }
 }

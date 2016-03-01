@@ -14,7 +14,7 @@ import java.util.function.Function;
  * Created by Gao Yuan on 2015/8/18.
  */
 public class SimpleKAuthority implements ISimpleKAuthority {
-    private ConcurrentHashMap<String, IKPermission> permissionMap = new ConcurrentHashMap<String, IKPermission>();
+    protected ConcurrentHashMap<String, IKPermission> permissionMap = new ConcurrentHashMap<String, IKPermission>();
 
     @Override
     public IKPermission getPermission(String resource) {

@@ -8,7 +8,7 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObj
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.servicemockup.TallyMockupMongoDataService;
-import com.taoswork.tallybook.dataservice.mongo.servicemockup.datasource.TallyMockupMongoDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.mongo.servicemockup.datasource.TallyMockupMongoDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
@@ -41,7 +41,7 @@ public class MongoEntityServicePerformanceTest {
 
     @After
     public void teardown() {
-        TallyMockupMongoDatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        TallyMockupMongoDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
         mdbDef.dropDatabase();
         dataService = null;
     }

@@ -1,17 +1,15 @@
 package com.taoswork.tallybook.authority.solution.domain.user;
 
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
-import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
-import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
-import org.mongodb.morphia.annotations.Entity;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 
 /**
  * Created by Gao Yuan on 2015/4/19.
  */
-@Entity
-@PresentationClass()
-public class GroupAuthority
+@PersistEntity(asDefaultPermissionGuardian = false)
+public abstract class GroupAuthority
         extends BaseAuthority {
 
     @PersistField(fieldType = FieldType.NAME, required = true)

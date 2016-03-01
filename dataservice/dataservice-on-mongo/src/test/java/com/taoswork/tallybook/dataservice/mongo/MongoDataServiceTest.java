@@ -6,7 +6,7 @@ import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.core.entity.EntityCatalog;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.servicemockup.TallyMockupMongoDataService;
-import com.taoswork.tallybook.dataservice.mongo.servicemockup.datasource.TallyMockupMongoDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.mongo.servicemockup.datasource.TallyMockupMongoDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.testmaterial.mongo.domain.nature.Citizen;
@@ -30,7 +30,7 @@ public class MongoDataServiceTest {
 
     @After
     public void teardown() {
-        TallyMockupMongoDatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        TallyMockupMongoDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
         mdbDef.dropDatabase();
         dataService = null;
     }

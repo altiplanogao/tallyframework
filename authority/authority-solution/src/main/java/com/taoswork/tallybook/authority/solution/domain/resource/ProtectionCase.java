@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.authority.solution.domain.resource;
 
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationEnum;
 import org.apache.commons.lang3.StringUtils;

@@ -1,24 +1,24 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness;
 
-import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessDataServiceBeanConfiguration;
-import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
-import com.taoswork.tallybook.dataservice.service.impl.DataServiceBase;
-
-import java.util.List;
+import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessDatasourceConfiguration;
+import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TallyBusinessPersistableConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
 
 /**
  * Created by Gao Yuan on 2015/6/5.
  */
-public class TallyBusinessDataService extends DataServiceBase {
-    public static final String COMPONENT_NAME = TallyBusinessJpaDatasourceDefinition.DATA_SERVICE_NAME;
+public class TallyBusinessDataService
+        extends MongoDataServiceBase<
+                TallyBusinessPersistableConfiguration,
+                MongoDatasourceConfiguration> {
+    public static final String COMPONENT_NAME = TallyBusinessDataServiceDefinition.DATA_SERVICE_NAME;
 
-    public TallyBusinessDataService(JpaDbSetting dbSetting) {
-        this(dbSetting, TallyBusinessDataServiceBeanConfiguration.class, null);
+    public TallyBusinessDataService() {
+        this(TallyBusinessDatasourceConfiguration.class);
     }
 
-    public TallyBusinessDataService(JpaDbSetting dbSetting,
-                                    Class<? extends TallyBusinessDataServiceBeanConfiguration> dataServiceConf,
-                                    List<Class> annotatedClasses) {
-        super(new TallyBusinessJpaDatasourceDefinition(), dbSetting, dataServiceConf, annotatedClasses);
+    public TallyBusinessDataService(Class<? extends MongoDatasourceConfiguration> dSrcConfClz) {
+        super(new TallyBusinessDataServiceDefinition(), TallyBusinessPersistableConfiguration.class, dSrcConfClz);
     }
 }

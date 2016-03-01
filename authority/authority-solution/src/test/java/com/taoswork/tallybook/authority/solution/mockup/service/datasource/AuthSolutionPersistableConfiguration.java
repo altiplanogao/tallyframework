@@ -1,6 +1,8 @@
 package com.taoswork.tallybook.authority.solution.mockup.service.datasource;
 
 import com.taoswork.tallybook.authority.solution.AuthoritySolutionDomain;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TGroupAuthority;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TUserAuthority;
 import com.taoswork.tallybook.authority.solution.mockup.domain.resource.*;
 import com.taoswork.tallybook.dataservice.mongo.config.MongoPersistableConfiguration;
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,6 +22,8 @@ public class AuthSolutionPersistableConfiguration
     protected Class<?>[] createPersistableEntities() {
         List<Class> classes = new ArrayList<Class>();
         CollectionUtils.addAll(classes, AuthoritySolutionDomain.domainEntities());
+        classes.add(TGroupAuthority.class);
+        classes.add(TUserAuthority.class);
         classes.add(XFile.class);
         classes.add(CS0File.class);
         classes.add(CS1File.class);

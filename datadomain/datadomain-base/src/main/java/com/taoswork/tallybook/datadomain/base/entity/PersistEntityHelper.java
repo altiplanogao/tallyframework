@@ -10,7 +10,7 @@ public class PersistEntityHelper {
         String typeName = entityInterface.getSimpleName().toLowerCase();
         PersistEntity persistEntity = entityInterface.getDeclaredAnnotation(PersistEntity.class);
         if (persistEntity != null) {
-            String nameOverride = persistEntity.nameOverride();
+            String nameOverride = persistEntity.value();
             if (StringUtils.isNotEmpty(nameOverride))
                 typeName = nameOverride;
         }

@@ -9,7 +9,10 @@ import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
-import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.annotations.Field;
+import org.mongodb.morphia.annotations.Index;
+import org.mongodb.morphia.annotations.Indexes;
+import org.mongodb.morphia.annotations.Version;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +21,14 @@ import java.util.Map;
  * Created by Gao Yuan on 2016/2/7.
  */
 @PersistEntity(
-
 )
 @Indexes({
         @Index(fields = @Field(BaseAuthority.FN_PROTECTION_SPACE)),
         @Index(fields = {@Field(BaseAuthority.FN_PROTECTION_SPACE),
-                @Field(BaseAuthority.FN_TENANT_ID)}),
+                @Field(BaseAuthority.FN_NAMESPACE)}),
         @Index(fields = {@Field(BaseAuthority.FN_PROTECTION_SPACE),
                 @Field(BaseAuthority.FN_OWNER_ID),
-                @Field(BaseAuthority.FN_TENANT_ID)}, unique = true),
+                @Field(BaseAuthority.FN_NAMESPACE)}, unique = true),
         @Index(fields = {@Field(BaseAuthority.FN_OWNER_ID)})
 })
 public abstract class BaseAuthority
@@ -38,8 +40,8 @@ public abstract class BaseAuthority
     public static final String FN_PROTECTION_SPACE = "protectionSpace";
 
     @PersistField(fieldType = FieldType.STRING, required = true)
-    private String tenantId;
-    public static final String FN_TENANT_ID = "tenantId";
+    private String namespace;
+    public static final String FN_NAMESPACE = "namespace";
 
     private String ownerId;
     public static final String FN_OWNER_ID = "ownerId";
@@ -59,12 +61,12 @@ public abstract class BaseAuthority
         this.protectionSpace = protectionSpace;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getNamespace() {
+        return namespace;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     public String getOwnerId() {

@@ -2,8 +2,8 @@ package com.taoswork.tallybook.authority.solution.engine.verifier;
 
 import com.taoswork.tallybook.authority.core.permission.IKAuthority;
 import com.taoswork.tallybook.authority.core.resource.IKProtection;
-import com.taoswork.tallybook.authority.core.resource.KAccessibleScope;
 import com.taoswork.tallybook.authority.core.resource.IKProtectionCenter;
+import com.taoswork.tallybook.authority.core.resource.KAccessibleScope;
 import com.taoswork.tallybook.authority.core.verifier.IKAccessVerifier;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.authority.solution.mockup.domain.resource.*;

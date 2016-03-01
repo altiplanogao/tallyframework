@@ -2,9 +2,9 @@ package com.taoswork.tallybook.authority.solution.domain.permission;
 
 import com.taoswork.tallybook.authority.solution.domain.ResourceAccess;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import org.mongodb.morphia.annotations.Embedded;
 
 /**

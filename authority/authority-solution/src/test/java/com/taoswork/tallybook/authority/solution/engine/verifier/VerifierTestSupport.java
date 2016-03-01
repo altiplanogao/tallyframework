@@ -6,9 +6,11 @@ import com.taoswork.tallybook.authority.core.permission.IKAuthority;
 import com.taoswork.tallybook.authority.solution.domain.ResourceAccess;
 import com.taoswork.tallybook.authority.solution.engine.PermissionEngine;
 import com.taoswork.tallybook.authority.solution.mockup.PermissionMockuper;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TGroupAuthority;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TUserAuthority;
 import com.taoswork.tallybook.authority.solution.mockup.domain.resource.*;
 import com.taoswork.tallybook.authority.solution.mockup.service.AuthSolutionDataService;
-import com.taoswork.tallybook.authority.solution.mockup.service.datasource.AuthSolutionDatasourceDefinition;
+import com.taoswork.tallybook.authority.solution.mockup.service.datasource.AuthSolutionDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.mongo.core.entityservice.MongoEntityService;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
@@ -32,6 +34,10 @@ public class VerifierTestSupport {
     public static final String User_G____ = "User_G____";
     public static final String User_GAB__ = "User_GAB__";
     public static final String User_GABCD = "User_GABCD";
+
+    public static final String Group_N____ = "Group_N____";
+    public static final String Group__AB__ = "Group__AB__";
+    public static final String Group_G____ = "Group_G____";
 
     protected IKAuthority user_N____ ;
     protected IKAuthority user__AB__ ;
@@ -68,13 +74,13 @@ public class VerifierTestSupport {
     protected static void setupDatabaseData() {
         dataService = new AuthSolutionDataService();
         entityService = dataService.getService(IEntityService.COMPONENT_NAME);
-        permissionEngine = new PermissionEngine(entityService);
+        permissionEngine = new PermissionEngine(entityService, TUserAuthority.class, TGroupAuthority.class);
         mockuper = new PermissionMockuper(dataService, normalAcces);
     }
 
     protected static void teardownDatabaseData() {
         permissionEngine = null;
-        AuthSolutionDatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        AuthSolutionDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
         mdbDef.dropDatabase();
         dataService = null;
     }
@@ -112,6 +118,10 @@ public class VerifierTestSupport {
             mockuper.makePerson(tenant, User_GAB__, resource, true, true, true, false, false);
             mockuper.makePerson(tenant, User_GABCD, resource, true, true, true, true, true);
 
+            mockuper.makeGroup(tenant, Group_N____, resource, false, false, false, false, false);
+            mockuper.makeGroup(tenant, Group__AB__, resource, false, true, true, false, false);
+            mockuper.makeGroup(tenant, Group_G____, resource, true, false, false, false, false);
+
             mockuper.makeInstanceWithTag(FILE_G_____, resource, false, false, false, false, false);
             mockuper.makeInstanceWithTag(FILE__A____, resource, true, false, false, false, false);
             mockuper.makeInstanceWithTag(FILE____C__, resource, false, false, true, false, false);
@@ -141,11 +151,11 @@ public class VerifierTestSupport {
     }
 
     protected void makeAuthoritiesUserMembers(String tenant){
-         user_N____ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_N____);
-         user__AB__ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User__AB__);
-         user__ABCD = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User__ABCD);
-         user_G____ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_G____);
-         user_GAB__ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_GAB__);
-         user_GABCD = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_GABCD);
+        user_N____ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_N____);
+        user__AB__ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User__AB__);
+        user__ABCD = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User__ABCD);
+        user_G____ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_G____);
+        user_GAB__ = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_GAB__);
+        user_GABCD = permissionEngine.getAuthority(mockuper.PROTECTION_SPACE, tenant, User_GABCD);
     }
 }

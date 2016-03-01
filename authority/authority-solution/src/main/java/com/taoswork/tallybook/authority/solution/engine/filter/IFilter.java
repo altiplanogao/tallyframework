@@ -1,9 +1,5 @@
 package com.taoswork.tallybook.authority.solution.engine.filter;
 
-import com.taoswork.tallybook.authority.solution.engine.filter.query.IQInterrupter;
-import org.mongodb.morphia.query.Criteria;
-import org.mongodb.morphia.query.Query;
-
 /**
  * Created by Gao Yuan on 2015/6/5.
  * <p>

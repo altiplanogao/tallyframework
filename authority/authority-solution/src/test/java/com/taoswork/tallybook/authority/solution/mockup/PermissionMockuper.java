@@ -10,7 +10,11 @@ import com.taoswork.tallybook.authority.solution.domain.resource.FilterType;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase;
 import com.taoswork.tallybook.authority.solution.domain.resource.protection.ResourceNameFieldGate;
-import com.taoswork.tallybook.authority.solution.domain.user.PersonAuthority;
+import com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority;
+import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
+import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TGroupAuthority;
+import com.taoswork.tallybook.authority.solution.mockup.domain.auth.TUserAuthority;
 import com.taoswork.tallybook.authority.solution.mockup.domain.resource.XFile;
 import com.taoswork.tallybook.authority.solution.mockup.service.AuthSolutionDataService;
 import com.taoswork.tallybook.authority.solution.mockup.service.EasyEntityServiceAccess;
@@ -70,7 +74,7 @@ public class PermissionMockuper {
                                     ProtectionMode pm, boolean addCases) {
         Protection sr = new Protection();
         sr.setProtectionSpace(PROTECTION_SPACE);
-        sr.setTenantId(tenant);
+        sr.setNamespace(tenant);
         sr.setResource(resource.getName());
         sr.setName(resource.getSimpleName());
         sr.setProtectionMode(pm);
@@ -94,26 +98,58 @@ public class PermissionMockuper {
     public Protection getResource(String tanantId, Class resource) {
         CriteriaTransferObject cto = new CriteriaTransferObject();
         cto.addFilterCriteria(Protection.FN_PROTECTION_SPACE, PROTECTION_SPACE)
-                .addFilterCriteria(Protection.FN_TENANT_ID, tanantId)
+                .addFilterCriteria(Protection.FN_NAMESPACE, tanantId)
                 .addFilterCriteria(Protection.FN_RESOURCE_ENTITY, ResourceNameFieldGate.unifiedResourceName(resource.getName()));
         Protection sr = easyEntityAccess.queryOne(Protection.class, cto);
         return sr;
     }
 
+    public <T extends UserAuthority> T getUserAuthority(String tenant, String userId){
+        CriteriaTransferObject cto = new CriteriaTransferObject();
+        cto.addFilterCriteria(UserAuthority.FN_PROTECTION_SPACE, PROTECTION_SPACE)
+                .addFilterCriteria(UserAuthority.FN_NAMESPACE, tenant)
+                .addFilterCriteria(UserAuthority.FN_OWNER_ID, userId);
+        BaseAuthority pp = easyEntityAccess.queryOne(UserAuthority.class, cto);
+        return (T) pp;
+    }
+
+    public <T extends GroupAuthority> T getGroupAuthority(String tenant, String groupId){
+        CriteriaTransferObject cto = new CriteriaTransferObject();
+        cto.addFilterCriteria(UserAuthority.FN_PROTECTION_SPACE, PROTECTION_SPACE)
+                .addFilterCriteria(UserAuthority.FN_NAMESPACE, tenant)
+                .addFilterCriteria(UserAuthority.FN_OWNER_ID, groupId);
+        BaseAuthority pp = easyEntityAccess.queryOne(GroupAuthority.class, cto);
+        return (T) pp;
+    }
+
     public void makePerson(String tenant, String userId, Class resource,
+                           boolean g, boolean a, boolean b, boolean c, boolean d) {
+        UserAuthority ua = new TUserAuthority();
+        makeAuthorizable(tenant, userId, resource, UserAuthority.class, ua, g, a, b, c, d);
+    }
+
+    public void makeGroup(String tenant, String userId, Class resource,
+                           boolean g, boolean a, boolean b, boolean c, boolean d) {
+        GroupAuthority ga = new TGroupAuthority();
+        ga.setName(userId);
+        makeAuthorizable(tenant, userId, resource, GroupAuthority.class, ga, g, a, b, c, d);
+    }
+
+    public <T extends BaseAuthority> void makeAuthorizable(String tenant, String ownerId, Class resource,
+                                                           Class<T> authorizableClz, T newInstance,
                            boolean g, boolean a, boolean b, boolean c, boolean d) {
         String resourceName = Protection.unifiedResourceName(resource.getName());
         CriteriaTransferObject cto = new CriteriaTransferObject();
-        cto.addFilterCriteria(PersonAuthority.FN_PROTECTION_SPACE, PROTECTION_SPACE)
-                .addFilterCriteria(PersonAuthority.FN_TENANT_ID, tenant)
-                .addFilterCriteria(PersonAuthority.FN_OWNER_ID, userId);
-        PersonAuthority pp = easyEntityAccess.queryOne(PersonAuthority.class, cto);
+        cto.addFilterCriteria(UserAuthority.FN_PROTECTION_SPACE, PROTECTION_SPACE)
+                .addFilterCriteria(UserAuthority.FN_NAMESPACE, tenant)
+                .addFilterCriteria(UserAuthority.FN_OWNER_ID, ownerId);
+        BaseAuthority pp = easyEntityAccess.queryOne(authorizableClz, cto);
         boolean isNew = false;
         if (pp == null) {
-            pp = new PersonAuthority();
+            pp = newInstance;
             pp.setProtectionSpace(PROTECTION_SPACE);
-            pp.setTenantId(tenant);
-            pp.setOwnerId(userId);
+            pp.setNamespace(tenant);
+            pp.setOwnerId(ownerId);
             isNew = true;
         }
 
@@ -151,9 +187,9 @@ public class PermissionMockuper {
         }
 
         if (isNew) {
-            easyEntityAccess.create(PersonAuthority.class, pp);
+            easyEntityAccess.create(authorizableClz, (T) pp);
         } else {
-            easyEntityAccess.update(PersonAuthority.class, pp);
+            easyEntityAccess.update(authorizableClz, (T) pp);
         }
     }
 

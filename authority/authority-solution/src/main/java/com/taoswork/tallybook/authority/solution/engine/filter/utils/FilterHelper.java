@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.authority.solution.engine.filter.utils;
 
 import com.taoswork.tallybook.authority.solution.domain.resource.FilterType;
-import com.taoswork.tallybook.authority.solution.engine.filter.IFilter;
 import com.taoswork.tallybook.authority.solution.engine.filter.FilterByClassifications;
+import com.taoswork.tallybook.authority.solution.engine.filter.IFilter;
 
 /**
  * Created by Gao Yuan on 2016/2/10.

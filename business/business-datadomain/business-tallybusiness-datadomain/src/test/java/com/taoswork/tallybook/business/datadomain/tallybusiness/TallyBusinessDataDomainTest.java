@@ -1,9 +1,8 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.testmaterial.jpa.persistence.TestApplicationContext;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
+import org.mongodb.morphia.Morphia;
 
 /**
  * Created by Gao Yuan on 2015/10/19.
@@ -12,10 +11,8 @@ public class TallyBusinessDataDomainTest {
     @Test
     public void testCreateDb() {
         try {
-            ApplicationContext applicationContext =
-                    TestApplicationContext.getApplicationContext(TallyBusinessDbPersistenceConfig.class);
-            Assert.assertTrue(true);
-            applicationContext = null;
+            Morphia morphia = new Morphia();
+            morphia.map(TallyBusinessDataDomain.persistableEntities());
         } catch (Exception exp) {
             Assert.fail();
         }

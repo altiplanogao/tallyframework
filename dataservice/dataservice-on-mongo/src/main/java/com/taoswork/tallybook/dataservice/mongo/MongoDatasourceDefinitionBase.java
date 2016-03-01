@@ -8,11 +8,13 @@ import com.mongodb.ServerAddress;
 public abstract class MongoDatasourceDefinitionBase implements MongoDatasourceDefinition{
     @Override
     public String getDbHost() {
-        return ServerAddress.defaultHost();
+        return "192.168.56.101";
+//        return ServerAddress.defaultHost();
     }
 
     @Override
     public int getDbPort() {
+//        return 37017;
         return ServerAddress.defaultPort();
     }
 
