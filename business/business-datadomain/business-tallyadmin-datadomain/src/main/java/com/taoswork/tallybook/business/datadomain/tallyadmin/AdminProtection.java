@@ -9,6 +9,9 @@ import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 public class AdminProtection extends Protection {
     public static final String COMMON_NAMESPACE = "admin-namespace";
 
+    public AdminProtection() {
+    }
+
     public AdminProtection(Class resource) {
         this(resource, ProtectionMode.FitAll, true);
     }
@@ -16,6 +19,7 @@ public class AdminProtection extends Protection {
     public AdminProtection(Class resource, ProtectionMode mode, boolean masterControlled) {
         this.setProtectionSpace(AdminProtectionSpace.COMMON_SPACE_NAME);
         this.setNamespace(COMMON_NAMESPACE);
+        this.setName(resource.getSimpleName());
         this.setResource(resource);
         this.setProtectionMode(mode);
         this.setMasterControlled(masterControlled);

@@ -127,6 +127,8 @@ public class Protection
     }
 
     public void setResource(Class resource) {
+        if(null == resource)
+            setResource("");
         setResource(resource.getName());
     }
 

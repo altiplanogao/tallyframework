@@ -18,11 +18,11 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCrite
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
 import com.taoswork.tallybook.dataservice.jpa.config.db.ProductDbConfig;
-import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
 import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.manage.impl.DataServiceManagerImpl;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -33,9 +33,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Import({ApplicationCommonConfig.class})
 @ComponentScan(
         basePackageClasses = TallyBookAdminCoreRoot.class,
-     //   useDefaultFilters = false,
+        //   useDefaultFilters = false,
         includeFilters = {
-                @ComponentScan.Filter( {
+                @ComponentScan.Filter({
                         Dao.class,
                         EntityService.class,
                         FrameworkService.class
@@ -46,77 +46,79 @@ import org.springframework.security.core.userdetails.UserDetailsService;
         )}
 )
 public class AdminCoreConfig {
-        protected Class<? extends IDbConfig> getDbSetting(){
-                return ProductDbConfig.class;
+    private static void dataServiceManagerDoInitialize(DataServiceManager dataServiceManager) throws ServiceException {
+        IDataService adminDataService = dataServiceManager.getDataServiceByServiceName(TallyAdminDataService.COMPONENT_NAME);
+        IEntityService entityService = adminDataService.getService(IEntityService.COMPONENT_NAME);
+
+        for (AdminProtection res : SecuredResources.getResources()) {
+            CriteriaTransferObject cto = new CriteriaTransferObject();
+            PropertyFilterCriteria propC = new PropertyFilterCriteria("name", res.getName());
+            cto.addFilterCriteria(propC);
+            CriteriaQueryResult cqr = entityService.query(AdminProtection.class, cto);
+            if (cqr.fetchedCount() == 0) {
+                entityService.create(AdminProtection.class, res);
+            }
         }
+    }
 
-        @Bean(name = TallyUserDataService.COMPONENT_NAME)
-        public TallyUserDataService tallyUserDataService(){
-                return new TallyUserDataService(getDbSetting());
-        }
+    protected Class<? extends IDbConfig> getDbSetting() {
+        return ProductDbConfig.class;
+    }
 
-        @Bean(name = TallyAdminDataService.COMPONENT_NAME)
-        public TallyAdminDataService tallyAdminDataService(){
-                return new TallyAdminDataService();
-        }
+    @Bean(name = TallyUserDataService.COMPONENT_NAME)
+    public TallyUserDataService tallyUserDataService() {
+        return new TallyUserDataService(getDbSetting());
+    }
 
-        @Bean(name = TallyBusinessDataService.COMPONENT_NAME)
-        public TallyBusinessDataService tallyBusinessDataService(){
-                return new TallyBusinessDataService();
-        }
+    @Bean(name = TallyAdminDataService.COMPONENT_NAME)
+    public TallyAdminDataService tallyAdminDataService() {
+        return new TallyAdminDataService();
+    }
 
-        @Bean(name = TallyManagementDataService.COMPONENT_NAME)
-        public TallyManagementDataService tallyManagementDataService(){
-                return new TallyManagementDataService();
-        }
+    @Bean(name = TallyBusinessDataService.COMPONENT_NAME)
+    public TallyBusinessDataService tallyBusinessDataService() {
+        return new TallyBusinessDataService();
+    }
 
-        @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
-        public UserDetailsService adminEmployeeDetailsService(){
-                return new AdminEmployeeDetailsServiceImpl();
-        }
+    @Bean(name = TallyManagementDataService.COMPONENT_NAME)
+    public TallyManagementDataService tallyManagementDataService() {
+        return new TallyManagementDataService();
+    }
 
-        @Bean(name = DataServiceManager.COMPONENT_NAME)
-        public DataServiceManager dataServiceManager(){
-                DataServiceManager dataServiceManager = new DataServiceManagerImpl(){
-                        @Override
-                        public void doInitialize() {
-                                dataServiceManagerDoInitialize(this);
-                        }
-                };
+    @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
+    public UserDetailsService adminEmployeeDetailsService() {
+        return new AdminEmployeeDetailsServiceImpl();
+    }
 
-                dataServiceManager.buildingAppendDataService(
-                                TallyUserDataService.COMPONENT_NAME,
-                                tallyUserDataService())
-                        .buildingAppendDataService(
-                                TallyAdminDataService.COMPONENT_NAME,
-                                tallyAdminDataService())
-                        .buildingAppendDataService(
-                                TallyBusinessDataService.COMPONENT_NAME,
-                                tallyBusinessDataService())
-                        .buildingAppendDataService(
-                                TallyManagementDataService.COMPONENT_NAME,
-                                tallyManagementDataService())
-
-                        .buildingAnnounceFinishing();
-
-                return dataServiceManager;
-        }
-
-        private void dataServiceManagerDoInitialize(DataServiceManager dataServiceManager){
-                IDataService adminDataService = dataServiceManager.getDataServiceByServiceName(TallyAdminDataService.COMPONENT_NAME);
-                IEntityService entityService = adminDataService.getService(IEntityService.COMPONENT_NAME);
+    @Bean(name = DataServiceManager.COMPONENT_NAME)
+    public DataServiceManager dataServiceManager() {
+        DataServiceManager dataServiceManager = new DataServiceManagerImpl() {
+            @Override
+            public void doInitialize() {
                 try {
-                        for (AdminProtection res : SecuredResources.getResources()) {
-                                CriteriaTransferObject cto = new CriteriaTransferObject();
-                                PropertyFilterCriteria propC = new PropertyFilterCriteria("name", res.getName());
-                                cto.addFilterCriteria(propC);
-                                CriteriaQueryResult cqr = entityService.query(AdminProtection.class, cto);
-                                if(cqr.fetchedCount() == 0){
-                                        entityService.create(AdminProtection.class, res);
-                                }
-                        }
-                } catch (ServiceException e) {
-                        e.printStackTrace();
+                    dataServiceManagerDoInitialize(this);
+                } catch (ServiceException se) {
+                    throw new BeanCreationException("ServiceException", se);
                 }
-        }
+            }
+        };
+
+        dataServiceManager
+                .buildingAppendDataService(
+                        TallyUserDataService.COMPONENT_NAME,
+                        tallyUserDataService())
+                .buildingAppendDataService(
+                        TallyAdminDataService.COMPONENT_NAME,
+                        tallyAdminDataService())
+                .buildingAppendDataService(
+                        TallyBusinessDataService.COMPONENT_NAME,
+                        tallyBusinessDataService())
+                .buildingAppendDataService(
+                        TallyManagementDataService.COMPONENT_NAME,
+                        tallyManagementDataService())
+
+                .buildingAnnounceFinishing();
+
+        return dataServiceManager;
+    }
 }

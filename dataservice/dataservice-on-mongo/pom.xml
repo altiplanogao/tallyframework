@@ -25,8 +25,12 @@
             <artifactId>meta-descriptor-mongo</artifactId>
         </dependency>
         <dependency>
-        <groupId>org.mongodb</groupId>
-        <artifactId>mongo-java-driver</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>

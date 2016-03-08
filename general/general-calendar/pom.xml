@@ -11,5 +11,23 @@
 
     <artifactId>general-calendar</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.objectlab.kit</groupId>
+            <artifactId>datecalc-common</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.objectlab.kit</groupId>
+            <artifactId>datecalc-joda</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

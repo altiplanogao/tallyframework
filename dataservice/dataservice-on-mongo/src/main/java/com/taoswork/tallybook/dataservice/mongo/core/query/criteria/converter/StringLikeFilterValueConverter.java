@@ -6,6 +6,8 @@ public class StringLikeFilterValueConverter implements FilterValueConverter<Stri
 
     @Override
     public String convert(Class type, String stringValue) {
+        if(null == stringValue)
+            return null;
         return stringValue.toLowerCase();
     }
 

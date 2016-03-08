@@ -6,7 +6,10 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin;
 public class TallyAdminDataDomain {
     public static Class<?>[] persistableEntities() {
         return new Class<?>[]{
-                AdminEmployee.class
+                AdminProtectionSpace.class,
+                AdminProtection.class,
+                AdminEmployee.class,
+                AdminGroup.class,
         };
     }
 
