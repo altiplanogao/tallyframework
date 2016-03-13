@@ -25,7 +25,7 @@
     <properties>
         <tallybook.framework.version>${project.version}</tallybook.framework.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.1.6.RELEASE</spring.version>
+        <spring.version>4.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.0.RELEASE</spring.security.version>
         <thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
         <scalaVersion>2.11.5</scalaVersion>
@@ -986,8 +986,8 @@
                 <scope>compile</scope>
                 <exclusions>
                     <exclusion>
-                        <artifactId>ehcache-core</artifactId>
                         <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

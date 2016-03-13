@@ -4,6 +4,7 @@ import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
 import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
 import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
 import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * Created by Gao Yuan on 2016/2/27.
  */
 @Entity("testuser")
+@PersistEntity(asDefaultPermissionGuardian = true)
 public class TUserAuthority extends UserAuthority<TGroupAuthority> {
 
     private String name;

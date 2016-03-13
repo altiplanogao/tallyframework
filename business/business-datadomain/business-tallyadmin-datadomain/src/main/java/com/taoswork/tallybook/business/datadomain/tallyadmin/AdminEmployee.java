@@ -24,6 +24,7 @@ import java.util.List;
  * Created by Gao Yuan on 2016/2/15.
  */
 @PersistEntity(value = "admin",
+        asDefaultPermissionGuardian = true,
         valueGates = {AdminEmployeeGate.class}
 )
 public class AdminEmployee extends UserAuthority<AdminGroup> {

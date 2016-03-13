@@ -114,8 +114,10 @@ public abstract class DataServiceBase implements IDataService {
 //        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(annotatedClasses);
 //        annotationConfigApplicationContext.setDisplayName(this.getClass().getSimpleName());
             applicationContext = annotationConfigApplicationContext;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
         } finally {
             postConstruct();
             postLoadCheck();
@@ -223,7 +225,7 @@ public abstract class DataServiceBase implements IDataService {
                     LOGGER.error("EntityCatalog with name '{}' already exist, over-writing", typeName);
                 }
                 EntityCatalog entityCatalog = new EntityCatalog(entityType);
-                String newResourceName = entityCatalog.getResourceName();
+                String newResourceName = entityCatalog.getResource();
 
                 entityTypeNameToCatalogs.put(typeName, entityCatalog);
                 entityResNameToTypeName.put(newResourceName, typeName);
@@ -239,7 +241,7 @@ public abstract class DataServiceBase implements IDataService {
         if (entityCatalog == null) {
             return null;
         }
-        return entityCatalog.getResourceName();
+        return entityCatalog.getResource();
     }
 
     @Override

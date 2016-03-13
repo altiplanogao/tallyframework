@@ -22,7 +22,9 @@ import java.util.List;
  * Created by Gao Yuan on 2015/4/14.
  */
 @Entity("employee")
-@PersistEntity("employee")
+@PersistEntity(value = "employee",
+        asDefaultPermissionGuardian = true
+)
 public class Employee extends
         //IPermissionUser,
         UserAuthority<Role> {
@@ -34,7 +36,7 @@ public class Employee extends
 
     @Reference(lazy = true)
     @PersistField(required = true, fieldType = FieldType.FOREIGN_KEY)
-    protected BusinessUnit businessUnit;
+    protected Bu bu;
 
     protected EmployeeStatus activeStatus;
 
@@ -62,12 +64,12 @@ public class Employee extends
         return this;
     }
 
-    public BusinessUnit getBusinessUnit() {
-        return businessUnit;
+    public Bu getBu() {
+        return bu;
     }
 
-    public Employee setOrganization(BusinessUnit businessUnit) {
-        this.businessUnit = businessUnit;
+    public Employee setOrganization(Bu bu) {
+        this.bu = bu;
         return this;
     }
 

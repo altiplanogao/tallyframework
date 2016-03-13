@@ -35,7 +35,7 @@ public interface IDataService {
     Map<String, EntityCatalog> getEntityCatalogs();
 
     /**
-     * Convert typeName to resourceName
+     * Convert typeName to resource
      * com.tallybook.data.Person -> person
      * com.tallybook.data.Tool -> tool
      *
@@ -45,7 +45,7 @@ public interface IDataService {
     String getEntityResourceName(String typeName);
 
     /**
-     * Convert resourceName to typeName
+     * Convert resource to typeName
      * person -> com.tallybook.data.Person
      * tool -> com.tallybook.data.Tool
      *

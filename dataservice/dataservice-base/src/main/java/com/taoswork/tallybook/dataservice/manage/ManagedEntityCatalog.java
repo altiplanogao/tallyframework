@@ -15,7 +15,7 @@ public class ManagedEntityCatalog extends EntityCatalog {
     }
 
     public ManagedEntityCatalog(String dataServiceName, EntityCatalog entityCatalog) {
-        super(entityCatalog.getResourceName(), entityCatalog.getEntityInterfaceName());
+        super(entityCatalog);
         this.dataServiceName = dataServiceName;
     }
 

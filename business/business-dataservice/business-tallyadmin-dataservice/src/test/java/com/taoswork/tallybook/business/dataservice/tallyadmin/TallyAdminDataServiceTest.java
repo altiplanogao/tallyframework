@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TestDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.config.TestDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
 import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;

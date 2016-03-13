@@ -16,7 +16,7 @@ public class ModuleUsage extends AbstractDocument {
     protected String description;
     protected String moduleService; // a key for module service url
 
-    protected BusinessUnit bu;
+    protected Bu bu;
     protected boolean producer;
     protected boolean consumer;
     protected boolean hide = false;

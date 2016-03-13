@@ -15,6 +15,7 @@
     <modules>
         <module>business-datadomain</module>
         <module>business-dataservice</module>
+        <module>module-support</module>
     </modules>
 
 

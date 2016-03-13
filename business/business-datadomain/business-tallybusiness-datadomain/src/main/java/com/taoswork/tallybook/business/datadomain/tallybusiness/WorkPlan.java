@@ -21,7 +21,7 @@ public class WorkPlan extends AbstractDocument {
 
     @Reference
     @PersistField(fieldType = FieldType.FOREIGN_KEY)
-    protected BusinessUnit host;
+    protected Bu host;
 
     @Reference
     @PersistField(fieldType = FieldType.FOREIGN_KEY)

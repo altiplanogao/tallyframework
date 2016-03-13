@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.taoswork.tallybook.authority.solution</OriginalElement>
+  <nodes>
+    <node x="380.0" y="1363.0">com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase.Presentation</node>
+    <node x="1329.75" y="0.0">com.taoswork.tallybook.authority.solution.AuthoritySolutionDomain</node>
+    <node x="318.75" y="1025.5">com.taoswork.tallybook.authority.solution.domain.user.UserAuthority</node>
+    <node x="286.67307692307696" y="0.0">com.taoswork.tallybook.authority.solution.domain.ResourceAccess</node>
+    <node x="0.0" y="645.5">com.taoswork.tallybook.authority.solution.domain.resource.ProtectionLink</node>
+    <node x="323.0" y="392.0">com.taoswork.tallybook.authority.solution.domain.permission.Permission</node>
+    <node x="451.75" y="1014.0">com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority</node>
+    <node x="710.75" y="645.5">com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase</node>
+    <node x="595.75" y="876.0">com.taoswork.tallybook.authority.solution.domain.resource.Protection</node>
+    <node x="192.0" y="1363.0">com.taoswork.tallybook.authority.solution.domain.permission.validation</node>
+    <node x="381.5" y="1256.0">com.taoswork.tallybook.authority.solution.engine</node>
+    <node x="1067.75" y="0.0">com.taoswork.tallybook.authority.solution.domain.IClassifiable</node>
+    <node x="711.75" y="392.0">com.taoswork.tallybook.authority.solution.domain.resource.FilterType</node>
+    <node x="318.5" y="242.0">com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase</node>
+    <node x="0.0" y="1363.0">com.taoswork.tallybook.authority.solution.domain.resource.protection</node>
+    <node x="281.0" y="611.0">com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority</node>
+    <node x="531.0" y="1363.0">com.taoswork.tallybook.authority.solution.domain.permission.Permission.Presentation</node>
+    <node x="20.0" y="979.5">com.taoswork.tallybook.authority.solution.domain.ProtectionSpace</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority" target="com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority">
+      <point x="0.0" y="-27.0" />
+      <point x="513.75" y="851.0" />
+      <point x="526.25" y="851.0" />
+      <point x="81.75" y="107.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase" target="com.taoswork.tallybook.authority.solution.domain.ResourceAccess">
+      <point x="40.25" y="-50.0" />
+      <point x="439.25" y="217.0" />
+      <point x="435.67307692307696" y="217.0" />
+      <point x="0.0" y="96.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority" target="com.taoswork.tallybook.authority.solution.domain.permission.Permission">
+      <point x="0.0" y="-107.5" />
+      <point x="0.0" y="84.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.engine" target="com.taoswork.tallybook.authority.solution.domain.resource.Protection">
+      <point x="47.25" y="-15.5" />
+      <point x="491.75" y="1236.0" />
+      <point x="809.25" y="1236.0" />
+      <point x="0.0" y="165.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.user.UserAuthority" target="com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority">
+      <point x="0.0" y="-15.5" />
+      <point x="375.25" y="851.0" />
+      <point x="362.75" y="851.0" />
+      <point x="-81.75" y="107.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.resource.Protection" target="com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase">
+      <point x="0.0" y="-165.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.permission.Permission" target="com.taoswork.tallybook.authority.solution.domain.ResourceAccess">
+      <point x="60.75" y="-84.5" />
+      <point x="505.25" y="367.0" />
+      <point x="490.0" y="367.0" />
+      <point x="490.0" y="217.0" />
+      <point x="535.0064102564102" y="217.0" />
+      <point x="99.33333333333326" y="96.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.engine" target="com.taoswork.tallybook.authority.solution.domain.ProtectionSpace">
+      <point x="-47.25" y="-15.5" />
+      <point x="397.25" y="1236.0" />
+      <point x="130.5" y="1236.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.ProtectionSpace" target="com.taoswork.tallybook.authority.solution.domain.resource.ProtectionLink">
+      <point x="0.0" y="-61.5" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.permission.Permission" target="com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase">
+      <point x="-60.75" y="-84.5" />
+      <point x="383.75" y="367.0" />
+      <point x="399.0" y="367.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase" target="com.taoswork.tallybook.authority.solution.domain.resource.FilterType">
+      <point x="0.0" y="-73.0" />
+      <point x="0.0" y="84.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.engine" target="com.taoswork.tallybook.authority.solution.domain.user.UserAuthority">
+      <point x="-15.75" y="-15.5" />
+      <point x="428.75" y="1226.0" />
+      <point x="375.25" y="1226.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.engine" target="com.taoswork.tallybook.authority.solution.engine">
+      <point x="0.0" y="15.5" />
+      <point x="444.5" y="1307.0" />
+      <point x="361.5" y="1307.0" />
+      <point x="361.5" y="1271.5" />
+      <point x="-63.0" y="-0.0" />
+    </edge>
+    <edge source="com.taoswork.tallybook.authority.solution.engine" target="com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority">
+      <point x="15.75" y="-15.5" />
+      <point x="460.25" y="1226.0" />
+      <point x="513.75" y="1226.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="405.0" y="228.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

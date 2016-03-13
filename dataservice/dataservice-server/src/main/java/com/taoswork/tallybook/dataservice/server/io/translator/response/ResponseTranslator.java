@@ -44,7 +44,7 @@ public class ResponseTranslator {
 
     public void translateRequest(EntityRequest request,
                                  EntityResponse response) {
-        response//.setResourceName(request.getResourceName())
+        response//.setResourceName(request.getResource())
                 .setEntityCeilingType(request.getEntityType())
                 .setEntityType(request.getEntityType())
 //            .setUri(request.getUri())

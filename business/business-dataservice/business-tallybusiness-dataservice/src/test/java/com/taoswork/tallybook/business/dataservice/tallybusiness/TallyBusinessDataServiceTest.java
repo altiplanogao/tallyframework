@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.dataservice.tallybusiness;
 
-import com.taoswork.tallybook.business.dataservice.tallybusiness.conf.TestDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.mongo.config.TestDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import org.junit.Assert;

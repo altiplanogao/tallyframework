@@ -1,7 +1,5 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness;
 
-import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
-import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
@@ -38,7 +36,8 @@ public class Asset extends AbstractDocument {
     @Reference
     //inverse controlled fields:
     @PersistField(fieldType = FieldType.ADDITIONAL_FOREIGN_KEY)
-    protected BusinessUnit owner;
+    protected Bu owner;
+    private List<AssetFacet> facets;
 
     public String getName() {
         return name;
@@ -56,7 +55,7 @@ public class Asset extends AbstractDocument {
         this.description = description;
     }
 
-//    public List<WorkPlan> getWorkPlans() {
+    //    public List<WorkPlan> getWorkPlans() {
 //        return workPlans;
 //    }
 //
@@ -64,11 +63,11 @@ public class Asset extends AbstractDocument {
 //        this.workPlans = workPlans;
 //    }
 //
-    public BusinessUnit getOwner() {
+    public Bu getOwner() {
         return owner;
     }
 
-    public void setOwner(BusinessUnit owner) {
+    public void setOwner(Bu owner) {
         this.owner = owner;
     }
 }
