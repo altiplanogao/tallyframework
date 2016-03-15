@@ -383,6 +383,11 @@
                 <artifactId>module-support</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.taoswork.tallybook</groupId>
+                <artifactId>module-base</artifactId>
+                <version>${tallybook.framework.version}</version>
+            </dependency>
 
 
             <dependency>
@@ -618,6 +623,35 @@
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-remoting</artifactId>
                 <version>${spring.security.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>

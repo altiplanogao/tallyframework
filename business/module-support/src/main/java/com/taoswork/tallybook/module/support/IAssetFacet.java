@@ -2,7 +2,6 @@ package com.taoswork.tallybook.module.support;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2016/3/9.

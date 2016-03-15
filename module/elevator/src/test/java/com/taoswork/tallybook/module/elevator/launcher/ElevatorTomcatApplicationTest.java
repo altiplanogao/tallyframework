@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.module.elevator.launcher;
 
 import com.taoswork.tallybook.module.elevator.def.ElevatorModule;
-import com.taoswork.tallybook.module.io.IModule;
+import com.taoswork.tallybook.module.IModule;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

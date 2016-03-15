@@ -54,7 +54,7 @@ public class FieldMetaMediate implements Serializable {
 
     public void setMetaSeed(IFieldMetaSeed seed) {
         if(this.metaSeed != null){
-            throw new IllegalAccessError("setMetaSeed accessed multiple times");
+            throw new IllegalAccessError("setMetaSeed accessed multiple times: " + basicFieldMetaObject.getDeclaringClassName() + "." + basicFieldMetaObject.getField());
         }
         this.metaSeed = seed;
     }

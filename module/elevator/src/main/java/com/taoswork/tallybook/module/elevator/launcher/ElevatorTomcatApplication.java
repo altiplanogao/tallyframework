@@ -4,21 +4,18 @@ import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfigurat
 import com.taoswork.tallybook.module.elevator.dataservice.ElevatorModuleDataService;
 import com.taoswork.tallybook.module.elevator.dataservice.conf.ModuleConfiguration;
 import com.taoswork.tallybook.module.elevator.def.ElevatorModule;
-import com.taoswork.tallybook.module.io.IModule;
+import com.taoswork.tallybook.module.IModule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.HashMap;

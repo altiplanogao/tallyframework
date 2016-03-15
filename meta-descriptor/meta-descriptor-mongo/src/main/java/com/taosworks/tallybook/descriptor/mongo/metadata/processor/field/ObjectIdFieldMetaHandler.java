@@ -1,5 +1,7 @@
 package com.taosworks.tallybook.descriptor.mongo.metadata.processor.field;
 
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.FieldMetaMediate;
 import com.taoswork.tallybook.descriptor.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.descriptor.metadata.processor.handler.basic.BaseFieldHandler;
@@ -15,7 +17,8 @@ import org.bson.types.ObjectId;
 public class ObjectIdFieldMetaHandler extends BaseFieldHandler{
     @Override
     protected boolean canProcess(Field field, FieldMetaMediate metaMediate) {
-        return ObjectId.class.equals(field.getType());
+        BasicFieldMetaObject bfmo = metaMediate.getBasicFieldMetaObject();
+        return ObjectId.class.equals(field.getType()) && (!bfmo.getFieldType().equals(FieldType.EXTERNAL_FOREIGN_KEY));
     }
 
     @Override

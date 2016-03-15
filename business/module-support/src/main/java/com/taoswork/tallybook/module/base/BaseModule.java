@@ -1,13 +1,26 @@
 package com.taoswork.tallybook.module.base;
 
+import com.taoswork.tallybook.module.IModuleCenter;
+import com.taoswork.tallybook.module.ModuleCenterInfo;
+import com.taoswork.tallybook.module.ModuleInfo;
 import com.taoswork.tallybook.module.io.AssetCategory;
 import com.taoswork.tallybook.module.io.AssetFacet;
-import com.taoswork.tallybook.module.io.IModule;
+import com.taoswork.tallybook.module.IModule;
 import com.taoswork.tallybook.module.io.Sheet;
+import com.taoswork.tallybook.module.security.KeyUtility;
 import com.taoswork.tallybook.module.support.IAssetCategory;
 import com.taoswork.tallybook.module.support.IAssetFacet;
 import com.taoswork.tallybook.module.support.ISheet;
+import org.apache.commons.lang3.SerializationUtils;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.Serializable;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -122,4 +135,39 @@ public abstract class BaseModule implements IModule {
     public AssetFacet getFacet(String facet) {
         return facetCache.get(facet);
     }
+//
+//    public static final String CIPHER_ALGORITHM = "RSA";
+//
+//    private String privateKey(){
+//        return "";
+//    };
+//
+//    private static class VContent implements Serializable{
+//        public String name;
+//        public int content;
+//
+//        public VContent(String name, int content) {
+//            this.name = name;
+//            this.content = content;
+//        }
+//    }
+//
+//    public static boolean moduleRequestVerify(IModuleCenter center, String hereName, String herePrivate, String therePublic) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+//        int rand = new Random().nextInt(Integer.MAX_VALUE - 1);
+//        VContent vContent = new VContent(hereName, rand);
+//
+//        byte[] randBytes = SerializationUtils.serialize(vContent);
+////        Conversion.intToByteArray(rand, 0, randBytes, 0, 4);
+//        Cipher hereCipher = Cipher.getInstance(CIPHER_ALGORITHM);
+//        Key herePrivateKey = KeyUtility.getPrivateKey(CIPHER_ALGORITHM, herePrivate);
+//        hereCipher.init(Cipher.ENCRYPT_MODE, herePrivateKey);
+//        byte[] hereBytes = hereCipher.doFinal(randBytes);
+//
+//        Cipher thereCiper = Cipher.getInstance(CIPHER_ALGORITHM);
+//        Key therePublicKey = KeyUtility.getPubKey(CIPHER_ALGORITHM, therePublic);
+//        thereCiper.init(Cipher.ENCRYPT_MODE, therePublicKey);
+//        byte[] thereBytes = thereCiper.doFinal(hereBytes);
+//
+//
+//    }
 }

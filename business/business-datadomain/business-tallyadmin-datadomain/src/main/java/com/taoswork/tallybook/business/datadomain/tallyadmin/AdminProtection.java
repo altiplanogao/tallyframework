@@ -2,10 +2,14 @@ package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
 import com.taoswork.tallybook.authority.core.ProtectionMode;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import org.mongodb.morphia.annotations.Entity;
 
 /**
  * Created by Gao Yuan on 2016/3/1.
  */
+@Entity("adminprotect")
+@PersistEntity(value = "adminprotect", asDefaultPermissionGuardian = true)
 public class AdminProtection extends Protection {
     public static final String COMMON_NAMESPACE = "admin-namespace";
 

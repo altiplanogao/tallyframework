@@ -64,6 +64,7 @@
     </dependencies>
     <modules>
         <module>elevator</module>
+        <module>module-base</module>
     </modules>
 
 </project>

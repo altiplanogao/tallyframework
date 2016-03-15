@@ -22,6 +22,10 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>business-tallymanagement-datadomain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
             <artifactId>authority-solution</artifactId>
         </dependency>
         <dependency>

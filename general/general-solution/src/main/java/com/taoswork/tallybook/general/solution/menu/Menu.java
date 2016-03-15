@@ -50,6 +50,13 @@ public class Menu implements IMenu {
         ensureQuickMapping();
     }
 
+    Menu(MenuEntryBuilder builder, IMenuEntryUpdater updater){
+        insideRoot = builder.innerMenuEntry();
+        insideRoot.dropInvalidChildren();
+        autoFill(updater);
+        ensureQuickMapping();
+    }
+
     @Override
     public IMenuEntry getEntry(MenuPath path) {
         if(null == path)

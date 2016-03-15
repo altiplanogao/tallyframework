@@ -3,9 +3,11 @@ package com.taoswork.tallybook.module.elevator.launcher;
 import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.mongo.config.TestDatasourceConfiguration;
 import com.taoswork.tallybook.module.elevator.def.ElevatorModule;
-import com.taoswork.tallybook.module.io.IModule;
+import com.taoswork.tallybook.module.IModule;
 import org.springframework.context.annotation.Bean;
+import org.springframework.remoting.httpinvoker.HttpComponentsHttpInvokerRequestExecutor;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
+import org.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 
 /**
@@ -25,6 +27,8 @@ public class ElevatorTomcatTestApplication extends ElevatorTomcatApplication {
         HttpInvokerProxyFactoryBean bean = new HttpInvokerProxyFactoryBean();
         bean.setServiceUrl("http://localhost:" + PORT + "/" + MODULE_SERVICE);
         bean.setServiceInterface(IModule.class);
+        HttpInvokerRequestExecutor requestExecutor = new HttpComponentsHttpInvokerRequestExecutor();
+        bean.setHttpInvokerRequestExecutor(requestExecutor);
         bean.afterPropertiesSet();
         return bean;
     }

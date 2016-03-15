@@ -39,8 +39,7 @@ public class AdminMenuServiceImpl implements AdminMenuService, ApplicationContex
         if(fullMenu != null)
             return;
         try {
-            InputStream fileStream = this.getClass().getClassLoader().getResource("menu/admin-menu.json").openStream();
-            fullMenu = new Menu(fileStream, new IMenuEntryUpdater() {
+            IMenuEntryUpdater updater = new IMenuEntryUpdater() {
                 @Override
                 public void update(IMenuEntry entry) {
                     String entity = entry.getEntity();
@@ -54,9 +53,14 @@ public class AdminMenuServiceImpl implements AdminMenuService, ApplicationContex
                         }
                     }
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+            };
+            fullMenu = MenuBuilder.buildMenu(updater);
+//            InputStream fileStream = this.getClass().getClassLoader().getResource("menu/admin-menu.json").openStream();
+//            fullMenu = new Menu(fileStream, updater);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+        }finally {
+
         }
     }
 

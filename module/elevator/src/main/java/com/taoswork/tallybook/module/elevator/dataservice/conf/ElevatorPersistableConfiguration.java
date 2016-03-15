@@ -3,8 +3,9 @@ package com.taoswork.tallybook.module.elevator.dataservice.conf;
 import com.taoswork.tallybook.dataservice.annotations.Dao;
 import com.taoswork.tallybook.dataservice.annotations.EntityService;
 import com.taoswork.tallybook.dataservice.mongo.config.MongoPersistableConfiguration;
+import com.taoswork.tallybook.module.base.datadomain.CenterDefinition;
 import com.taoswork.tallybook.module.elevator.dataservice.ElevatorModuleDataService;
-import com.taoswork.tallybook.module.elevator.entity.ElevatorModuleDomain;
+import com.taoswork.tallybook.module.elevator.datadomain.ElevatorModuleDomain;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class ElevatorPersistableConfiguration
     protected Class<?>[] createPersistableEntities() {
         List<Class> classes = new ArrayList<Class>();
         CollectionUtils.addAll(classes, ElevatorModuleDomain.persistableEntities());
+        classes.add(CenterDefinition.class);
         return classes.toArray(new Class[]{});
     }
 }
