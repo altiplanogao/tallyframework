@@ -4,7 +4,7 @@ import com.taoswork.tallybook.descriptor.description.descriptor.field.typedcolle
 import com.taoswork.tallybook.descriptor.description.infos.IEntityInfo;
 import com.taoswork.tallybook.descriptor.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
-import com.taoswork.tallybook.descriptor.service.impl.MetaInfoServiceImpl;
+import com.taoswork.tallybook.descriptor.service.impl.BaseMetaInfoServiceImpl;
 import com.taoswork.tallybook.descriptor.service.MetaInfoService;
 import com.taoswork.tallybook.descriptor.service.MetaService;
 import com.taoswork.tallybook.descriptor.jpa.service.JpaMetaServiceImpl;
@@ -36,7 +36,7 @@ public class MetaInfoServiceTest_Fields_Base {
 
     public MetaInfoServiceTest_Fields_Base() {
         metaService = new JpaMetaServiceImpl();
-        metaInfoService = new MetaInfoServiceImpl();
+        metaInfoService = new BaseMetaInfoServiceImpl();
 
         companyMetadata = metaService.generateMeta(CompanyImpl.class, null);
         departmentMetadata = metaService.generateMeta(DepartmentImpl.class, null);

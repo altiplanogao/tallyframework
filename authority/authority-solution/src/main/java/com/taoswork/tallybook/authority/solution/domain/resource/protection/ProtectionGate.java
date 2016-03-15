@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.authority.solution.domain.resource.protection;
 
 import com.taoswork.tallybook.authority.core.ProtectionMode;
+import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.datadomain.base.entity.valuegate.BaseEntityGate;
 
@@ -11,7 +12,7 @@ public class ProtectionGate extends BaseEntityGate<Protection> {
     @Override
     protected void doStore(Protection entity, Protection oldEntity) {
         if (entity.getProtectionMode() == null){
-            entity.setProtectionMode(ProtectionMode.FitAll);
+            entity.setProtectionMode(DProtectionMode.FitAll);
         }
     }
 
@@ -19,7 +20,7 @@ public class ProtectionGate extends BaseEntityGate<Protection> {
     protected void doFetch(Protection entity) {
         if (entity != null){
             if(entity.getProtectionMode() == null){
-                entity.setProtectionMode(ProtectionMode.FitAll);
+                entity.setProtectionMode(DProtectionMode.FitAll);
             }
         }
     }

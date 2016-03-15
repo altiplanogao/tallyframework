@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
-import com.taoswork.tallybook.authority.core.ProtectionMode;
+import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import org.mongodb.morphia.annotations.Entity;
@@ -17,10 +17,10 @@ public class AdminProtection extends Protection {
     }
 
     public AdminProtection(Class resource) {
-        this(resource, ProtectionMode.FitAll, true);
+        this(resource, DProtectionMode.FitAll, true);
     }
 
-    public AdminProtection(Class resource, ProtectionMode mode, boolean masterControlled) {
+    public AdminProtection(Class resource, DProtectionMode mode, boolean masterControlled) {
         this.setProtectionSpace(AdminProtectionSpace.COMMON_SPACE_NAME);
         this.setNamespace(COMMON_NAMESPACE);
         this.setName(resource.getSimpleName());

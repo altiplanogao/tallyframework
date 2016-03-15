@@ -30,6 +30,7 @@ public class Asset extends AbstractDocument {
     @PresentationField(order = 4, visibility = Visibility.GRID_HIDE)
     protected String description;
 
+    @PersistField(fieldType = FieldType.ENUMERATION)
     protected Privacy privacy;
 //
 //    @Reference

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.descriptor.description.service;
 
 import com.taoswork.tallybook.descriptor.jpa.service.JpaMetaServiceImpl;
-import com.taoswork.tallybook.descriptor.service.impl.MetaInfoServiceImpl;
+import com.taoswork.tallybook.descriptor.service.impl.BaseMetaInfoServiceImpl;
 import com.taoswork.tallybook.descriptor.service.MetaInfoService;
 import com.taoswork.tallybook.descriptor.service.MetaService;
 import org.junit.After;
@@ -17,7 +17,7 @@ public class MetaInfoServiceTest_CompanyImpl {
     @Before
     public void setup() {
         metaService = new JpaMetaServiceImpl();
-        metaInfoService = new MetaInfoServiceImpl();
+        metaInfoService = new BaseMetaInfoServiceImpl();
     }
 
     @After

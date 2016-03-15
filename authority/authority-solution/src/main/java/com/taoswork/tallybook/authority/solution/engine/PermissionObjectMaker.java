@@ -10,6 +10,7 @@ import com.taoswork.tallybook.authority.core.resource.impl.KProtection;
 import com.taoswork.tallybook.authority.solution.domain.ResourceAccess;
 import com.taoswork.tallybook.authority.solution.domain.permission.Permission;
 import com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase;
+import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase;
 import com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority;
@@ -27,7 +28,7 @@ public class PermissionObjectMaker {
         String resource = sr.getResource();
         KProtection protection = new KProtection(resource);
         protection.setMasterControlled(sr.isMasterControlled());
-        protection.setProtectionMode(sr.getProtectionMode());
+        protection.setProtectionMode(DProtectionMode.convert(sr.getProtectionMode()));
         Map<String, ProtectionCase> cases = sr.getCases();
         if(cases != null){
             for(ProtectionCase _case : cases.values()){

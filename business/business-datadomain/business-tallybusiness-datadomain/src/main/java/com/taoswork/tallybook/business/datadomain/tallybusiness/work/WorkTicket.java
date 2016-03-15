@@ -6,6 +6,10 @@ import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationDate;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
@@ -37,7 +41,13 @@ public class WorkTicket extends AbstractDocument {
     @PersistField(fieldType = FieldType.FOREIGN_KEY)
     protected WorkPlan workPlan;
 
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationField(visibility = Visibility.GRID_HIDE)
+    @PresentationDate(cellMode = DateCellMode.DateAndTime)
     protected Date startWorkingTime;
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationField(visibility = Visibility.GRID_HIDE)
+    @PresentationDate(cellMode = DateCellMode.DateAndTime)
     protected Date endWorkingTime;
 
     @Reference

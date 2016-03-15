@@ -21,6 +21,10 @@ public class FM2IPool {
     private final Map<Class, IFM2I> fm2is;
     public FM2IPool(){
         fm2is = new ConcurrentHashMap<Class, IFM2I>();
+        addFM2Is();
+    }
+
+    protected void addFM2Is(){
         addFM2I(new StringFM2I());
         addFM2I(new EnumFM2I());
         addFM2I(new BooleanFM2I());
@@ -41,7 +45,7 @@ public class FM2IPool {
         addFM2I(new AdornedLookupMapFM2I());
     }
 
-    private void addFM2I(FM2I fm2i){
+    protected void addFM2I(FM2I fm2i){
         Class<? extends IFieldMeta> c = fm2i.targetMeta();
         if(fm2is.containsKey(c)){
             throw new IllegalArgumentException("Duplicated handler");

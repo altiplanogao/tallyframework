@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.descriptor.description.builder;
 
+import com.taoswork.tallybook.descriptor.description.builder.m2i.FM2IPool;
 import com.taoswork.tallybook.descriptor.description.descriptor.base.NamedOrderedInfo;
 import com.taoswork.tallybook.descriptor.description.descriptor.field.IFieldInfo;
 import com.taoswork.tallybook.descriptor.description.descriptor.group.GroupInfoImpl;
@@ -16,13 +17,19 @@ import java.util.*;
  * Created by Gao Yuan on 2015/6/25.
  */
 public final class EntityInfoBuilder {
+    private final FM2IPool fm2IPool;
+
+    public EntityInfoBuilder(FM2IPool fm2IPool) {
+        this.fm2IPool = fm2IPool;
+    }
 
     private EntityInfoBuilder() throws IllegalAccessException {
         throw new IllegalAccessException("EntityInfoBuilder: Not instance-able object");
     }
 
-    public static EntityInfo build(IClassMeta classMeta) {
-        RawEntityInfo rawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(classMeta);
+    public EntityInfo build(IClassMeta classMeta) {
+        RawEntityInfoBuilder builder = new RawEntityInfoBuilder(fm2IPool);
+        RawEntityInfo rawEntityInfo = builder.buildRawEntityInfo(classMeta);
 
         Class entityType = classMeta.getEntityClz();
         boolean withHierarchy = classMeta.containsHierarchy();
@@ -31,7 +38,7 @@ public final class EntityInfoBuilder {
         if (refEntries != null && !refEntries.isEmpty()) {
             for (Class entry : refEntries) {
                 IClassMeta entryCm = classMeta.getReferencingClassMeta(entry);
-                RawEntityInfo entryRawEntityInfo = RawEntityInfoBuilder.buildRawEntityInfo(entryCm);
+                RawEntityInfo entryRawEntityInfo = builder.buildRawEntityInfo(entryCm);
                 EntityInfo entryEntityInfo = build(entry, entryRawEntityInfo, false, null);
                 childInfoMap.put(entry.getName(), entryEntityInfo);
             }
@@ -40,7 +47,7 @@ public final class EntityInfoBuilder {
         return entityInfo;
     }
 
-    private static EntityInfo build(Class entityType, RawEntityInfo rawEntityInfo, boolean withHierarchy, Map<String, EntityInfo> childInfoMap) {
+    private EntityInfo build(Class entityType, RawEntityInfo rawEntityInfo, boolean withHierarchy, Map<String, EntityInfo> childInfoMap) {
         Map<String, IFieldInfo> fields = rawEntityInfo.getFields();
         EntityInfoImpl entityInfo = null;
         {//make tabs

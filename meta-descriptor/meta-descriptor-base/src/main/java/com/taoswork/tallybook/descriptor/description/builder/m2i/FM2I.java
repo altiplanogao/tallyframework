@@ -19,7 +19,6 @@ public abstract class FM2I<Fm extends IFieldMeta> implements IFM2I {
         return name;
     }
 
-
     public static void setFieldInfoCommonFields(IFieldMeta fm, IFieldInfoRW fi) {
         fi.setOrder(fm.getOrder());
         fi.setRequired(fm.isRequired());

@@ -5,6 +5,9 @@ import com.taoswork.tallybook.business.datadomain.tallymanagement.ModuleEntry;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationDate;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationExternalForeignKey;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import org.bson.types.ObjectId;
@@ -32,7 +35,11 @@ public class ModuleUsage extends AbstractDocument {
 
     protected boolean hide = false;
 
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationDate(cellMode = DateCellMode.Date, mode = DateMode.Date)
     protected Date availableFrom;
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationDate(cellMode = DateCellMode.Date, mode = DateMode.Date)
     protected Date availableTo;
 
     public ObjectId getModuleId() {

@@ -20,6 +20,7 @@ import java.util.List;
 @Entity("workplan")
 @PersistEntity("workplan")
 public class WorkPlan extends AbstractDocument {
+    @PersistField(fieldType = FieldType.NAME)
     protected String name;
     protected String description;
 

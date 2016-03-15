@@ -4,6 +4,9 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.subject.Employee
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationDate;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
@@ -25,8 +28,11 @@ public class WorkFeedback extends AbstractDocument {
     @PersistField(fieldType = FieldType.FOREIGN_KEY)
     protected Employee writer;
 
+    @PersistField(fieldType = FieldType.DATE, editable = false)
+    @PresentationDate(cellMode = DateCellMode.DateAndTime, mode = DateMode.DateTime)
     protected Date date;
 
+    @PersistField(fieldType = FieldType.HTML)
     protected String content;
 
     public WorkTicket getWorkTicket() {

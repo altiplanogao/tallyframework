@@ -6,6 +6,7 @@ import com.taoswork.tallybook.authority.solution.domain.ProtectionSpace;
 import com.taoswork.tallybook.authority.solution.domain.ResourceAccess;
 import com.taoswork.tallybook.authority.solution.domain.permission.Permission;
 import com.taoswork.tallybook.authority.solution.domain.permission.PermissionCase;
+import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
 import com.taoswork.tallybook.authority.solution.domain.resource.FilterType;
 import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
 import com.taoswork.tallybook.authority.solution.domain.resource.ProtectionCase;
@@ -77,7 +78,7 @@ public class PermissionMockuper {
         sr.setNamespace(tenant);
         sr.setResource(resource.getName());
         sr.setName(resource.getSimpleName());
-        sr.setProtectionMode(pm);
+        sr.setProtectionMode(DProtectionMode.convert(pm));
         sr.setMasterControlled(masterControlled);
 
         if(addCases) {

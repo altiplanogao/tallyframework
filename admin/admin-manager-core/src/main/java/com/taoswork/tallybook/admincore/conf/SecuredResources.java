@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.admincore.conf;
 
-import com.taoswork.tallybook.authority.core.ProtectionMode;
+import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminGroup;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminProtection;
@@ -17,9 +17,9 @@ public class SecuredResources {
 
     static {
         List<AdminProtection> tempResources = new ArrayList<AdminProtection>();
-        tempResources.add(new AdminProtection(AdminProtection.class, ProtectionMode.FitAll, true));
-        tempResources.add(new AdminProtection(AdminEmployee.class, ProtectionMode.FitAll, true));
-        tempResources.add(new AdminProtection(AdminGroup.class, ProtectionMode.FitAll, true));
+        tempResources.add(new AdminProtection(AdminProtection.class, DProtectionMode.FitAll, true));
+        tempResources.add(new AdminProtection(AdminEmployee.class, DProtectionMode.FitAll, true));
+        tempResources.add(new AdminProtection(AdminGroup.class, DProtectionMode.FitAll, true));
         resources = Collections.unmodifiableList(tempResources);
     }
 

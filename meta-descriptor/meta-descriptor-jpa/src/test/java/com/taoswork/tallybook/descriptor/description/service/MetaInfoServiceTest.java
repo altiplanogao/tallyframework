@@ -2,7 +2,7 @@ package com.taoswork.tallybook.descriptor.description.service;
 
 import com.taoswork.tallybook.descriptor.description.infos.main.EntityInfo;
 import com.taoswork.tallybook.descriptor.jpa.service.JpaMetaServiceImpl;
-import com.taoswork.tallybook.descriptor.service.impl.MetaInfoServiceImpl;
+import com.taoswork.tallybook.descriptor.service.impl.BaseMetaInfoServiceImpl;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.classtree.EntityClassTree;
 import com.taoswork.tallybook.descriptor.metadata.classtree.EntityClassTreeAccessor;
@@ -26,8 +26,8 @@ public class MetaInfoServiceTest {
     @Before
     public void setup() {
         metaService = new JpaMetaServiceImpl();
-        MetaInfoServiceImpl metaInfoServiceImpl
-                = new MetaInfoServiceImpl();
+        BaseMetaInfoServiceImpl metaInfoServiceImpl
+                = new BaseMetaInfoServiceImpl();
         metaInfoService = metaInfoServiceImpl;
     }
 

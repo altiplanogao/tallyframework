@@ -1,6 +1,13 @@
 package com.taoswork.tallybook.business.datadomain.tallymanagement;
 
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateCellMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.DateMode;
+import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationDate;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.Entity;
 
@@ -15,8 +22,13 @@ import java.util.List;
 public class ModuleEntry extends AbstractDocument {
 
     protected String name;
+    @PresentationField(visibility = Visibility.GRID_HIDE)
     protected String fullName;
+
+    @PresentationField(visibility = Visibility.GRID_HIDE)
     protected String description;
+
+    @PresentationField(visibility = Visibility.GRID_HIDE)
     protected String moduleService; // a key for module service url
 
 //    protected List<String> assetFacets;
@@ -24,8 +36,13 @@ public class ModuleEntry extends AbstractDocument {
     protected ManagementPrivacy privacy  = ManagementPrivacy.Public;
 
     protected String version;
+
+    @PersistField(fieldType = FieldType.DATE)
+    @PresentationDate(mode = DateMode.Date, cellMode = DateCellMode.Date)
     protected Date updateDate;
 
+    @PersistField(fieldType = FieldType.STRING)
+    @PresentationField(visibility = Visibility.HIDDEN_ALL)
     protected String publicKey;
 
     public String getName() {

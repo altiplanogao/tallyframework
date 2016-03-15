@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.descriptor.service.impl;
 
 import com.taoswork.tallybook.descriptor.description.builder.EntityInfoBuilder;
+import com.taoswork.tallybook.descriptor.description.builder.m2i.FM2IPool;
 import com.taoswork.tallybook.descriptor.description.infos.EntityInfoType;
 import com.taoswork.tallybook.descriptor.description.infos.IEntityInfo;
 import com.taoswork.tallybook.descriptor.description.infos.main.EntityInfo;
@@ -16,9 +17,19 @@ import java.lang.reflect.Constructor;
  * Created by Gao Yuan on 2015/5/27.
  */
 @ThreadSafe
-public class MetaInfoServiceImpl implements
+public class BaseMetaInfoServiceImpl implements
         MetaInfoService {
-    private static Logger LOGGER = LoggerFactory.getLogger(MetaInfoServiceImpl.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(BaseMetaInfoServiceImpl.class);
+
+    private final FM2IPool fm2IPool;
+
+    public BaseMetaInfoServiceImpl(){
+        fm2IPool = createFM2IPool();
+    }
+
+    protected FM2IPool createFM2IPool(){
+        return new FM2IPool();
+    }
 
     @Override
     public IEntityInfo generateEntityInfo(IClassMeta classMeta, EntityInfoType infoType) {
@@ -28,7 +39,7 @@ public class MetaInfoServiceImpl implements
 
     @Override
     public EntityInfo generateEntityMainInfo(IClassMeta classMeta) {
-        EntityInfo entityInfo = EntityInfoBuilder.build(classMeta);
+        EntityInfo entityInfo = new EntityInfoBuilder(fm2IPool).build(classMeta);
         return entityInfo;
     }
 

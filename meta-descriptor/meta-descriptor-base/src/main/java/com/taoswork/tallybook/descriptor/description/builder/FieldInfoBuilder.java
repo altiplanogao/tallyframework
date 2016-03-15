@@ -19,20 +19,19 @@ import java.util.Map;
  * Created by Gao Yuan on 2015/10/24.
  */
 public class FieldInfoBuilder {
-    private static FM2IPool fm2IPool = new FM2IPool();
+    private final FM2IPool fm2IPool;
 
-    private static IFieldInfo createFieldInfo(final IClassMeta topMeta, String prefix, IFieldMeta fieldMeta,
+    public FieldInfoBuilder(FM2IPool fm2IPool) {
+        this.fm2IPool = fm2IPool;
+    }
+
+    private IFieldInfo createFieldInfo(final IClassMeta topMeta, String prefix, IFieldMeta fieldMeta,
                                               Collection<Class> collectionTypeReferenced) {
         IFieldInfo resultByFm2i = fm2IPool.createByFM2I(topMeta, prefix, fieldMeta, collectionTypeReferenced);
         if(resultByFm2i != null){
             return resultByFm2i;
         }
 
-        String name = FM2I.prepend(prefix, fieldMeta.getName());
-        String friendlyName = fieldMeta.getFriendlyName();
-        boolean editable = fieldMeta.isEditable();
-
-        IFieldInfoRW result = null;
         if (fieldMeta instanceof EmbeddedFieldMeta) {
             //handled in createFieldInfos()
             throw new MetadataException("EmbeddedFieldMeta shouldn't e handed here.");
@@ -40,18 +39,15 @@ public class FieldInfoBuilder {
         } else {
             throw new MetadataException("Unexpected FieldMeta type: " + fieldMeta.getClass());
         }
-        //FM2I.setFieldInfoCommonFields(fieldMeta, result);
-
-        //return result;
     }
 
-    public static Collection<IFieldInfo> createFieldInfos(IClassMeta topMeta, IFieldMeta fieldMeta, Collection<Class> collectionTypeReferenced) {
+    public Collection<IFieldInfo> createFieldInfos(IClassMeta topMeta, IFieldMeta fieldMeta, Collection<Class> collectionTypeReferenced) {
         List<IFieldInfo> result = new ArrayList<IFieldInfo>();
         createFieldInfos(topMeta, "", fieldMeta, result, collectionTypeReferenced);
         return result;
     }
 
-    private static int createFieldInfos(final IClassMeta topMeta, String prefix, IFieldMeta fieldMeta,
+    private int createFieldInfos(final IClassMeta topMeta, String prefix, IFieldMeta fieldMeta,
                                         Collection<IFieldInfo> fieldInfos, Collection<Class> collectionTypeReferenced) {
         int counter = 0;
         if (fieldMeta instanceof EmbeddedFieldMeta) {

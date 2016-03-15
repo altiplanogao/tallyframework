@@ -75,8 +75,8 @@ public class Protection
 
     @PersistField(fieldType = FieldType.ENUMERATION, required = true, length = 10)
     @PresentationField(order = 5)
-    @PresentationEnum(enumeration = ProtectionMode.class)
-    protected ProtectionMode protectionMode;
+    @PresentationEnum(enumeration = DProtectionMode.class)
+    protected DProtectionMode protectionMode;
 
     @PersistField(fieldType = FieldType.BOOLEAN, required = true)
     @PresentationField(order = 6)
@@ -152,11 +152,11 @@ public class Protection
         this.masterControlled = masterControlled;
     }
 
-    public ProtectionMode getProtectionMode() {
+    public DProtectionMode getProtectionMode() {
         return protectionMode;
     }
 
-    public void setProtectionMode(ProtectionMode protectionMode) {
+    public void setProtectionMode(DProtectionMode protectionMode) {
         this.protectionMode = protectionMode;
     }
 

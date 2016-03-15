@@ -30,7 +30,6 @@ import org.springframework.context.annotation.Import;
  * Created by Gao Yuan on 2016/2/13.
  */
 @Configuration
-@Import(StandAloneBeanConfiguration.class)
 public class DataServiceBeanBaseConfiguration
     implements
         ApplicationContextAware,

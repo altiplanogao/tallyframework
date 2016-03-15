@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.descriptor.description.builder;
 
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
+import com.taoswork.tallybook.descriptor.description.builder.m2i.FM2IPool;
 import com.taoswork.tallybook.descriptor.description.descriptor.base.impl.NamedInfoRW;
 import com.taoswork.tallybook.descriptor.description.descriptor.base.impl.NamedOrderedInfoRW;
 import com.taoswork.tallybook.descriptor.description.descriptor.field.IBasicFieldInfo;
@@ -25,6 +26,11 @@ import java.util.Map;
  */
 final class RawEntityInfoBuilder {
     private static Logger LOGGER = LoggerFactory.getLogger(RawEntityInfoBuilder.class);
+    private final FM2IPool fm2IPool;
+
+    public RawEntityInfoBuilder(FM2IPool fm2IPool) {
+        this.fm2IPool = fm2IPool;
+    }
 
     private RawEntityInfoBuilder() throws IllegalAccessException {
         throw new IllegalAccessException("RawEntityInfoBuilder: Not instance-able object");
@@ -37,13 +43,13 @@ final class RawEntityInfoBuilder {
      * @param classMeta
      * @return
      */
-    public static RawEntityInfo buildRawEntityInfo(IClassMeta classMeta) {
+    public RawEntityInfo buildRawEntityInfo(IClassMeta classMeta) {
         final RawEntityInfo rawEntityInfo = RawInfoCreator.createRawEntityInfo(classMeta);
         rawEntityInfoAppendMetadata(rawEntityInfo, classMeta);
         return rawEntityInfo;
     }
 
-    private static void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final IClassMeta classMeta) {
+    private void rawEntityInfoAppendMetadata(RawEntityInfo rawEntityInfo, final IClassMeta classMeta) {
         Collection<Class> collectionTypeReferenced = new HashSet<Class>();
 
         final IClassMeta topMeta = classMeta;
@@ -92,7 +98,7 @@ final class RawEntityInfoBuilder {
             RawTabInfo rawTabInfo = rawEntityInfo.getTab(tabName);
             RawGroupInfo rawGroupInfo = rawTabInfo.getGroup(groupName);
 
-            Collection<IFieldInfo> fieldInfos = FieldInfoBuilder.createFieldInfos(topMeta, fieldMeta, collectionTypeReferenced);
+            Collection<IFieldInfo> fieldInfos = new FieldInfoBuilder(fm2IPool).createFieldInfos(topMeta, fieldMeta, collectionTypeReferenced);
             for (IFieldInfo fi : fieldInfos) {
                 if (fi.ignored())
                     continue;
