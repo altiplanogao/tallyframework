@@ -5,6 +5,4 @@ package com.taoswork.tallybook.module;
  */
 public interface IModuleCenter {
     String serviceUrl();
-
-    String publicKey();
 }

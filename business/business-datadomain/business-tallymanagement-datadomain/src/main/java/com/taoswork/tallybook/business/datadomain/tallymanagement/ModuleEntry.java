@@ -12,7 +12,6 @@ import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.Entity;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Gao Yuan on 2015/4/16.

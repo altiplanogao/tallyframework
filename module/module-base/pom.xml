@@ -17,6 +17,12 @@
             <artifactId>module-support</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
             <groupId>com.taoswork.tallybook</groupId>
             <artifactId>dataservice-on-mongo</artifactId>
         </dependency>

@@ -62,7 +62,7 @@ public class PersistenceManagerImpl
         return result;
     }
 
-    protected EntityTranslatorOnMetaAccess converter = new EntityTranslatorOnMetaAccess() {
+    protected JpaEntityTranslator converter = new JpaEntityTranslator() {
         @Override
         protected IClassMetaAccess getClassMetaAccess() {
             return entityMetaAccess;

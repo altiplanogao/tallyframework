@@ -9,7 +9,7 @@ import com.taoswork.tallybook.descriptor.dataio.in.translator.TranslateException
 /**
  * Created by Gao Yuan on 2015/11/15.
  */
-abstract class EntityTranslatorOnMetaAccess extends EntityTranslator {
+abstract class JpaEntityTranslator extends EntityTranslator {
 
     public Persistable convert(Entity source, String id) throws ServiceException {
         try {
