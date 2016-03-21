@@ -49,12 +49,12 @@ public class MongoEntityServiceImpl
     @Resource(name = SecuredEntityAccess.COMPONENT_NAME)
     protected SecuredEntityAccess securedEntityAccess;
 
-    protected MongoEntityTranslator converter = new MongoEntityTranslator() {
-        @Override
-        protected IClassMetaAccess getClassMetaAccess() {
-            return entityMetaAccess;
-        }
-    };
+//    protected MongoEntityTranslator converter = new MongoEntityTranslator() {
+//        @Override
+//        protected IClassMetaAccess getClassMetaAccess() {
+//            return entityMetaAccess;
+//        }
+//    };
 
     @Override
     public AdvancedDatastore getAdvancedDatastore() {
@@ -114,41 +114,41 @@ public class MongoEntityServiceImpl
         return false;
     }
 
-    @Override
-    public <T extends PersistableDocument> PersistableResult<T> create(Entity entity) throws ServiceException {
-        try {
-            T instance = (T) converter.convert(entity, null);
-            Class ceilingType = getCeilingType(entity);
-            return this.create(ceilingType, instance);
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-        }
-        return null;
-    }
-
-    @Override
-    public <T extends PersistableDocument> PersistableResult<T> update(Entity entity) throws ServiceException {
-        try {
-            T instance = (T) converter.convert(entity, null);
-            Class ceilingType = getCeilingType(entity);
-            return this.update(ceilingType, instance);
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-        }
-        return null;
-    }
-
-    @Override
-    public <T extends PersistableDocument> boolean delete(Entity entity, String id) throws ServiceException {
-        try {
-            Class ceilingType = getCeilingType(entity);
-            T instance = (T) converter.convert(entity, id);
-            return this.delete(ceilingType, instance);
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-        }
-        return false;
-    }
+//    @Override
+//    public <T extends PersistableDocument> PersistableResult<T> create(Entity entity) throws ServiceException {
+//        try {
+//            T instance = (T) converter.convert(entity, null);
+//            Class ceilingType = getCeilingType(entity);
+//            return this.create(ceilingType, instance);
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public <T extends PersistableDocument> PersistableResult<T> update(Entity entity) throws ServiceException {
+//        try {
+//            T instance = (T) converter.convert(entity, null);
+//            Class ceilingType = getCeilingType(entity);
+//            return this.update(ceilingType, instance);
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public <T extends PersistableDocument> boolean delete(Entity entity, String id) throws ServiceException {
+//        try {
+//            Class ceilingType = getCeilingType(entity);
+//            T instance = (T) converter.convert(entity, id);
+//            return this.delete(ceilingType, instance);
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//        }
+//        return false;
+//    }
 
     @Override
     public <T extends PersistableDocument> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {

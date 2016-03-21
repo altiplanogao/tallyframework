@@ -8,7 +8,7 @@ import com.taoswork.tallybook.dataservice.core.entityservice.BaseEntityServiceIm
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
-import com.taoswork.tallybook.descriptor.dataio.in.Entity;
+//import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +42,15 @@ public final class JpaEntityServiceImpl
         return null;
     }
 
-    @Override
-    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
-        try {
-            return persistenceService.create(entity);
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-        }
-        return null;
-    }
+//    @Override
+//    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
+//        try {
+//            return persistenceService.create(entity);
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//        }
+//        return null;
+//    }
 
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
@@ -72,15 +72,15 @@ public final class JpaEntityServiceImpl
         return null;
     }
 
-    @Override
-    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
-        try {
-            return persistenceService.update(entity);
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-        }
-        return null;
-    }
+//    @Override
+//    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
+//        try {
+//            return persistenceService.update(entity);
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//        }
+//        return null;
+//    }
 
     @Override
     public <T extends Persistable> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
@@ -93,16 +93,16 @@ public final class JpaEntityServiceImpl
         return false;
     }
 
-    @Override
-    public <T extends Persistable> boolean delete(final Entity entity, String id) throws ServiceException {
-        try {
-            persistenceService.delete(entity, id);
-            return true;
-        } catch (Exception e) {
-            entityAccessExceptionHandler(e);
-            return false;
-        }
-    }
+//    @Override
+//    public <T extends Persistable> boolean delete(final Entity entity, String id) throws ServiceException {
+//        try {
+//            persistenceService.delete(entity, id);
+//            return true;
+//        } catch (Exception e) {
+//            entityAccessExceptionHandler(e);
+//            return false;
+//        }
+//    }
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {

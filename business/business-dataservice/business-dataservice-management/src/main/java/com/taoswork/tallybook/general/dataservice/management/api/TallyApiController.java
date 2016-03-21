@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.general.dataservice.management.api;
 
 import com.taoswork.tallybook.dataservice.IDataService;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.server.io.request.EntityQueryRequest;
 import com.taoswork.tallybook.dataservice.server.io.request.EntityReadRequest;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameter;

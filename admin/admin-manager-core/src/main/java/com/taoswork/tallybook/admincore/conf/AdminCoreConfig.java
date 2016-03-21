@@ -18,8 +18,8 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCrite
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
 import com.taoswork.tallybook.dataservice.jpa.config.db.ProductDbConfig;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
-import com.taoswork.tallybook.dataservice.manage.impl.DataServiceManagerImpl;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.impl.DataServiceManagerImpl;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import org.springframework.beans.factory.BeanCreationException;

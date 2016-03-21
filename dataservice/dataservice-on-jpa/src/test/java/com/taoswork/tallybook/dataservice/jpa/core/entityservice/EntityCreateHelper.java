@@ -1,7 +1,11 @@
 package com.taoswork.tallybook.dataservice.jpa.core.entityservice;
 
+import com.taoswork.tallybook.dataservice.IDataService;
 import com.taoswork.tallybook.dataservice.PersistableResult;
+import com.taoswork.tallybook.dataservice.core.persistence.InputEntityTranslator;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
+import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
+import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.testmaterial.jpa.domain.zoo.ZooKeeper;
 import com.taoswork.tallybook.testmaterial.jpa.domain.zoo.impl.ZooKeeperImpl;
@@ -11,8 +15,12 @@ import org.junit.Assert;
  * Created by Gao Yuan on 2015/9/23.
  */
 public class EntityCreateHelper {
-    public static int createPeopleEntityWith(JpaEntityService jpaEntityService,
+    public static int createPeopleEntityWith(IDataService dataService,
                                              String namePrefix, int postfixStartingIndex, int createAttempt) {
+        InputEntityTranslator translator = new InputEntityTranslator();
+        JpaEntityService jpaEntityService = dataService.getService(IEntityService.COMPONENT_NAME);
+        EntityMetaAccess metaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+
         int created = 0;
         try {
             for (int i = 0; i < createAttempt; ++i) {
@@ -24,7 +32,8 @@ public class EntityCreateHelper {
                         .setType(ZooKeeperImpl.class)
                         .setCeilingType(ZooKeeper.class)
                         .setProperty("name", name);
-                PersistableResult<ZooKeeper> adminRes = jpaEntityService.create(adminEntity);
+                ZooKeeper adminP = (ZooKeeper)translator.convert(metaAccess, adminEntity, null);
+                PersistableResult<ZooKeeper> adminRes = jpaEntityService.create(ZooKeeper.class, adminP);
                 ZooKeeper admin = adminRes.getValue();
 
                 Long id = admin.getId();

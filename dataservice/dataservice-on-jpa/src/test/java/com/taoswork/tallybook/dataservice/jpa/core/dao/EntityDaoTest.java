@@ -40,7 +40,7 @@ public class EntityDaoTest {
     public void testDynamicEntityDao() throws ServiceException {
         MethodTimeCounter methodTimeCounter = new MethodTimeCounter(LOGGER);
 
-        JpaEntityService entityService = dataService.getService(IEntityService.COMPONENT_NAME);
+//        JpaEntityService entityService = dataService.getService(IEntityService.COMPONENT_NAME);
         EntityDao entityDao = dataService.getService(EntityDao.COMPONENT_NAME);
         Assert.assertNotNull(entityDao);
 
@@ -60,7 +60,7 @@ public class EntityDaoTest {
         }
 
 
-        created += EntityCreateHelper.createPeopleEntityWith(entityService, nameAAA, created, createAttemptA);
+        created += EntityCreateHelper.createPeopleEntityWith(dataService, nameAAA, created, createAttemptA);
 
         Assert.assertTrue(created == (createAttemptA));
 

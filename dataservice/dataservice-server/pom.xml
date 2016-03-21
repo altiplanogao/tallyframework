@@ -16,6 +16,14 @@
             <groupId>com.taoswork.tallybook</groupId>
             <artifactId>dataservice-base</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>dataservice-on-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallybook</groupId>
+            <artifactId>dataservice-on-mongo</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

@@ -2,11 +2,11 @@ package com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic;
 
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseNonCollectionFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.IFieldMetaSeed;
 
-public final class EnumFieldMeta extends BaseNonCollectionFieldMeta implements IFieldMeta {
+public final class EnumFieldMeta extends BasePrimitiveFieldMeta {
     private final Class enumerationType;
 
     public EnumFieldMeta(BasicFieldMetaObject bfmo, Class enumerationType) {
@@ -28,8 +28,8 @@ public final class EnumFieldMeta extends BaseNonCollectionFieldMeta implements I
     }
 
     @Override
-    public boolean isPrimitiveField() {
-        return true;
+    public Object getValueFromString(String valStr) {
+        return Enum.valueOf(enumerationType, valStr);
     }
 
     /**

@@ -80,10 +80,15 @@ public abstract class BaseController {
         return result;
     }
 
-    private ThreadLocal<ObjectMapper> objectMapper = ThreadLocalHelper.createThreadLocal(ObjectMapper.class);
+    protected ObjectMapper createObjectMapper(){
+        return new ObjectMapper();
+    }
+
+    private ObjectMapper objectMapper = createObjectMapper();
+
     protected String getObjectInJson(Object data) {
         try {
-            return objectMapper.get().writeValueAsString(data);
+            return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException exp) {
             throw new RuntimeException(exp);
         }

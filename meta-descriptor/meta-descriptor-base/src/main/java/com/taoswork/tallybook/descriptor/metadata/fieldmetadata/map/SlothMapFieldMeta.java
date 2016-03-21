@@ -2,8 +2,6 @@ package com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map;
 
 import com.taoswork.tallybook.datadomain.base.entity.MapField;
 import com.taoswork.tallybook.datadomain.base.entity.MapMode;
-import com.taoswork.tallybook.datadomain.base.presentation.typedcollection.mapentry.IMapEntryDelegate;
-import com.taoswork.tallybook.datadomain.base.presentation.typedcollection.mapentry.MapEntryDelegates;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.exception.MetadataException;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;

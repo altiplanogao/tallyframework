@@ -32,19 +32,14 @@ public class EntityTranslatorTest {
             return null;
         }
     };
-    EntityTranslator translator = new EntityTranslator() {
-        @Override
-        protected IClassMetaAccess getClassMetaAccess() {
-            return classMetaAccess;
-        }
-    };
+    EntityTranslator translator = new EntityTranslator();
 
     @Test
     public void testStringField() throws TranslateException {
         Entity entity = new Entity();
         entity.setType(CompanyImpl.class);
         entity.setProperty("description", "ABCD abcd");
-        ICompany company = (ICompany) translator.translate(entity, null);
+        ICompany company = (ICompany) translator.translate(classMetaAccess, entity, null);
         Assert.assertEquals("ABCD abcd", company.getDescription());
     }
 
@@ -54,12 +49,12 @@ public class EntityTranslatorTest {
         entity.setType(CompanyImpl.class);
         entity.setProperty("locked", "true");
         entity.setProperty("active", "true");
-        ICompany company = (ICompany) translator.translate(entity, null);
+        ICompany company = (ICompany) translator.translate(classMetaAccess, entity, null);
         Assert.assertTrue(company.isLocked());
         Assert.assertTrue(company.isActive());
         entity.setProperty("locked", "false");
         entity.setProperty("active", "false");
-        ICompany company2 = (ICompany) translator.translate(entity, null);
+        ICompany company2 = (ICompany) translator.translate(classMetaAccess, entity, null);
         Assert.assertFalse(company2.isLocked());
         Assert.assertFalse(company2.isActive());
     }
@@ -69,10 +64,10 @@ public class EntityTranslatorTest {
         Entity entity = new Entity();
         entity.setType(CompanyImpl.class);
         entity.setProperty("companyType", CompanyType.National.toString());
-        ICompany company = (ICompany) translator.translate(entity, null);
+        ICompany company = (ICompany) translator.translate(classMetaAccess, entity, null);
         Assert.assertEquals(CompanyType.National, company.getCompanyType());
         entity.setProperty("companyType", CompanyType.Private.toString());
-        ICompany company2 = (ICompany) translator.translate(entity, null);
+        ICompany company2 = (ICompany) translator.translate(classMetaAccess, entity, null);
         Assert.assertEquals(CompanyType.Private, company2.getCompanyType());
     }
 
@@ -84,7 +79,7 @@ public class EntityTranslatorTest {
         entity.setProperty("address.city", "City B");
         entity.setProperty("address.state", "State C");
         entity.setProperty("address.zip", "zip D");
-        ICompany company = (ICompany) translator.translate(entity, null);
+        ICompany company = (ICompany) translator.translate(classMetaAccess, entity, null);
         Address address = company.getAddress();
 
         Assert.assertNotNull(address);
@@ -99,7 +94,7 @@ public class EntityTranslatorTest {
         Entity entity = new Entity();
         entity.setType(EmployeeImpl.class);
         entity.setProperty("department", "{\"id\":-123,\"display\":\"department a\"}");
-        IEmployee employee = (IEmployee) translator.translate(entity, null);
+        IEmployee employee = (IEmployee) translator.translate(classMetaAccess, entity, null);
         Assert.assertNotNull(employee);
         IDepartment department = employee.getDepartment();
         Assert.assertNotNull(department);
@@ -111,7 +106,7 @@ public class EntityTranslatorTest {
         Entity entity = new Entity();
         entity.setType(EmployeeImpl.class);
         entity.setProperty("citizenId", "{\"id\":-123,\"display\":\"Citizen Kane\"}");
-        IEmployee employee = (IEmployee) translator.translate(entity, null);
+        IEmployee employee = (IEmployee) translator.translate(classMetaAccess, entity, null);
         Assert.assertNotNull(employee);
         Assert.assertEquals(-123L, employee.getCitizenId().longValue());
     }

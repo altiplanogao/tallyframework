@@ -13,6 +13,7 @@ import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.Collection;
 
+@Deprecated
 public final class CollectionFieldMeta extends BaseCollectionFieldMeta {
     private final CollectionTypesSetting collectionTypesSetting;
 

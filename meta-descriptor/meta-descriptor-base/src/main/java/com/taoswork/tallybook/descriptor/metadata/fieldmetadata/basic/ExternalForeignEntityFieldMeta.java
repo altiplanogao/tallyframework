@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseNonCollectionFieldMeta;
@@ -12,9 +13,9 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 public final class ExternalForeignEntityFieldMeta
-        extends BaseNonCollectionFieldMeta
-        implements IFieldMeta {
+        extends BaseNonCollectionFieldMeta {
     private final static Logger LOGGER = LoggerFactory.getLogger(ExternalForeignEntityFieldMeta.class);
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     private final Class declareType;
     private final Class targetType;
@@ -54,11 +55,11 @@ public final class ExternalForeignEntityFieldMeta
     public String getTheDataFieldName() {
         return theDataFieldName;
     }
-
-    @Override
-    public boolean isPrimitiveField() {
-        return false;
-    }
+//
+//    @Override
+//    public boolean isPrimitiveField() {
+//        return false;
+//    }
 
     public Field getEntityField() {
         synchronized (this) {

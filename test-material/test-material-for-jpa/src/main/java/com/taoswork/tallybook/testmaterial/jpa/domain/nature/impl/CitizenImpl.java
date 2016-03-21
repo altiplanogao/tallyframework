@@ -14,7 +14,7 @@ import java.util.Map;
 @Table(name = "CITIZEN")
 public class CitizenImpl implements ICitizen {
     @Id
-    private int id;
+    private long id;
 
     @Column(name = "F_NAME")
     private String firstName;

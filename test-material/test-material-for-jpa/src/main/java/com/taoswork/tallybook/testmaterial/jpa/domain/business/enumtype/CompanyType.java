@@ -14,7 +14,7 @@ public enum CompanyType implements IFriendlyEnum<String> {
     National("nat", "National"),
     Multinationals("mul", "Multinationals"),
     Private("pri", "Multinationals"),
-    Unknown("ukn", "Multinationals");
+    Unknown("ukn", "Unknown");
 
     private final String type;
     private final String friendlyType;

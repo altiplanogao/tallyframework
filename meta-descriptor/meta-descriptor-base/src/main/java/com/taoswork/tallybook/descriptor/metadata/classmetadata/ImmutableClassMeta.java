@@ -68,7 +68,7 @@ public final class ImmutableClassMeta implements IClassMeta, Serializable {
         this.nonCollectionFields = CloneUtility.makeClone(cm.getNonCollectionFields());
 
         Map<String, IClassMeta> referencingClassMetadataLocal = new HashMap<String, IClassMeta>();
-        for (Map.Entry<String, IClassMeta> entry : cm.getReadonlyReferencingClassMetadataMap().entrySet()) {
+        for (Map.Entry<String, IClassMeta> entry : cm.getReadonlyReferencingClassMetaMap().entrySet()) {
             IClassMeta ecm = entry.getValue();
             if (!(ecm instanceof ImmutableClassMeta)) {
                 ecm = new ImmutableClassMeta(ecm);
@@ -188,7 +188,7 @@ public final class ImmutableClassMeta implements IClassMeta, Serializable {
     }
 
     @Override
-    public Map<String, IClassMeta> getReadonlyReferencingClassMetadataMap() {
+    public Map<String, IClassMeta> getReadonlyReferencingClassMetaMap() {
         return this.referencingClassMeta;
     }
 

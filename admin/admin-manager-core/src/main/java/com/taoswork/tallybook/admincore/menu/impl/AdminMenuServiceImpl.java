@@ -2,7 +2,7 @@ package com.taoswork.tallybook.admincore.menu.impl;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
 import com.taoswork.tallybook.general.solution.menu.*;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +12,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 
 /**

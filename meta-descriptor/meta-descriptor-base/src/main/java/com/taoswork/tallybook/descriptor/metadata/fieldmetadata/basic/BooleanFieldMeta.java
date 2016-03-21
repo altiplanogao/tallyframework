@@ -3,13 +3,13 @@ package com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.BooleanMode;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseNonCollectionFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.IFieldMetaSeed;
+import org.apache.commons.lang3.StringUtils;
 
 public final class BooleanFieldMeta
-        extends BaseNonCollectionFieldMeta
-        implements IFieldMeta {
+        extends BasePrimitiveFieldMeta {
     private final BooleanMode mode;
 
     public BooleanFieldMeta(BasicFieldMetaObject bfmo, BooleanMode _mode) {
@@ -31,8 +31,10 @@ public final class BooleanFieldMeta
     }
 
     @Override
-    public boolean isPrimitiveField() {
-        return true;
+    public Object getValueFromString(String valStr) {
+        if(StringUtils.isEmpty(valStr))
+            return null;
+        return Boolean.parseBoolean(valStr);
     }
 
     public static class Seed implements IFieldMetaSeed {

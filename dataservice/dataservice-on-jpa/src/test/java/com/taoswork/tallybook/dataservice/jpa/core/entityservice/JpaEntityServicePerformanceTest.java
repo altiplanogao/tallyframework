@@ -1,12 +1,15 @@
 package com.taoswork.tallybook.dataservice.jpa.core.entityservice;
 
+import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.dataservice.IDataService;
 import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dataservice.core.persistence.InputEntityTranslator;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.jpa.servicemockup.TallyMockupDataService;
+import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
@@ -30,15 +33,21 @@ public class JpaEntityServicePerformanceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaEntityServicePerformanceTest.class);
 
     private IDataService dataService = null;
+    private InputEntityTranslator translator = null;
+    private EntityMetaAccess metaAccess = null;
 
     @Before
     public void setup() {
         dataService = new TallyMockupDataService();
+        metaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+        translator = new InputEntityTranslator();
     }
 
     @After
     public void teardown() {
         dataService = null;
+        metaAccess = null;
+        translator = null;
     }
 
     @Test
@@ -60,7 +69,8 @@ public class JpaEntityServicePerformanceTest {
                             .setType(ZooKeeperImpl.class)
                             .setCeilingType(ZooKeeper.class)
                             .setProperty("name", nameAAA + i);
-                    PersistableResult<ZooKeeper> adminRes = entityService.create(adminEntity);
+                    ZooKeeper adminP = (ZooKeeper)translator.convert(metaAccess, adminEntity, null);
+                    PersistableResult<ZooKeeper> adminRes = entityService.create(ZooKeeper.class, adminP);
                     ZooKeeper admin = adminRes.getValue();
                     ids.add(admin.getId());
                     created++;

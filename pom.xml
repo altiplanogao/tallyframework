@@ -41,7 +41,7 @@
         <module>datadomain</module>
         <module>dataservice</module>
         <module>meta-descriptor</module>
-        <module>module</module>
+        <module>module-base</module>
         <module>test-material</module>
         <module>application</module>
         <module>authority</module>
@@ -373,11 +373,6 @@
             </dependency>
 
 
-            <dependency>
-                <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>module</artifactId>
-                <version>${tallybook.framework.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
                 <artifactId>module-support</artifactId>

@@ -9,6 +9,7 @@ import com.taoswork.tallybook.descriptor.jpa.metadata.CollectionTypesSetting;
 import com.taoswork.tallybook.descriptor.jpa.metadata.EntryTypeUnion;
 import com.taoswork.tallybook.descriptor.metadata.*;
 import com.taoswork.tallybook.descriptor.metadata.exception.MetadataException;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ExternalForeignEntityFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ForeignEntityFieldMeta;
 import com.taoswork.tallybook.descriptor.jpa.metadata.fieldmetadata.list.CollectionFieldMeta;
@@ -170,7 +171,7 @@ public class EntityCopier {
                 continue;
             }
             IFieldMeta fieldMeta = fieldMetaEntry.getValue();
-            if(fieldMeta.isPrimitiveField()){
+            if(fieldMeta instanceof BasePrimitiveFieldMeta){
                 Field field = fieldMeta.getField();
                 field.set(target, field.get(source));
                 continue;

@@ -26,8 +26,8 @@ public interface IFieldMeta extends IFriendlyOrdered, Serializable {
     boolean isNameField();
 
     void setNameField(boolean b);
-
-    boolean isPrimitiveField();
+//
+//    boolean isPrimitiveField();
 
     boolean isCollectionField();
 

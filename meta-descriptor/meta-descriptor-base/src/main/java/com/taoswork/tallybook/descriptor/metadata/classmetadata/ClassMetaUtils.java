@@ -2,6 +2,7 @@ package com.taoswork.tallybook.descriptor.metadata.classmetadata;
 
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.*;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.embedded.EmbeddedFieldMeta;
 import org.slf4j.Logger;
@@ -57,22 +58,21 @@ public class ClassMetaUtils {
         Set<Class> entities = new HashSet<Class>();
         calcReferencedTypes(classMeta, entities);
         return entities;
-
     }
 
     public static void calcReferencedTypes(IClassMeta classMeta, Collection<Class> entities) {
-        Map<String, IFieldMeta> fieldMetaMap = classMeta.getReadonlyFieldMetaMap();
-        for (Map.Entry<String, IFieldMeta> fieldMetaEntry : fieldMetaMap.entrySet()) {
-            IFieldMeta fieldMeta = fieldMetaEntry.getValue();
-            if (fieldMeta.getIgnored()) {
+        Map<String, IFieldMeta> fmMap = classMeta.getReadonlyFieldMetaMap();
+        for (Map.Entry<String, IFieldMeta> fmEntry : fmMap.entrySet()) {
+            IFieldMeta fm = fmEntry.getValue();
+            if (fm.getIgnored()) {
                 continue;
             }
-            if(NO_REF_FIELD_META.contains(fieldMeta.getClass())){
+            if(NO_REF_FIELD_META.contains(fm.getClass())){
                 continue;
             }
-            fieldMeta.gatherReferencingTypes(entities);
-            if (fieldMeta instanceof EmbeddedFieldMeta) {
-                EmbeddedFieldMeta typedFieldMeta = (EmbeddedFieldMeta) fieldMeta;
+            fm.gatherReferencingTypes(entities);
+            if (fm instanceof EmbeddedFieldMeta) {
+                EmbeddedFieldMeta typedFieldMeta = (EmbeddedFieldMeta) fm;
                 calcReferencedTypes(typedFieldMeta.getClassMetadata(), entities);
 //            } else if (fieldMeta instanceof CollectionFieldMeta) {
 //                Class entryType = ((CollectionFieldMeta) fieldMeta).getPresentationClass();
@@ -97,5 +97,24 @@ public class ClassMetaUtils {
 //                throw new MetadataException("Filed Metadata Not handled: " + fieldMeta.getClass());
             }
         }
+    }
+
+    /**
+     *
+     * @param cm
+     * @param field, the field name, expected to be primitive field
+     * @param instance, the target object to set value to
+     * @param value, string value of the field
+     * @return
+     */
+    public static boolean setPrimitiveField(IClassMeta cm, String field, Object instance, String value) throws IllegalAccessException {
+        IFieldMeta fm = cm.getFieldMeta(field);
+        if(fm instanceof BasePrimitiveFieldMeta){
+            BasePrimitiveFieldMeta pfm = (BasePrimitiveFieldMeta) fm;
+            Object fval = pfm.getValueFromString(value);
+            pfm.getField().set(instance, fval);
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,7 @@ package com.taoswork.tallybook.adminmvc.controllers.entities;
 
 import com.taoswork.tallybook.dataservice.IDataService;
 import com.taoswork.tallybook.dataservice.jpa.core.metaaccess.JpaEntityMetaAccess;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;

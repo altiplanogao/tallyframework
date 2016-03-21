@@ -9,7 +9,7 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaOb
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.IFieldMetaSeed;
 import com.taoswork.tallybook.descriptor.metadata.processor.handler.basic.IFacet;
 
-public final class EmbeddedFieldMeta extends BaseNonCollectionFieldMeta implements IFieldMeta {
+public final class EmbeddedFieldMeta extends BaseNonCollectionFieldMeta {
     private final IClassMeta classMeta;
 
     public EmbeddedFieldMeta(BasicFieldMetaObject bfmo, IClassMeta classMeta) {
@@ -26,10 +26,10 @@ public final class EmbeddedFieldMeta extends BaseNonCollectionFieldMeta implemen
         return FieldType.EMBEDDABLE;
     }
 
-    @Override
-    public boolean isPrimitiveField() {
-        return false;
-    }
+//    @Override
+//    public boolean isPrimitiveField() {
+//        return false;
+//    }
 
     public static class Facet implements IFacet {
         private final Class embeddableClz;

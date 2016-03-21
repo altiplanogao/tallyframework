@@ -14,8 +14,7 @@ import java.util.Collection;
 import static com.taoswork.tallybook.datadomain.base.presentation.FieldType.FOREIGN_KEY;
 
 public final class ForeignEntityFieldMeta
-        extends BaseNonCollectionFieldMeta
-        implements IFieldMeta {
+        extends BaseNonCollectionFieldMeta {
     private final Class declareType;
     private final Class targetType;
     private final String idField;
@@ -47,10 +46,10 @@ public final class ForeignEntityFieldMeta
         return displayField;
     }
 
-    @Override
-    public boolean isPrimitiveField() {
-        return false;
-    }
+//    @Override
+//    public boolean isPrimitiveField() {
+//        return false;
+//    }
 
     @Override
     protected FieldType overrideUnknownFieldType() {

@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.descriptor.dataio.in.Entity;
+//import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 
 /**
@@ -24,11 +24,11 @@ public interface PersistenceManager {
 
     <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 
-
-    <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException;
-
-    <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException;
-
-    <T extends Persistable> void delete(Entity entity, String id) throws ServiceException;
+//
+//    <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException;
+//
+//    <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException;
+//
+//    <T extends Persistable> void delete(Entity entity, String id) throws ServiceException;
 
 }

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dataservice.server.io.request.parameter;
 
 import com.taoswork.tallybook.datadomain.base.entity.Persistable;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import org.apache.commons.lang3.StringUtils;
 

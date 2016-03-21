@@ -2,13 +2,12 @@ package com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic;
 
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseNonCollectionFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.IFieldMetaSeed;
 
 public final class StringFieldMeta
-        extends BaseNonCollectionFieldMeta
-        implements IFieldMeta {
+        extends BasePrimitiveFieldMeta {
     private final int length;
 
     public StringFieldMeta(BasicFieldMetaObject bfmo, int length) {
@@ -23,11 +22,6 @@ public final class StringFieldMeta
 
     public int getLength() {
         return length;
-    }
-
-    @Override
-    public boolean isPrimitiveField() {
-        return true;
     }
 
     /**
@@ -49,5 +43,10 @@ public final class StringFieldMeta
         public IFieldMeta makeFieldMeta(BasicFieldMetaObject bfmo) {
             return new StringFieldMeta(bfmo, length);
         }
+    }
+
+    @Override
+    public Object getValueFromString(String valStr) {
+        return valStr;
     }
 }

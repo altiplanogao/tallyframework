@@ -14,6 +14,7 @@ import com.taoswork.tallybook.descriptor.dataio.copier.fieldcopier.map.EntityMap
 import com.taoswork.tallybook.descriptor.dataio.copier.fieldcopier.map.LookupMapFieldCopier;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -91,7 +92,7 @@ public class FieldCopierSolution implements IFieldCopierSolution{
                 continue;
             }
             IFieldMeta fieldMeta = fieldMetaEntry.getValue();
-            if (fieldMeta.isPrimitiveField()) {
+            if (fieldMeta instanceof BasePrimitiveFieldMeta) {
                 Field field = fieldMeta.getField();
                 field.set(target, field.get(source));
                 continue;

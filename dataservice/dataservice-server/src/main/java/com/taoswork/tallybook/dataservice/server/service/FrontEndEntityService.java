@@ -9,8 +9,9 @@ import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dataservice.core.persistence.InputEntityTranslator;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.manage.DataServiceManager;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dataservice.server.io.response.*;
 import com.taoswork.tallybook.dataservice.server.io.response.result.EntityInfoResult;
@@ -22,6 +23,7 @@ import com.taoswork.tallybook.dataservice.server.io.translator.response.Response
 import com.taoswork.tallybook.dataservice.server.io.translator.response.ResultTranslator;
 import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
+import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.EntityFetchException;
 import com.taoswork.tallybook.descriptor.dataio.reference.EntityRecords;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
@@ -48,12 +50,14 @@ public class FrontEndEntityService implements IFrontEndEntityService {
     private final DataServiceManager dataServiceManager;
     private final IEntityService entityService;
     private final MessageSource errorMessageSource;
+    private final InputEntityTranslator translator;
 
     public FrontEndEntityService(DataServiceManager dataServiceManager, IDataService dataService) {
         this.dataServiceManager = dataServiceManager;
         this.dataService = dataService;
         this.entityService = dataService.getService(IEntityService.COMPONENT_NAME);
         this.errorMessageSource = dataService.getService(IDataService.ERROR_MESSAGE_SOURCE_BEAN_NAME);
+        this.translator = dataServiceManager.getEntityTranslator();
     }
 
     public static FrontEndEntityService newInstance(DataServiceManager dataServiceManager, IDataService dataService) {
@@ -169,7 +173,10 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         PersistableResult result = null;
         ServiceException se = null;
         try {
-            result = entityService.create(request.getEntity());
+            EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+            Entity entity = request.getEntity();
+            Persistable persistable = translator.convert(entityMetaAccess, entity, null);
+            result = entityService.create(entity.getCeilingType(), persistable);
             Map<String, Object> m = new MapBuilder<String, Object>().append(EntityActionPaths.ID_KEY, result.getIdValue());
             String beanUri = (new UriTemplate(beanUriTemplate)).expand(m).toString();
             response = new EntityCreateResponse(request.getUri(), beanUri);
@@ -212,7 +219,10 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         PersistableResult result = null;
         ServiceException se = null;
         try {
-            result = entityService.update(request.getEntity());
+            EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+            Entity entity = request.getEntity();
+            Persistable persistable = translator.convert(entityMetaAccess, entity, null);
+            result = entityService.update(entity.getCeilingType(), persistable);
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -229,7 +239,10 @@ public class FrontEndEntityService implements IFrontEndEntityService {
         boolean deleted = false;
         ServiceException se = null;
         try {
-            deleted = entityService.delete(request.getEntity(), request.getId());
+            EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+            Entity entity = request.getEntity();
+            Persistable persistable = translator.convert(entityMetaAccess, entity, null);
+            deleted = entityService.delete(entity.getCeilingType(), persistable);
         } catch (ServiceException e) {
             se = e;
         } finally {

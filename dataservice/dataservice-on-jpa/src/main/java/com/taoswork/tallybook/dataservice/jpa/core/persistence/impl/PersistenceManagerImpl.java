@@ -62,12 +62,12 @@ public class PersistenceManagerImpl
         return result;
     }
 
-    protected JpaEntityTranslator converter = new JpaEntityTranslator() {
-        @Override
-        protected IClassMetaAccess getClassMetaAccess() {
-            return entityMetaAccess;
-        }
-    };
+//    protected JpaEntityTranslator converter = new JpaEntityTranslator() {
+//        @Override
+//        protected IClassMetaAccess getClassMetaAccess() {
+//            return entityMetaAccess;
+//        }
+//    };
 
     @Override
     public <T extends Persistable> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
@@ -75,12 +75,12 @@ public class PersistenceManagerImpl
         return makePersistableResult(result);
     }
 
-    @Override
-    public <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException {
-        T instance = (T) converter.convert(entity, null);
-        Class ceilingType = getCeilingType(entity);
-        return this.create(ceilingType, instance);
-    }
+//    @Override
+//    public <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException {
+//        T instance = (T) converter.convert(entity, null);
+//        Class ceilingType = getCeilingType(entity);
+//        return this.create(ceilingType, instance);
+//    }
 
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key, ExternalReference externalReference) throws ServiceException {
@@ -98,24 +98,24 @@ public class PersistenceManagerImpl
         return makePersistableResult(result);
     }
 
-    @Override
-    public <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException {
-        T instance = (T) converter.convert(entity, null);
-        Class ceilingType = getCeilingType(entity);
-        return this.update(ceilingType, instance);
-    }
-
+//    @Override
+//    public <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException {
+//        T instance = (T) converter.convert(entity, null);
+//        Class ceilingType = getCeilingType(entity);
+//        return this.update(ceilingType, instance);
+//    }
+//
     @Override
     public <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException {
         securedDelete(ceilingType, entity);
     }
 
-    @Override
-    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
-        Class ceilingType = getCeilingType(entity);
-        T instance = (T) converter.convert(entity, id);
-        this.delete(ceilingType, instance);
-    }
+//    @Override
+//    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
+//        Class ceilingType = getCeilingType(entity);
+//        T instance = (T) converter.convert(entity, id);
+//        this.delete(ceilingType, instance);
+//    }
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {

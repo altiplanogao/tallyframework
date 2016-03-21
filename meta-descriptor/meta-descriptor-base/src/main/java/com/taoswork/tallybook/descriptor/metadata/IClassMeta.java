@@ -44,7 +44,7 @@ public interface IClassMeta extends IFriendly, Cloneable, Serializable {
     //Referencing
     boolean isReferencingClassMetaPublished();
 
-    Map<String, IClassMeta> getReadonlyReferencingClassMetadataMap();
+    Map<String, IClassMeta> getReadonlyReferencingClassMetaMap();
 
     IClassMeta getReferencingClassMeta(Class entity);
 

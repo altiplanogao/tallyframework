@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.descriptor.dataio.in.Entity;
+//import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +20,16 @@ public interface DynamicEntityPersistenceService {
     @Transactional
     <T extends Persistable> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
 
-    @Transactional
-    <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException;
+//    @Transactional
+//    <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException;
 
     <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException;
 
     @Transactional
     <T extends Persistable> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
-
-    @Transactional
-    <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException;
+//
+//    @Transactional
+//    <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException;
 
     @Transactional
     <T extends Persistable> Void delete(Class<T> ceilingType, T entity) throws ServiceException;
@@ -41,8 +41,8 @@ public interface DynamicEntityPersistenceService {
      * @return
      * @throws ServiceException
      */
-    @Transactional
-    <T extends Persistable> Void delete(Entity entity, String id) throws ServiceException;
+//    @Transactional
+//    <T extends Persistable> Void delete(Entity entity, String id) throws ServiceException;
 
     <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 }

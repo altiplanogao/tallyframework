@@ -155,7 +155,7 @@ public class MutableClassMeta extends FriendlyMeta implements IClassMeta, Clonea
     }
 
     @Override
-    public Map<String, IClassMeta> getReadonlyReferencingClassMetadataMap() {
+    public Map<String, IClassMeta> getReadonlyReferencingClassMetaMap() {
         return Collections.unmodifiableMap(referencingClassMeta);
     }
 
@@ -228,7 +228,7 @@ public class MutableClassMeta extends FriendlyMeta implements IClassMeta, Clonea
         MapUtility.putIfAbsent(thatMeta.getReadonlyTabMetaMap(), getRWTabMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyGroupMetaMap(), getRWGroupMetadataMap());
         MapUtility.putIfAbsent(thatMeta.getReadonlyFieldMetaMap(), getRWFieldMetaMap());
-        MapUtility.putIfAbsent(thatMeta.getReadonlyReferencingClassMetadataMap(), referencingClassMeta);
+        MapUtility.putIfAbsent(thatMeta.getReadonlyReferencingClassMetaMap(), referencingClassMeta);
 
         this.setIdFieldIfNone(thatMeta.getIdField());
 

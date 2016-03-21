@@ -8,10 +8,10 @@ public abstract class BaseCollectionFieldMeta extends BaseFieldMeta {
         super(bfmo);
     }
 
-    @Override
-    public boolean isPrimitiveField() {
-        return false;
-    }
+//    @Override
+//    public boolean isPrimitiveField() {
+//        return false;
+//    }
 
     @Override
     public boolean isCollectionField() {

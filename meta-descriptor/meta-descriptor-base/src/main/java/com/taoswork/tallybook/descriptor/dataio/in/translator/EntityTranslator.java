@@ -2,48 +2,48 @@ package com.taoswork.tallybook.descriptor.dataio.in.translator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.datadomain.base.entity.Persistable;
-import com.taoswork.tallybook.datadomain.base.presentation.typed.DateMode;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.in.ForeignEntityRef;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.IClassMetaAccess;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.DateFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.classmetadata.ClassMetaUtils;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseNonCollectionFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasePrimitiveFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ExternalForeignEntityFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ForeignEntityFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.embedded.EmbeddedFieldMeta;
-import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.list.ListFieldMeta;
+import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map.MapFieldMeta;
+import org.apache.commons.beanutils.ConvertUtilsBean2;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.PropertyValue;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Created by Gao Yuan on 2015/9/23.
+ * Translate String map into Persistable object
  */
-public abstract class EntityTranslator {
+public class EntityTranslator implements IEntityTranslator{
     private static Logger LOGGER = LoggerFactory.getLogger(EntityTranslator.class);
 
-    private ThreadLocal<ObjectMapper> objectMapper = ThreadLocalHelper.createThreadLocal(ObjectMapper.class);
-//    protected ThreadLocal<BeanWrapperImpl> beanWrapperThreadLocal = new ThreadLocal<BeanWrapperImpl>(){
-//        @Override
-//        protected BeanWrapperImpl initialValue() {
-//            return new BeanWrapperImpl();
-//        }
-//    };
+    private static ObjectMapper objectMapper = new ObjectMapper();
+    private final ConvertUtilsBean2 convertUtils;
 
     public EntityTranslator() {
+        convertUtils = makeConvertUtils();
     }
 
-    protected Map<String, Object> buildEntityPropertyTree(Map<String, String> entityProperties) {
+    protected ConvertUtilsBean2 makeConvertUtils(){
+        return new ConvertUtilsBean2();
+    }
+
+    protected Map<String, Object> buildPropertyTree(Map<String, String> entityProperties) {
         Map<String, Object> result = new HashMap<String, Object>();
         for (Map.Entry<String, String> entry : entityProperties.entrySet()) {
             String propertyName = entry.getKey();
@@ -70,30 +70,25 @@ public abstract class EntityTranslator {
         pushProperty(subMap, remainPiece, propertyValue);
     }
 
-    protected abstract IClassMetaAccess getClassMetaAccess();
-
     /**
      * @param source
      * @param id,    id value of the entity
      * @return
      */
-    public Persistable translate(Entity source, String id) throws TranslateException {
+    public Persistable translate(final IClassMetaAccess cmAccess, Entity source, String id) throws TranslateException {
         Persistable instance = null;
-        final IClassMetaAccess classMetaAccess = getClassMetaAccess();
         try {
             final Class entityClass = (source.getType());
             final Persistable tempInstance = (Persistable) entityClass.newInstance();
-            final IClassMeta classMeta = classMetaAccess.getClassMeta(entityClass, false);
+            final IClassMeta classMeta = cmAccess.getClassMeta(entityClass, false);
 
             final Map<String, String> propsAsMap = source.getProps();
-            final Map<String, Object> propsAsTree = buildEntityPropertyTree(propsAsMap);
+            final Map<String, Object> propsAsTree = buildPropertyTree(propsAsMap);
             fillEntity(tempInstance, classMeta, propsAsTree);
 
             if (StringUtils.isNotEmpty(id)) {
                 String idFieldName = classMeta.getIdField().getName();
-                BeanWrapperImpl beanWrapper = new BeanWrapperImpl();
-                beanWrapper.setWrappedInstance(tempInstance);
-                beanWrapper.setPropertyValue(idFieldName, id);
+                ClassMetaUtils.setPrimitiveField(classMeta, idFieldName, tempInstance, id);
             }
 
             instance = tempInstance;
@@ -106,8 +101,6 @@ public abstract class EntityTranslator {
     }
 
     private void fillEntity(Object instance, final IClassMeta classMeta, Map<String, Object> entityAsTree) throws TranslateException {
-        BeanWrapperImpl instanceBean = new BeanWrapperImpl();
-        instanceBean.setWrappedInstance(instance);
         String translatingField = "";
         try {
             for (Map.Entry<String, Object> entry : entityAsTree.entrySet()) {
@@ -115,57 +108,30 @@ public abstract class EntityTranslator {
                 translatingField = fieldKey;
                 IFieldMeta fieldMeta = classMeta.getFieldMeta(fieldKey);
                 if (fieldMeta != null) {
-                    if (fieldMeta.isPrimitiveField()) {
-                        if (fieldMeta instanceof DateFieldMeta) {
-                            Field field = fieldMeta.getField();
-                            String fieldValue = (String) entry.getValue();
-                            if (StringUtils.isEmpty(fieldValue)) {
-                                field.set(instance, null);
-                            } else {
-                                DateFieldMeta dateFieldMeta = (DateFieldMeta) fieldMeta;
-                                DateMode model = dateFieldMeta.getMode();
-                                boolean useJavaDate = dateFieldMeta.isUseJavaDate();
-                                Long ms = Long.parseLong(fieldValue);
-                                Object val = ms;
-                                if (useJavaDate) {
-                                    val = new Date(ms);
-                                }
-                                field.set(instance, val);
-                            }
-                        } else {
-                            PropertyValue pv = new PropertyValue(fieldKey, entry.getValue());
-                            instanceBean.setPropertyValue(pv);
-                        }
-                    } else {
-                        String valKey = entry.getKey();
+                    if (fieldMeta instanceof BasePrimitiveFieldMeta) {
+                        String fieldValue = (String) entry.getValue();
+                        BasePrimitiveFieldMeta bpfm = (BasePrimitiveFieldMeta)fieldMeta;
+                        Field field = fieldMeta.getField();
+                        final Object val = StringUtils.isEmpty(fieldValue) ? null : bpfm.getValueFromString(fieldValue);
+                        field.set(instance, val);
+                    } else if (fieldMeta instanceof BaseNonCollectionFieldMeta){
                         if (fieldMeta instanceof ForeignEntityFieldMeta) {
                             String valStr = (String) entry.getValue();
-                            Persistable valObj = null;
-                            if (StringUtils.isEmpty(valStr)) {
-                                valObj = null;
-                            } else {
-                                ForeignEntityFieldMeta foreignEntityFieldMeta = (ForeignEntityFieldMeta) fieldMeta;
-                                Class entityType = foreignEntityFieldMeta.getTargetType();
-                                ForeignEntityRef ref = objectMapper.get().readValue(valStr, ForeignEntityRef.class);
-                                valObj = (Persistable) entityType.newInstance();
-
-                                IClassMeta foreignClassMetadata = classMeta.getReferencingClassMeta(entityType);
-                                BeanWrapperImpl fkBean = new BeanWrapperImpl(valObj);
-                                fkBean.setPropertyValue(new PropertyValue(foreignClassMetadata.getIdFieldName(), ref.id));
-                            }
+                            final Persistable valObj = workOutForeignEntity(classMeta, (ForeignEntityFieldMeta) fieldMeta, valStr);
                             Field field = fieldMeta.getField();
                             field.set(instance, valObj);
                         } else if (fieldMeta instanceof ExternalForeignEntityFieldMeta) {
                             String valStr = (String) entry.getValue();
-                            Object valObj = null;
+                            final Object valObj;
                             if (StringUtils.isEmpty(valStr)) {
                                 valObj = null;
                             } else {
                                 ExternalForeignEntityFieldMeta effm = (ExternalForeignEntityFieldMeta) fieldMeta;
-                                ForeignEntityRef ref = objectMapper.get().readValue(valStr, ForeignEntityRef.class);
-                                valObj = ref.id;
-                                instanceBean.setPropertyValue(new PropertyValue(fieldKey, valObj));
+                                ForeignEntityRef ref = objectMapper.readValue(valStr, ForeignEntityRef.class);
+                                valObj = convertUtils.convert(ref.id, fieldMeta.getFieldClass());
                             }
+                            Field field = fieldMeta.getField();
+                            field.set(instance, valObj);
                         } else if (fieldMeta instanceof EmbeddedFieldMeta) {
                             EmbeddedFieldMeta embeddedFieldMeta = (EmbeddedFieldMeta) fieldMeta;
                             Field field = fieldMeta.getField();
@@ -175,6 +141,12 @@ public abstract class EntityTranslator {
                                 field.set(instance, embeddObj);
                             }
                             fillEntity(embeddObj, embeddedFieldMeta.getClassMetadata(), (Map<String, Object>) entry.getValue());
+                        } else if(fieldMeta instanceof ListFieldMeta) {
+                            throw new TranslateException("Field not handled with name: " + fieldKey);
+
+                        } else if(fieldMeta instanceof MapFieldMeta) {
+                            throw new TranslateException("Field not handled with name: " + fieldKey);
+
                         } else {
                             throw new TranslateException("Field not handled with name: " + fieldKey);
                         }
@@ -193,26 +165,20 @@ public abstract class EntityTranslator {
         }
     }
 
-//    public Entity instanceToEntity(String ceilingType, Serializable instance){
-//        DynamicEntityMetadataAccess entityMetaAccess = this.getDynamicEntityMetadataAccess();
-//        Entity entity =null;
-//        try{
-//            Entity tempEntity = new Entity();
-//            Class entityClass = instance.getClass();
-//            tempEntity.setType(entityClass);
-//            if(ceilingType != null){
-//                Class ceilingClz = Class.forName(ceilingType);
-//                if(ceilingClz.isAssignableFrom(entityClass)){
-//                    tempEntity.setCeilingType(ceilingType);
-//                }
-//            }
-//            IClassMeta classMeta = entityMetaAccess.getMutableClassMetadata(entityClass, false);
-//            for(classMeta.getReadonlyFieldMetaMap())
-//            entity = tempEntity;
-//        }catch (Exception e){
-//
-//        }
-//        return entity;
-//    }
+    private Persistable workOutForeignEntity(IClassMeta classMeta, ForeignEntityFieldMeta fieldMeta, String valStr) throws IOException, InstantiationException, IllegalAccessException {
+        final Persistable valObj;
+        if (StringUtils.isEmpty(valStr)) {
+            valObj = null;
+        } else {
+            ForeignEntityFieldMeta foreignEntityFieldMeta = fieldMeta;
+            Class entityType = foreignEntityFieldMeta.getTargetType();
+            ForeignEntityRef ref = objectMapper.readValue(valStr, ForeignEntityRef.class);
+            valObj = (Persistable) entityType.newInstance();
+
+            IClassMeta fcm = classMeta.getReferencingClassMeta(entityType);
+            ClassMetaUtils.setPrimitiveField(fcm, fcm.getIdFieldName(), valObj, ref.id);
+        }
+        return valObj;
+    }
 
 }

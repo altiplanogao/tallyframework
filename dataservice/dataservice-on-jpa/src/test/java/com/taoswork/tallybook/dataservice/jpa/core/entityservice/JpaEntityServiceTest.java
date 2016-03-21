@@ -58,7 +58,7 @@ public class JpaEntityServiceTest {
         }
 
 
-        created += EntityCreateHelper.createPeopleEntityWith(entityService, nameAAA, created, createAttemptA);
+        created += EntityCreateHelper.createPeopleEntityWith(dataService, nameAAA, created, createAttemptA);
 
         Assert.assertTrue(created == (createAttemptA));
 
@@ -107,8 +107,8 @@ public class JpaEntityServiceTest {
         }
 
 
-        created += EntityCreateHelper.createPeopleEntityWith(entityService, nameAAA, created, createAttemptA);
-        created += EntityCreateHelper.createPeopleEntityWith(entityService, nameBBB, created, createAttemptB);
+        created += EntityCreateHelper.createPeopleEntityWith(dataService, nameAAA, created, createAttemptA);
+        created += EntityCreateHelper.createPeopleEntityWith(dataService, nameBBB, created, createAttemptB);
 
         Assert.assertTrue(created == (createAttemptA + createAttemptB));
 
@@ -247,8 +247,7 @@ public class JpaEntityServiceTest {
             Assert.assertTrue(returned == createAttemptB);
 
             for (ZooKeeper p : cache) {
-                Entity entity = new Entity().setCeilingType(ZooKeeper.class).setType(p.getClass());
-                entityService.delete(entity, p.getId().toString());
+                entityService.delete(ZooKeeper.class, p);
             }
 
             {

@@ -42,16 +42,16 @@ public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersist
         });
     }
 
-    @Override
-    @Transactional
-    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
-        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<PersistableResult<T>, ServiceException>() {
-            @Override
-            public PersistableResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.create(entity);
-            }
-        });
-    }
+//    @Override
+//    @Transactional
+//    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
+//        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<PersistableResult<T>, ServiceException>() {
+//            @Override
+//            public PersistableResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+//                return persistenceManager.create(entity);
+//            }
+//        });
+//    }
 
     @Override
     public <T extends Persistable> PersistableResult<T> read(final Class<T> entityClz, final Object key, final ExternalReference externalReference) throws ServiceException {
@@ -74,16 +74,16 @@ public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersist
         });
     }
 
-    @Override
-    @Transactional
-    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
-        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<PersistableResult<T>, ServiceException>() {
-            @Override
-            public PersistableResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
-                return persistenceManager.update(entity);
-            }
-        });
-    }
+//    @Override
+//    @Transactional
+//    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
+//        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<PersistableResult<T>, ServiceException>() {
+//            @Override
+//            public PersistableResult<T> execute(PersistenceManager persistenceManager) throws ServiceException {
+//                return persistenceManager.update(entity);
+//            }
+//        });
+//    }
 
     @Override
     @Transactional
@@ -97,17 +97,17 @@ public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersist
         });
     }
 
-    @Override
-    @Transactional
-    public <T extends Persistable> Void delete(final Entity entity, final String id) throws ServiceException {
-        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
-            @Override
-            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
-                persistenceManager.delete(entity, id);
-                return null;
-            }
-        });
-    }
+//    @Override
+//    @Transactional
+//    public <T extends Persistable> Void delete(final Entity entity, final String id) throws ServiceException {
+//        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
+//            @Override
+//            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
+//                persistenceManager.delete(entity, id);
+//                return null;
+//            }
+//        });
+//    }
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(final Class<T> entityClz, final CriteriaTransferObject query, final ExternalReference externalReference) throws ServiceException {

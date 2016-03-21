@@ -6,9 +6,11 @@ import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.PropertyFilterCriteria;
+import com.taoswork.tallybook.dataservice.core.persistence.InputEntityTranslator;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.servicemockup.TallyMockupMongoDataService;
 import com.taoswork.tallybook.dataservice.mongo.servicemockup.datasource.TallyMockupMongoDatasourceConfiguration;
+import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.general.solution.time.MethodTimeCounter;
@@ -33,10 +35,14 @@ public class MongoEntityServicePerformanceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoEntityServicePerformanceTest.class);
 
     private IDataService dataService = null;
+    private InputEntityTranslator translator = null;
+    private EntityMetaAccess metaAccess = null;
 
     @Before
     public void setup() {
         dataService = new TallyMockupMongoDataService();
+        metaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
+        translator = new InputEntityTranslator();
     }
 
     @After
@@ -44,6 +50,8 @@ public class MongoEntityServicePerformanceTest {
         TallyMockupMongoDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
         mdbDef.dropDatabase();
         dataService = null;
+        metaAccess = null;
+        translator = null;
     }
 
     @Test
@@ -65,7 +73,8 @@ public class MongoEntityServicePerformanceTest {
                             .setType(ZooKeeperImpl.class)
                             .setCeilingType(ZooKeeper.class)
                             .setProperty("name", nameAAA + i);
-                    PersistableResult<ZooKeeper> adminRes = entityService.create(adminEntity);
+                    ZooKeeper adminP = (ZooKeeper)translator.convert(metaAccess, adminEntity, null);
+                    PersistableResult<ZooKeeper> adminRes = entityService.create(ZooKeeper.class, adminP);
                     ZooKeeper admin = adminRes.getValue();
                     ids.add(admin.getId());
                     created++;
