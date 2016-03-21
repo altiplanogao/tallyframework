@@ -28,22 +28,25 @@ import java.util.StringJoiner;
 public class MongoQueryTranslatorImpl implements MongoQueryTranslator {
     @Override
     public <T> Query<T> constructListQuery(AdvancedDatastore datastore,
+                                           String collection,
                                            Class<T> entityClz,
                                            IClassMeta classTreeMeta,
                                            CriteriaTransferObject cto) {
-        return constructGeneralQuery(datastore, entityClz, classTreeMeta, cto, false);
+        return constructGeneralQuery(datastore, collection, entityClz, classTreeMeta, cto, false);
     }
 
     @Override
-    public <T> Query<T> constructCountQuery(AdvancedDatastore datastore, Class<T> entityClz, IClassMeta classTreeMeta, CriteriaTransferObject cto) {
-        return constructGeneralQuery(datastore, entityClz, classTreeMeta, cto, true);
+    public <T> Query<T> constructCountQuery(AdvancedDatastore datastore,
+                                            String collection, Class<T> entityClz, IClassMeta classTreeMeta, CriteriaTransferObject cto) {
+        return constructGeneralQuery(datastore, collection, entityClz, classTreeMeta, cto, true);
     }
 
     protected <T> Query<T> constructGeneralQuery(AdvancedDatastore datastore,
+                                                 String collection,
                                                  Class<T> entityClz,
                                                  IClassMeta classTreeMeta,
                                                  CriteriaTransferObject cto, boolean isCount) {
-        Query<T> query = datastore.createQuery(entityClz);
+        Query<T> query = datastore.createQuery(collection, entityClz);
         if (!isCount) {
             addPaging(query, cto);
         }

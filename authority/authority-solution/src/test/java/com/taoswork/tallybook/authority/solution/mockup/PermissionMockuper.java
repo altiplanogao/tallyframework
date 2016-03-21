@@ -67,7 +67,7 @@ public class PermissionMockuper {
     public void makeProtectionSpace() {
         ProtectionSpace ps = new ProtectionSpace();
         ps.setSpaceName(PROTECTION_SPACE);
-        easyEntityAccess.create(ProtectionSpace.class, ps);
+        easyEntityAccess.create(ps);
     }
 
     public void makeSecuredResource(String tenant, Class resource,
@@ -93,7 +93,7 @@ public class PermissionMockuper {
                 sr.addCase(_case);
             }
         }
-        easyEntityAccess.create(Protection.class, sr);
+        easyEntityAccess.create(sr);
     }
 
     public Protection getResource(String tanantId, Class resource) {
@@ -188,9 +188,9 @@ public class PermissionMockuper {
         }
 
         if (isNew) {
-            easyEntityAccess.create(authorizableClz, (T) pp);
+            easyEntityAccess.create((T) pp);
         } else {
-            easyEntityAccess.update(authorizableClz, (T) pp);
+            easyEntityAccess.update((T) pp);
         }
     }
 
@@ -209,7 +209,7 @@ public class PermissionMockuper {
         if (c) instance.addClassification(CASE_C_TAG);
         if (d) instance.addClassification(CASE_D_TAG);
         if (e) instance.addClassification(CASE_E_TAG);
-        easyEntityAccess.create(fileType, instance);
+        easyEntityAccess.create(instance);
     }
 
     public <T extends XFile> T fetchInstance(Class<T> fileType, String fileTitle) {

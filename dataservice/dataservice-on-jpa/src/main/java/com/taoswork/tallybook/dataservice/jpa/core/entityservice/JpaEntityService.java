@@ -27,6 +27,4 @@ import com.taoswork.tallybook.dataservice.service.IEntityService;
  */
 public interface JpaEntityService extends IEntityService<Persistable> {
 
-    Class<?> getRootInstantiableEntityClass(Class<?> entityType);
-
 }

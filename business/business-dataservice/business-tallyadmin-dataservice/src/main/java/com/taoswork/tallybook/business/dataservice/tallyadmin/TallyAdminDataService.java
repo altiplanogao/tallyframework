@@ -50,7 +50,7 @@ public class TallyAdminDataService
                 newMaster.setTitle("Master");
                 newMaster.setProtectionSpace(AdminSecurityDefinition.PROTECTION_SPACE);
                 newMaster.setNamespace(AdminSecurityDefinition.ADMIN_TENANT);
-                entityService.create(AdminEmployee.class, newMaster);
+                entityService.create(newMaster);
             }
         } catch (ServiceException e) {
             e.printStackTrace();

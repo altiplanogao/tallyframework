@@ -101,7 +101,7 @@ public class TallyUserEntityServiceTest {
         try {
             Person admin = new PersonImpl();
             admin.setName("admin").setUuid(UUID.randomUUID().toString());
-            entityService.create(Person.class, admin);
+            entityService.create(admin);
             Assert.fail();
         } catch (ServiceException e) {
             if (!(e instanceof EntityValueValidationException)) {
@@ -137,7 +137,7 @@ public class TallyUserEntityServiceTest {
                 Person admin = new PersonImpl();
                 admin.setName("admin").setUuid(UUID.randomUUID().toString());
                 admin.setMobile("1234567890" + (1000 + i));
-                entityService.create(Person.class, admin);
+                entityService.create(admin);
 
                 Long id = admin.getId();
                 Person adminFromDb = entityService.straightRead(Person.class, Long.valueOf(id));

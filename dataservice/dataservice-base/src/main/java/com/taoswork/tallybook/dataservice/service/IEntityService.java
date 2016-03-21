@@ -20,22 +20,17 @@ import java.util.Locale;
 public interface IEntityService<Pb extends Persistable> {
     public static final String COMPONENT_NAME = "IEntityService";
 
-    <T extends Pb> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Pb> PersistableResult<T> create(T entity) throws ServiceException;
 
     <T extends Pb> PersistableResult<T> read(Class<T> entityClz, Object key) throws ServiceException;
 
     <T extends Pb> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException;
 
-    <T extends Pb> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Pb> PersistableResult<T> update(T entity) throws ServiceException;
 
-    <T extends Pb> boolean delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Pb> boolean delete(T entity) throws ServiceException;
+//    <T extends Pb> boolean delete(Class<T> ceilingType, T entity) throws ServiceException;
 
-//    //Entity crud
-//    <T extends Pb> PersistableResult<T> create(Entity entity) throws ServiceException;
-//
-//    <T extends Pb> PersistableResult<T> update(Entity entity) throws ServiceException;
-//
-//    <T extends Pb> boolean delete(Entity entity, String id) throws ServiceException;
 
 
     <T extends Pb> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query) throws ServiceException;

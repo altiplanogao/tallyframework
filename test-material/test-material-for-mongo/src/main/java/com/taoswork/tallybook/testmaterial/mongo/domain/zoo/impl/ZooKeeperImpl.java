@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2015/4/15.
  */
-@Entity
+@Entity("zookeeper")
 @PresentationClass(
 )
 @PersistEntity(valueGates = {ZooKeeperGate.class})

@@ -33,7 +33,7 @@ public class EntityCreateHelper {
                         .setCeilingType(ZooKeeper.class)
                         .setProperty("name", name);
                 ZooKeeper adminP = (ZooKeeper)translator.convert(metaAccess, adminEntity, null);
-                PersistableResult<ZooKeeper> adminRes = jpaEntityService.create(ZooKeeper.class, adminP);
+                PersistableResult<ZooKeeper> adminRes = jpaEntityService.create(adminP);
                 ZooKeeper admin = adminRes.getValue();
 
                 ObjectId id = admin.getId();

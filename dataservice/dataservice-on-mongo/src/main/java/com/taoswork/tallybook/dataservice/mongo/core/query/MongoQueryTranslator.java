@@ -11,12 +11,14 @@ import org.mongodb.morphia.query.Query;
 public interface MongoQueryTranslator {
     <T> Query<T> constructListQuery(
             AdvancedDatastore datastore,
+            String collection,
             Class<T> entityClz,
             IClassMeta classTreeMeta,
             CriteriaTransferObject cto);
 
     <T> Query<T> constructCountQuery(
             AdvancedDatastore datastore,
+            String collection,
             Class<T> entityClz,
             IClassMeta classTreeMeta,
             CriteriaTransferObject cto);

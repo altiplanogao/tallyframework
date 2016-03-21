@@ -12,7 +12,6 @@ import com.taoswork.tallybook.dataservice.jpa.core.persistence.PersistenceManage
 import com.taoswork.tallybook.dataservice.service.EntityCopierService;
 import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
-import com.taoswork.tallybook.descriptor.metadata.IClassMetaAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,55 +35,41 @@ public class PersistenceManagerImpl
     protected EntityCopierService entityCopierService;
 
     @Override
-    protected <T extends Persistable> T doCreate(T entity) {
+    protected <T extends Persistable> T doCreate(Class<T> projectedEntityType, T entity) {
         return entityDao.create(entity);
     }
 
     @Override
-    protected <T extends Persistable> T doRead(Class<T> entityRootClz, Object key) {
-        T result = entityDao.read(entityRootClz, key);
+    protected <T extends Persistable> T doRead(Class<T> projectedEntityType, Object key) {
+        T result = entityDao.read(projectedEntityType, key);
         return result;
     }
 
     @Override
-    protected <T extends Persistable> T doUpdate(T entity) {
+    protected <T extends Persistable> T doUpdate(Class<T> projectedEntityType, T entity) {
         return entityDao.update(entity);
     }
 
     @Override
-    protected <T extends Persistable> void doDelete(T entity) {
+    protected <T extends Persistable> void doDelete(Class<T> projectedEntityType, T entity) {
         entityDao.delete(entity);
     }
 
     @Override
-    protected <T extends Persistable> CriteriaQueryResult<T> doQuery(Class<T> entityRootClz, CriteriaTransferObject query) {
-        CriteriaQueryResult<T> result = entityDao.query(entityRootClz, query);
+    protected <T extends Persistable> CriteriaQueryResult<T> doQuery(Class<T> projectedEntityType, CriteriaTransferObject query) {
+        CriteriaQueryResult<T> result = entityDao.query(projectedEntityType, query);
         return result;
     }
 
-//    protected JpaEntityTranslator converter = new JpaEntityTranslator() {
-//        @Override
-//        protected IClassMetaAccess getClassMetaAccess() {
-//            return entityMetaAccess;
-//        }
-//    };
-
     @Override
-    public <T extends Persistable> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
-        T result = securedCreate(ceilingType, entity);
+    public <T extends Persistable> PersistableResult<T> create(Class<T> projectedEntityType, T entity) throws ServiceException {
+        T result = securedCreate(projectedEntityType, entity);
         return makePersistableResult(result);
     }
 
-//    @Override
-//    public <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException {
-//        T instance = (T) converter.convert(entity, null);
-//        Class ceilingType = getCeilingType(entity);
-//        return this.create(ceilingType, instance);
-//    }
-
     @Override
-    public <T extends Persistable> PersistableResult<T> read(Class<T> entityType, Object key, ExternalReference externalReference) throws ServiceException {
-        T result = securedRead(entityType, key);
+    public <T extends Persistable> PersistableResult<T> read(Class<T> projectedEntityType, Object key, ExternalReference externalReference) throws ServiceException {
+        T result = securedRead(projectedEntityType, key);
 
         CopierContext copierContext = new CopierContext(this.entityMetaAccess, externalReference);
         T safeResult = this.entityCopierService.makeSafeCopyForRead(copierContext, result);
@@ -93,35 +78,21 @@ public class PersistenceManagerImpl
     }
 
     @Override
-    public <T extends Persistable> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
-        T result = securedUpdate(ceilingType, entity);
+    public <T extends Persistable> PersistableResult<T> update(Class<T> projectedEntityType, T entity) throws ServiceException {
+        T result = securedUpdate(projectedEntityType, entity);
         return makePersistableResult(result);
     }
 
-//    @Override
-//    public <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException {
-//        T instance = (T) converter.convert(entity, null);
-//        Class ceilingType = getCeilingType(entity);
-//        return this.update(ceilingType, instance);
-//    }
-//
     @Override
-    public <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException {
-        securedDelete(ceilingType, entity);
+    public <T extends Persistable> void delete(Class<T> projectedEntityType, T entity) throws ServiceException {
+        securedDelete(projectedEntityType, entity);
     }
 
-//    @Override
-//    public <T extends Persistable> void delete(Entity entity, String id) throws ServiceException {
-//        Class ceilingType = getCeilingType(entity);
-//        T instance = (T) converter.convert(entity, id);
-//        this.delete(ceilingType, instance);
-//    }
-
     @Override
-    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
+    public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> projectedEntityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
         if (query == null)
             query = new CriteriaTransferObject();
-        CriteriaQueryResult<T> criteriaQueryResult = securedQuery(entityType, query);
+        CriteriaQueryResult<T> criteriaQueryResult = securedQuery(projectedEntityType, query);
         CriteriaQueryResult<T> safeResult = new CriteriaQueryResult<T>(criteriaQueryResult.getEntityType())
                 .setStartIndex(criteriaQueryResult.getStartIndex())
                 .setTotalCount(criteriaQueryResult.getTotalCount());
@@ -137,10 +108,5 @@ public class PersistenceManagerImpl
         }
         return safeResult;
     }
-
-    private <T> Class<T> getCeilingType(Entity entity) {
-        return (Class<T>) entity.getCeilingType();
-    }
-
 
 }

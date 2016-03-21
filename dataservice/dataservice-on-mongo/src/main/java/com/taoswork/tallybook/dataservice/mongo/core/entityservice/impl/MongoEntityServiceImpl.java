@@ -67,9 +67,12 @@ public class MongoEntityServiceImpl
     }
 
     @Override
-    public <T extends PersistableDocument> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException {
+    public <T extends PersistableDocument> PersistableResult<T> create(T entity) throws ServiceException {
         try {
-            T result = securedEntityAccess.securedCreate(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class ceilingType = getProjectedEntityType(directClz);
+
+            T result = (T) securedEntityAccess.securedCreate(ceilingType, entity);
             return securedEntityAccess.makePersistableResult(result);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -78,9 +81,10 @@ public class MongoEntityServiceImpl
     }
 
     @Override
-    public <T extends PersistableDocument> PersistableResult<T> read(Class<T> entityType, Object key, ExternalReference externalReference) throws ServiceException {
+    public <T extends PersistableDocument> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
         try {
-            T result = securedEntityAccess.securedRead(entityType, key);
+            Class projectedEntityType = getProjectedEntityType(entityClz);
+            T result = (T) securedEntityAccess.securedRead(projectedEntityType, key);
 
             CopierContext copierContext = new CopierContext(this.entityMetaAccess, externalReference);
             T safeResult = this.entityCopierService.makeSafeCopyForRead(copierContext, result);
@@ -93,9 +97,11 @@ public class MongoEntityServiceImpl
     }
 
     @Override
-    public <T extends PersistableDocument> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException {
+    public <T extends PersistableDocument> PersistableResult<T> update(T entity) throws ServiceException {
         try {
-            T result = securedEntityAccess.securedUpdate(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class projectedEntityType = getProjectedEntityType(directClz);
+            T result = (T) securedEntityAccess.securedUpdate(projectedEntityType, entity);
             return securedEntityAccess.makePersistableResult(result);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -104,9 +110,11 @@ public class MongoEntityServiceImpl
     }
 
     @Override
-    public <T extends PersistableDocument> boolean delete(Class<T> ceilingType, T entity) throws ServiceException {
+    public <T extends PersistableDocument> boolean delete(T entity) throws ServiceException {
         try {
-            securedEntityAccess.securedDelete(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class projectedEntityType = getProjectedEntityType(directClz);
+            securedEntityAccess.securedDelete(projectedEntityType, entity);
             return true;
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -151,11 +159,12 @@ public class MongoEntityServiceImpl
 //    }
 
     @Override
-    public <T extends PersistableDocument> CriteriaQueryResult<T> query(Class<T> entityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
+    public <T extends PersistableDocument> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
         try {
+            Class projectedEntityType = getProjectedEntityType(entityClz);
             if (query == null)
                 query = new CriteriaTransferObject();
-            CriteriaQueryResult<T> criteriaQueryResult = securedEntityAccess.securedQuery(entityType, query);
+            CriteriaQueryResult<T> criteriaQueryResult = securedEntityAccess.securedQuery(projectedEntityType, query);
             CriteriaQueryResult<T> safeResult = new CriteriaQueryResult<T>(criteriaQueryResult.getEntityType())
                     .setStartIndex(criteriaQueryResult.getStartIndex())
                     .setTotalCount(criteriaQueryResult.getTotalCount());
@@ -177,8 +186,9 @@ public class MongoEntityServiceImpl
 
     }
 
-    private <T> Class<T> getCeilingType(Entity entity) {
-        return (Class<T>) entity.getCeilingType();
+    protected Class<?> getProjectedEntityType(Class<?> entityClz) {
+        Class<?> entityRootClz = this.entityMetaAccess.getRootInstantiableEntityType(entityClz);
+        return entityRootClz;
     }
 
 }

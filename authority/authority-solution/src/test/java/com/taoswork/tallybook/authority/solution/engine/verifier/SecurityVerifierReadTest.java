@@ -229,7 +229,7 @@ public class SecurityVerifierReadTest extends VerifierTestSupport {
                 List<TGroupAuthority> ga = new ArrayList<TGroupAuthority>();
                 ga.add(d_group_N____);
                 du.setGroups(ga);
-                entityService.update(TUserAuthority.class, du);
+                entityService.update(du);
             }
 
             makeAuthoritiesUserMembers(TENANT);
@@ -303,7 +303,7 @@ public class SecurityVerifierReadTest extends VerifierTestSupport {
                 List<TGroupAuthority> ga = new ArrayList<TGroupAuthority>();
                 ga.add(d_group__AB__);
                 du.setGroups(ga);
-                entityService.update(TUserAuthority.class, du);
+                entityService.update(du);
             }
 
             makeAuthoritiesUserMembers(TENANT);
@@ -360,7 +360,7 @@ public class SecurityVerifierReadTest extends VerifierTestSupport {
                 List<TGroupAuthority> ga = new ArrayList<TGroupAuthority>();
                 ga.add(d_group_G____);
                 du.setGroups(ga);
-                entityService.update(TUserAuthority.class, du);
+                entityService.update(du);
             }
 
             makeAuthoritiesUserMembers(TENANT);
@@ -414,7 +414,7 @@ public class SecurityVerifierReadTest extends VerifierTestSupport {
         for (TUserAuthority du : d_users) {
             List<TGroupAuthority> ga = new ArrayList<TGroupAuthority>();
             du.setGroups(ga);
-            entityService.update(TUserAuthority.class, du);
+            entityService.update(du);
         }
     }
 

@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 /**
  * Created by Gao Yuan on 2016/2/15.
  */
-public abstract class SecuredCrudqAccessor {
+public abstract class SecuredCrudqAccessor implements ISecuredCrudqAccessor{
     private static final Logger LOGGER = LoggerFactory.getLogger(SecuredCrudqAccessor.class);
 
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
@@ -37,11 +37,12 @@ public abstract class SecuredCrudqAccessor {
     @Resource(name = EntityMetaAccess.COMPONENT_NAME)
     protected EntityMetaAccess entityMetaAccess;
 
-    public <T extends Persistable> T securedCreate(Class<T> ceilingType, T entity) throws ServiceException {
-        if (ceilingType == null) {
-            ceilingType = (Class<T>) entity.getClass();
+    @Override
+    public <T extends Persistable> T securedCreate(Class<T> projectedEntityType, T entity) throws ServiceException {
+        if (projectedEntityType == null) {
+            projectedEntityType = (Class<T>) entity.getClass();
         }
-        Class<?> guardian = entityMetaAccess.getPermissionGuardian(ceilingType);
+        Class<?> guardian = entityMetaAccess.getPermissionGuardian(projectedEntityType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Create, entity);
         PersistableResult persistableResult = makePersistableResult(entity);
@@ -50,33 +51,34 @@ public abstract class SecuredCrudqAccessor {
         entityValueGateService.store(persistableResult.getValue(), null);
         entityValidationService.validate(persistableResult);
 
-        return doCreate(entity);
+        return doCreate(projectedEntityType, entity);
     }
 
-    protected abstract <T extends Persistable> T doCreate(T entity);
+    protected abstract <T extends Persistable> T doCreate(Class<T> projectedEntityType, T entity);
 
-    public <T extends Persistable> T securedRead(Class<T> entityType, Object key) throws ServiceException {
-        Class<?> guardian = entityMetaAccess.getPermissionGuardian(entityType);
+    @Override
+    public <T extends Persistable> T securedRead(Class<T> projectedEntityType, Object key) throws ServiceException {
+        Class<?> guardian = entityMetaAccess.getPermissionGuardian(projectedEntityType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Read);
-        Class<T> entityRootClz = entityMetaAccess.getRootInstantiableEntityType(entityType);
-        T result = doRead(entityRootClz, key);
+        T result = doRead(projectedEntityType, key);
         if(result == null){
-            throw new NoSuchRecordException(entityType, key);
+            throw new NoSuchRecordException(projectedEntityType, key);
         }
         entityValueGateService.fetch(result);
         return result;
     }
 
-    protected abstract <T extends Persistable> T doRead(Class<T> entityRootClz, Object key);
+    protected abstract <T extends Persistable> T doRead(Class<T> projectedEntityType, Object key);
 
-    public <T extends Persistable> T securedUpdate(Class<T> ceilingType, T entity) throws ServiceException {
-        if (ceilingType == null) {
-            ceilingType = (Class<T>) entity.getClass();
+    @Override
+    public <T extends Persistable> T securedUpdate(Class<T> projectedEntityType, T entity) throws ServiceException {
+        if (projectedEntityType == null) {
+            projectedEntityType = (Class<T>) entity.getClass();
         }
-        Class<?> guardian = entityMetaAccess.getPermissionGuardian(ceilingType);
+        Class<?> guardian = entityMetaAccess.getPermissionGuardian(projectedEntityType);
         String guardianName = guardian.getName();
-        PersistableResult<T> oldEntity = getManagedEntity(ceilingType, entity);
+        PersistableResult<T> oldEntity = getManagedEntity(projectedEntityType, entity);
         securityVerifier.checkAccess(guardianName, Access.Update, oldEntity.getValue());
         securityVerifier.checkAccess(guardianName, Access.Update, entity);
         PersistableResult persistableResult = makePersistableResult(entity);
@@ -85,58 +87,56 @@ public abstract class SecuredCrudqAccessor {
         entityValueGateService.store(persistableResult.getValue(), oldEntity.getValue());
         entityValidationService.validate(persistableResult);
 
-        return doUpdate(entity);
+        return doUpdate(projectedEntityType, entity);
     }
 
-    protected abstract  <T extends Persistable> T doUpdate(T entity);
+    protected abstract  <T extends Persistable> T doUpdate(Class<T> projectedEntityType, T entity);
 
-    public <T extends Persistable> void securedDelete(Class<T> ceilingType, T entity) throws ServiceException {
-        if (ceilingType == null) {
-            ceilingType = (Class<T>) entity.getClass();
+    @Override
+    public <T extends Persistable> void securedDelete(Class<T> projectedEntityType, T entity) throws ServiceException {
+        if (projectedEntityType == null) {
+            projectedEntityType = (Class<T>) entity.getClass();
         }
-        Class<?> guardian = entityMetaAccess.getPermissionGuardian(ceilingType);
+        Class<?> guardian = entityMetaAccess.getPermissionGuardian(projectedEntityType);
         String guardianName = guardian.getName();
-        PersistableResult<T> oldEntity = getManagedEntity(ceilingType, entity);
+        PersistableResult<T> oldEntity = getManagedEntity(projectedEntityType, entity);
         if(oldEntity == null){
             PersistableResult<T> temp = makePersistableResult(entity);
-            throw new NoSuchRecordException(ceilingType, temp.getIdValue());
+            throw new NoSuchRecordException(projectedEntityType, temp.getIdValue());
         }
         entity = oldEntity.getValue();
         securityVerifier.checkAccess(guardianName, Access.Delete, entity);
-        doDelete(entity);
+        doDelete(projectedEntityType, entity);
     }
 
-    protected abstract <T extends Persistable> void doDelete(T entity);
+    protected abstract <T extends Persistable> void doDelete(Class<T> projectedEntityType, T entity);
 
-    public <T extends Persistable> CriteriaQueryResult<T> securedQuery(Class<T> entityType, CriteriaTransferObject query) throws ServiceException {
-        Class<?> guardian = entityMetaAccess.getPermissionGuardian(entityType);
+    @Override
+    public <T extends Persistable> CriteriaQueryResult<T> securedQuery(Class<T> projectedEntityType, CriteriaTransferObject query) throws ServiceException {
+        Class<?> guardian = entityMetaAccess.getPermissionGuardian(projectedEntityType);
         String guardianName = guardian.getName();
         securityVerifier.checkAccess(guardianName, Access.Query);
-        Class<T> entityRootClz = entityMetaAccess.getRootInstantiableEntityType(entityType);
-        CriteriaQueryResult<T> result = doQuery(entityRootClz, query);
+        CriteriaQueryResult<T> result = doQuery(projectedEntityType, query);
         for(T one : result.getEntityCollection()){
             entityValueGateService.fetch(one);
         }
         return result;
     }
 
-    protected abstract <T extends Persistable> CriteriaQueryResult<T> doQuery(Class<T> entityRootClz, CriteriaTransferObject query);
+    protected abstract <T extends Persistable> CriteriaQueryResult<T> doQuery(Class<T> projectedEntityType, CriteriaTransferObject query);
 
-    private <T extends Persistable> PersistableResult<T> internalReadNoAccessCheck(Class<T> entityType, Object key) {
-        Class<T> entityRootClz = entityMetaAccess.getRootInstantiableEntityType(entityType);
-        T result = doRead(entityRootClz, key);
+    private <T extends Persistable> PersistableResult<T> internalReadNoAccessCheck(Class<T> projectedEntityType, Object key) {
+        T result = doRead(projectedEntityType, key);
         return makePersistableResult(result);
     }
 
-    private <T extends Persistable> PersistableResult<T> getManagedEntity(Class ceilingType, T entity) throws ServiceException {
+    private <T extends Persistable> PersistableResult<T> getManagedEntity(Class projectedEntityType, T entity) throws ServiceException {
         try {
-            Class ceilingClz = ceilingType;
-            Class<T> entityRootClz = entityMetaAccess.getRootInstantiableEntityType(ceilingClz);
-            IClassMeta rootClzMeta = entityMetaAccess.getClassMeta(entityRootClz, false);
+            IClassMeta rootClzMeta = entityMetaAccess.getClassMeta(projectedEntityType, false);
             Field idField = rootClzMeta.getIdField();
 
             Object id = idField.get(entity);
-            PersistableResult oldEntity = this.internalReadNoAccessCheck(ceilingClz, id);
+            PersistableResult oldEntity = this.internalReadNoAccessCheck(projectedEntityType, id);
             return oldEntity;
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());

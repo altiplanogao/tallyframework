@@ -247,7 +247,7 @@ public class JpaEntityServiceTest {
             Assert.assertTrue(returned == createAttemptB);
 
             for (ZooKeeper p : cache) {
-                entityService.delete(ZooKeeper.class, p);
+                entityService.delete(p);
             }
 
             {

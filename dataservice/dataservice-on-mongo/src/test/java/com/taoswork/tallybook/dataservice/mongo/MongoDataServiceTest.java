@@ -56,12 +56,11 @@ public class MongoDataServiceTest {
 
         try {
             {
-                Class ctzClz = Citizen.class;
                 Citizen c = new Citizen();
                 c.setFirstName("First");
                 c.setLastName("Last");
 
-                PersistableResult<Citizen> result = entityService.create(ctzClz, c);
+                PersistableResult<Citizen> result = entityService.create(c);
 
             }
 

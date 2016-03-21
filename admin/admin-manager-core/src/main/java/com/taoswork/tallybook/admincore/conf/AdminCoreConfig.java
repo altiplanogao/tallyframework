@@ -56,7 +56,7 @@ public class AdminCoreConfig {
             cto.addFilterCriteria(propC);
             CriteriaQueryResult cqr = entityService.query(AdminProtection.class, cto);
             if (cqr.fetchedCount() == 0) {
-                entityService.create(AdminProtection.class, res);
+                entityService.create(res);
             }
         }
     }

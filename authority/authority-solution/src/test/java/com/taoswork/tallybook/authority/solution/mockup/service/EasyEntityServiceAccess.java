@@ -19,9 +19,9 @@ public class EasyEntityServiceAccess {
         this.entityService = entityService;
     }
 
-    public <T extends Persistable> boolean create(Class<T> ceilingType, T entity){
+    public <T extends Persistable> boolean create(T entity){
         try {
-            PersistableResult result = entityService.create(ceilingType, entity);
+            PersistableResult result = entityService.create(entity);
             if(result == null)
                 return false;
             return null != result.getValue();
@@ -45,9 +45,9 @@ public class EasyEntityServiceAccess {
         }
     }
 
-    public <T extends Persistable> T update(Class<T> ceilingType, T entity){
+    public <T extends Persistable> T update(T entity){
         try {
-            PersistableResult<T> result = entityService.update(ceilingType, entity);
+            PersistableResult<T> result = entityService.update(entity);
             if(result == null)
                 return null;
             return result.getValue();
@@ -58,9 +58,9 @@ public class EasyEntityServiceAccess {
         }
     }
 
-    public <T extends Persistable> boolean delete(Class<T> ceilingType, T entity){
+    public <T extends Persistable> boolean delete(T entity){
         try {
-            boolean result = entityService.delete(ceilingType, entity);
+            boolean result = entityService.delete( entity);
             return result;
         } catch (ServiceException e) {
             e.printStackTrace();

@@ -33,29 +33,23 @@ public final class JpaEntityServiceImpl
     }
 
     @Override
-    public <T extends Persistable> PersistableResult<T> create(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> create(final T entity) throws ServiceException {
         try {
-            return persistenceService.create(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class projectedEntityType = getProjectedEntityType(directClz);
+
+            return persistenceService.create(projectedEntityType, entity);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
     }
-
-//    @Override
-//    public <T extends Persistable> PersistableResult<T> create(final Entity entity) throws ServiceException {
-//        try {
-//            return persistenceService.create(entity);
-//        } catch (Exception e) {
-//            entityAccessExceptionHandler(e);
-//        }
-//        return null;
-//    }
 
     @Override
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
         try {
-            return persistenceService.read(entityClz, key, externalReference);
+            Class projectedEntityType = getProjectedEntityType(entityClz);
+            return persistenceService.read(projectedEntityType, key, externalReference);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
@@ -63,29 +57,23 @@ public final class JpaEntityServiceImpl
     }
 
     @Override
-    public <T extends Persistable> PersistableResult<T> update(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> PersistableResult<T> update(final T entity) throws ServiceException {
         try {
-            return persistenceService.update(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class projectedEntityType = getProjectedEntityType(directClz);
+            return persistenceService.update(projectedEntityType, entity);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return null;
     }
 
-//    @Override
-//    public <T extends Persistable> PersistableResult<T> update(final Entity entity) throws ServiceException {
-//        try {
-//            return persistenceService.update(entity);
-//        } catch (Exception e) {
-//            entityAccessExceptionHandler(e);
-//        }
-//        return null;
-//    }
-
     @Override
-    public <T extends Persistable> boolean delete(final Class<T> ceilingType, final T entity) throws ServiceException {
+    public <T extends Persistable> boolean delete(final T entity) throws ServiceException {
         try {
-            persistenceService.delete(ceilingType, entity);
+            Class directClz = entity.getClass();
+            Class projectedEntityType = getProjectedEntityType(directClz);
+            persistenceService.delete(projectedEntityType, entity);
             return true;
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -107,15 +95,15 @@ public final class JpaEntityServiceImpl
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {
         try {
-            return persistenceService.query(entityClz, query, externalReference);
+            Class projectedEntityType = getProjectedEntityType(entityClz);
+            return persistenceService.query(projectedEntityType, query, externalReference);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
             return null;
         }
     }
 
-    @Override
-    public Class<?> getRootInstantiableEntityClass(Class<?> entityClz) {
+    protected Class<?> getProjectedEntityType(Class<?> entityClz) {
         Class<?> entityRootClz = this.entityMetaAccess.getRootInstantiableEntityType(entityClz);
         return entityRootClz;
     }

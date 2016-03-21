@@ -176,7 +176,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
             Entity entity = request.getEntity();
             Persistable persistable = translator.convert(entityMetaAccess, entity, null);
-            result = entityService.create(entity.getCeilingType(), persistable);
+            result = entityService.create(persistable);
             Map<String, Object> m = new MapBuilder<String, Object>().append(EntityActionPaths.ID_KEY, result.getIdValue());
             String beanUri = (new UriTemplate(beanUriTemplate)).expand(m).toString();
             response = new EntityCreateResponse(request.getUri(), beanUri);
@@ -222,7 +222,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
             Entity entity = request.getEntity();
             Persistable persistable = translator.convert(entityMetaAccess, entity, null);
-            result = entityService.update(entity.getCeilingType(), persistable);
+            result = entityService.update(persistable);
         } catch (ServiceException e) {
             se = e;
         } finally {
@@ -242,7 +242,7 @@ public class FrontEndEntityService implements IFrontEndEntityService {
             EntityMetaAccess entityMetaAccess = dataService.getService(EntityMetaAccess.COMPONENT_NAME);
             Entity entity = request.getEntity();
             Persistable persistable = translator.convert(entityMetaAccess, entity, null);
-            deleted = entityService.delete(entity.getCeilingType(), persistable);
+            deleted = entityService.delete(persistable);
         } catch (ServiceException e) {
             se = e;
         } finally {

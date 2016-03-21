@@ -74,7 +74,7 @@ public class MongoEntityServicePerformanceTest {
                             .setCeilingType(ZooKeeper.class)
                             .setProperty("name", nameAAA + i);
                     ZooKeeper adminP = (ZooKeeper)translator.convert(metaAccess, adminEntity, null);
-                    PersistableResult<ZooKeeper> adminRes = entityService.create(ZooKeeper.class, adminP);
+                    PersistableResult<ZooKeeper> adminRes = entityService.create(adminP);
                     ZooKeeper admin = adminRes.getValue();
                     ids.add(admin.getId());
                     created++;
@@ -129,7 +129,7 @@ public class MongoEntityServicePerformanceTest {
                 String oldEmail = admin.getEmail();
                 String newEmail = admin.getName() + "@xxx.com";
                 admin.setEmail(newEmail);
-                PersistableResult<ZooKeeper> freshAdminFrom = entityService.update(ZooKeeper.class, admin);
+                PersistableResult<ZooKeeper> freshAdminFrom = entityService.update(admin);
                 Assert.assertEquals(newEmail, freshAdminFrom.getValue().getEmail());
                 updated++;
             }
@@ -142,7 +142,7 @@ public class MongoEntityServicePerformanceTest {
                 PersistableResult<ZooKeeper> adminFromDbRes = entityService.read(ZooKeeper.class, (id));
                 ZooKeeperImpl zk = new ZooKeeperImpl();
                 zk.setId(id);
-                boolean delOk = entityService.delete(ZooKeeper.class, zk);
+                boolean delOk = entityService.delete(zk);
                 Assert.assertTrue(delOk);
                 deleted++;
             }

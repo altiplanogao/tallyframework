@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.dataservice.core.metaaccess.impl;
 
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.dataservice.core.metaaccess.helper.EntityMetaRawAccess;
 import com.taoswork.tallybook.dataservice.service.EntityMetaAccess;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
@@ -129,6 +128,9 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
         synchronized (ceiling2Instantiables) {
             List<Class> root = ceiling2Instantiables.get(entityCeilingType);
             if (null == root) {
+                if(!entityTypesWithInterfaces.contains(entityCeilingType)){
+                    return null;
+                }
                 root = calcInstantiableEntityTypes(entityCeilingType);
                 ceiling2Instantiables.put(entityCeilingType, root);
             }
@@ -141,6 +143,9 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
         synchronized (ceiling2RootInstantiable) {
             Class<T> root = ceiling2RootInstantiable.get(entityCeilingType);
             if (null == root) {
+                if(!entityTypesWithInterfaces.contains(entityCeilingType)){
+                    return null;
+                }
                 root = calcRootInstantiableEntityClass(entityCeilingType);
                 ceiling2RootInstantiable.put(entityCeilingType, root);
             }
@@ -203,6 +208,9 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
         synchronized (ceiling2ClassTreeMap) {
             EntityClassTree classTree = ceiling2ClassTreeMap.get(entityCeilingType);
             if (classTree == null) {
+                if(!entityTypesWithInterfaces.contains(entityCeilingType)){
+                    return null;
+                }
                 classTree = calcEntityClassTreeFromCeiling(entityCeilingType);
                 ceiling2ClassTreeMap.put(entityCeilingType, classTree);
             }

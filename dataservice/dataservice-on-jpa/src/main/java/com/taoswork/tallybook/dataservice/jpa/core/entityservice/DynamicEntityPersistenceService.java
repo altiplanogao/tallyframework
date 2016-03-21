@@ -18,21 +18,15 @@ public interface DynamicEntityPersistenceService {
     public static final String COMPONENT_NAME = "DynamicEntityPersistenceService";
 
     @Transactional
-    <T extends Persistable> PersistableResult<T> create(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> PersistableResult<T> create(Class<T> projectedEntityType, T entity) throws ServiceException;
 
-//    @Transactional
-//    <T extends Persistable> PersistableResult<T> create(Entity entity) throws ServiceException;
-
-    <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException;
+    <T extends Persistable> PersistableResult<T> read(Class<T> projectedEntityType, Object key, ExternalReference externalReference) throws ServiceException;
 
     @Transactional
-    <T extends Persistable> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
-//
-//    @Transactional
-//    <T extends Persistable> PersistableResult<T> update(Entity entity) throws ServiceException;
+    <T extends Persistable> PersistableResult<T> update(Class<T> projectedEntityType, T entity) throws ServiceException;
 
     @Transactional
-    <T extends Persistable> Void delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> Void delete(Class<T> projectedEntityType, T entity) throws ServiceException;
 
     /**
      * @param entity
@@ -44,5 +38,5 @@ public interface DynamicEntityPersistenceService {
 //    @Transactional
 //    <T extends Persistable> Void delete(Entity entity, String id) throws ServiceException;
 
-    <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
+    <T extends Persistable> CriteriaQueryResult<T> query(Class<T> projectedEntityType, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 }

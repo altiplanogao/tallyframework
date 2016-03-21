@@ -53,7 +53,7 @@ public class JpaEntityServiceCompanyTest {
                         privateProducts.add("private " + c);
                     }
                     company.setPrivateProducts(privateProducts);
-                    PersistableResult<ICompany> result = entityService.create(null, company);
+                    PersistableResult<ICompany> result = entityService.create(company);
                 }
 
                 PersistableResult<ICompany> readCompanyR = entityService.read(ICompany.class, company.getId());
