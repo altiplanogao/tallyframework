@@ -78,7 +78,7 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
             entityTypes = new HashSet<Class>();
             new SetBuilder<Class>(entityTypes).addAll(entityClasses);
 
-            entityInterfaces = ClassUtility.getAllSupers(Persistable.class, entityClasses, true, true);
+            entityInterfaces = ClassUtility.getAllSupers(superPersistable(), entityClasses, true, true);
 
             entityTypesWithInterfaces = new HashSet<Class>();
             entityTypesWithInterfaces.addAll(entityTypes);
@@ -93,6 +93,7 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
         classMetaMap = new LRUMap();
 
         calcAllEntityMeta();
+        calcAllInstantiable();
         calcEntityTypeGuardians();
     }
 
@@ -284,6 +285,13 @@ abstract class BaseEntityMetaAccess_metapart implements EntityMetaAccess {
         for (Class<?> entity : allEntities) {
             calcClassMeta(entity, true);
             calcClassMeta(entity, false);
+        }
+    }
+
+    private void calcAllInstantiable(){
+        for (Class<?> entity : entityTypesWithInterfaces){
+            getRootInstantiableEntityType(entity);
+            getInstantiableEntityTypes(entity);
         }
     }
 

@@ -28,7 +28,7 @@ public abstract class AutoTreeAccessor<D, N extends AutoTree<D>> extends AutoTre
     public N add(N existingNode, D newNodeData) {
         D existingNodeData = existingNode.data;
         if (genealogy.isSuperOf(existingNodeData, newNodeData)) {
-            if (allowChild) {
+            if (allowKid) {
                 List<D> superChain = genealogy.superChain(existingNodeData, newNodeData);
                 N currentNode = existingNode;
                 for (D d : superChain) {
@@ -36,7 +36,7 @@ public abstract class AutoTreeAccessor<D, N extends AutoTree<D>> extends AutoTre
                     D expectedP = genealogy.calcDirectSuper(d, currentD);
                     if (genealogy.checkEqual(expectedP, currentD)) {
                         N newNode = createNode(d);
-                        AddResult<N> result = currentNode.safeDirectAddChild(newNode, genealogy);
+                        AddResult<N> result = currentNode.safeDirectAddKid(newNode, genealogy);
                         if (result.isOk()) {
                             currentNode = result.node;
                         } else {

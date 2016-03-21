@@ -62,4 +62,13 @@ class ClassScope implements Cloneable, Serializable {
                 .append(withHierarchy)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ClassScope{" +
+                clazzName + '\'' +
+                ", super:" + withSuper +
+                ", hierarchy:" + withHierarchy +
+                '}';
+    }
 }

@@ -12,7 +12,7 @@ public class TestClassTree {
     private static final String delimiter = "*";
 
     @Test
-    public void addChildBySteps() {
+    public void addKidBySteps() {
         StringTree a = new StringTree("A");
         StringTreeAccessor accessor = new StringTreeAccessor();
         accessor.allowAll();
@@ -86,7 +86,7 @@ public class TestClassTree {
     }
 
     @Test
-    public void addChildJumpSteps() {
+    public void addKidJumpSteps() {
         StringTree a = new StringTree("A");
         StringTreeAccessor accessor = new StringTreeAccessor();
         accessor.allowAll();
@@ -113,10 +113,10 @@ public class TestClassTree {
     }
 
     @Test
-    public void addChildDenyParentBranch() {
+    public void addKidDenyParentBranch() {
         StringTree aa = new StringTree("AA");
         StringTreeAccessor accessor = new StringTreeAccessor();
-        accessor.denyAll().setAllowChild(true);
+        accessor.denyAll().setAllowKid(true);
 
         StringTree a = accessor.add(aa, "A");
         Assert.assertNull(a);
@@ -146,10 +146,10 @@ public class TestClassTree {
     }
 
     @Test
-    public void addChildDenyParentBranch2() {
+    public void addKidDenyParentBranch2() {
         StringTree aa = new StringTree("AA");
         StringTreeAccessor accessor = new StringTreeAccessor();
-        accessor.denyAll().setAllowChild(true);
+        accessor.denyAll().setAllowKid(true);
 
         StringTree aaaa = accessor.add(aa, "AAAA");
         StringTree a = accessor.add(aa, "A");
@@ -171,7 +171,7 @@ public class TestClassTree {
     public void addDirectParent() {
         StringTree aaaa = new StringTree("AAAA");
         StringTreeAccessor accessor = new StringTreeAccessor();
-        accessor.denyAll().setAllowChild(false).setAllowParent(true);
+        accessor.denyAll().setAllowKid(false).setAllowParent(true);
 
         StringTree aaa =accessor.add(aaaa, "AAA");
         StringTree aa =accessor.add(aaaa, "AA");
@@ -250,7 +250,7 @@ public class TestClassTree {
     public void addJumpParent() {
         StringTree aaa = new StringTree("AAA");
         StringTreeAccessor accessor = new StringTreeAccessor();
-        accessor.denyAll().setAllowChild(true).setAllowParent(true);
+        accessor.denyAll().setAllowKid(true).setAllowParent(true);
 
         StringTree a = accessor.add(aaa, "A");
         StringTree aaaa = accessor.add(aaa, "AAAA");

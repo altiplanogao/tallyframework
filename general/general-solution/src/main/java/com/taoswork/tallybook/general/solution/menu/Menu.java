@@ -45,14 +45,14 @@ public class Menu implements IMenu {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        insideRoot.dropInvalidChildren();
+        insideRoot.dropInvalidKids();
         autoFill(updater);
         ensureQuickMapping();
     }
 
     Menu(MenuEntryBuilder builder, IMenuEntryUpdater updater){
         insideRoot = builder.innerMenuEntry();
-        insideRoot.dropInvalidChildren();
+        insideRoot.dropInvalidKids();
         autoFill(updater);
         ensureQuickMapping();
     }

@@ -4,7 +4,6 @@ import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 import com.taoswork.tallybook.general.extension.utils.TPredicate;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback;
 import com.taoswork.tallybook.general.solution.quickinterface.ICallback2;
-import com.taoswork.tallybook.general.solution.quickinterface.IChecker;
 import com.taoswork.tallybook.general.solution.quickinterface.IToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class AutoTree <D> implements Serializable {
 
     protected final D data;
     protected AutoTree<D> parent;
-    protected final List<AutoTree<D>> children = new ArrayList<AutoTree<D>>();
+    protected final List<AutoTree<D>> kids = new ArrayList<AutoTree<D>>();
 
     public AutoTree(D data){
         this.data = data;
@@ -49,14 +48,14 @@ public class AutoTree <D> implements Serializable {
     }
 
     public Collection<AutoTree<D>> getReadonlyChildren(){
-        return Collections.unmodifiableCollection(this.children);
+        return Collections.unmodifiableCollection(this.kids);
     }
 
-    <N extends AutoTree<D>> AddResult<N> safeDirectAddChild(AutoTree<D> candidate, AutoTreeGenealogy<D> genealogy){
+    <N extends AutoTree<D>> AddResult<N> safeDirectAddKid(AutoTree<D> candidate, AutoTreeGenealogy<D> genealogy){
         final AutoTree<D> node = candidate;
         D expectedSameAsThis = genealogy.calcDirectSuper(node.data, this.data);
         if(genealogy.checkEqual(expectedSameAsThis, this.data)){
-            AutoTree<D> shouldNoMatch = CollectionUtility.find(children, new TPredicate<AutoTree<D>>() {
+            AutoTree<D> shouldNoMatch = CollectionUtility.find(kids, new TPredicate<AutoTree<D>>() {
                 @Override
                 public boolean evaluate(AutoTree<D> notNullObj) {
                     return notNullObj.data.equals(node.data);
@@ -64,7 +63,7 @@ public class AutoTree <D> implements Serializable {
             });
             if(shouldNoMatch == null){
                 node.parent = this;
-                this.children.add(node);
+                this.kids.add(node);
                 return new AddResult<N>(AddResult.Type.Success, (N)node);
             }else {
                 return new AddResult<N>(AddResult.Type.Exist, (N)shouldNoMatch);
@@ -84,7 +83,7 @@ public class AutoTree <D> implements Serializable {
         }
         D expected = genealogy.calcDirectSuper(this.data, node.data);
         if(genealogy.checkEqual(expected, node.data)){
-            AddResult<N> tempResult = candidate.safeDirectAddChild(this, genealogy);
+            AddResult<N> tempResult = candidate.safeDirectAddKid(this, genealogy);
             if(tempResult.isOk()){
                 return new AddResult<N>(tempResult.type, (N)candidate);
             }else {
@@ -94,13 +93,13 @@ public class AutoTree <D> implements Serializable {
         return new AddResult<N>(AddResult.Type.Fail, null);
     }
 
-    public <N extends AutoTree<D>> N findChild(D data, AutoTreeGenealogy genealogy) {
+    public <N extends AutoTree<D>> N findKid(D data, AutoTreeGenealogy genealogy) {
         if (genealogy.checkEqual(this.data, data)) {
             return (N) this;
         }
         if (genealogy.isSuperOf(this.data, data)) {
-            for (AutoTree<D> child : this.children) {
-                N tt = child.findChild(data, genealogy);
+            for (AutoTree<D> kid : this.kids) {
+                N tt = kid.findKid(data, genealogy);
                 if (tt != null) {
                     return tt;
                 }
@@ -114,10 +113,10 @@ public class AutoTree <D> implements Serializable {
             return (N)this;
         }
         if(genealogy.isSuperOf(this.data, data)) {
-            return findChild(data, genealogy);
+            return findKid(data, genealogy);
         }
         if(searchSuper){
-            return this.getRoot().findChild(data, genealogy);
+            return this.getRoot().findKid(data, genealogy);
         }else {
             return null;
         }
@@ -146,11 +145,11 @@ public class AutoTree <D> implements Serializable {
         }
         sb.append(toString.makeString(data));
         sb.append(delimiter);
-        if(null == children){
+        if(null == kids){
             return;
         }
-        for (AutoTree<D> child : children){
-            child.printTree(sb, useIndent, indent + 1, delimiter, toString);
+        for (AutoTree<D> kid : kids){
+            kid.printTree(sb, useIndent, indent + 1, delimiter, toString);
         }
     }
     
@@ -162,10 +161,11 @@ public class AutoTree <D> implements Serializable {
             boolean rootToLeaves,
             ICallback<Void, D, AutoTreeException> elementCallback,
             boolean skipRoot){
-        this.traverse(rootToLeaves, elementCallback, new IChecker<Integer>() {
+        final int callableLvl = skipRoot ? 1 : 0;
+        this.traverse(rootToLeaves, elementCallback, new ICallableChecker<Integer>() {
             @Override
-            public boolean check(Integer parameter) {
-                return parameter.intValue() > 0;
+            public boolean callable(Integer parameter) {
+                return parameter.intValue() >= callableLvl;
             }
         });
     }
@@ -173,27 +173,27 @@ public class AutoTree <D> implements Serializable {
     public void traverse(
             boolean rootToLeaves,
             ICallback<Void, D, AutoTreeException> elementCallback,
-            IChecker<Integer> canCallChecker){
-        this.traverse(rootToLeaves, elementCallback, canCallChecker, 0);
+            ICallableChecker<Integer> callable){
+        this.traverse(rootToLeaves, elementCallback, callable, 0);
     }
 
     private void traverse(
             boolean rootToLeaves,
             ICallback<Void, D, AutoTreeException> elementCallback,
-            IChecker<Integer> canCallChecker,
+            ICallableChecker<Integer> callable,
             int depth) throws AutoTreeException{
         if(rootToLeaves){
-            if(canCallChecker.check(depth)){
+            if(callable.callable(depth)){
                 elementCallback.callback(data);
             }
         }
-        if (children != null && children.size() > 0){
-            for (AutoTree<D> treeNode : children){
-                treeNode.traverse(rootToLeaves, elementCallback, canCallChecker, depth + 1);
+        if (kids != null && kids.size() > 0){
+            for (AutoTree<D> treeNode : kids){
+                treeNode.traverse(rootToLeaves, elementCallback, callable, depth + 1);
             }
         }
         if(!rootToLeaves) {
-            if (canCallChecker.check(depth)) {
+            if (callable.callable(depth)) {
                 elementCallback.callback(data);
             }
         }
@@ -203,9 +203,9 @@ public class AutoTree <D> implements Serializable {
             boolean rootToLeaves,
             ICallback2<Void, D, TraverseControl, AutoTreeException> elementCallback,
             final boolean skipRoot){
-        this.traverse(rootToLeaves, elementCallback, new IChecker<Integer>() {
+        this.traverse(rootToLeaves, elementCallback, new ICallableChecker<Integer>() {
             @Override
-            public boolean check(Integer parameter) {
+            public boolean callable(Integer parameter) {
                 if(skipRoot){
                     return parameter.intValue() > 0;
                 }else {
@@ -218,26 +218,26 @@ public class AutoTree <D> implements Serializable {
     public void traverse(
             boolean rootToLeaves,
             ICallback2<Void, D, TraverseControl, AutoTreeException> elementCallback,
-            IChecker<Integer> canCallChecker){
+            ICallableChecker<Integer> canCallChecker){
         this.traverse(rootToLeaves, elementCallback, canCallChecker, new TraverseControl(), 0);
     }
 
     private void traverse(
             boolean rootToLeaves,
             ICallback2<Void, D, TraverseControl, AutoTreeException> elementCallback,
-            IChecker<Integer> canCallChecker,
+            ICallableChecker<Integer> canCallChecker,
             TraverseControl traverseControl,
             int depth) throws AutoTreeException{
         if(rootToLeaves){
-            if(canCallChecker.check(depth)){
+            if(canCallChecker.callable(depth)){
                 elementCallback.callback(data, traverseControl);
                 if(traverseControl.shouldBreak){
                     return;
                 }
             }
         }
-        if (children != null && children.size() > 0){
-            for (AutoTree<D> treeNode : children){
+        if (kids != null && kids.size() > 0){
+            for (AutoTree<D> treeNode : kids){
                 treeNode.traverse(rootToLeaves, elementCallback, canCallChecker, traverseControl, depth + 1);
                 if(traverseControl.shouldBreak){
                     return;
@@ -245,7 +245,7 @@ public class AutoTree <D> implements Serializable {
             }
         }
         if(!rootToLeaves) {
-            if (canCallChecker.check(depth)) {
+            if (canCallChecker.callable(depth)) {
                 elementCallback.callback(data, traverseControl);
                 if(traverseControl.shouldBreak){
                     return;

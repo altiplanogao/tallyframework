@@ -4,16 +4,16 @@ package com.taoswork.tallybook.general.solution.autotree;
  * Created by Gao Yuan on 2015/7/3.
  */
 public class AutoTreeAccessorSetting {
-    boolean allowChild = true;
+    boolean allowKid = true;
     boolean allowParent = false;
     boolean allowBranch = false;
 
-    public boolean isAllowChild() {
-        return allowChild;
+    public boolean isAllowKid() {
+        return allowKid;
     }
 
-    public AutoTreeAccessorSetting setAllowChild(boolean allowChild) {
-        this.allowChild = allowChild;
+    public AutoTreeAccessorSetting setAllowKid(boolean allowKid) {
+        this.allowKid = allowKid;
         return this;
     }
 
@@ -39,14 +39,14 @@ public class AutoTreeAccessorSetting {
     }
 
     public AutoTreeAccessorSetting allowAll(){
-        allowChild = true;
+        allowKid = true;
         allowParent = true;
         allowBranch = true;
         return this;
     }
 
     public AutoTreeAccessorSetting denyAll(){
-        allowChild = false;
+        allowKid = false;
         allowParent = false;
         allowBranch = false;
         return this;

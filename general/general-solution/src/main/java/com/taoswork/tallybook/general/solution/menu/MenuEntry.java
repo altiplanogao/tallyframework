@@ -177,14 +177,14 @@ public class MenuEntry implements IMenuEntry {
         return true;
     }
 
-    private boolean hasChild(){
+    private boolean hasKid(){
         return (entries != null && entries.size() > 0);
     }
 
-    public void dropInvalidChildren(){
+    public void dropInvalidKids(){
         List<MenuEntry> delList = new ArrayList<MenuEntry>();
         for(MenuEntry entry : entries){
-            entry.dropInvalidChildren();
+            entry.dropInvalidKids();
             if(!entry._isValid()){
                 delList.add(entry);
             }

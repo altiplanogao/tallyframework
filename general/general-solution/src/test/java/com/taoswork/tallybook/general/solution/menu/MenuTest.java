@@ -23,19 +23,19 @@ public class MenuTest {
     @Test
     public void testOutput(){
         MenuEntry menuEntry = new MenuEntry();
-        List<MenuEntry> childrenAtLv1 = new ArrayList<MenuEntry>();
+        List<MenuEntry> kidsAtLv1 = new ArrayList<MenuEntry>();
         for (int i = 0 ; i < 4; ++i){
             MenuEntry level1Entry = makeMenuEntry(1, "Group", i);
-            List<MenuEntry> children = new ArrayList<MenuEntry>();
+            List<MenuEntry> kids = new ArrayList<MenuEntry>();
             for(int j = 0 ; j <4 ; ++j){
                 MenuEntry level2Entry = makeMenuEntry(2, "Item"+i, j);
-                children.add(level2Entry);
+                kids.add(level2Entry);
             }
-            level1Entry.setEntries(children);
+            level1Entry.setEntries(kids);
 
-            childrenAtLv1.add(level1Entry);
+            kidsAtLv1.add(level1Entry);
         }
-        menuEntry.setEntries(childrenAtLv1);
+        menuEntry.setEntries(kidsAtLv1);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {

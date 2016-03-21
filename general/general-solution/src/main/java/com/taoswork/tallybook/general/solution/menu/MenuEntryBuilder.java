@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class MenuEntryBuilder {
     private final MenuEntryBuilder parent;
-    private final List<MenuEntryBuilder> children = new ArrayList<MenuEntryBuilder>();
+    private final List<MenuEntryBuilder> kids = new ArrayList<MenuEntryBuilder>();
     private final MenuEntry entry;
 
     private MenuEntryBuilder(MenuEntry entry) {
@@ -79,7 +79,7 @@ public class MenuEntryBuilder {
 
     public MenuEntryBuilder beginEntry(){
         MenuEntryBuilder subNode = new MenuEntryBuilder(this);
-        children.add(subNode);
+        kids.add(subNode);
         return subNode;
     }
 
@@ -87,17 +87,17 @@ public class MenuEntryBuilder {
         return parent;
     }
 
-    private void gatherChildren(){
+    private void gatherKids(){
         List<MenuEntry> e = new ArrayList<MenuEntry>();
-        for(MenuEntryBuilder entry : children){
-            entry.gatherChildren();
-           e.add(entry.entry);
+        for(MenuEntryBuilder kid : kids){
+            kid.gatherKids();
+           e.add(kid.entry);
         }
         entry.setEntries(e);
     }
 
     public Menu makeMenu(IMenuEntryUpdater updater){
-        this.gatherChildren();
+        this.gatherKids();
         return new Menu(this, updater);
     }
 
