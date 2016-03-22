@@ -6,9 +6,8 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.entityservice.BaseEntityServiceImpl;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
-//import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,8 @@ public final class JpaEntityServiceImpl
         implements JpaEntityService {
     private static final Logger LOGGER = LoggerFactory.getLogger(JpaEntityServiceImpl.class);
 
-    @Resource(name = DynamicEntityPersistenceService.COMPONENT_NAME)
-    protected DynamicEntityPersistenceService persistenceService;
+    @Resource(name = PersistenceService.COMPONENT_NAME)
+    protected PersistenceService persistenceService;
 
     public JpaEntityServiceImpl() {
     }
@@ -69,28 +68,15 @@ public final class JpaEntityServiceImpl
     }
 
     @Override
-    public <T extends Persistable> boolean delete(final T entity) throws ServiceException {
+    public <T extends Persistable> boolean delete(Class<T> entityClz, Object key) throws ServiceException {
+        Class projectedEntityType = getProjectedEntityType(entityClz);
         try {
-            Class directClz = entity.getClass();
-            Class projectedEntityType = getProjectedEntityType(directClz);
-            persistenceService.delete(projectedEntityType, entity);
-            return true;
+            return persistenceService.delete(projectedEntityType, key);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }
         return false;
     }
-
-//    @Override
-//    public <T extends Persistable> boolean delete(final Entity entity, String id) throws ServiceException {
-//        try {
-//            persistenceService.delete(entity, id);
-//            return true;
-//        } catch (Exception e) {
-//            entityAccessExceptionHandler(e);
-//            return false;
-//        }
-//    }
 
     @Override
     public <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException {

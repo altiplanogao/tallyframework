@@ -5,7 +5,6 @@ import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-//import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 //Aspected by OpenEntityManagerAop.java
-public interface DynamicEntityPersistenceService {
-    public static final String COMPONENT_NAME = "DynamicEntityPersistenceService";
+public interface PersistenceService {
+    public static final String COMPONENT_NAME = "PersistenceService";
 
     @Transactional
     <T extends Persistable> PersistableResult<T> create(Class<T> projectedEntityType, T entity) throws ServiceException;
@@ -26,7 +25,7 @@ public interface DynamicEntityPersistenceService {
     <T extends Persistable> PersistableResult<T> update(Class<T> projectedEntityType, T entity) throws ServiceException;
 
     @Transactional
-    <T extends Persistable> Void delete(Class<T> projectedEntityType, T entity) throws ServiceException;
+    <T extends Persistable> boolean delete(Class<T> projectedEntityType, Object key) throws ServiceException;
 
     /**
      * @param entity

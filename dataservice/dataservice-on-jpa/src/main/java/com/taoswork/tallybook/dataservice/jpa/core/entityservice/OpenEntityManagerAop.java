@@ -34,7 +34,7 @@ public class OpenEntityManagerAop implements ApplicationContextAware {
     public OpenEntityManagerAop() {
     }
 
-    @Pointcut("execution(* com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService.*(..))")
+    @Pointcut("execution(* com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService.*(..))")
     public void persistenceMethod() {
     }
 

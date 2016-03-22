@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.dataservice.jpa.config.beanlist;
 
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 
@@ -13,5 +13,5 @@ public interface IEntityBeanList {
 
     AnnotationAwareAspectJAutoProxyCreator annotationAwareAspectJAutoProxyCreator();
 
-    DynamicEntityPersistenceService dynamicEntityPersistenceService();
+    PersistenceService dynamicEntityPersistenceService();
 }

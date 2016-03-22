@@ -8,10 +8,10 @@ import com.taoswork.tallybook.dataservice.jpa.config.db.setting.JpaDbSetting;
 import com.taoswork.tallybook.dataservice.jpa.config.db.setting.MysqlDbSetting;
 import com.taoswork.tallybook.dataservice.jpa.config.db.setting.TestDbSetting;
 import com.taoswork.tallybook.dataservice.jpa.config.helper.DataServiceJpaBeanCreationHelper;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.OpenEntityManagerAop;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.impl.DynamicEntityPersistenceServiceImpl;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.impl.PersistenceServiceImpl;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.impl.JpaEntityServiceImpl;
 import com.taoswork.tallybook.dataservice.jpa.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dataservice.jpa.core.persistence.PersistenceManagerFactory;
@@ -106,9 +106,9 @@ public abstract class JpaDatasourceBeanConfiguration
     }
 
     @Override
-    @Bean(name = DynamicEntityPersistenceService.COMPONENT_NAME)
-    public DynamicEntityPersistenceService dynamicEntityPersistenceService() {
-        return new DynamicEntityPersistenceServiceImpl();
+    @Bean(name = PersistenceService.COMPONENT_NAME)
+    public PersistenceService dynamicEntityPersistenceService() {
+        return new PersistenceServiceImpl();
     }
     /* IEntityBeanList                                          */
 

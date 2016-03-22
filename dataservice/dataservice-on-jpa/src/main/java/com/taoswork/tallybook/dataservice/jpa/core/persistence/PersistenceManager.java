@@ -19,7 +19,7 @@ public interface PersistenceManager {
 
     <T extends Persistable> PersistableResult<T> update(Class<T> ceilingType, T entity) throws ServiceException;
 
-    <T extends Persistable> void delete(Class<T> ceilingType, T entity) throws ServiceException;
+    <T extends Persistable> boolean delete(Class<T> ceilingType, Object key) throws ServiceException;
 
     <T extends Persistable> CriteriaQueryResult<T> query(Class<T> entityClz, CriteriaTransferObject query, ExternalReference externalReference) throws ServiceException;
 

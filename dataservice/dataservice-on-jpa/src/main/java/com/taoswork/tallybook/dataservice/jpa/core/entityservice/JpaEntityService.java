@@ -11,8 +11,8 @@ import com.taoswork.tallybook.dataservice.service.IEntityService;
  * |
  * |
  * \/
- * DynamicEntityPersistenceService(DynamicEntityPersistenceServiceImpl)
- * ({@link DynamicEntityPersistenceService})
+ * PersistenceService(PersistenceServiceImpl)
+ * ({@link PersistenceService})
  * (Aspected by OpenEntityManagerAop.java)
  * (@Transactional)
  * (ThreadSafe by PersistenceManagerInvoker)

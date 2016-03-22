@@ -62,6 +62,12 @@ public class ListBuilder<E> implements List<E>{
         return innerList.containsAll(c);
     }
 
+    public void addAll(E ... cs) {
+        for(E c : cs){
+            innerList.add(c);
+        }
+    }
+
     @Override
     public boolean addAll(Collection<? extends E> c) {
         return innerList.addAll(c);

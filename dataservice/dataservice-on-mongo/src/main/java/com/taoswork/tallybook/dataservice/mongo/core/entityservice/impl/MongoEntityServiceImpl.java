@@ -110,11 +110,10 @@ public class MongoEntityServiceImpl
     }
 
     @Override
-    public <T extends PersistableDocument> boolean delete(T entity) throws ServiceException {
+    public <T extends PersistableDocument> boolean delete(Class<T> entityClz, Object key) throws ServiceException {
         try {
-            Class directClz = entity.getClass();
-            Class projectedEntityType = getProjectedEntityType(directClz);
-            securedEntityAccess.securedDelete(projectedEntityType, entity);
+            Class projectedEntityType = getProjectedEntityType(entityClz);
+            securedEntityAccess.securedDelete(projectedEntityType, key);
             return true;
         } catch (Exception e) {
             entityAccessExceptionHandler(e);

@@ -44,8 +44,22 @@ public abstract class BaseEntityServiceImpl<Pb extends Persistable>
     }
 
     @Override
+    public <T extends Pb> PersistableResult<T> read(T entity) throws ServiceException {
+        Class directClz = entity.getClass();
+        Object key =  getEntityId(directClz, entity);
+        return read(directClz, key);
+    }
+
+    @Override
     public <T extends Pb> PersistableResult<T> read(Class<T> entityClz, Object key) throws ServiceException {
         return read(entityClz, key, null);
+    }
+
+    @Override
+    public <T extends Pb> boolean delete(final T entity) throws ServiceException {
+        Class directClz = entity.getClass();
+        Object key =  getEntityId(directClz, entity);
+        return delete(directClz, key);
     }
 
     @Override
@@ -118,4 +132,18 @@ public abstract class BaseEntityServiceImpl<Pb extends Persistable>
     public <T extends Pb> IEntityInfo describe(Class<T> entityType, boolean withHierarchy, EntityInfoType infoType, Locale locale) {
         return entityMetaAccess.getEntityInfo(entityType, withHierarchy, locale, infoType);
     }
+
+    protected <T extends Persistable> Object getEntityId(Class projectedEntityType, T entity) throws ServiceException {
+        try {
+            IClassMeta rootClzMeta = entityMetaAccess.getClassMeta(projectedEntityType, false);
+            Field idField = rootClzMeta.getIdField();
+
+            Object id = idField.get(entity);
+            return id;
+        } catch (IllegalAccessException e) {
+            LOGGER.error(e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
 }

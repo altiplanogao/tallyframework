@@ -5,7 +5,7 @@ import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.DynamicEntityPersistenceService;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.metaaccess.JpaEntityMetaAccess;
 import com.taoswork.tallybook.dataservice.jpa.core.persistence.IPersistentMethod;
 import com.taoswork.tallybook.dataservice.jpa.core.persistence.PersistenceManager;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 //Aspected by OpenEntityManagerAop.java
-public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersistenceService {
+public class PersistenceServiceImpl implements PersistenceService {
 
     @Resource(name = JpaEntityMetaAccess.COMPONENT_NAME)
     protected JpaEntityMetaAccess entityMetaAccess;
@@ -64,12 +64,11 @@ public class DynamicEntityPersistenceServiceImpl implements DynamicEntityPersist
 
     @Override
     @Transactional
-    public <T extends Persistable> Void delete(final Class<T> projectedEntityType, final T entity) throws ServiceException {
-        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<Void, ServiceException>() {
+    public <T extends Persistable> boolean delete(final Class<T> projectedEntityType, final Object key) throws ServiceException {
+        return persistenceManagerIsolatedInvoker.operation(new IPersistentMethod<Boolean, ServiceException>() {
             @Override
-            public Void execute(PersistenceManager persistenceManager) throws ServiceException {
-                persistenceManager.delete(projectedEntityType, entity);
-                return null;
+            public Boolean execute(PersistenceManager persistenceManager) throws ServiceException {
+                return persistenceManager.delete(projectedEntityType, key);
             }
         });
     }

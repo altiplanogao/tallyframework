@@ -10,7 +10,6 @@ import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.jpa.core.dao.EntityDao;
 import com.taoswork.tallybook.dataservice.jpa.core.persistence.PersistenceManager;
 import com.taoswork.tallybook.dataservice.service.EntityCopierService;
-import com.taoswork.tallybook.descriptor.dataio.in.Entity;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +50,9 @@ public class PersistenceManagerImpl
     }
 
     @Override
-    protected <T extends Persistable> void doDelete(Class<T> projectedEntityType, T entity) {
+    protected <T extends Persistable> boolean doDelete(Class<T> projectedEntityType, T entity) {
         entityDao.delete(entity);
+        return true;
     }
 
     @Override
@@ -84,8 +84,8 @@ public class PersistenceManagerImpl
     }
 
     @Override
-    public <T extends Persistable> void delete(Class<T> projectedEntityType, T entity) throws ServiceException {
-        securedDelete(projectedEntityType, entity);
+    public <T extends Persistable> boolean delete(Class<T> projectedEntityType, Object key) throws ServiceException {
+        return securedDelete(projectedEntityType, key);
     }
 
     @Override

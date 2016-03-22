@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.dataservice.mongo.core.entityservice;
 
+import com.mongodb.WriteResult;
 import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
 import com.taoswork.tallybook.dataservice.core.SecuredCrudqAccessor;
@@ -50,7 +51,7 @@ public class SecuredEntityAccess extends SecuredCrudqAccessor {
     }
 
     @Override
-    protected <T extends Persistable> void doDelete(Class<T> projectedEntityType, T entity) {
+    protected <T extends Persistable> boolean doDelete(Class<T> projectedEntityType, T entity) {
         String collection = getCollectionName(projectedEntityType);
         Object idVal = null;
         if(entity instanceof AbstractDocument){
@@ -69,7 +70,11 @@ public class SecuredEntityAccess extends SecuredCrudqAccessor {
         if(idVal == null){
             throw new UnexpectedException();
         }
-        datastore.delete(collection, projectedEntityType, idVal);
+        WriteResult wr = datastore.delete(collection, projectedEntityType, idVal);
+        int n = wr.getN();
+        if(n > 1)
+            throw new UnexpectedException();
+        return n == 1;
     }
 
     @Override

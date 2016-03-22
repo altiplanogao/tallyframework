@@ -8,12 +8,12 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.SortDirection;
 import com.taoswork.tallybook.dataservice.mongo.core.query.MongoQueryTranslator;
 import com.taoswork.tallybook.dataservice.mongo.core.query.criteria.restriction.Restriction;
 import com.taoswork.tallybook.dataservice.mongo.core.query.criteria.restriction.RestrictionFactory;
-import com.taoswork.tallybook.dataservice.mongo.core.query.criteria.util.FieldPathBuilder;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.classmetadata.ClassMetaUtils;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ForeignEntityFieldMeta;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
+import com.taoswork.tallybook.general.solution.proppath.PathBuilder;
 import org.mongodb.morphia.AdvancedDatastore;
 import org.mongodb.morphia.query.Criteria;
 import org.mongodb.morphia.query.Query;
@@ -59,16 +59,15 @@ public class MongoQueryTranslatorImpl implements MongoQueryTranslator {
             String propertyName = pfc.getPropertyName();
             List<String> values = pfc.getFilterValues();
             if (!CollectionUtility.isEmpty(values)) {
-                FieldPathBuilder fieldPathBuilder = new FieldPathBuilder();
                 IFieldMeta fieldMeta = ClassMetaUtils.getRoutedFieldMeta(classTreeMeta, propertyName);
                 if (fieldMeta == null) {
                     continue;
                 }
-                String explicitPath = fieldPathBuilder.buildPath(root, propertyName);
+                String explicitPath = PathBuilder.buildPath(root, propertyName);
                 if (fieldMeta instanceof ForeignEntityFieldMeta) {
                     ForeignEntityFieldMeta foreignEntityFieldMeta = (ForeignEntityFieldMeta) fieldMeta;
                     String idField = foreignEntityFieldMeta.getIdField();
-                    explicitPath = fieldPathBuilder.buildPathBySegments(root, propertyName, idField);
+                    explicitPath = PathBuilder.buildPath(root, propertyName, idField);
                 }
                 FieldType fieldType = fieldMeta.getFieldType();
                 Restriction restriction = RestrictionFactory.instance().getRestriction(fieldType, fieldMeta.getFieldClass());
@@ -92,9 +91,7 @@ public class MongoQueryTranslatorImpl implements MongoQueryTranslator {
                     continue;
                 } else {
                     IFieldMeta fieldMeta = classTreeMeta.getFieldMeta(propertyName);
-                    FieldPathBuilder fpb = new FieldPathBuilder();
-
-                    String path = fpb.buildPath(root, propertyName);
+                    String path = PathBuilder.buildPath(root, propertyName);
 
                     if (SortDirection.ASCENDING == direction) {
                         sorts.add(path);
