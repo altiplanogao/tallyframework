@@ -4,18 +4,18 @@ import com.taoswork.tallybook.datadomain.onmongo.PersistableDocument;
 import com.taoswork.tallybook.dataservice.PersistableResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.descriptor.dataio.copier.CopierContext;
 import com.taoswork.tallybook.dataservice.core.entityservice.BaseEntityServiceImpl;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.MongoDatasourceDefinition;
+import com.taoswork.tallybook.dataservice.mongo.core.convertors.ObjectIdConverter;
 import com.taoswork.tallybook.dataservice.mongo.core.entityservice.MongoEntityService;
 import com.taoswork.tallybook.dataservice.mongo.core.entityservice.SecuredEntityAccess;
 import com.taoswork.tallybook.dataservice.service.EntityCopierService;
 import com.taoswork.tallybook.dataservice.service.EntityValidationService;
 import com.taoswork.tallybook.dataservice.service.EntityValueGateService;
-import com.taoswork.tallybook.descriptor.dataio.in.Entity;
+import com.taoswork.tallybook.descriptor.dataio.copier.CopierContext;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
-import com.taoswork.tallybook.descriptor.metadata.IClassMetaAccess;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.AdvancedDatastore;
 import org.mongodb.morphia.Datastore;
 import org.slf4j.Logger;
@@ -49,12 +49,9 @@ public class MongoEntityServiceImpl
     @Resource(name = SecuredEntityAccess.COMPONENT_NAME)
     protected SecuredEntityAccess securedEntityAccess;
 
-//    protected MongoEntityTranslator converter = new MongoEntityTranslator() {
-//        @Override
-//        protected IClassMetaAccess getClassMetaAccess() {
-//            return entityMetaAccess;
-//        }
-//    };
+    public MongoEntityServiceImpl() {
+        convertUtils.register(new ObjectIdConverter(), ObjectId.class);
+    }
 
     @Override
     public AdvancedDatastore getAdvancedDatastore() {
@@ -84,6 +81,7 @@ public class MongoEntityServiceImpl
     public <T extends PersistableDocument> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
         try {
             Class projectedEntityType = getProjectedEntityType(entityClz);
+            key = keyTypeAdjuest(projectedEntityType, key);
             T result = (T) securedEntityAccess.securedRead(projectedEntityType, key);
 
             CopierContext copierContext = new CopierContext(this.entityMetaAccess, externalReference);
@@ -113,8 +111,8 @@ public class MongoEntityServiceImpl
     public <T extends PersistableDocument> boolean delete(Class<T> entityClz, Object key) throws ServiceException {
         try {
             Class projectedEntityType = getProjectedEntityType(entityClz);
-            securedEntityAccess.securedDelete(projectedEntityType, key);
-            return true;
+            key = keyTypeAdjuest(projectedEntityType, key);
+            return securedEntityAccess.securedDelete(projectedEntityType, key);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
         }

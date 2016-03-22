@@ -15,6 +15,8 @@ import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import com.taoswork.tallybook.descriptor.description.infos.EntityInfoType;
 import com.taoswork.tallybook.descriptor.description.infos.IEntityInfo;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
+import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
+import org.apache.commons.beanutils.ConvertUtilsBean2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +40,12 @@ public abstract class BaseEntityServiceImpl<Pb extends Persistable>
 
     @Resource(name = SecurityVerifierAgent.COMPONENT_NAME)
     protected ISecurityVerifier securityVerifier;
+
+    protected final ConvertUtilsBean2 convertUtils;
+
+    public BaseEntityServiceImpl() {
+        this.convertUtils = new ConvertUtilsBean2();
+    }
 
     protected void entityAccessExceptionHandler(Exception e) throws ServiceException {
         throw ServiceException.treatAsServiceException(e);
@@ -146,4 +154,14 @@ public abstract class BaseEntityServiceImpl<Pb extends Persistable>
         }
     }
 
+    protected Object keyTypeAdjuest(Class entityClz, Object key){
+        IClassMeta cm = this.entityMetaAccess.getClassMeta(entityClz, false);
+        String idFieldName = cm.getIdFieldName();
+        IFieldMeta fm = cm.getFieldMeta(idFieldName);
+        Class targetClass = fm.getFieldClass();
+        if(key.getClass().equals(targetClass)){
+            return key;
+        }
+        return convertUtils.convert(key, targetClass);
+    }
 }

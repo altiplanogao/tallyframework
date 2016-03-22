@@ -1,22 +1,18 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.datadomain.base.restful.EntityAction;
-import com.taoswork.tallybook.datadomain.onmongo.jackson.ObjectIdJsonDeserializer;
-import com.taoswork.tallybook.datadomain.onmongo.jackson.ObjectIdJsonSerializer;
 import com.taoswork.tallybook.dataservice.IDataService;
-import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.server.io.request.*;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.CollectionEntryTypeParameter;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameter;
 import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
 import com.taoswork.tallybook.dataservice.server.io.request.translator.Parameter2RequestTranslator;
 import com.taoswork.tallybook.dataservice.server.io.response.*;
+import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
 import com.taoswork.tallybook.dataservice.server.service.FrontEndEntityService;
 import com.taoswork.tallybook.dataservice.server.service.IFrontEndEntityService;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
@@ -29,7 +25,6 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseCollectionFi
 import com.taoswork.tallybook.general.solution.menu.IMenu;
 import com.taoswork.tallybook.general.solution.menu.MenuPath;
 import org.apache.commons.httpclient.URI;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -69,17 +64,6 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
     @Resource(name = DataServiceManager.COMPONENT_NAME)
     protected DataServiceManager dataServiceManager;
-
-    @Override
-    protected ObjectMapper createObjectMapper() {
-        ObjectMapper om = super.createObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(ObjectId.class, new ObjectIdJsonSerializer());
-        module.addDeserializer(ObjectId.class, new ObjectIdJsonDeserializer());
-
-        om.registerModule(module);
-        return om;
-    }
 
     private Helper helper = new Helper();
 

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.dataservice.server.service;
 
 import com.taoswork.tallybook.dataservice.core.persistence.InputEntityTranslator;
-import com.taoswork.tallybook.dataservice.server.service.convertors.ObjectIdConverter;
+import com.taoswork.tallybook.dataservice.mongo.core.convertors.ObjectIdConverter;
 import org.apache.commons.beanutils.ConvertUtilsBean2;
 import org.bson.types.ObjectId;
 

@@ -6,8 +6,8 @@ import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.entityservice.BaseEntityServiceImpl;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
+import com.taoswork.tallybook.dataservice.jpa.core.entityservice.PersistenceService;
 import com.taoswork.tallybook.descriptor.dataio.reference.ExternalReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +48,7 @@ public final class JpaEntityServiceImpl
     public <T extends Persistable> PersistableResult<T> read(Class<T> entityClz, Object key, ExternalReference externalReference) throws ServiceException {
         try {
             Class projectedEntityType = getProjectedEntityType(entityClz);
+            key = keyTypeAdjuest(projectedEntityType, key);
             return persistenceService.read(projectedEntityType, key, externalReference);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -69,8 +70,9 @@ public final class JpaEntityServiceImpl
 
     @Override
     public <T extends Persistable> boolean delete(Class<T> entityClz, Object key) throws ServiceException {
-        Class projectedEntityType = getProjectedEntityType(entityClz);
         try {
+            Class projectedEntityType = getProjectedEntityType(entityClz);
+            key = keyTypeAdjuest(projectedEntityType, key);
             return persistenceService.delete(projectedEntityType, key);
         } catch (Exception e) {
             entityAccessExceptionHandler(e);
@@ -93,5 +95,7 @@ public final class JpaEntityServiceImpl
         Class<?> entityRootClz = this.entityMetaAccess.getRootInstantiableEntityType(entityClz);
         return entityRootClz;
     }
+
+
 
 }

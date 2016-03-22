@@ -1,8 +1,13 @@
 package com.taoswork.tallybook.application.core.conf;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.taoswork.tallybook.datadomain.onmongo.jackson.ObjectIdJsonDeserializer;
+import com.taoswork.tallybook.datadomain.onmongo.jackson.ObjectIdJsonSerializer;
 import com.taoswork.tallybook.general.solution.exception.UnexpectedException;
 import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
 import org.apache.commons.lang3.SerializationUtils;
+import org.bson.types.ObjectId;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +27,7 @@ import java.util.function.BiConsumer;
 public class ApplicationCommonConfig {
     public static final String COMMON_MESSAGE = "commonMessage";
     public static final String COMMON_MESSAGE_SOURCE = "commonMessageSource";
+    public static final String JSON_OBJECT_MAPPER = "ObjectMapper";
 
     private HashMap<String, String> rawMessages = new HashMap<String, String>();
 
@@ -75,6 +81,17 @@ public class ApplicationCommonConfig {
         }
         CachedMessageLocalizedDictionary commonMessage = new CachedMessageLocalizedDictionary(raw, ms);
         return commonMessage;
+    }
+
+    @Bean(name = JSON_OBJECT_MAPPER)
+    protected ObjectMapper createObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(ObjectId.class, new ObjectIdJsonSerializer());
+        module.addDeserializer(ObjectId.class, new ObjectIdJsonDeserializer());
+
+        om.registerModule(module);
+        return om;
     }
 
 }

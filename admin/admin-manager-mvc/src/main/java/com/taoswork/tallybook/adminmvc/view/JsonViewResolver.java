@@ -1,24 +1,33 @@
-package com.taoswork.tallybook.general.web.view.thymeleaf;
+package com.taoswork.tallybook.adminmvc.view;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import javax.annotation.Resource;
 import java.util.Locale;
 
 /**
- * Created by Gao Yuan on 2015/7/28.
+ * Created by Gao Yuan on 2016/3/22.
  */
-public class TallyBookDataViewResolver extends AbstractCachingViewResolver implements Ordered {
+public class JsonViewResolver extends AbstractCachingViewResolver implements Ordered {
     public static final String JSON_VIEW_NAME = "objectview:json";
 
     private int order = 0;
 
+    @Resource(name = ApplicationCommonConfig.JSON_OBJECT_MAPPER)
+    private ObjectMapper objectMapper;
+
+    public JsonViewResolver() {
+    }
+
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
         if (JSON_VIEW_NAME.equals(viewName)) {
-            View view = new MappingJackson2JsonView();
+            View view = new MappingJackson2JsonView(objectMapper);
             return view;
         }
         return null;
@@ -42,3 +51,4 @@ public class TallyBookDataViewResolver extends AbstractCachingViewResolver imple
 //        return null;
 //    }
 }
+

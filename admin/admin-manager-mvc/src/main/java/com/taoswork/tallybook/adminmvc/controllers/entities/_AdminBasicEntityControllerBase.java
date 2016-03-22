@@ -1,5 +1,7 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taoswork.tallybook.adminmvc.view.JsonViewResolver;
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
 import com.taoswork.tallybook.dataservice.server.io.response.EntityResponse;
 import com.taoswork.tallybook.dataservice.server.io.response.result.EntityErrors;
@@ -17,6 +19,8 @@ import java.util.Map;
  */
 abstract class _AdminBasicEntityControllerBase extends BaseController {
 
+    protected static final String DataView = JsonViewResolver.JSON_VIEW_NAME;
+
     protected static class VIEWS {
         static final String Redirect2Home = "redirect:/";
         static final String Redirect2Failure = "redirect:failure";
@@ -26,6 +30,9 @@ abstract class _AdminBasicEntityControllerBase extends BaseController {
 
     @Resource(name = ApplicationCommonConfig.COMMON_MESSAGE)
     private CachedMessageLocalizedDictionary commonMessage;
+
+    @Resource(name=ApplicationCommonConfig.JSON_OBJECT_MAPPER)
+    private ObjectMapper objectMapper;
 
     private Map<String, String> getCommonMessage(Locale locale) {
         return commonMessage.getTranslated(locale);
@@ -37,7 +44,6 @@ abstract class _AdminBasicEntityControllerBase extends BaseController {
         String messageDict = getObjectInJson(messageMap);
 
         model.addAttribute("messageDict", messageDict);
-//        model.addAttribute("currentUrl", request.getRequestURL().toString());
         model.addAttribute("production", production);
     }
 
@@ -59,6 +65,18 @@ abstract class _AdminBasicEntityControllerBase extends BaseController {
     protected String makeDataView(Model model, EntityResponse data) {
         model.addAttribute("data", data);
         model.addAttribute("success", data.success());
+        return DataView;
+    }
+
+    @Override
+    protected ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    protected String makeRedirectView(Model model, String url) {
+        model.addAttribute("operation", "redirect");
+        model.addAttribute("url", url);
+
         return DataView;
     }
 

@@ -2,11 +2,8 @@ package com.taoswork.tallybook.general.web.control;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taoswork.tallybook.general.solution.threading.ThreadLocalHelper;
-import com.taoswork.tallybook.general.web.view.thymeleaf.TallyBookDataViewResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +17,6 @@ import java.util.Map;
  */
 public abstract class BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
-
-    protected static final String DataView = TallyBookDataViewResolver.JSON_VIEW_NAME;
 
     public static final String AJAX_VIEW_NAME_PREFIX = "ajax:";
     public static final String AJAX_REQUEST_KEY = "ajax";
@@ -80,25 +75,14 @@ public abstract class BaseController {
         return result;
     }
 
-    protected ObjectMapper createObjectMapper(){
-        return new ObjectMapper();
-    }
-
-    private ObjectMapper objectMapper = createObjectMapper();
+    protected abstract ObjectMapper getObjectMapper();
 
     protected String getObjectInJson(Object data) {
         try {
-            return objectMapper.writeValueAsString(data);
+            return getObjectMapper().writeValueAsString(data);
         } catch (JsonProcessingException exp) {
             throw new RuntimeException(exp);
         }
-    }
-
-    protected String makeRedirectView(Model model, String url) {
-        model.addAttribute("operation", "redirect");
-        model.addAttribute("url", url);
-
-        return DataView;
     }
 
     protected static URI uriFromRequest(HttpServletRequest request){

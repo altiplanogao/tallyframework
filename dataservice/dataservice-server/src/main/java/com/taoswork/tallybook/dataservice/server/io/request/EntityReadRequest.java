@@ -6,23 +6,19 @@ import java.net.URI;
 
 public class EntityReadRequest extends EntityRequest {
 
-    private long id;
+    private String id;
 
     public EntityReadRequest(EntityTypeParameter entityTypeParam, URI fullUri) {
         super(entityTypeParam, fullUri);
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     public EntityReadRequest setId(String id) {
-        this.id = Long.parseLong(id);
+        this.id = (id);
         return this;
     }
 
-    public EntityReadRequest setId(long id) {
-        this.id = id;
-        return this;
-    }
 }
