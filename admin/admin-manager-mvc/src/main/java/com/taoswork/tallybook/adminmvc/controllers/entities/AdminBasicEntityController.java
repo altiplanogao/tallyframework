@@ -140,9 +140,12 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IMenu menu = adminMenuService.buildMenu(employee);
         CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
 
-        model.addAttribute("menu", menu);
+        model.addAttribute("imenu", menu);
         model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
+
+        String menuInJson = getObjectInJson(menu);
+        model.addAttribute("menu", menuInJson);
 
         {
 //            ObjectMapper mapper = new ObjectMapper();

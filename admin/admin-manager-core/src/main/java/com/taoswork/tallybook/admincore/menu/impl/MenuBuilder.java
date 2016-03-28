@@ -41,7 +41,7 @@ class MenuBuilder {
     public static Menu buildMenu(IMenuEntryUpdater updater){
         MenuEntryBuilder builder = MenuEntryBuilder.createRootNode();
         builder.beginEntry()
-                .key("user").name(USER_GROUP_NAME).description("fa-user")
+                .key("user").name(USER_GROUP_NAME).icon("fa-user")
                     .beginEntry()
                         .key("person").name(USER_PERSON_ENTRY_NAME).icon("glyphicon-user").entity(Person.class)
                     .endEntry()
@@ -72,11 +72,11 @@ class MenuBuilder {
                 .beginSiblingEntry()
                         .key("bp").name(BUSINESS_BP_ENTRY_NAME).entity(Bp.class)
                     .beginSiblingEntry()
-                .key("moduleusage").name(BUSINESS_MODULE_USAGE_ENTRY_NAME).entity(ModuleUsage.class)
+                        .key("moduleusage").name(BUSINESS_MODULE_USAGE_ENTRY_NAME).entity(ModuleUsage.class)
                     .beginSiblingEntry()
-                .key("workplan").name(BUSINESS_WORKPLAN_ENTRY_NAME).entity(WorkPlan.class)
+                        .key("workplan").name(BUSINESS_WORKPLAN_ENTRY_NAME).entity(WorkPlan.class)
                     .beginSiblingEntry()
-                .key("workticket").name(BUSINESS_WORKTICKET_ENTRY_NAME).entity(WorkTicket.class)
+                        .key("workticket").name(BUSINESS_WORKTICKET_ENTRY_NAME).entity(WorkTicket.class)
                     .beginSiblingEntry()
                         .key("workfeedback").name(BUSINESS_WORKFEEDBACK_ENTRY_NAME).entity(WorkFeedback.class)
                     .endEntry()

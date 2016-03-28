@@ -1,9 +1,10 @@
 package com.taoswork.tallybook.general.solution.menu;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public interface IMenuEntry{
+public interface IMenuEntry extends Serializable {
 
     String getName();
 

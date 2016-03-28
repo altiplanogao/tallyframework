@@ -65,7 +65,7 @@ public class Menu implements IMenu {
     }
 
     @Override
-    public IMenuEntry getFirstLeafEntry() {
+    public IMenuEntry theFirstLeafEntry() {
         IMenuEntry entry = this.findMenuEntry(this.insideRoot, new MenuPath(), 0, new Matcher() {
             @Override
             public boolean match(TravParam param) {
