@@ -11,8 +11,8 @@ import java.lang.reflect.Field;
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class ForeignEntityFieldCopier extends BaseFieldCopier<ForeignEntityFieldMeta> {
-    public ForeignEntityFieldCopier(IFieldCopierSolution solution) {
+public class VForeignEntityFieldCopier extends BaseFieldCopier<ForeignEntityFieldMeta> {
+    public VForeignEntityFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 
@@ -32,7 +32,6 @@ public class ForeignEntityFieldCopier extends BaseFieldCopier<ForeignEntityField
         Object fo = field.get(source);
         Object fn = solution.walkFieldsAndCopy(topMeta, foreignClassMeta, fo, currentLevel, levelLimit,
                 copierContext);
-        field.set(target, fn);
         return true;
     }
 }

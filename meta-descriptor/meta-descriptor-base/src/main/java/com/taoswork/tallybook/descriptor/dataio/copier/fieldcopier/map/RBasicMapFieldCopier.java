@@ -7,8 +7,8 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map.BasicMapFiel
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class BasicMapFieldCopier extends BaseMapFieldCopier<BasicMapFieldMeta> {
-    public BasicMapFieldCopier(IFieldCopierSolution solution) {
+public class RBasicMapFieldCopier extends BaseRMapFieldCopier<BasicMapFieldMeta> {
+    public RBasicMapFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

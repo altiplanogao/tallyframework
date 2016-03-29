@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-abstract class BaseMapFieldCopier<Lfm extends MapFieldMeta> extends BaseFieldCopier<Lfm> {
-    public BaseMapFieldCopier(IFieldCopierSolution solution) {
+abstract class BaseVMapFieldCopier<Lfm extends MapFieldMeta> extends BaseFieldCopier<Lfm> {
+    public BaseVMapFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

@@ -15,7 +15,7 @@ public class EntityRecords {
     /**
      * Records with id as key
      */
-    private final Map<Object, Object> entities = new HashMap<Object, Object>();
+    private final Map<String, Object> entities = new HashMap<String, Object>();
 
     public EntityRecords(String entityType) {
         this.entityType = entityType;
@@ -25,11 +25,11 @@ public class EntityRecords {
         return entityType;
     }
 
-    public void setRecord(Object id, Object record) {
+    public void setRecord(String id, Object record) {
         entities.put(id, record);
     }
 
-    public Object getRecord(Object id) {
+    public Object getRecord(String id) {
         return entities.get(id);
     }
 

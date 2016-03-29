@@ -6,7 +6,7 @@ import com.taoswork.tallybook.descriptor.dataio.copier.CopierContext;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.service.EntityCopierService;
 import com.taoswork.tallybook.descriptor.dataio.copier.CopyException;
-import com.taoswork.tallybook.descriptor.dataio.copier.fieldcopier.FieldCopierSolution;
+import com.taoswork.tallybook.descriptor.dataio.copier.fieldcopier.RFieldCopierSolution;
 import com.taoswork.tallybook.descriptor.dataio.copier.fieldcopier.IFieldCopierSolution;
 
 /**
@@ -18,13 +18,13 @@ public class JpaEntityCopierServiceImpl implements EntityCopierService {
 
     public JpaEntityCopierServiceImpl() {
         entityCopierPool = new EntityCopierPool();
-        fieldCopierSolution = new FieldCopierSolution(entityCopierPool);
+        fieldCopierSolution = new RFieldCopierSolution(entityCopierPool);
     }
 
     @Override
     public <T extends Persistable> T makeSafeCopyForQuery(CopierContext copierContext, T rec) throws ServiceException {
         try {
-            return FieldCopierSolution.makeSafeCopyForQuery(fieldCopierSolution, rec, copierContext);
+            return fieldCopierSolution.makeSafeCopyForQuery(rec, copierContext);
         } catch (CopyException e) {
             throw ServiceException.treatAsServiceException(e);
         }
@@ -33,7 +33,7 @@ public class JpaEntityCopierServiceImpl implements EntityCopierService {
     @Override
     public <T extends Persistable> T makeSafeCopyForRead(CopierContext copierContext, T result) throws ServiceException {
         try {
-            return FieldCopierSolution.makeSafeCopyForRead(fieldCopierSolution, result, copierContext);
+            return fieldCopierSolution.makeSafeCopyForRead(result, copierContext);
         } catch (CopyException e) {
             throw ServiceException.treatAsServiceException(e);
         }

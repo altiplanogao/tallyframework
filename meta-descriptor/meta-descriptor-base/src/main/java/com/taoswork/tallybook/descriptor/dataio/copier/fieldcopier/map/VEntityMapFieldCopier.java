@@ -6,8 +6,8 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map.EntityMapFie
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class EntityMapFieldCopier extends BaseMapFieldCopier<EntityMapFieldMeta> {
-    public EntityMapFieldCopier(IFieldCopierSolution solution) {
+public class VEntityMapFieldCopier extends BaseVMapFieldCopier<EntityMapFieldMeta> {
+    public VEntityMapFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

@@ -10,13 +10,12 @@ import com.taoswork.tallybook.general.solution.exception.UnImplementedException;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-abstract class BaseListFieldCopier<Lfm extends ListFieldMeta> extends BaseFieldCopier<Lfm> {
-    public BaseListFieldCopier(IFieldCopierSolution solution) {
+abstract class BaseRListFieldCopier<Lfm extends ListFieldMeta> extends BaseFieldCopier<Lfm> {
+    public BaseRListFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

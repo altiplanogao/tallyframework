@@ -12,8 +12,8 @@ import java.lang.reflect.Field;
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class ExternalForeignEntityFieldCopier extends BaseFieldCopier<ExternalForeignEntityFieldMeta> {
-    public ExternalForeignEntityFieldCopier(IFieldCopierSolution solution) {
+public class RExternalForeignEntityFieldCopier extends BaseFieldCopier<ExternalForeignEntityFieldMeta> {
+    public RExternalForeignEntityFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 
@@ -26,7 +26,7 @@ public class ExternalForeignEntityFieldCopier extends BaseFieldCopier<ExternalFo
     protected boolean doCopy(IClassMeta topMeta, ExternalForeignEntityFieldMeta fieldMeta,
                              Object source, Object target, int currentLevel, int levelLimit,
                              CopierContext copierContext) throws IllegalAccessException, InstantiationException {
-        ExternalForeignEntityFieldMeta efeFm = (ExternalForeignEntityFieldMeta) fieldMeta;
+        ExternalForeignEntityFieldMeta efeFm = fieldMeta;
         Field foreignKeyField = fieldMeta.getField();
         Field foreignValField = efeFm.getEntityField();
         Object keyVal = foreignKeyField.get(source);
@@ -39,7 +39,7 @@ public class ExternalForeignEntityFieldCopier extends BaseFieldCopier<ExternalFo
                 Class entityType = efeFm.getTargetType();
                 //backlog data: [type: entityType, key: keyVal]
                 //slot: [target: target, position: foreignValField]
-                externalReference.publishReference(target, foreignValField, entityType, keyVal);
+                externalReference.publishReference(target, foreignValField, entityType, keyVal.toString());
             }
             foreignValField.set(target, null);
 //                    throw new IllegalAccessException("Not Implemented");

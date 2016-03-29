@@ -1,17 +1,11 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
-import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.AdminSpecifiedConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistableConfiguration;
-import com.taoswork.tallybook.business.dataservice.tallyadmin.security.AdminSecurityDefinition;
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.dataservice.annotations.DataService;
-import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
-import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
-import com.taoswork.tallybook.dataservice.service.IEntityService;
 
 /**
  * Created by Gao Yuan on 2015/5/12.

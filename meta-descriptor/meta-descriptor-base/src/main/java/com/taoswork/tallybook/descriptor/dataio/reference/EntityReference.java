@@ -8,9 +8,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class EntityReference {
     private final String entityType;
-    private final Object entityId;
+    private final String entityId;
 
-    public EntityReference(String entityType, Object entityId) {
+    public EntityReference(String entityType, String entityId) {
         this.entityType = entityType;
         this.entityId = entityId;
     }
@@ -19,7 +19,7 @@ public class EntityReference {
         return entityType;
     }
 
-    public Object getEntityId() {
+    public String getEntityId() {
         return entityId;
     }
 

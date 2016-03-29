@@ -16,7 +16,7 @@ public class ExternalReference {
      */
     private final List<ReferencingSlot> referencingSlots = new ArrayList<ReferencingSlot>();
 
-    public void publishReference(Object holder, Field holdingField, Class entityType, Object id){
+    public void publishReference(Object holder, Field holdingField, Class entityType, String id){
         String entityTypeName = entityType.getName();
         referencesByType.putIfAbsent(entityType, new EntityReferences(entityTypeName));
         EntityReferences references = referencesByType.get(entityType);
@@ -43,7 +43,7 @@ public class ExternalReference {
             records.forEach(new BiConsumer<Object, Object>() {
                 @Override
                 public void accept(Object k, Object v) {
-                    entityRecords.setRecord(k, v);
+                    entityRecords.setRecord(k.toString(), v);
                 }
             });
 
@@ -59,7 +59,7 @@ public class ExternalReference {
             for (ReferencingSlot slot : referencingSlots) {
                 EntityReference reference = slot.getEntityReference();
                 String entityType = reference.getEntityType();
-                Object entityId = reference.getEntityId();
+                String entityId = reference.getEntityId();
                 Object entityRecord = null;
                 EntityRecords typedRecords = records.get(entityType);
                 if (typedRecords != null) {

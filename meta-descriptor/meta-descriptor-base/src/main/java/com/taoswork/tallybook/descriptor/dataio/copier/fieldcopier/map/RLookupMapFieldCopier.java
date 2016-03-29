@@ -6,8 +6,8 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map.LookupMapFie
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class LookupMapFieldCopier extends BaseMapFieldCopier<LookupMapFieldMeta> {
-    public LookupMapFieldCopier(IFieldCopierSolution solution) {
+public class RLookupMapFieldCopier extends BaseRMapFieldCopier<LookupMapFieldMeta> {
+    public RLookupMapFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

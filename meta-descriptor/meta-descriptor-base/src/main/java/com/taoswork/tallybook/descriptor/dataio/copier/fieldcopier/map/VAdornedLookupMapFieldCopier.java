@@ -6,8 +6,8 @@ import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.map.AdornedLooku
 /**
  * Created by Gao Yuan on 2016/2/23.
  */
-public class AdornedLookupMapFieldCopier extends BaseMapFieldCopier<AdornedLookupMapFieldMeta> {
-    public AdornedLookupMapFieldCopier(IFieldCopierSolution solution) {
+public class VAdornedLookupMapFieldCopier extends BaseVMapFieldCopier<AdornedLookupMapFieldMeta> {
+    public VAdornedLookupMapFieldCopier(IFieldCopierSolution solution) {
         super(solution);
     }
 

@@ -15,6 +15,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface PersistEntity {
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({})
+    @interface FieldOverride{
+        String fieldName();
+        PersistField define();
+    }
+
+    FieldOverride[] fieldOverrides() default {};
+
     String value() default "";//name override
 
     boolean instantiable() default true;
