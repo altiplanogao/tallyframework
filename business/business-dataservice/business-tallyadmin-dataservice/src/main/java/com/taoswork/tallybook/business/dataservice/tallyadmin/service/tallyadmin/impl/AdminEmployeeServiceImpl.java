@@ -25,7 +25,7 @@ public class AdminEmployeeServiceImpl
 //    protected TallyUserDataService tallyUserDataService;
 
     @Override
-    public AdminEmployee readAdminEmployeeByPersonId(Long personId) {
+    public AdminEmployee readAdminEmployeeByPersonId(String personId) {
         return adminEmployeeDao.readAdminEmployeeByPersonId(personId);
     }
 

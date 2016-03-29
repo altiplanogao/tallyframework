@@ -3,7 +3,7 @@ package com.taoswork.tallybook.business.datadomain.tallyuser;
 import com.taoswork.tallybook.business.datadomain.tallyuser.gate.PersonGate;
 import com.taoswork.tallybook.business.datadomain.tallyuser.validation.PersonValidator;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.datadomain.onmongo.PersistableDocument;
 
 import java.util.Date;
 
@@ -11,10 +11,7 @@ import java.util.Date;
         validators = {PersonValidator.class},
         valueGates = {PersonGate.class}
 )
-public interface Person extends Persistable {
-    Long getId();
-
-    Person setId(Long id);
+public interface Person extends PersistableDocument {
 
     String getName();
 
@@ -30,7 +27,7 @@ public interface Person extends Persistable {
 
     Gender getGender();
 
-    void setGender(Gender gender);
+    Person setGender(Gender gender);
 
     String getEmail();
 

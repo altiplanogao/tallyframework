@@ -16,7 +16,7 @@ public class AdminEmployeeGate extends BaseEntityGate<AdminEmployee> {
             if (StringUtils.isEmpty(entity.getName())) {
                 entity.setName(person.getName());
             }
-            entity.setPersonId(person.getId());
+            entity.setPersonId(person.getId().toHexString());
         }
         AccountStatus as = entity.getStatus();
         if (as == null) {

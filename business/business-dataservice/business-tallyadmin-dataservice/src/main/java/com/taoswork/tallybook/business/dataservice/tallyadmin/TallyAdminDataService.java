@@ -38,23 +38,23 @@ public class TallyAdminDataService
     @Override
     protected void postConstruct() {
         super.postConstruct();
-        final Long masterPersonId = -1L;
-        IEntityService<Persistable> entityService = this.getService(IEntityService.COMPONENT_NAME);
-        try {
-            CriteriaTransferObject cto = new CriteriaTransferObject(AdminEmployee.FN_PERSON_ID, "" + masterPersonId);
-            AdminEmployee result = entityService.queryOne(AdminEmployee.class, cto);
-            if(result == null){
-                AdminEmployee newMaster = new AdminEmployee();
-                newMaster.setPersonId(masterPersonId);
-                newMaster.setName("Admin");
-                newMaster.setTitle("Master");
-                newMaster.setProtectionSpace(AdminSecurityDefinition.PROTECTION_SPACE);
-                newMaster.setNamespace(AdminSecurityDefinition.ADMIN_TENANT);
-                entityService.create(newMaster);
-            }
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+//        final String masterPersonId = AdminEmployee.ROOT_PERSON_ID;
+//        IEntityService<Persistable> entityService = this.getService(IEntityService.COMPONENT_NAME);
+//        try {
+//            CriteriaTransferObject cto = new CriteriaTransferObject(AdminEmployee.FN_PERSON_ID, "" + masterPersonId);
+//            AdminEmployee result = entityService.queryOne(AdminEmployee.class, cto);
+//            if(result == null){
+//                AdminEmployee newMaster = new AdminEmployee();
+//                newMaster.setPersonId(masterPersonId);
+//                newMaster.setName("Admin");
+//                newMaster.setTitle("Master");
+//                newMaster.setProtectionSpace(AdminSecurityDefinition.PROTECTION_SPACE);
+//                newMaster.setNamespace(AdminSecurityDefinition.ADMIN_TENANT);
+//                entityService.create(newMaster);
+//            }
+//        } catch (ServiceException e) {
+//            e.printStackTrace();
+//        }
 //        IPermissionEngine permissionEngine = this.getService(AdminSpecifiedConfiguration.ADMIN_PERMISSION_ENGINE_NAME);
 //        ISecurityVerifier securityVerifier = new SecurityVerifierByPermissionEngine(permissionEngine, ADMIN_DATA_PROTECTION_SCOPE, ADMIN_DATA_TENANT);
 //        this.setSecurityVerifier(securityVerifier);

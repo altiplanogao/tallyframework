@@ -16,7 +16,6 @@
         <module>business-tallyadmin-datadomain</module>
         <module>business-tallybusiness-datadomain</module>
         <module>business-tallymanagement-datadomain</module>
-        <module>business-tallymodule-datadomain</module>
         <module>business-tallyuser-datadomain</module>
     </modules>
 

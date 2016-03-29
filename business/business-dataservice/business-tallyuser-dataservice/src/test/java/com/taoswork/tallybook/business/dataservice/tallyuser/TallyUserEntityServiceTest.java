@@ -1,20 +1,22 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser;
 
+import com.taoswork.tallybook.business.datadomain.tallyuser.Gender;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonCertificationDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceDefinition;
 import com.taoswork.tallybook.business.dataservice.tallyuser.service.tallyuser.PersonService;
+import com.taoswork.tallybook.datadomain.onmongo.PersistableDocument;
+import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaTransferObject;
 import com.taoswork.tallybook.dataservice.core.entityprotect.validate.EntityValueValidationException;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.jpa.config.db.TestDbConfig;
-import com.taoswork.tallybook.dataservice.jpa.core.entityservice.JpaEntityService;
+import com.taoswork.tallybook.dataservice.mongo.config.TestDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
 import com.taoswork.tallybook.descriptor.service.MetaInfoService;
+import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,24 +34,38 @@ public class TallyUserEntityServiceTest {
     @Before
     public void setupDataSource() {
         counter++;
-        dataService = new TallyUserDataService(TestDbConfig.class);
+        dataService = new TallyUserDataService(TestDatasourceConfiguration.class);
     }
 
     @After
     public void tearDown() {
+        TestDatasourceConfiguration.DatasourceDefinition mdbDef = dataService.getService(IDatasourceConfiguration.DATA_SOURCE_PATH_DEFINITION);
+        mdbDef.dropDatabase();
         dataService = null;
     }
+//
+//    @Test
+//    public void testCreate() throws ServiceException {
+//        IEntityService<PersistableDocument> es = dataService.getService(IEntityService.COMPONENT_NAME);
+//        for(int i = 0 ; i < 67 ; i ++) {
+//            Person p = new PersonImpl();
+//            p.setName("admin" + i).setGender(Gender.male).setEmail("admin_" + i + "@aa.com").setMobile("12345678901" + i);
+//            es.create(p);
+//        }
+//    }
+
+    private final static String AdminId = "56f8c90cc98d9124e8cc1752";
 
     @Test
     public void testDao() {
         PersonDao personDao = dataService.getService(PersonDao.COMPONENT_NAME);
         Assert.assertNotNull(personDao);
-        Person xx = personDao.readPersonById(-1L);
+        Person xx = personDao.readPersonById(AdminId);
         Assert.assertTrue(xx.getName().equals("admin")); //Loaded from load_person.xml
 
         PersonCertificationDao personCertificationDao = dataService.getService(PersonCertificationDao.COMPONENT_NAME);
         Assert.assertNotNull(personCertificationDao);
-        PersonCertification pc = personCertificationDao.readPersonCertificationById(-1L);
+        PersonCertification pc = personCertificationDao.readPersonCertificationById(AdminId);
         Assert.assertEquals(pc.getUserCode(), xx.getUuid());
     }
 
@@ -57,8 +73,6 @@ public class TallyUserEntityServiceTest {
     public void testDataServices() {
 
         PersonService personService = dataService.getService(PersonService.SERVICE_NAME);
-        Object object = dataService.getService(TallyUserJpaDatasourceDefinition.TUSER_TRANSACTION_MANAGER_NAME);
-
         Assert.assertTrue(personService != null);
 
         Person adminP = personService.readPersonByAnyIdentity("admin");
@@ -76,11 +90,11 @@ public class TallyUserEntityServiceTest {
                 admin.setName("admin").setUuid(UUID.randomUUID().toString());
                 personService.savePerson(admin);
 
-                Long id = admin.getId();
-                Person adminFromDb = personService.readPersonByID(id);
+                ObjectId id = admin.getId();
+                Person adminFromDb = personService.readPersonByID(id.toHexString());
 
-                Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
-                Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
+                Assert.assertTrue("Created and Read should be same: " + i, admin.getId().equals(adminFromDb.getId()));
+//                Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
                 created++;
             }
         } finally {
@@ -96,7 +110,7 @@ public class TallyUserEntityServiceTest {
 
     @Test
     public void testDynamicEntityService() {
-        JpaEntityService entityService = dataService.getService(IEntityService.COMPONENT_NAME);
+        IEntityService<PersistableDocument> entityService = dataService.getService(IEntityService.COMPONENT_NAME);
         Assert.assertNotNull(entityService);
         try {
             Person admin = new PersonImpl();
@@ -111,8 +125,8 @@ public class TallyUserEntityServiceTest {
 
         long existingCount = 0;
         try {
-            Person personImp = entityService.straightRead(PersonImpl.class, Long.valueOf(-1L));
-            Person person = entityService.straightRead(Person.class, Long.valueOf(-1L));
+            Person personImp = entityService.straightRead(PersonImpl.class, AdminId);
+            Person person = entityService.straightRead(Person.class, AdminId);
             Assert.assertEquals(person.getUuid(), personImp.getUuid());
             Assert.assertEquals(person.getId(), personImp.getId());
 
@@ -139,11 +153,11 @@ public class TallyUserEntityServiceTest {
                 admin.setMobile("1234567890" + (1000 + i));
                 entityService.create(admin);
 
-                Long id = admin.getId();
-                Person adminFromDb = entityService.straightRead(Person.class, Long.valueOf(id));
+                ObjectId id = admin.getId();
+                Person adminFromDb = entityService.straightRead(Person.class, id);
 
-                Assert.assertTrue("Created and Read should be same: " + i, admin.getId() == adminFromDb.getId());
-                Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
+                Assert.assertTrue("Created and Read should be same: " + i, admin.getId().equals(adminFromDb.getId()));
+//                Assert.assertTrue("Created Object [" + admin.getId() + "] should have Id: " + expected, admin.getId().equals(0L + expected));
                 created++;
             }
         } catch (ServiceException e) {

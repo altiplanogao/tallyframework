@@ -11,7 +11,7 @@ public interface PersonDao extends IDao {
 
     Person readPersonByKey(PersonKeyType keyType, String keyValue, boolean containsInternalKey);
 
-    Person readPersonById(Long id);
+    Person readPersonById(String id);
 
     Person readPersonByUUID(String uuid);
 
@@ -27,7 +27,5 @@ public interface PersonDao extends IDao {
 
     Person create();
 
-    void delete(Person user);
-
-    boolean isThereAnyData();
+    boolean delete(Person user);
 }

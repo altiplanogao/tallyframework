@@ -8,6 +8,7 @@ import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
 import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
 import com.taoswork.tallybook.dataservice.exception.ServiceException;
 import com.taoswork.tallybook.dataservice.service.IEntityService;
+import org.bson.types.ObjectId;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -46,8 +47,9 @@ public class TallyAdminDataServiceTest {
         AdminEmployeeService employeeService = dataService.getService(AdminEmployeeService.SERVICE_NAME);
         Assert.assertNotNull(employeeService);
 
-        AdminEmployee employeeInDb = employeeService.readAdminEmployeeByPersonId(-1L);
-        Assert.assertTrue(employeeInDb.getPersonId().equals(-1L));
+        String rootPersonId =  AdminEmployee.ROOT_PERSON_ID;
+        AdminEmployee employeeInDb = employeeService.readAdminEmployeeByPersonId(rootPersonId);
+        Assert.assertTrue(employeeInDb.getPersonId().equals(rootPersonId));
         Assert.assertTrue(employeeInDb.getTitle().equals("Master"));
 
         int createAttempt = 10;
@@ -55,14 +57,14 @@ public class TallyAdminDataServiceTest {
         try {
             for (int i = 0; i < createAttempt; ++i) {
                 int expected = i + 1;
-                Long personId = i + 2L;
+                ObjectId personId = new ObjectId();
                 AdminEmployee employee = new AdminEmployee();
-                employee.setPersonId(personId);
+                employee.setPersonId(personId.toHexString());
                 employee.setTitle("Title" + expected);
                 employee.setName("Name" + expected);
 
                 employeeService.saveAdminEmployee(employee);
-                AdminEmployee employeeLoaded = employeeService.readAdminEmployeeByPersonId(personId);
+                AdminEmployee employeeLoaded = employeeService.readAdminEmployeeByPersonId(personId.toHexString());
 
                 Assert.assertTrue(personId.equals(employeeLoaded.getPersonId()));
                 Assert.assertTrue(employee.getTitle().equals(employeeLoaded.getTitle()));

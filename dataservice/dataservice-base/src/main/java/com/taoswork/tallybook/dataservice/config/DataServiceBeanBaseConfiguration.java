@@ -88,7 +88,7 @@ public class DataServiceBeanBaseConfiguration
      ************************************************************/
 
     @Override
-    @Bean
+    @Bean(name = IDataService.PROPERTY_CONFIGURER)
     public RuntimeEnvironmentPropertyPlaceholderConfigurer runtimeEnvironmentPropertyPlaceholderConfigurer() {
         return helper.createDefaultRuntimeEnvironmentPropertyPlaceholderConfigurer();
     }

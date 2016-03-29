@@ -14,7 +14,7 @@ public interface PersonService extends IService {
 
     Person savePerson(Person person);
 
-    Person readPersonByID(Long id);
+    Person readPersonByID(String id);
 
     Person readPersonByAnyIdentity(String s);
 

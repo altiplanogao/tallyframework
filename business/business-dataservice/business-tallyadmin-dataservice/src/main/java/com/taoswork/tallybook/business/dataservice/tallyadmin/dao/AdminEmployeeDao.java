@@ -9,7 +9,7 @@ import com.taoswork.tallybook.dataservice.core.entity.IDao;
 public interface AdminEmployeeDao extends IDao {
     public static final String COMPONENT_NAME = PREFIX + "AdminEmployeeDao";
 
-    AdminEmployee readAdminEmployeeByPersonId(Long id);
+    AdminEmployee readAdminEmployeeByPersonId(String id);
 
     AdminEmployee save(AdminEmployee employee);
 }

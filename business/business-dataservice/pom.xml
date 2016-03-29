@@ -15,7 +15,6 @@
         <module>business-tallyuser-dataservice</module>
         <module>business-tallyadmin-dataservice</module>
         <module>business-tallybusiness-dataservice</module>
-        <module>business-tallymodule-dataservice</module>
         <module>business-tallymanagement-dataservice</module>
         <module>business-dataservice-management</module>
     </modules>

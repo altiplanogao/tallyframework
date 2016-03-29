@@ -2,60 +2,45 @@ package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.FacetType;
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonFacetCertification;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
+import org.mongodb.morphia.annotations.Entity;
 
-import javax.persistence.*;
 
 /**
  * Created by Gao Yuan on 2015/4/21.
  */
 
-@Entity
-@Table(name = "TB_PERSON_FACET_CERTIFICATION")
-@NamedQueries({
-        @NamedQuery(name = "PersonFacetCertification.ReadByPersonCode",
-                query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonFacetCertification personCertification" +
-                        " WHERE personCertification.userCode = :userCode")
-})
+@Entity("pfcert")
+@PersistEntity("pfcert")
+//
+//@NamedQueries({
+//        @NamedQuery(name = "PersonFacetCertification.ReadByPersonCode",
+//                query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonFacetCertification personCertification" +
+//                        " WHERE personCertification.userCode = :userCode")
+//})
 public class PersonFacetCertificationImpl
+        extends AbstractDocument
         implements PersonFacetCertification {
-    @Id
-    @Column(name = "ID")
-    protected Long id;
 
-    @Column(name = "FACET_TYPE", nullable = false)
     @PersistField(required = true)
     protected FacetType facetType;
 
-    @Column(name = "FACET_ID", nullable = false)
     @PersistField(required = true)
     protected Long facetId;
 
-    @Column(name = "USER_CODE", nullable = false)
     @PersistField(required = true)
     protected String userCode;
 
-    @Column(name = "CHK_PWD", nullable = false)
     @PersistField(required = true)
     protected boolean checkPwd;
 
-    @Column(name = "PWD", nullable = false)
     @PersistField(required = true)
     protected String password;
 
-    @Column(name = "UPDATE_DATE", nullable = true)
     @PersistField(required = false)
     protected Long lastUpdateDate = 0L;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public FacetType getFacetType() {

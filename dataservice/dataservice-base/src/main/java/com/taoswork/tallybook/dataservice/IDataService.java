@@ -19,6 +19,7 @@ import java.util.Map;
 public interface IDataService {
     public static final String DATASERVICE_NAME_S_BEAN_NAME = "DataServiceBeanName";
     public static final String ERROR_MESSAGE_SOURCE_BEAN_NAME = "ErrorMessageSource";
+    public static final String PROPERTY_CONFIGURER = "PROPERTY_CONFIGURER";
 
     <T> T getService(String serviceName);
 

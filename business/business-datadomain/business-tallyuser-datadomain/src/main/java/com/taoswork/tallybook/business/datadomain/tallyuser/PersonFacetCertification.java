@@ -1,15 +1,11 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.datadomain.onmongo.PersistableDocument;
 
 /**
  * Created by Gao Yuan on 2015/4/14.
  */
-public interface PersonFacetCertification extends Persistable {
-
-    Long getId();
-
-    void setId(Long id);
+public interface PersonFacetCertification extends PersistableDocument {
 
     FacetType getFacetType();
 

@@ -1,49 +1,34 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification;
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
-
-import javax.persistence.*;
+import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
+import org.mongodb.morphia.annotations.Entity;
 
 /**
  * Created by Gao Yuan on 2015/4/21.
  */
 
-@Entity
-@Table(name = "TB_PERSON_CERTIFICATION")
-@NamedQueries({
-        @NamedQuery(name = "PersonCertification.ReadByPersonCode",
-                query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification personCertification" +
-                        " WHERE personCertification.userCode = :userCode")
-})
-public class PersonCertificationImpl
+@Entity("pcert")
+@PersistEntity("pcert")
+//@Table(name = "TB_PERSON_CERTIFICATION")
+//@NamedQueries({
+//        @NamedQuery(name = "PersonCertification.ReadByPersonCode",
+//                query = "SELECT personCertification FROM com.taoswork.tallybook.business.datadomain.tallyuser.PersonCertification personCertification" +
+//                        " WHERE personCertification.userCode = :userCode")
+//})
+public class PersonCertificationImpl extends AbstractDocument
         implements PersonCertification {
-    @Id
-    @Column(name = "ID")
-    protected Long id;
 
-
-    @Column(name = "USER_CODE", nullable = false)
     @PersistField(required = true)
     protected String userCode;
 
-    @Column(name = "PWD", nullable = false)
     @PersistField(required = true)
     protected String password;
 
-    @Column(name = "UPDATE_DATE", nullable = true)
+    @PersistField(required = false)
     protected Long lastUpdateDate = 0L;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public PersonCertification setId(Long id) {
-        this.id = id;
-        return this;
-    }
 
     @Override
     public String getPassword() {

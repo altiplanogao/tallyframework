@@ -9,7 +9,7 @@ import com.taoswork.tallybook.dataservice.core.entity.IService;
 public interface AdminEmployeeService extends IService {
     public static final String SERVICE_NAME = PREFIX + "AdminEmployeeService";
 
-    AdminEmployee readAdminEmployeeByPersonId(Long personId);
+    AdminEmployee readAdminEmployeeByPersonId(String personId);
 
     AdminEmployee saveAdminEmployee(AdminEmployee employee);
 }

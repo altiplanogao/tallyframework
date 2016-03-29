@@ -9,7 +9,7 @@ import com.taoswork.tallybook.dataservice.core.entity.IDao;
 public interface PersonCertificationDao extends IDao {
     public static final String COMPONENT_NAME = PREFIX + "PersonCertificationDao";
 
-    PersonCertification readPersonCertificationById(Long id);
+    PersonCertification readPersonCertificationById(String id);
 
     PersonCertification readPersonCertificationByPersonCode(String userCode);
 }

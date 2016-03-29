@@ -43,7 +43,7 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
 
         Person person = personDetails.getPerson();
         AdminEmployeeService adminEmployeeService = tallyAdminDataService.getService(AdminEmployeeService.SERVICE_NAME);
-        AdminEmployee adminEmployee = adminEmployeeService.readAdminEmployeeByPersonId(person.getId());
+        AdminEmployee adminEmployee = adminEmployeeService.readAdminEmployeeByPersonId(person.getId().toHexString());
         if (adminEmployee == null || adminEmployee.getId() == null) {
             return null;
         }

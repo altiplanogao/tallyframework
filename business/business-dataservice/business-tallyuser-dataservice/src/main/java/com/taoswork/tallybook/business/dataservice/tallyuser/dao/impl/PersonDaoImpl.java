@@ -1,20 +1,23 @@
 package com.taoswork.tallybook.business.dataservice.tallyuser.dao.impl;
 
+import com.mongodb.DBRef;
+import com.mongodb.WriteResult;
 import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonDao;
 import com.taoswork.tallybook.business.dataservice.tallyuser.dao.PersonKeyType;
-import com.taoswork.tallybook.business.dataservice.tallyuser.conf.TallyUserJpaDatasourceDefinition;
 import com.taoswork.tallybook.dataservice.annotations.Dao;
 import com.taoswork.tallybook.dataservice.core.entity.DaoBase;
+import com.taoswork.tallybook.dataservice.mongo.MongoDatasourceDefinition;
 import com.taoswork.tallybook.general.extension.collections.CollectionUtility;
 import com.taoswork.tallybook.general.extension.collections.ListUtility;
 import com.taoswork.tallybook.general.extension.utils.AccountUtility;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.AdvancedDatastore;
+import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -26,15 +29,15 @@ public class PersonDaoImpl
         extends DaoBase
         implements PersonDao {
 
-    @PersistenceContext(unitName = TallyUserJpaDatasourceDefinition.TUSER_PU_NAME)
-    protected EntityManager em;
+    @Resource(name = MongoDatasourceDefinition.DATASTORE_BEAN_NAME)
+    private AdvancedDatastore datastore;
 
     @Override
     public Person readPersonByKey(PersonKeyType keyType, String keyValue, boolean eraseInternalKey) {
         Person tempPerson = null;
         switch (keyType) {
             case ID:
-                tempPerson = this.readPersonById(Long.getLong(keyValue));
+                tempPerson = this.readPersonById(keyValue);
                 break;
             case UUID:
                 tempPerson = readPersonByUUID(keyValue);
@@ -59,43 +62,39 @@ public class PersonDaoImpl
     }
 
     @Override
-    public Person readPersonById(Long id) {
-        return em.find(PersonImpl.class, id);
+    public Person readPersonById(String id) {
+        return datastore.get(PersonImpl.class, new ObjectId(id));
     }
 
     @Override
     public Person readPersonByUUID(String uuid) {
-        TypedQuery<Person> query = em.createNamedQuery("Person.ReadPersonByUUID", Person.class);
-        query.setParameter("uuid", uuid);
-        query.setMaxResults(2);
-        List<Person> users = query.getResultList();
+        Query<PersonImpl> q = datastore.find(PersonImpl.class, "uuid", uuid);
+        q.limit(2);
+        List<PersonImpl> users = q.asList();
         return ListUtility.getTheSingleElement(users);
     }
 
     @Override
     public Person readPersonByName(String name) {
-        TypedQuery<Person> query = em.createNamedQuery("Person.ReadPersonByName", Person.class);
-        query.setParameter("name", name);
-        query.setMaxResults(2);
-        List<Person> users = query.getResultList();
+        Query<PersonImpl> q = datastore.find(PersonImpl.class, "name", name);
+        q.limit(2);
+        List<PersonImpl> users = q.asList();
         return ListUtility.getTheSingleElement(users);
     }
 
     @Override
     public Person readPersonByEmail(String email) {
-        TypedQuery<Person> query = em.createNamedQuery("Person.ReadPersonByEmail", Person.class);
-        query.setParameter("email", email);
-        query.setMaxResults(2);
-        List<Person> users = query.getResultList();
+        Query<PersonImpl> q = datastore.find(PersonImpl.class, "email", email);
+        q.limit(2);
+        List<PersonImpl> users = q.asList();
         return ListUtility.getTheSingleElement(users);
     }
 
     @Override
     public Person readPersonByMobile(String mobile) {
-        TypedQuery<Person> query = em.createNamedQuery("Person.ReadPersonByMobile", Person.class);
-        query.setParameter("mobile", mobile);
-        query.setMaxResults(2);
-        List<Person> users = query.getResultList();
+        Query<PersonImpl> q = datastore.find(PersonImpl.class, "mobile", mobile);
+        q.limit(2);
+        List<PersonImpl> users = q.asList();
         return ListUtility.getTheSingleElement(users);
     }
 
@@ -112,12 +111,8 @@ public class PersonDaoImpl
 
     @Override
     public Person save(Person person) {
-        if (em.contains(person) || person.getId() != null) {
-            return em.merge(person);
-        } else {
-            em.persist(person);
-            return person;
-        }
+        datastore.save(person);
+        return person;
     }
 
     @Override
@@ -127,18 +122,9 @@ public class PersonDaoImpl
     }
 
     @Override
-    public void delete(Person user) {
-        if (!em.contains(user)) {
-            user = readPersonById(user.getId());
-        }
-        em.remove(user);
+    public boolean delete(Person user) {
+        WriteResult wr = datastore.delete(PersonImpl.class, user.getId());
+        return wr.getN() == 1;
     }
 
-    @Override
-    public boolean isThereAnyData() {
-        TypedQuery<Person> query = em.createNamedQuery("Person.ListPerson", Person.class);
-        query.setMaxResults(1);
-        List<Person> users = query.getResultList();
-        return !CollectionUtility.isEmpty(users);
-    }
 }

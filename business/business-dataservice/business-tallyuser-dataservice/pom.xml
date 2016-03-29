@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>dataservice-on-jpa</artifactId>
+            <artifactId>dataservice-on-mongo</artifactId>
         </dependency>
 
         <dependency>
@@ -44,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>test-material-for-jpa</artifactId>
+            <artifactId>test-material-for-mongo</artifactId>
         </dependency>
     </dependencies>
 

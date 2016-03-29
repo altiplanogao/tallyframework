@@ -1,11 +1,11 @@
 package com.taoswork.tallybook.business.datadomain.tallyuser;
 
-import com.taoswork.tallybook.datadomain.base.entity.Persistable;
+import com.taoswork.tallybook.datadomain.onmongo.PersistableDocument;
 
 /**
  * Created by Gao Yuan on 2015/4/14.
  */
-public interface PersonCertification extends Persistable {
+public interface PersonCertification extends PersistableDocument {
     String getPassword();
 
     PersonCertification setPassword(String password);
@@ -13,10 +13,6 @@ public interface PersonCertification extends Persistable {
     String getUserCode();
 
     PersonCertification setUserCode(String userId);
-
-    Long getId();
-
-    PersonCertification setId(Long id);
 
     Long getLastUpdateDate();
 

@@ -1,0 +1,13 @@
+[{
+  "collection":"com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl",
+  "entries":[
+    {"_id"	:	"000000000000000000000000", "name" : "admin" , "gender" : "male" , "email" : "admin_name0@abc.com" , "mobile" : "12345678901" , "active" : "true" , "uuid" : "00000000-0000-0000-0000-000000000000"}
+  ]
+},{
+    "collection": "com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonCertificationImpl",
+  "entries":[
+    {"_id"	:	"000000000000000000000000", "userCode" : "00000000-0000-0000-0000-000000000000", "password":"admin"}
+  ]
+  }
+]
+

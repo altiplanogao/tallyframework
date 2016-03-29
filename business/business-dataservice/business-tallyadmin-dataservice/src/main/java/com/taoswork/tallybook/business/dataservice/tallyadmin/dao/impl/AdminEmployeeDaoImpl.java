@@ -23,7 +23,7 @@ public class AdminEmployeeDaoImpl
         implements AdminEmployeeDao {
 
     @Override
-    public AdminEmployee readAdminEmployeeByPersonId(Long id) {
+    public AdminEmployee readAdminEmployeeByPersonId(String id) {
         Query<AdminEmployee> q = datastore.createQuery(AdminEmployee.class);
         q.field("personId").equal(id);
         q.limit(2);
@@ -33,7 +33,7 @@ public class AdminEmployeeDaoImpl
 
     @Override
     public AdminEmployee save(AdminEmployee employee) {
-        Long personId = employee.getPersonId();
+        String personId = employee.getPersonId();
         if (personId == null)
             throw new IllegalArgumentException();
         Query<AdminEmployee> q = datastore.createQuery(AdminEmployee.class);

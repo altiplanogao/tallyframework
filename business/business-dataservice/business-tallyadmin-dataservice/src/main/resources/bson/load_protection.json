@@ -1,0 +1,9 @@
+[{
+  "collection":"com.taoswork.tallybook.business.datadomain.tallyadmin.AdminProtection",
+  "entries":[
+    { "_id" : "56fa75e1456e9c696c76df05", "protectionSpace" : "admin-protection-space", "namespace" : "admin-namespace", "name" : "AdminProtection", "resource" : "#com-taoswork-tallybook-business-datadomain-tallyadmin-AdminProtection", "protectionMode" : "FitAll", "masterControlled" : true },
+    { "_id" : "56fa75e1456e9c696c76df06", "protectionSpace" : "admin-protection-space", "namespace" : "admin-namespace", "name" : "AdminEmployee", "resource" : "#com-taoswork-tallybook-business-datadomain-tallyadmin-AdminEmployee", "protectionMode" : "FitAll", "masterControlled" : true},
+    { "_id" : "56fa75e1456e9c696c76df07", "protectionSpace" : "admin-protection-space", "namespace" : "admin-namespace", "name" : "AdminGroup", "resource" : "#com-taoswork-tallybook-business-datadomain-tallyadmin-AdminGroup", "protectionMode" : "FitAll", "masterControlled" : true}
+  ]
+}
+]
