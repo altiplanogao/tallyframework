@@ -38,4 +38,14 @@ public @interface PresentationClass {
 
         boolean collapsed() default false;
     }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({})
+    @interface FieldOverride{
+        String fieldName();
+        PresentationField define();
+    }
+
+    FieldOverride[] fieldOverrides() default {};
+
 }

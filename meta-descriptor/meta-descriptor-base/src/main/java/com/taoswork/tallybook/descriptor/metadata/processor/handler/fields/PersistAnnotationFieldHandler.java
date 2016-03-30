@@ -3,6 +3,7 @@ package com.taoswork.tallybook.descriptor.metadata.processor.handler.fields;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.entity.valuegate.IFieldGate;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
+import com.taoswork.tallybook.descriptor.metadata.classmetadata.MutableClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.FieldMetaMediate;
 import com.taoswork.tallybook.descriptor.metadata.processor.ProcessResult;
@@ -17,7 +18,12 @@ public class PersistAnnotationFieldHandler
     public ProcessResult process(Field field, FieldMetaMediate metaMediate) {
         BasicFieldMetaObject bfmo = metaMediate.getBasicFieldMetaObject();
         bfmo.setFieldType(FieldType.UNKNOWN);
-        PersistField persistField = field.getDeclaredAnnotation(PersistField.class);
+        MutableClassMeta mutableClassMeta = metaMediate.getMutableClassMetadata();
+        PersistField persistField = mutableClassMeta.getPersistFieldOverride(field.getName());
+        if (persistField == null){
+            persistField = field.getDeclaredAnnotation(PersistField.class);
+        }
+
         Class<? extends IFieldGate> fvg = null;
         if (persistField != null) {
             bfmo.setFieldType(persistField.fieldType());

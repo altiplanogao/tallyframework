@@ -31,7 +31,7 @@ public class IntervalSensitiveTest {
         Assert.assertTrue(intervalSensitive.checkExpired());
     }
 
-    @Test
+    @Test(timeout = 10000)
     public void sometimeExpire() throws Exception{
         IntervalSensitive intervalSensitive = new IntervalSensitive(1000);
         Assert.assertEquals(intervalSensitive.getLastTouch(), 0L);

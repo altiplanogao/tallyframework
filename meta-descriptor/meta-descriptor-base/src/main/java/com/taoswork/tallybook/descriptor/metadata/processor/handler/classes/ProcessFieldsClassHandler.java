@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.descriptor.metadata.processor.handler.classes;
 
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.classmetadata.MutableClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.FieldMetaMediate;
@@ -9,13 +10,17 @@ import com.taoswork.tallybook.descriptor.metadata.processor.IFieldProcessor;
 import com.taoswork.tallybook.descriptor.metadata.processor.ProcessResult;
 import com.taoswork.tallybook.descriptor.metadata.processor.handler.basic.IClassHandler;
 import com.taoswork.tallybook.descriptor.metadata.utils.GeneralFieldScanMethod;
+import com.taoswork.tallybook.general.solution.reflect.ClassUtility;
 import com.taoswork.tallybook.general.solution.reflect.FieldScanMethod;
 import com.taoswork.tallybook.general.solution.reflect.FieldScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class ProcessFieldsClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessFieldsClassHandler.class);
@@ -34,13 +39,22 @@ public class ProcessFieldsClassHandler implements IClassHandler {
         FieldScanMethod fsm = new GeneralFieldScanMethod();
         fsm.setIncludeStatic(false).setIncludeTransient(false).setIncludeId(true)
                 .setScanSuper(false);
-        List<Field> fields = FieldScanner.getFields(clz, fsm);
+        List<Field> fields = new ArrayList<Field>();
+        Collection<String> pfos = mutableClassMetadata.getFieldsOverrided();
+        for(String fieldName : pfos) {
+            Field f = ClassUtility.getFieldOfName(clz, fieldName, true);
+            if (f == null) {
+                throw new RuntimeException("[" + ProcessFieldsClassHandler.class + "] Field " + fieldName + " in " + clz + " doesn't exist , aborting ...");
+            }
+            fields.add(f);
+        }
+        FieldScanner.getFields(clz, fsm, fields);
         int fieldOrigIndex = 0;
         for (Field field : fields) {
             totalfields++;
             String fieldName = field.getName();
 
-            FieldMetaMediate fieldMetaMediate = new FieldMetaMediate(fieldOrigIndex, field);
+            FieldMetaMediate fieldMetaMediate = new FieldMetaMediate(mutableClassMetadata, fieldOrigIndex, field);
             ProcessResult pr = fieldHandler.process(field, fieldMetaMediate);
             if (mutableClassMetadata.getRWFieldMetaMap().containsKey(fieldName)) {
                 LOGGER.error("FieldMeta with name '{}' already exist.", fieldName);

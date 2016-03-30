@@ -40,7 +40,7 @@ public abstract class BaseAuthority
     public static final String FN_PROTECTION_SPACE = "protectionSpace";
 
     @PersistField(fieldType = FieldType.STRING, required = true)
-    private String namespace;
+    protected String namespace;
     public static final String FN_NAMESPACE = "namespace";
 
     private String ownerId;

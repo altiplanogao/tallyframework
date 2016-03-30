@@ -1,6 +1,8 @@
 package com.taoswork.tallybook.descriptor.metadata.processor.handler.classes;
 
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.descriptor.metadata.GroupMeta;
 import com.taoswork.tallybook.descriptor.metadata.TabMeta;
 import com.taoswork.tallybook.descriptor.metadata.classmetadata.MutableClassMeta;
@@ -18,6 +20,9 @@ import java.util.Map;
 public class PresentationAnnotationClassHandler implements IClassHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(PresentationAnnotationClassHandler.class);
 
+    public PresentationAnnotationClassHandler() {
+    }
+
     @Override
     public ProcessResult process(Class<?> clz, MutableClassMeta mutableClassMetadata) {
         PresentationClass presentationClass = clz.getAnnotation(PresentationClass.class);
@@ -26,7 +31,18 @@ public class PresentationAnnotationClassHandler implements IClassHandler {
         }
         handleAnnotationPresentationClassTabs(presentationClass, mutableClassMetadata);
         handleAnnotationPresentationClassGroups(presentationClass, mutableClassMetadata);
+        handleAnnotationPresentationClassFieldOverrides(presentationClass, mutableClassMetadata);
         return ProcessResult.HANDLED;
+    }
+
+    private void handleAnnotationPresentationClassFieldOverrides(PresentationClass presentationClass, MutableClassMeta mutableClassMetadata) {
+        PresentationClass.FieldOverride fieldOverrides[] = presentationClass.fieldOverrides();
+        Map<String, PresentationField> foMap = mutableClassMetadata.getPresentationFieldOverrides();
+        for (PresentationClass.FieldOverride fo : fieldOverrides){
+            String fieldName = fo.fieldName();
+            PresentationField pf = fo.define();
+            foMap.put(fieldName, pf);
+        }
     }
 
     private void handleAnnotationPresentationClassTabs(PresentationClass presentationClass, MutableClassMeta mutableClassMetadata) {

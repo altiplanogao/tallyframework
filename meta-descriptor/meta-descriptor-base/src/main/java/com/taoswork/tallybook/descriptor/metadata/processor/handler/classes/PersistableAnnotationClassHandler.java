@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.descriptor.metadata.processor.handler.classes;
 
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.entity.Persistable;
 import com.taoswork.tallybook.datadomain.base.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.datadomain.base.entity.valuecopier.IEntityCopier;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,12 +41,23 @@ public class PersistableAnnotationClassHandler implements IClassHandler {
                 }
                 Class<? extends IEntityCopier> copier = persistEntity.copier();
                 mutableClassMetadata.setValueCopier(copier);
+                handleAnnotationPersistEntityFieldOverrides(persistEntity, mutableClassMetadata);
                 handled = true;
             }
         }
         if (handled)
             return ProcessResult.HANDLED;
         return ProcessResult.INAPPLICABLE;
+    }
+
+    private void handleAnnotationPersistEntityFieldOverrides(PersistEntity persistEntity, MutableClassMeta mutableClassMetadata) {
+        PersistEntity.FieldOverride fieldOverrides[] = persistEntity.fieldOverrides();
+        Map<String, PersistField> foMap = mutableClassMetadata.getPersistFieldOverrides();
+        for (PersistEntity.FieldOverride fo : fieldOverrides){
+            String fieldName = fo.fieldName();
+            PersistField pf = fo.define();
+            foMap.put(fieldName, pf);
+        }
     }
 
 

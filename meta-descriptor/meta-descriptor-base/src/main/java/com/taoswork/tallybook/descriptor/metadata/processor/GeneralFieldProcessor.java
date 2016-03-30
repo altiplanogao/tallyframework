@@ -27,6 +27,9 @@ public class GeneralFieldProcessor
     private MapFieldHandlerDispatcher mapFieldHandler;
     private final List<IFieldHandler> additionalBasicHandlers = new ArrayList<IFieldHandler>();
 
+    public GeneralFieldProcessor() {
+    }
+
     @Override
     public void setParentClassProcessor(IClassProcessor classProcessor) {
         parentClassProcessor = classProcessor;

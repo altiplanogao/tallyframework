@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
+import com.taoswork.tallybook.authority.solution.domain.user.BaseAuthority;
 import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
 import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.valueprotect.AdminEmployeeGate;
@@ -10,6 +11,7 @@ import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
 import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
 import com.taoswork.tallybook.datadomain.base.entity.PersistField;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
 import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
@@ -27,8 +29,20 @@ import java.util.List;
 @Entity("admin")
 @PersistEntity(value = "admin",
         asDefaultPermissionGuardian = true,
-        valueGates = {AdminEmployeeGate.class}
+        valueGates = {AdminEmployeeGate.class},
+        fieldOverrides = {
+                @PersistEntity.FieldOverride(fieldName = BaseAuthority.FN_NAMESPACE,
+                        define = @PersistField(editable = false)),
+                @PersistEntity.FieldOverride(fieldName = BaseAuthority.FN_OWNER_ID,
+                        define = @PersistField(editable = false))
+        }
 )
+@PresentationClass(fieldOverrides = {
+        @PresentationClass.FieldOverride(fieldName = BaseAuthority.FN_NAMESPACE,
+                define = @PresentationField(visibility = Visibility.HIDDEN_ALL)),
+        @PresentationClass.FieldOverride(fieldName = BaseAuthority.FN_OWNER_ID,
+                define = @PresentationField(visibility = Visibility.HIDDEN_ALL))
+})
 public class AdminEmployee extends UserAuthority<AdminGroup> {
     //protected Big
 //    @Transient

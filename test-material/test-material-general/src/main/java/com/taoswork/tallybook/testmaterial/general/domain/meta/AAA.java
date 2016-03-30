@@ -1,6 +1,7 @@
 package com.taoswork.tallybook.testmaterial.general.domain.meta;
 
 import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.validator.AAAValueValidator;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.valuecopier.AAACopier;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.valuegate.AAAGate;

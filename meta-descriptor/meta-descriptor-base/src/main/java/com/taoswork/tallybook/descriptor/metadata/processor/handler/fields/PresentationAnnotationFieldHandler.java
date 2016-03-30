@@ -3,6 +3,7 @@ package com.taoswork.tallybook.descriptor.metadata.processor.handler.fields;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
 import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
+import com.taoswork.tallybook.descriptor.metadata.classmetadata.MutableClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BasicFieldMetaObject;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.FieldMetaMediate;
 import com.taoswork.tallybook.descriptor.metadata.processor.ProcessResult;
@@ -12,10 +13,16 @@ import java.lang.reflect.Field;
 
 public class PresentationAnnotationFieldHandler
         implements IFieldHandler {
+    public PresentationAnnotationFieldHandler() {
+    }
 
     @Override
     public ProcessResult process(Field field, FieldMetaMediate metaMediate) {
-        PresentationField presentationField = field.getDeclaredAnnotation(PresentationField.class);
+        MutableClassMeta mutableClassMeta = metaMediate.getMutableClassMetadata();
+        PresentationField presentationField = mutableClassMeta.getPresentationFieldOverride(field.getName());
+        if (presentationField == null){
+            presentationField = field.getDeclaredAnnotation(PresentationField.class);
+        }
 
         BasicFieldMetaObject bfmo = metaMediate.getBasicFieldMetaObject();
 

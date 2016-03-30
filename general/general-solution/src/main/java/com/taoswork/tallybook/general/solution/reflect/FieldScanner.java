@@ -3,6 +3,7 @@ package com.taoswork.tallybook.general.solution.reflect;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,12 +13,16 @@ public class FieldScanner {
     public static List<Field> getFields(Class<?> clz,
                                         FieldScanMethod scanMethod) {
         List<Field> fieldList = new ArrayList<Field>();
-        scanHierarchySuperFirst(clz, scanMethod, fieldList);
+        getFields(clz, scanMethod, fieldList);
 
         return fieldList;
     }
+    public static void getFields(Class<?> clz,
+                                        FieldScanMethod scanMethod, Collection<Field> fieldList) {
+        scanHierarchySuperFirst(clz, scanMethod, fieldList);
+    }
 
-    private static void scanHierarchySuperFirst(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList) {
+    private static void scanHierarchySuperFirst(Class<?> clz, FieldScanMethod scanMethod, Collection<Field> fieldList) {
         Class<?> superClz = scanMethod.getTheSuper(clz);
 
         if (superClz != null) {
@@ -27,7 +32,7 @@ public class FieldScanner {
         fetchFileds(clz, scanMethod, fieldList);
     }
 
-    private static void scanHierarchyChildFirst(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList) {
+    private static void scanHierarchyChildFirst(Class<?> clz, FieldScanMethod scanMethod, Collection<Field> fieldList) {
         Class<?> superClz = scanMethod.getTheSuper(clz);
 
         fetchFileds(clz, scanMethod, fieldList);
@@ -37,7 +42,7 @@ public class FieldScanner {
         }
     }
 
-    private static void fetchFileds(Class<?> clz, FieldScanMethod scanMethod, List<Field> fieldList) {
+    private static void fetchFileds(Class<?> clz, FieldScanMethod scanMethod, Collection<Field> fieldList) {
         Field[] fields = clz.getDeclaredFields();
         for (Field field : fields) {
             boolean abandon = false;

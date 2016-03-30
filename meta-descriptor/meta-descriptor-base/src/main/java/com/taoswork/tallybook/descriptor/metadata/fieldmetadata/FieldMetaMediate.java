@@ -1,5 +1,6 @@
 package com.taoswork.tallybook.descriptor.metadata.fieldmetadata;
 
+import com.taoswork.tallybook.descriptor.metadata.classmetadata.MutableClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.processor.handler.basic.IFacet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +14,13 @@ public class FieldMetaMediate implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(FieldMetaMediate.class);
     private final Map<String, IFacet> facets = new HashMap<String, IFacet>();
 //    public final Map<FieldFacetType, IFieldMetaSeed> facets = new HashMap<FieldFacetType, IFieldMetaSeed>();
+    private final MutableClassMeta mutableClassMetadata;
     private final BasicFieldMetaObject basicFieldMetaObject;
 //    private Class<? extends IFieldMeta> targetMetadataType;
     private IFieldMetaSeed metaSeed;
 
-    public FieldMetaMediate(int originalOrder, Field field) {
+    public FieldMetaMediate(MutableClassMeta mutableClassMetadata, int originalOrder, Field field) {
+        this.mutableClassMetadata = mutableClassMetadata;
         this.basicFieldMetaObject = new BasicFieldMetaObject(originalOrder, field);
     }
 
@@ -57,6 +60,10 @@ public class FieldMetaMediate implements Serializable {
             throw new IllegalAccessError("setMetaSeed accessed multiple times: " + basicFieldMetaObject.getDeclaringClassName() + "." + basicFieldMetaObject.getField());
         }
         this.metaSeed = seed;
+    }
+
+    public MutableClassMeta getMutableClassMetadata() {
+        return mutableClassMetadata;
     }
 
     public BasicFieldMetaObject getBasicFieldMetaObject() {

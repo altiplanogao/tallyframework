@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.descriptor.metadata.service;
 
-import com.taoswork.tallybook.descriptor.jpa.service.JpaMetaServiceImpl;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.service.MetaService;
+import com.taoswork.tallybook.descriptor.service.impl.GeneralMetaServiceImpl;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.A;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.AA;
 import com.taoswork.tallybook.testmaterial.general.domain.meta.AAA;
@@ -35,7 +35,7 @@ public class MetaServiceTest_ValueValidatorGateCopier {
 
     @Before
     public void setup() {
-        metaService = new JpaMetaServiceImpl();
+        metaService = new GeneralMetaServiceImpl();
         aaacm = metaService.generateMeta(AAA.class, null, true);
         aabcm = metaService.generateMeta(AAB.class, null, true);
         aacm = metaService.generateMeta(AA.class, null, true);

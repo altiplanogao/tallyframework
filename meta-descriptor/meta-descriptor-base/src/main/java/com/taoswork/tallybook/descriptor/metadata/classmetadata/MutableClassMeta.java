@@ -1,8 +1,12 @@
 package com.taoswork.tallybook.descriptor.metadata.classmetadata;
 
+import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallybook.datadomain.base.entity.PersistField;
 import com.taoswork.tallybook.datadomain.base.entity.validation.IEntityValidator;
 import com.taoswork.tallybook.datadomain.base.entity.valuecopier.IEntityCopier;
 import com.taoswork.tallybook.datadomain.base.entity.valuegate.IEntityGate;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationClass;
+import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
 import com.taoswork.tallybook.descriptor.metadata.GroupMeta;
 import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
 import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
@@ -32,6 +36,8 @@ public class MutableClassMeta extends FriendlyMeta implements IClassMeta, Clonea
     private final Set<String> nonCollectionFields = new HashSet<String>();
     private final Set<String> validators = new HashSet();
     private final Set<String> valueGates = new HashSet();
+    private final Map<String, PresentationField> presentationFieldOverrides = new HashMap<String, PresentationField>();
+    private final Map<String, PersistField> persistFieldOverrides = new HashMap<String, PersistField>();
     private String valueCopier = null;
     public final Class<?> entityClz;
     public boolean containsSuper = false;
@@ -158,6 +164,30 @@ public class MutableClassMeta extends FriendlyMeta implements IClassMeta, Clonea
     public Map<String, IClassMeta> getReadonlyReferencingClassMetaMap() {
         return Collections.unmodifiableMap(referencingClassMeta);
     }
+
+    public Map<String, PresentationField> getPresentationFieldOverrides() {
+        return presentationFieldOverrides;
+    }
+
+    public Map<String, PersistField> getPersistFieldOverrides() {
+        return persistFieldOverrides;
+    }
+
+    public PresentationField getPresentationFieldOverride(String fieldName) {
+        return presentationFieldOverrides.get(fieldName);
+    }
+
+    public Collection<String> getFieldsOverrided(){
+        Set<String> fs = new HashSet<String>();
+        fs.addAll(persistFieldOverrides.keySet());
+        fs.addAll(presentationFieldOverrides.keySet());
+        return fs;
+    }
+
+    public PersistField getPersistFieldOverride(String fieldName) {
+        return persistFieldOverrides.get(fieldName);
+    }
+
 
     @Override
     public IFieldMeta getFieldMeta(String fieldName) {
