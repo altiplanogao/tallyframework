@@ -7,12 +7,14 @@ import com.taoswork.tallybook.datadomain.base.presentation.typed.BooleanMode;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.DateMode;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationBoolean;
 import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationDate;
+import org.mongodb.morphia.annotations.Embedded;
 
 import java.util.Date;
 
 /**
  * Created by Gao Yuan on 2015/4/16.
  */
+@Embedded
 public class AccountStatus {
 
     @PersistField(fieldType = FieldType.BOOLEAN)
