@@ -75,6 +75,9 @@ public abstract class BaseController {
         return result;
     }
 
+    protected DataMapBuilder makeDataMapBuilder(String attributeName){
+        return new DataMapBuilder(attributeName, getObjectMapper());
+    }
     protected abstract ObjectMapper getObjectMapper();
 
     protected String getObjectInJson(Object data) {

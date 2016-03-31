@@ -125,7 +125,7 @@ public class Menu implements IMenu {
     }
 
     @Override
-    public Collection<IMenuEntry> getTopEntries() {
+    public Collection<IMenuEntry> getEntries() {
         return insideRoot.subEntries();
     }
 

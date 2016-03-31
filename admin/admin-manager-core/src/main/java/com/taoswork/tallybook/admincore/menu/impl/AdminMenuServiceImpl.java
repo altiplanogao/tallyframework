@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -90,5 +91,25 @@ public class AdminMenuServiceImpl implements AdminMenuService, ApplicationContex
     public MenuPath findMenuPathByEntryKey(String entryKey) {
         MenuPath path = fullMenu.getSinglePathOfEntry(entryKey);
         return path;
+    }
+
+    @Override
+    public Collection<String> workoutMenuKeyPathByUrl(String url) {
+        MenuPath path = this.findMenuPathByUrl(url);
+        if (path != null) {
+            return path.getPath();
+        }
+
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public Collection<String> workoutMenuKeyByEntryKey(String entryKey) {
+        MenuPath path = this.findMenuPathByEntryKey(entryKey);
+        if (path != null) {
+            return path.getPath();
+        }
+
+        return new ArrayList<String>();
     }
 }

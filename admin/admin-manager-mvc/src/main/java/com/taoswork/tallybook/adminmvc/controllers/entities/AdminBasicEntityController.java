@@ -24,7 +24,9 @@ import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
 import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.BaseCollectionFieldMeta;
 import com.taoswork.tallybook.general.solution.menu.IMenu;
 import com.taoswork.tallybook.general.solution.menu.MenuPath;
+import com.taoswork.tallybook.general.web.control.DataMapBuilder;
 import org.apache.commons.httpclient.URI;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -37,9 +39,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *    Action            Method      Success :                       Error:NoRecord      Error:Validation    Error:KPermission
@@ -138,14 +138,13 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
-
-        model.addAttribute("imenu", menu);
-        model.addAttribute("current", currentPath);
+        Collection<String> currentMPath = adminMenuService.workoutMenuKeyPathByUrl(entityTypes.getTypeName());
         model.addAttribute("person", person);
 
-        String menuInJson = getObjectInJson(menu);
-        model.addAttribute("menu", menuInJson);
+        makeDataMapBuilder("dataMap")
+                .addAttribute("menu", menu)
+                .addAttribute("menuPath", currentMPath)
+                .addToModule(model);;
 
         {
 //            ObjectMapper mapper = new ObjectMapper();
@@ -230,11 +229,13 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
-
-        model.addAttribute("menu", menu);
-        model.addAttribute("current", currentPath);
+        Collection<String> currentMPath = adminMenuService.workoutMenuKeyPathByUrl(entityTypes.getTypeName());
         model.addAttribute("person", person);
+
+        makeDataMapBuilder("dataMap")
+                .addAttribute("menu", menu)
+                .addAttribute("menuPath", currentMPath)
+                .addToModule(model);;
 
         model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
         String entityResultInJson = getObjectInJson(addResponse);
@@ -350,15 +351,18 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         Person person = adminCommonModelService.getPersistentPerson();
         AdminEmployee employee = adminCommonModelService.getPersistentAdminEmployee();
         IMenu menu = adminMenuService.buildMenu(employee);
-        CurrentPath currentPath = helper.buildCurrentPath(entityTypes.getTypeName(), request);
+        Collection<String> currentMPath = adminMenuService.workoutMenuKeyPathByUrl(entityTypes.getTypeName());
+        String entityName = "";
         if (readResponse.getEntity() != null) {
-//            currentPath.pushEntry(readResponse.getValue().getName(), request.getRequestURI());
-            model.addAttribute("entityName", readResponse.getEntity().getName());
+            entityName = readResponse.getEntity().getName();
         }
-
-        model.addAttribute("menu", menu);
-        model.addAttribute("current", currentPath);
         model.addAttribute("person", person);
+
+        makeDataMapBuilder("dataMap")
+                .addAttribute("menu", menu)
+                .addAttribute("menuPath", currentMPath)
+                .addAttribute("entityName", entityName, StringUtils.isNotEmpty(entityName))
+                .addToModule(model);;
 
         IEntityInfo formInfo = null;
         if (readResponse.getInfos() != null) {
@@ -718,16 +722,5 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
     ///         Helper                                                              //////
     //////////////////////////////////////////////////////////////////////////////////////
     class Helper {
-        private CurrentPath buildCurrentPath(String sectionName, HttpServletRequest request) {
-            CurrentPath currentPath = new CurrentPath();
-            MenuPath path = adminMenuService.findMenuPathByUrl(sectionName);
-            if (path != null) {
-                String currentUrl = request.getRequestURL().toString();
-                currentPath.setMenuEntries(path, adminMenuService.getEntriesOnPath(path));
-                currentPath.setUrl(currentUrl);
-            }
-
-            return currentPath;
-        }
     }
 }

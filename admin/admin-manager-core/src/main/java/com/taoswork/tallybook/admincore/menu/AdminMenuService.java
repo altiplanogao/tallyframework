@@ -19,4 +19,9 @@ public interface AdminMenuService {
     MenuPath findMenuPathByUrl(String url);
 
     MenuPath findMenuPathByEntryKey(String entryKey);
+
+    Collection<String> workoutMenuKeyPathByUrl(String url);
+
+    Collection<String> workoutMenuKeyByEntryKey(String entryKey);
+
 }

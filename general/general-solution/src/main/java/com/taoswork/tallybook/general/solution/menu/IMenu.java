@@ -25,5 +25,5 @@ public interface IMenu extends Serializable {
 
     MenuPath getSinglePathOfEntry(String key);
 
-    Collection<IMenuEntry> getTopEntries();
+    Collection<IMenuEntry> getEntries();
 }
