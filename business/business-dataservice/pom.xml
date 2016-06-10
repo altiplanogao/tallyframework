@@ -12,11 +12,10 @@
     <artifactId>business-dataservice</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>business-tallyuser-dataservice</module>
-        <module>business-tallyadmin-dataservice</module>
-        <module>business-tallybusiness-dataservice</module>
-        <module>business-tallymanagement-dataservice</module>
-        <module>business-dataservice-management</module>
+        <module>tallyadmin-dataservice</module>
+        <module>tallybusiness-dataservice</module>
+        <module>tallymanagement-dataservice</module>
+        <module>dataservice-management</module>
     </modules>
 
     <dependencyManagement>

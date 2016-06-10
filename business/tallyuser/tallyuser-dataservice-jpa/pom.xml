@@ -3,42 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>admin</artifactId>
+        <artifactId>business-dataservice</artifactId>
         <groupId>com.taoswork.tallybook</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>admin-manager-core</artifactId>
+    <artifactId>tallyuser-dataservice</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>general-solution</artifactId>
+            <artifactId>tallyuser-datadomain</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>tallyadmin-dataservice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>tallyuser-dataservice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>tallybusiness-dataservice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>tallymanagement-dataservice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>business-dataservice-management</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
-            <artifactId>application-core</artifactId>
+            <artifactId>dataservice-on-jpa</artifactId>
         </dependency>
 
         <dependency>
@@ -47,11 +27,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
+            <artifactId>spring-beans</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
         </dependency>
 
         <dependency>
@@ -61,8 +45,7 @@
         <dependency>
             <groupId>com.taoswork.tallybook</groupId>
             <artifactId>test-material-for-jpa</artifactId>
-            <scope>test</scope>
         </dependency>
-
     </dependencies>
+
 </project>

@@ -38,8 +38,7 @@
         <module>general</module>
         <module>admin</module>
         <module>business</module>
-        <module>datadomain</module>
-        <module>dataservice</module>
+        <module>data-support</module>
         <module>meta-descriptor</module>
         <module>module-base</module>
         <module>test-material</module>
@@ -307,22 +306,22 @@
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallyadmin-datadomain</artifactId>
+                <artifactId>tallyadmin-datadomain</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallybusiness-datadomain</artifactId>
+                <artifactId>tallybusiness-datadomain</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallymanagement-datadomain</artifactId>
+                <artifactId>tallymanagement-datadomain</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallyuser-datadomain</artifactId>
+                <artifactId>tallyuser-datadomain</artifactId>
                 <version>${tallybook.framework.version}</version>
                 <exclusions>
                     <exclusion>
@@ -344,22 +343,22 @@
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallyadmin-dataservice</artifactId>
+                <artifactId>tallyadmin-dataservice</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallybusiness-dataservice</artifactId>
+                <artifactId>tallybusiness-dataservice</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallymanagement-dataservice</artifactId>
+                <artifactId>tallymanagement-dataservice</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
-                <artifactId>business-tallyuser-dataservice</artifactId>
+                <artifactId>tallyuser-dataservice</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
 

@@ -13,7 +13,7 @@ import redis.clients.jedis.Jedis;
 public class FastPermissionEngine
         extends PermissionEngine {
     
-    private Jedis jedis = new Jedis("192.168.56.101");
+    private Jedis jedis = new Jedis("localhost");
 
     public FastPermissionEngine(MongoEntityService entityService, Class<? extends UserAuthority> userClz, Class<? extends GroupAuthority> groupClz) {
         super(entityService, ProtectionSpace.class, Protection.class, userClz, groupClz);

@@ -13,9 +13,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>business-datadomain</module>
+        <module>datadomains</module>
         <module>business-dataservice</module>
         <module>module-support</module>
+        <module>tallyuser</module>
     </modules>
 
 
