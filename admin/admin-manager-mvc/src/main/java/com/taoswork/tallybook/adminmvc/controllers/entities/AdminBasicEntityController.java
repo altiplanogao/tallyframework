@@ -140,11 +140,14 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IMenu menu = adminMenuService.buildMenu(employee);
         Collection<String> currentMPath = adminMenuService.workoutMenuKeyPathByUrl(entityTypes.getTypeName());
         model.addAttribute("person", person);
+        String entityResultInJson = getObjectInJson(entityQueryResponse);
+        model.addAttribute("queryResult", entityResultInJson);
 
         makeDataMapBuilder("dataMap")
                 .addAttribute("menu", menu)
                 .addAttribute("menuPath", currentMPath)
-                .addToModule(model);;
+                .addAttribute("queryResult", entityQueryResponse)
+                .addToModule(model);
 
         {
 //            ObjectMapper mapper = new ObjectMapper();
@@ -153,8 +156,6 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 //            module.addSerializer()
 //            mapper.registerModule()
         }
-        String entityResultInJson = getObjectInJson(entityQueryResponse);
-        model.addAttribute("queryResult", entityResultInJson);
 
         model.addAttribute("viewType", "entityMainGrid");
         setCommonModelAttributes(model, locale);

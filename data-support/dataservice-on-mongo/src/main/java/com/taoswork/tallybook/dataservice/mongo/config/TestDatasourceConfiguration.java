@@ -30,7 +30,7 @@ public class TestDatasourceConfiguration extends MongoDatasourceConfiguration {
 
         public void dropDatabase() {
             DatasourceDefinition def = this;
-            final MongoClient mongo = new MongoClient(def.getDbHost(), def.getDbPort());
+            final MongoClient mongo = new MongoClient(def.getServerAddress());
             final MongoDatabase db = mongo.getDatabase(def.getDbName());
             db.drop();
         }

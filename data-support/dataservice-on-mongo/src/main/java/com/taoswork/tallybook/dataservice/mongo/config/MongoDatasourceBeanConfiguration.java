@@ -47,7 +47,7 @@ public class MongoDatasourceBeanConfiguration
             morphia.map(pEntities);
         }
 
-        MongoClient client = new MongoClient(mdd.getDbHost(), mdd.getDbPort());
+        MongoClient client = new MongoClient(mdd.getServerAddress());
         final AdvancedDatastore datastore = (AdvancedDatastore) morphia.createDatastore(client, mdd.getDbName());
         datastore.ensureIndexes();
         return datastore;
