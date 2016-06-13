@@ -49,7 +49,6 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
             return null;
         }
         PersonCertification userCert = personService.readPersonCertificationByUUID(person.getUuid());
-        ;
         PersonDetails userDetails = new PersonDetails(person, userCert.getPassword(), new ArrayList<GrantedAuthority>());
         return userDetails;
 

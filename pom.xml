@@ -24,6 +24,7 @@
 
     <properties>
         <tallybook.framework.version>${project.version}</tallybook.framework.version>
+        <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.2.4.RELEASE</spring.version>
         <spring.security.version>4.0.0.RELEASE</spring.security.version>
@@ -354,6 +355,11 @@
             <dependency>
                 <groupId>com.taoswork.tallybook</groupId>
                 <artifactId>tallymanagement-dataservice</artifactId>
+                <version>${tallybook.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.taoswork.tallybook</groupId>
+                <artifactId>tallyuser-api</artifactId>
                 <version>${tallybook.framework.version}</version>
             </dependency>
             <dependency>
@@ -874,6 +880,12 @@
             <!-- Provided Libraries ] -->
 
             <!-- Others Libraries [ -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo-parent</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
