@@ -2,8 +2,8 @@ package com.taoswork.tallybook.business.dataservice.tallymanagement;
 
 import com.taoswork.tallybook.business.dataservice.tallymanagement.conf.TallyManagementDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.conf.TallyManagementPersistableConfiguration;
-import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
-import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
+import com.taoswork.tallycheck.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallycheck.dataservice.mongo.core.MongoDataServiceBase;
 
 
 /**

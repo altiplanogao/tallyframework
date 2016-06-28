@@ -1,7 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
-import com.taoswork.tallybook.authority.solution.domain.ProtectionSpace;
-import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
+import com.taoswork.tallycheck.authority.solution.domain.ProtectionSpace;
 import org.mongodb.morphia.annotations.Entity;
 
 /**

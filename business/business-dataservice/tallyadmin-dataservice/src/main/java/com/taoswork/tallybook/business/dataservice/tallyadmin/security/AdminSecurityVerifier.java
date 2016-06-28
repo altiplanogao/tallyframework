@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.security;
 
-import com.taoswork.tallybook.authority.core.Access;
-import com.taoswork.tallybook.authority.core.verifier.IKAccessVerifier;
-import com.taoswork.tallybook.dataservice.security.ISecurityVerifier;
-import com.taoswork.tallybook.dataservice.security.NoPermissionException;
+import com.taoswork.tallycheck.authority.core.Access;
+import com.taoswork.tallycheck.authority.core.verifier.IKAccessVerifier;
+import com.taoswork.tallycheck.dataservice.security.ISecurityVerifier;
+import com.taoswork.tallycheck.dataservice.security.NoPermissionException;
 
 /**
  * Created by Gao Yuan on 2015/8/23.

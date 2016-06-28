@@ -3,11 +3,11 @@ package com.taoswork.tallybook.admincore.web.model.service.impl;
 import com.taoswork.tallybook.admincore.security.AdminSecurityService;
 import com.taoswork.tallybook.admincore.web.model.service.AdminCommonModelService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.AdminEmployeeDetailsService;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
-import com.taoswork.tallybook.general.solution.menu.Menu;
+import com.taoswork.tallycheck.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallycheck.general.solution.menu.Menu;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 

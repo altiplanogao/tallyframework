@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.subject;
 
-import com.taoswork.tallybook.datadomain.base.presentation.PresentationEnumClass;
-import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
+import com.taoswork.tallycheck.datadomain.base.presentation.PresentationEnumClass;
+import com.taoswork.tallycheck.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
 import java.util.Map;

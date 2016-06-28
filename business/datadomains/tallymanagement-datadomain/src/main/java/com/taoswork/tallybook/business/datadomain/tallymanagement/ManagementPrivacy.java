@@ -1,6 +1,6 @@
 package com.taoswork.tallybook.business.datadomain.tallymanagement;
 
-import com.taoswork.tallybook.general.extension.utils.IFriendlyEnum;
+import com.taoswork.tallycheck.general.extension.utils.IFriendlyEnum;
 
 import java.util.HashMap;
 import java.util.Map;

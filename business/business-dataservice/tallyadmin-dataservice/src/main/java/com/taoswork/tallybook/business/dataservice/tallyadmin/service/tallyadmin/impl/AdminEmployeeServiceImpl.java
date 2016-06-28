@@ -3,8 +3,8 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmi
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
-import com.taoswork.tallybook.dataservice.annotations.EntityService;
-import com.taoswork.tallybook.dataservice.core.entity.EntityServiceBase;
+import com.taoswork.tallycheck.dataservice.annotations.EntityService;
+import com.taoswork.tallycheck.dataservice.core.entity.EntityServiceBase;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

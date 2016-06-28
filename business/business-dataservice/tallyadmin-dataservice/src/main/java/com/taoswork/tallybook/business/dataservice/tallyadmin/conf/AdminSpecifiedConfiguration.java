@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.conf;
 
-import com.taoswork.tallybook.authority.solution.engine.PermissionEngine;
+import com.taoswork.tallycheck.authority.solution.engine.PermissionEngine;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminGroup;
-import com.taoswork.tallybook.dataservice.mongo.core.entityservice.MongoEntityService;
-import com.taoswork.tallybook.dataservice.service.IEntityService;
+import com.taoswork.tallycheck.dataservice.mongo.core.entityservice.MongoEntityService;
+import com.taoswork.tallycheck.dataservice.service.IEntityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

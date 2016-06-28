@@ -2,9 +2,9 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin.dao.impl;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
-import com.taoswork.tallybook.dataservice.annotations.Dao;
-import com.taoswork.tallybook.dataservice.mongo.dao.DocumentDaoBase;
-import com.taoswork.tallybook.general.extension.collections.ListUtility;
+import com.taoswork.tallycheck.dataservice.annotations.Dao;
+import com.taoswork.tallycheck.dataservice.mongo.dao.DocumentDaoBase;
+import com.taoswork.tallycheck.general.extension.collections.ListUtility;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;

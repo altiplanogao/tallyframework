@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin.valueprotect;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallyuser.AccountStatus;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.datadomain.base.entity.valuegate.BaseEntityGate;
+import com.taoswork.tallycheck.datadomain.tallyuser.AccountStatus;
+import com.taoswork.tallycheck.datadomain.tallyuser.Person;
+import com.taoswork.tallycheck.datadomain.base.entity.valuegate.BaseEntityGate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;

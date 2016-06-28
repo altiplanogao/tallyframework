@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.security;
 
-import com.taoswork.tallybook.authority.core.Access;
-import com.taoswork.tallybook.authority.core.permission.IKAuthority;
-import com.taoswork.tallybook.authority.core.permission.IKPermission;
-import com.taoswork.tallybook.authority.core.resource.IKProtectionCenter;
-import com.taoswork.tallybook.authority.core.resource.link.IKProtectionMapping;
-import com.taoswork.tallybook.authority.core.verifier.impl.KAccessVerifier;
-import com.taoswork.tallybook.authority.solution.engine.IPermissionEngine;
-import com.taoswork.tallybook.dataservice.security.impl.BaseSecurityVerifier;
+import com.taoswork.tallycheck.authority.core.Access;
+import com.taoswork.tallycheck.authority.core.permission.IKAuthority;
+import com.taoswork.tallycheck.authority.core.permission.IKPermission;
+import com.taoswork.tallycheck.authority.core.resource.IKProtectionCenter;
+import com.taoswork.tallycheck.authority.core.resource.link.IKProtectionMapping;
+import com.taoswork.tallycheck.authority.core.verifier.impl.KAccessVerifier;
+import com.taoswork.tallycheck.authority.solution.engine.IPermissionEngine;
+import com.taoswork.tallycheck.dataservice.security.impl.BaseSecurityVerifier;
 
 /**
  * Created by Gao Yuan on 2016/2/26.

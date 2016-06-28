@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
-import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
-import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallycheck.authority.solution.domain.user.GroupAuthority;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistEntity;
 import org.mongodb.morphia.annotations.Entity;
 
 /**

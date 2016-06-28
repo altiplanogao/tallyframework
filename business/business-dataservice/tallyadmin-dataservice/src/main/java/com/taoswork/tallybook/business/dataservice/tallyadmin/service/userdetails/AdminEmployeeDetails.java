@@ -1,10 +1,10 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallyuser.AccountStatus;
-import com.taoswork.tallybook.business.datadomain.tallyuser.FacetType;
-import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.FacetDetails;
-import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetails;
+import com.taoswork.tallycheck.datadomain.tallyuser.AccountStatus;
+import com.taoswork.tallycheck.datadomain.tallyuser.FacetType;
+import com.taoswork.tallycheck.dataservice.tallyuser.service.userdetails.FacetDetails;
+import com.taoswork.tallycheck.dataservice.tallyuser.service.userdetails.PersonDetails;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

@@ -9,10 +9,10 @@ import com.taoswork.tallybook.business.datadomain.tallybusiness.work.WorkFeedbac
 import com.taoswork.tallybook.business.datadomain.tallybusiness.work.WorkPlan;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.work.WorkTicket;
 import com.taoswork.tallybook.business.datadomain.tallymanagement.ModuleEntry;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.general.solution.menu.IMenuEntryUpdater;
-import com.taoswork.tallybook.general.solution.menu.Menu;
-import com.taoswork.tallybook.general.solution.menu.MenuEntryBuilder;
+import com.taoswork.tallycheck.datadomain.tallyuser.Person;
+import com.taoswork.tallycheck.general.solution.menu.IMenuEntryUpdater;
+import com.taoswork.tallycheck.general.solution.menu.Menu;
+import com.taoswork.tallycheck.general.solution.menu.MenuEntryBuilder;
 
 /**
  * Created by Gao Yuan on 2016/3/15.

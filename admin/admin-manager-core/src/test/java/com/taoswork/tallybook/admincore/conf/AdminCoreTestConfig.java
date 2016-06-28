@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.admincore.conf;
 
-import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
-import com.taoswork.tallybook.dataservice.jpa.config.db.TestDbConfig;
+import com.taoswork.tallycheck.dataservice.jpa.config.db.IDbConfig;
+import com.taoswork.tallycheck.dataservice.jpa.config.db.TestDbConfig;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

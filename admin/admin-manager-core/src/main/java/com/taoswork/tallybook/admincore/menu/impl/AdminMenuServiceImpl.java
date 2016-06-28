@@ -2,9 +2,9 @@ package com.taoswork.tallybook.admincore.menu.impl;
 
 import com.taoswork.tallybook.admincore.menu.AdminMenuService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
-import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
-import com.taoswork.tallybook.general.solution.menu.*;
+import com.taoswork.tallycheck.dataservice.server.manage.DataServiceManager;
+import com.taoswork.tallycheck.general.extension.annotations.FrameworkService;
+import com.taoswork.tallycheck.general.solution.menu.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

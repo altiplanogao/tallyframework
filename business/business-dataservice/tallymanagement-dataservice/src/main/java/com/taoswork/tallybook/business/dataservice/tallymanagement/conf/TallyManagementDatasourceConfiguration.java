@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.dataservice.tallymanagement.conf;
 
-import com.taoswork.tallybook.dataservice.mongo.MongoDatasourceDefinition;
-import com.taoswork.tallybook.dataservice.mongo.MongoDatasourceDefinitionBase;
-import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallycheck.dataservice.mongo.MongoDatasourceDefinition;
+import com.taoswork.tallycheck.dataservice.mongo.MongoDatasourceDefinitionBase;
+import com.taoswork.tallycheck.dataservice.mongo.config.MongoDatasourceConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**

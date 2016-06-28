@@ -1,13 +1,13 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.dataservice.mongo.config.TestDatasourceConfiguration;
+import com.taoswork.tallycheck.dataservice.mongo.config.TestDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.dao.AdminEmployeeDao;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.tallyadmin.AdminEmployeeService;
-import com.taoswork.tallybook.dataservice.config.IDatasourceConfiguration;
-import com.taoswork.tallybook.dataservice.core.dao.query.dto.CriteriaQueryResult;
-import com.taoswork.tallybook.dataservice.exception.ServiceException;
-import com.taoswork.tallybook.dataservice.service.IEntityService;
+import com.taoswork.tallycheck.dataservice.config.IDatasourceConfiguration;
+import com.taoswork.tallycheck.dataservice.core.dao.query.dto.CriteriaQueryResult;
+import com.taoswork.tallycheck.dataservice.exception.ServiceException;
+import com.taoswork.tallycheck.dataservice.service.IEntityService;
 import org.bson.types.ObjectId;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -66,7 +66,7 @@ public class TallyAdminDataServiceTest {
                 employeeService.saveAdminEmployee(employee);
                 AdminEmployee employeeLoaded = employeeService.readAdminEmployeeByPersonId(personId.toHexString());
 
-                Assert.assertTrue(personId.equals(employeeLoaded.getPersonId()));
+                Assert.assertTrue(personId.toHexString().equals(employeeLoaded.getPersonId()));
                 Assert.assertTrue(employee.getTitle().equals(employeeLoaded.getTitle()));
                 Assert.assertTrue(employee.getTitle().equals("Title" + expected));
 

@@ -93,7 +93,7 @@
             <scope>import</scope>
         </dependency>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>dataservice-on-mongo</artifactId>
         </dependency>
         <dependency>

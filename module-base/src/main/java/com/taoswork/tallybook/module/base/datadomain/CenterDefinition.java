@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.module.base.datadomain;
 
-import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallycheck.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.CappedAt;
 import org.mongodb.morphia.annotations.Entity;
 

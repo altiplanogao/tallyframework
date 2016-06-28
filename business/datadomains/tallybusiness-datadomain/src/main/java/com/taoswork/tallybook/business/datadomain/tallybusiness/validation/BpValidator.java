@@ -2,8 +2,8 @@ package com.taoswork.tallybook.business.datadomain.tallybusiness.validation;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.subject.Bp;
 import com.taoswork.tallybook.business.datadomain.tallybusiness.subject.Bu;
-import com.taoswork.tallybook.datadomain.base.entity.validation.BaseEntityValidator;
-import com.taoswork.tallybook.datadomain.base.entity.validation.error.EntityValidationErrors;
+import com.taoswork.tallycheck.datadomain.base.entity.validation.BaseEntityValidator;
+import com.taoswork.tallycheck.datadomain.base.entity.validation.error.EntityValidationErrors;
 
 import java.util.Objects;
 

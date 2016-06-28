@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.admincore.menu;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.general.solution.menu.IMenu;
-import com.taoswork.tallybook.general.solution.menu.IMenuEntry;
-import com.taoswork.tallybook.general.solution.menu.MenuPath;
+import com.taoswork.tallycheck.general.solution.menu.IMenu;
+import com.taoswork.tallycheck.general.solution.menu.IMenuEntry;
+import com.taoswork.tallycheck.general.solution.menu.MenuPath;
 
 import java.util.Collection;
 

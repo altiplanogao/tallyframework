@@ -2,12 +2,12 @@ package com.taoswork.tallybook.admincore.security.impl;
 
 import com.taoswork.tallybook.admincore.security.AdminSecurityService;
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.business.datadomain.tallyuser.FacetType;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
+import com.taoswork.tallycheck.datadomain.tallyuser.FacetType;
+import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.AdminEmployeeDetails;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
-import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetails;
-import com.taoswork.tallybook.business.dataservice.tallyuser.service.userdetails.PersonDetailsService;
+import com.taoswork.tallycheck.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallycheck.dataservice.tallyuser.service.userdetails.PersonDetails;
+import com.taoswork.tallycheck.dataservice.tallyuser.service.userdetails.PersonDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

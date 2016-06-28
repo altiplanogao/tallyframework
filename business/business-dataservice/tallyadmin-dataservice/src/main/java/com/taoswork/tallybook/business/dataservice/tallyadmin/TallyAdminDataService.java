@@ -3,9 +3,9 @@ package com.taoswork.tallybook.business.dataservice.tallyadmin;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.AdminSpecifiedConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminDatasourceConfiguration;
 import com.taoswork.tallybook.business.dataservice.tallyadmin.conf.TallyAdminPersistableConfiguration;
-import com.taoswork.tallybook.dataservice.annotations.DataService;
-import com.taoswork.tallybook.dataservice.mongo.config.MongoDatasourceConfiguration;
-import com.taoswork.tallybook.dataservice.mongo.core.MongoDataServiceBase;
+import com.taoswork.tallycheck.dataservice.annotations.DataService;
+import com.taoswork.tallycheck.dataservice.mongo.config.MongoDatasourceConfiguration;
+import com.taoswork.tallycheck.dataservice.mongo.core.MongoDataServiceBase;
 
 /**
  * Created by Gao Yuan on 2015/5/12.

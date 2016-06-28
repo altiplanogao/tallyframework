@@ -1,9 +1,9 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.genesis;
 
-import com.taoswork.tallybook.authority.solution.domain.ProtectionSpace;
-import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
-import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
-import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
+import com.taoswork.tallycheck.authority.solution.domain.ProtectionSpace;
+import com.taoswork.tallycheck.authority.solution.domain.resource.Protection;
+import com.taoswork.tallycheck.authority.solution.domain.user.GroupAuthority;
+import com.taoswork.tallycheck.authority.solution.domain.user.UserAuthority;
 
 import java.util.ArrayList;
 import java.util.List;

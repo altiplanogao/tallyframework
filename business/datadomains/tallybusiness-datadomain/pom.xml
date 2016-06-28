@@ -13,11 +13,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>datadomain-on-mongo</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>tallyuser-datadomain</artifactId>
         </dependency>
         <dependency>
@@ -25,11 +25,11 @@
             <artifactId>tallymanagement-datadomain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>authority-solution</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>test-material-for-mongo</artifactId>
             <type>jar</type>
             <scope>test</scope>

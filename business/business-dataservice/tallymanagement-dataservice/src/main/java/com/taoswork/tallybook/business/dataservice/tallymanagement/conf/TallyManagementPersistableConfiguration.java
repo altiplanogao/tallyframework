@@ -3,9 +3,9 @@ package com.taoswork.tallybook.business.dataservice.tallymanagement.conf;
 
 import com.taoswork.tallybook.business.datadomain.tallymanagement.TallyManagementDataDomain;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
-import com.taoswork.tallybook.dataservice.annotations.Dao;
-import com.taoswork.tallybook.dataservice.annotations.EntityService;
-import com.taoswork.tallybook.dataservice.mongo.config.MongoPersistableConfiguration;
+import com.taoswork.tallycheck.dataservice.annotations.Dao;
+import com.taoswork.tallycheck.dataservice.annotations.EntityService;
+import com.taoswork.tallycheck.dataservice.mongo.config.MongoPersistableConfiguration;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

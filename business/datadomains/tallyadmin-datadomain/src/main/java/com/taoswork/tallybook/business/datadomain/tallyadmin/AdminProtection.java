@@ -1,8 +1,8 @@
 package com.taoswork.tallybook.business.datadomain.tallyadmin;
 
-import com.taoswork.tallybook.authority.solution.domain.resource.DProtectionMode;
-import com.taoswork.tallybook.authority.solution.domain.resource.Protection;
-import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallycheck.authority.solution.domain.resource.DProtectionMode;
+import com.taoswork.tallycheck.authority.solution.domain.resource.Protection;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistEntity;
 import org.mongodb.morphia.annotations.Entity;
 
 /**

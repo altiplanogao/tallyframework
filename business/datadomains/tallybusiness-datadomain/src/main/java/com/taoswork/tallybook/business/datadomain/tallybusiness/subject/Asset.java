@@ -1,14 +1,14 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.subject;
 
 import com.taoswork.tallybook.business.datadomain.tallybusiness.Privacy;
-import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
-import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
-import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.base.entity.PersistField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
-import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.Visibility;
-import com.taoswork.tallybook.datadomain.onmongo.AbstractDocument;
+import com.taoswork.tallycheck.datadomain.base.entity.CollectionField;
+import com.taoswork.tallycheck.datadomain.base.entity.CollectionMode;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistField;
+import com.taoswork.tallycheck.datadomain.base.presentation.FieldType;
+import com.taoswork.tallycheck.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallycheck.datadomain.base.presentation.Visibility;
+import com.taoswork.tallycheck.datadomain.onmongo.AbstractDocument;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;
 

@@ -1,7 +1,7 @@
 package com.taoswork.tallybook.business.dataservice.tallyadmin.dao;
 
 import com.taoswork.tallybook.business.datadomain.tallyadmin.AdminEmployee;
-import com.taoswork.tallybook.dataservice.core.entity.IDao;
+import com.taoswork.tallycheck.dataservice.core.entity.IDao;
 
 /**
  * Created by Gao Yuan on 2015/5/10.

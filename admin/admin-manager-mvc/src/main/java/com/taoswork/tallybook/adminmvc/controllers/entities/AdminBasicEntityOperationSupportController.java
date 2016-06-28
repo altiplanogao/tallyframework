@@ -1,14 +1,14 @@
 package com.taoswork.tallybook.adminmvc.controllers.entities;
 
-import com.taoswork.tallybook.dataservice.IDataService;
-import com.taoswork.tallybook.dataservice.jpa.core.metaaccess.JpaEntityMetaAccess;
-import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
-import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameter;
-import com.taoswork.tallybook.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
-import com.taoswork.tallybook.descriptor.metadata.IClassMeta;
-import com.taoswork.tallybook.descriptor.metadata.IFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ExternalForeignEntityFieldMeta;
-import com.taoswork.tallybook.descriptor.metadata.fieldmetadata.basic.ForeignEntityFieldMeta;
+import com.taoswork.tallycheck.dataservice.IDataService;
+import com.taoswork.tallycheck.dataservice.jpa.core.metaaccess.JpaEntityMetaAccess;
+import com.taoswork.tallycheck.dataservice.server.manage.DataServiceManager;
+import com.taoswork.tallycheck.dataservice.server.io.request.parameter.EntityTypeParameter;
+import com.taoswork.tallycheck.dataservice.server.io.request.parameter.EntityTypeParameterBuilder;
+import com.taoswork.tallycheck.descriptor.metadata.IClassMeta;
+import com.taoswork.tallycheck.descriptor.metadata.IFieldMeta;
+import com.taoswork.tallycheck.descriptor.metadata.fieldmetadata.basic.ExternalForeignEntityFieldMeta;
+import com.taoswork.tallycheck.descriptor.metadata.fieldmetadata.basic.ForeignEntityFieldMeta;
 import org.apache.commons.httpclient.URI;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

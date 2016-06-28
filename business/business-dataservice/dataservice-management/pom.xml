@@ -13,11 +13,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>dataservice-on-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.taoswork.tallybook</groupId>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>dataservice-server</artifactId>
         </dependency>
         <dependency>

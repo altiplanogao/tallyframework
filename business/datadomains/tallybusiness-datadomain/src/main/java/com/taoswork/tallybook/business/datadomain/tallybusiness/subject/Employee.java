@@ -1,16 +1,16 @@
 package com.taoswork.tallybook.business.datadomain.tallybusiness.subject;
 
-import com.taoswork.tallybook.authority.solution.domain.user.GroupAuthority;
-import com.taoswork.tallybook.authority.solution.domain.user.UserAuthority;
-import com.taoswork.tallybook.business.datadomain.tallyuser.Person;
-import com.taoswork.tallybook.business.datadomain.tallyuser.impl.PersonImpl;
-import com.taoswork.tallybook.datadomain.base.entity.CollectionField;
-import com.taoswork.tallybook.datadomain.base.entity.CollectionMode;
-import com.taoswork.tallybook.datadomain.base.entity.PersistEntity;
-import com.taoswork.tallybook.datadomain.base.entity.PersistField;
-import com.taoswork.tallybook.datadomain.base.presentation.FieldType;
-import com.taoswork.tallybook.datadomain.base.presentation.PresentationField;
-import com.taoswork.tallybook.datadomain.base.presentation.typed.PresentationExternalForeignKey;
+import com.taoswork.tallycheck.authority.solution.domain.user.GroupAuthority;
+import com.taoswork.tallycheck.authority.solution.domain.user.UserAuthority;
+import com.taoswork.tallycheck.datadomain.tallyuser.Person;
+import com.taoswork.tallycheck.datadomain.tallyuser.impl.PersonImpl;
+import com.taoswork.tallycheck.datadomain.base.entity.CollectionField;
+import com.taoswork.tallycheck.datadomain.base.entity.CollectionMode;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistEntity;
+import com.taoswork.tallycheck.datadomain.base.entity.PersistField;
+import com.taoswork.tallycheck.datadomain.base.presentation.FieldType;
+import com.taoswork.tallycheck.datadomain.base.presentation.PresentationField;
+import com.taoswork.tallycheck.datadomain.base.presentation.typed.PresentationExternalForeignKey;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Reference;

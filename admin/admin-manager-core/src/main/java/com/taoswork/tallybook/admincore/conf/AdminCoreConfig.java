@@ -7,14 +7,14 @@ import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetail
 import com.taoswork.tallybook.business.dataservice.tallyadmin.service.userdetails.impl.AdminEmployeeDetailsServiceImpl;
 import com.taoswork.tallybook.business.dataservice.tallybusiness.TallyBusinessDataService;
 import com.taoswork.tallybook.business.dataservice.tallymanagement.TallyManagementDataService;
-import com.taoswork.tallybook.business.dataservice.tallyuser.TallyUserDataService;
-import com.taoswork.tallybook.dataservice.annotations.Dao;
-import com.taoswork.tallybook.dataservice.annotations.EntityService;
-import com.taoswork.tallybook.dataservice.jpa.config.db.IDbConfig;
-import com.taoswork.tallybook.dataservice.jpa.config.db.ProductDbConfig;
-import com.taoswork.tallybook.dataservice.server.manage.DataServiceManager;
-import com.taoswork.tallybook.dataservice.server.manage.impl.DataServiceManagerImpl;
-import com.taoswork.tallybook.general.extension.annotations.FrameworkService;
+import com.taoswork.tallycheck.dataservice.tallyuser.TallyUserDataService;
+import com.taoswork.tallycheck.dataservice.annotations.Dao;
+import com.taoswork.tallycheck.dataservice.annotations.EntityService;
+import com.taoswork.tallycheck.dataservice.jpa.config.db.IDbConfig;
+import com.taoswork.tallycheck.dataservice.jpa.config.db.ProductDbConfig;
+import com.taoswork.tallycheck.dataservice.server.manage.DataServiceManager;
+import com.taoswork.tallycheck.dataservice.server.manage.impl.DataServiceManagerImpl;
+import com.taoswork.tallycheck.general.extension.annotations.FrameworkService;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

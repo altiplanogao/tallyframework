@@ -3,11 +3,11 @@ package com.taoswork.tallybook.adminmvc.controllers.entities;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taoswork.tallybook.adminmvc.view.JsonViewResolver;
 import com.taoswork.tallybook.application.core.conf.ApplicationCommonConfig;
-import com.taoswork.tallybook.dataservice.server.io.response.EntityResponse;
-import com.taoswork.tallybook.dataservice.server.io.response.result.EntityErrors;
-import com.taoswork.tallybook.general.solution.message.CachedMessageLocalizedDictionary;
-import com.taoswork.tallybook.general.solution.property.RuntimePropertiesPublisher;
-import com.taoswork.tallybook.general.web.control.BaseController;
+import com.taoswork.tallycheck.dataservice.server.io.response.EntityResponse;
+import com.taoswork.tallycheck.dataservice.server.io.response.result.EntityErrors;
+import com.taoswork.tallycheck.general.solution.message.CachedMessageLocalizedDictionary;
+import com.taoswork.tallycheck.general.solution.property.RuntimePropertiesPublisher;
+import com.taoswork.tallycheck.general.web.control.BaseController;
 import org.springframework.ui.Model;
 
 import javax.annotation.Resource;
